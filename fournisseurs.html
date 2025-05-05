@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chem Spot - Matières Premières Pharmaceutiques</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset et variables */
+        :root {
+            --primary: #2c5282;
+            --primary-light: #4299e1;
+            --secondary: #718096;
+            --accent: #4fd1c5;
+            --background: #f7fafc;
+            --card-bg: #ffffff;
+            --text: #2d3748;
+            --text-light: #718096;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: var(--background);
+            color: var(--text);
+        }
+        
+        /* Typographie */
+        h1, h2, h3, h4 {
+            font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        h2 {
+            font-size: 1.75rem;
+        }
+        
+        h3 {
+            font-size: 1.35rem;
+            color: var(--text);
+        }
+        
+        h4 {
+            font-size: 1.15rem;
+        }
+        
+        p {
+            margin-bottom: 0.75rem;
+        }
+        
+        a {
+            text-decoration: none;
+            color: var(--primary);
+            transition: var(--transition);
+        }
+        
+        a:hover {
+            color: var(--primary-light);
+        }
+        
+        /* Layout */
+        .container {
+            width: 90%;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+        
+        /* Header */
+        header {
+            background-color: var(--card-bg);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 1rem 0;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            height: 300px;
+            object-fit: contain;
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        .nav-menu a {
+            font-weight: 500;
+            color: var(--text);
+            position: relative;
+            padding: 0.5rem 0;
+        }
+        
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--accent);
+            transition: var(--transition);
+        }
+        
+        .nav-menu a:hover {
+            color: var(--primary);
+        }
+        
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+        
+        .search-form {
+            display: flex;
+            max-width: 300px;
+        }
+        
+        .search-form input {
+            padding: 0.7rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 4px 0 0 4px;
+            width: 100%;
+            font-size: 0.9rem;
+            outline: none;
+            transition: var(--transition);
+        }
+        
+        .search-form input:focus {
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.2);
+        }
+        
+        .search-form button {
+            padding: 0 1.25rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .search-form button:hover {
+            background-color: var(--primary-light);
+        }
+        
+        /* Main content */
+        .main-content {
+            padding: 2.5rem 0;
+        }
+        
+        .page-layout {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background-color: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            align-self: flex-start;
+            position: sticky;
+            top: 100px;
+        }
+        
+        .filter-section {
+            margin-bottom: 2rem;
+        }
+        
+        .filter-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .filter-section h3 {
+            position: relative;
+            padding-bottom: 0.75rem;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        .filter-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--accent);
+        }
+        
+        .sidebar ul {
+            list-style: none;
+        }
+        
+        .sidebar li {
+            margin-bottom: 0.75rem;
+        }
+        
+        .sidebar a {
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            transition: var(--transition);
+            padding: 0.35rem 0;
+        }
+        
+        .sidebar a:hover {
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+        
+        .sidebar a::before {
+            content: '\f105';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            margin-right: 0.5rem;
+            color: var(--secondary);
+            transition: var(--transition);
+        }
+        
+        .sidebar a:hover::before {
+            color: var(--primary);
+        }
+        
+        /* Content area */
+        .content-area {
+            flex: 1;
+        }
+        
+        /* Supplier header */
+        .supplier-header {
+            background-color: var(--card-bg);
+            padding: 1.75rem;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+        
+        .supplier-header h2 {
+            margin-top: 0;
+            color: var(--primary);
+            font-size: 1.6rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1rem;
+            margin-bottom: 1.25rem;
+        }
+        
+        .supplier-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        
+        .supplier-details {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .supplier-details h3 {
+            margin-bottom: 1rem;
+            color: var(--text);
+            font-size: 1.25rem;
+        }
+        
+        .supplier-details p {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            color: var(--text-light);
+        }
+        
+        .supplier-details strong {
+            color: var(--text);
+            margin-right: 0.5rem;
+        }
+        
+        /* Product grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .product-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid var(--border);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .product-image {
+            height: 180px;
+            background-color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .product-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background-color: var(--accent);
+        }
+        
+        .product-content {
+            padding: 1.25rem;
+        }
+        
+        .product-content h4 {
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+        
+        .product-category {
+            color: var(--text-light);
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            background-color: rgba(66, 153, 225, 0.08);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+        }
+        
+        .product-details {
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            background-color: #f8fafc;
+            padding: 0.75rem;
+            border-radius: 6px;
+            border-left: 3px solid var(--accent);
+        }
+        
+        .product-details p {
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .product-details p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .product-price {
+            font-weight: 700;
+            color: var(--primary);
+            margin: 1rem 0;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .product-price::before {
+            content: 'Prix:';
+            font-size: 0.875rem;
+            font-weight: normal;
+            color: var(--text-light);
+            margin-right: 0.5rem;
+        }
+        
+        .product-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1.25rem;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.65rem 1.25rem;
+            text-decoration: none;
+            text-align: center;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        
+<ul class="nav-menu">
+    <li><a href="index.html">Accueil</a></li>
+    <li><a href="#">Catalogue</a></li>
+    <li><a href="#">Fournisseurs</a></li>
+    <li><a href="#">Contact</a></li>
+</ul>
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            flex: 1;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-light);
+            color: white;
+        }
+        .img-logo-companion {
+    height: 150px;
+    object-fit: contain;
+    margin-left: 15px;
+}
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 0.6rem 1rem;
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #2d3748;
+            color: #cbd5e0;
+            padding: 3rem 0 1.5rem;
+            margin-top: 4rem;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 2rem;
+        }
+        
+        .footer-column {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .footer-column h3 {
+            color: white;
+            margin-bottom: 1.25rem;
+            position: relative;
+            padding-bottom: 0.75rem;
+            font-size: 1.15rem;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background-color: var(--accent);
+        }
+        
+        .footer-column p {
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column li {
+            margin-bottom: 0.75rem;
+        }
+        
+        .footer-column a {
+            color: #cbd5e0;
+            transition: var(--transition);
+            display: inline-block;
+        }
+        
+        .footer-column a:hover {
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 992px) {
+            .page-layout {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                position: static;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+            
+            .nav-menu {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .search-form {
+                width: 100%;
+                max-width: none;
+            }
+            
+            .supplier-info {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .product-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 2rem;
+            }
+        }
+        <ul>
+  
+        @media (max-width: 576px) {
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-menu {
+                gap: 1rem;
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+               
+                <div style="display: flex; align-items: center;"></div>
+                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/chemspotV1-dt6tDoOKp1wAyi8oRMzxzufIVBfiu9.png" alt="Chem Spot Logo" class="logo">
+                    <!-- Image gon.png à côté du logo -->
+                    <img src="gon.png" alt="Gon" class="img-logo-companion">
+                <ul class="nav-menu">
+                    <li><a href="index.html">Accueil</a></li> <!-- MODIFIÉ: changé de "#" à "index.html" -->
+                    <li><a href="catalogue.html">Catalogue</a></li>
+                    <li><a href="#">Fournisseurs</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+                
+                <form class="search-form">
+                    <input type="text" placeholder="Rechercher un produit...">
+                    <button type="submit"><i class="fas fa-search"></i></button>
+                </form>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="page-layout">
+                <aside class="sidebar">
+                    <div class="filter-section">
+                        <h3>Catégories</h3>
+                        <ul>
+                            <li><a href="#">Principes actifs</a></li>
+                            <li><a href="#">Excipients</a></li>
+                            <li><a href="#">Arômes et colorants</a></li>
+                            <li><a href="#">Conservateurs</a></li>
+                            <li><a href="#">Solvants</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="filter-section">
+                        <h3>Fournisseurs</h3>
+                        <ul>
+                            <li><a href="#">Cooper</a></li>
+                            <li><a href="#">BASF Pharma</a></li>
+                            <li><a href="#">Sanofi Chimie</a></li>
+                            <li><a href="#">Givaudan</a></li>
+                        </ul>
+                    </div>
+                </aside>
+                
+                <div class="content-area">
+                    <div class="supplier-header">
+                        <h2>Matières premières pharmaceutiques de Cooper</h2>
+                        <div class="supplier-info">
+                            <div class="supplier-details">
+                                <h3>Cooper</h3>
+                                <p><strong>Localisation :</strong> Paris, France</p>
+                                <p><strong>Certifications :</strong> ISO 9001, BPF</p>
+                                <p><strong>Contact :</strong> +33 1 45 86 70 00 | contact@cooper.fr</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="product-grid">
+                        <div class="product-card">
+                            <div class="product-image">
+                                <span>Image Produit</span>
+                            </div>
+                            <div class="product-content">
+                                <h4>Acide acétylsalicylique</h4>
+                                <span class="product-category">Principe actif anti-inflammatoire</span>
+                                <div class="product-details">
+                                    <p><strong>Poids moléculaire :</strong> 180.16 g/mol</p>
+                                    <p><strong>Pureté :</strong> ≥99.0%</p>
+                                </div>
+                                <p class="product-price">45€/kg</p>
+                                <div class="product-actions">
+                                    <a href="#" class="btn btn-primary">Demander un devis</a>
+                                    <a href="#" class="btn btn-outline"><i class="fas fa-info-circle"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="product-card">
+                            <div class="product-image">
+                                <span>Image Produit</span>
+                            </div>
+                            <div class="product-content">
+                                <h4>Paracétamol</h4>
+                                <span class="product-category">Analgésique et antipyrétique</span>
+                                <div class="product-details">
+                                    <p><strong>Poids moléculaire :</strong> 151.16 g/mol</p>
+                                    <p><strong>Pureté :</strong> ≥98.0%</p>
+                                </div>
+                                <p class="product-price">38€/kg</p>
+                                <div class="product-actions">
+                                    <a href="#" class="btn btn-primary">Demander un devis</a>
+                                    <a href="#" class="btn btn-outline"><i class="fas fa-info-circle"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="product-card">
+                            <div class="product-image">
+                                <span>Image Produit</span>
+                            </div>
+                            <div class="product-content">
+                                <h4>Ibuprofène</h4>
+                                <span class="product-category">Anti-inflammatoire non stéroïdien</span>
+                                <div class="product-details">
+                                    <p><strong>Poids moléculaire :</strong> 206.29 g/mol</p>
+                                    <p><strong>Pureté :</strong> ≥98.5%</p>
+                                </div>
+                                <p class="product-price">52€/kg</p>
+                                <div class="product-actions">
+                                    <a href="#" class="btn btn-primary">Demander un devis</a>
+                                    <a href="#" class="btn btn-outline"><i class="fas fa-info-circle"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="product-card">
+                            <div class="product-image">
+                                <span>Image Produit</span>
+                            </div>
+                            <div class="product-content">
+                                <h4>Lactose monohydraté</h4>
+                                <span class="product-category">Excipient couramment utilisé</span>
+                                <div class="product-details">
+                                    <p><strong>Poids moléculaire :</strong> 360.31 g/mol</p>
+                                    <p><strong>Pureté :</strong> ≥99.0%</p>
+                                </div>
+                                <p class="product-price">15€/kg</p>
+                                <div class="product-actions">
+                                    <a href="#" class="btn btn-primary">Demander un devis</a>
+                                    <a href="#" class="btn btn-outline"><i class="fas fa-info-circle"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>À propos de Chem Spot</h3>
+                    <p>Chem Spot est la plateforme de référence pour les matières premières pharmaceutiques en France, connectant laboratoires et fournisseurs depuis 2020.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Liens rapides</h3>
+                    <ul>
+                        <li><a href="index.html">Accueil</a></li> <!-- MODIFIÉ: changé de "#" à "index.html" -->
+                        <li><a href="#">Catalogue</a></li>
+                        <li><a href="#">Fournisseurs</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Contact</h3>
+                    <p>75 Avenue des Champs-Élysées, 75008 Paris</p>
+                    <p>+33 1 45 86 70 00</p>
+                    <p>contact@chemspot.fr</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Chem Spot. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

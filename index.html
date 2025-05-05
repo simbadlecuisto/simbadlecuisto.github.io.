@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chem Spot - Fournisseurs de Matières Premières Pharmaceutiques</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset et variables */
+        :root {
+            --primary: #2c5282;
+            --primary-light: #4299e1;
+            --secondary: #718096;
+            --accent: #4fd1c5;
+            --background: #f7fafc;
+            --card-bg: #ffffff;
+            --text: #2d3748;
+            --text-light: #718096;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: var(--background);
+            color: var(--text);
+        }
+        
+        /* Typographie */
+        h1, h2, h3, h4 {
+            font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        h2 {
+            font-size: 1.75rem;
+        }
+        
+        h3 {
+            font-size: 1.35rem;
+            color: var(--text);
+        }
+        
+        h4 {
+            font-size: 1.15rem;
+        }
+        
+        p {
+            margin-bottom: 0.75rem;
+        }
+        
+        a {
+            text-decoration: none;
+            color: var(--primary);
+            transition: var(--transition);
+        }
+        
+        a:hover {
+            color: var(--primary-light);
+        }
+        
+        /* Layout */
+        .container {
+            width: 90%;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+        
+        /* Header */
+        header {
+            background-color: var(--card-bg);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 1rem 0;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            height: 200px;
+            object-fit: contain;
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        .nav-menu a {
+            font-weight: 500;
+            color: var(--text);
+            position: relative;
+            padding: 0.5rem 0;
+        }
+        
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--accent);
+            transition: var(--transition);
+        }
+        
+        .nav-menu a:hover {
+            color: var(--primary);
+        }
+        
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+        
+        .nav-menu a.active {
+            color: var(--primary);
+        }
+        
+        .nav-menu a.active::after {
+            width: 100%;
+        }
+        
+        .search-form {
+            display: flex;
+            max-width: 300px;
+        }
+        
+        .search-form input {
+            padding: 0.7rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 4px 0 0 4px;
+            width: 100%;
+            font-size: 0.9rem;
+            outline: none;
+            transition: var(--transition);
+        }
+        
+        .search-form input:focus {
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.2);
+        }
+        
+        .search-form button {
+            padding: 0 1.25rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .search-form button:hover {
+            background-color: var(--primary-light);
+        }
+        
+        /* Page header */
+        .page-header {
+            background-color: var(--primary);
+            color: white;
+            padding: 3rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(44, 82, 130, 0.95), rgba(44, 82, 130, 0.8));
+            z-index: 1;
+        }
+        
+        .page-header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><path d="M20 0 L20 40 M0 20 L40 20" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></svg>');
+            background-size: 30px 30px;
+            z-index: 0;
+        }
+        
+        .page-header-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .page-header h1 {
+            color: white;
+            margin-bottom: 1rem;
+            font-size: 2.25rem;
+        }
+        
+        .page-header p {
+            max-width: 700px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.125rem;
+        }
+        
+        /* Main content */
+        .main-content {
+            padding: 3rem 0;
+        }
+        
+        /* Filter bar */
+        .filter-bar {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 1.25rem;
+            margin-bottom: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .filter-label {
+            font-weight: 500;
+            color: var(--text);
+        }
+        
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            background-color: transparent;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        /* Suppliers grid */
+        .suppliers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .supplier-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        .supplier-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .supplier-logo {
+            height: 180px;
+            background-color: #f8fafc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            position: relative;
+        }
+        
+        .supplier-logo img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .supplier-details {
+            padding: 1.25rem;
+            text-align: center;
+        }
+        
+        .supplier-details h3 {
+            margin-bottom: 0.5rem;
+        }
+        
+        .supplier-details p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .supplier-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background-color: var(--accent);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+        }
+        
+        /* Tooltip */
+        .supplier-tooltip {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(44, 82, 130, 0.95);
+            color: white;
+            padding: 1.5rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .supplier-logo:hover .supplier-tooltip {
+            opacity: 1;
+        }
+        
+        .tooltip-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .tooltip-info {
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .tooltip-info i {
+            color: var(--accent);
+            margin-right: 0.5rem;
+            min-width: 20px;
+            margin-top: 4px;
+        }
+        
+        .supplier-actions {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1.25rem;
+        }
+        
+        .supplier-actions .btn {
+            font-size: 0.85rem;
+            padding: 0.5rem 1rem;
+        }
+        
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 3rem;
+            gap: 0.5rem;
+        }
+        
+        .page-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .page-item:hover, .page-item.active {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #2d3748;
+            color: #cbd5e0;
+            padding: 3rem 0 1.5rem;
+            margin-top: 4rem;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 2rem;
+        }
+        
+        .footer-column {
+            flex: 1;
+            min-width: 200px;
+        }
+      
+        .footer-column h3 {
+            color: white;
+            margin-bottom: 1.25rem;
+            position: relative;
+            padding-bottom: 0.75rem;
+            font-size: 1.15rem;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background-color: var(--accent);
+        }
+        
+        .footer-column p {
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column li {
+            margin-bottom: 0.75rem;
+        }
+        
+        .footer-column a {
+            color: #cbd5e0;
+            transition: var(--transition);
+            display: inline-block;
+        }
+        
+        .footer-column a:hover {
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 992px) {
+            .suppliers-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+            
+            .nav-menu {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .search-form {
+                width: 100%;
+                max-width: none;
+            }
+            
+            .page-header {
+                padding: 2rem 0;
+            }
+            
+            .page-header h1 {
+                font-size: 1.75rem;
+            }
+            
+            .filter-bar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .suppliers-grid {
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 2rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .suppliers-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-menu {
+                gap: 1rem;
+                flex-wrap: wrap;
+            }
+        }
+        /* Style pour les images personnalisées */
+.img-center {
+    display: block;
+    margin: 30px auto;
+    width: 80%;
+    max-width: 3000px;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
+
+
+
+    </style>
+    
+</head>
+<body>
+ 
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div style="display: flex; align-items: center;">
+                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/chemspotV1-dt6tDoOKp1wAyi8oRMzxzufIVBfiu9.png" alt="Chem Spot Logo" class="logo">
+                    <!-- Image gon.png à côté du logo -->
+               
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="catalogue.html">Catalogue</a></li>
+                    <li><a href="fournisseurs.html" class="active">Fournisseurs</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+                
+                <form class="search-form">
+                    <input type="text" placeholder="Rechercher un fournisseur...">
+                    <button type="submit"><i class="fas fa-search"></i></button>
+                </form>
+            </div>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <div class="container">
+            <div class="page-header-content">
+                <h1>Nos Fournisseurs de Matières Premières</h1>
+                <p>Découvrez notre réseau de fournisseurs certifiés proposant des matières premières pharmaceutiques de haute qualité, conformes aux normes internationales.</p>
+            </div>
+        </div>
+    </section>
+
+<ul>
+    <li><a href="index.html">Accueil</a></li>
+    <li><a href="catalogue.html">Catalogue</a></li>
+    <li><a href="fournisseurs.html">Fournisseurs</a></li>
+    <li><a href="#">Contact</a></li>
+</ul>
+<!-- Image kamaji.png au centre -->
+<div class="container">
+    <img src="ouibadakor.png"  class="img-center">
+</div>
+    <main class="main-content">
+        <div class="container">
+            <div class="filter-bar">
+                <span class="filter-label">Filtrer par :</span>
+                <button class="filter-btn active">Tous</button>
+                <button class="filter-btn">Principes actifs</button>
+                <button class="filter-btn">Excipients</button>
+                <button class="filter-btn">Arômes et colorants</button>
+                <button class="filter-btn">Conservateurs</button>
+            </div>
+           
+
+            <div class="suppliers-grid">
+                <!-- Fournisseur 1: Cooper -->
+                <div class="supplier-card">
+                    <div class="supplier-logo">
+                        <img src="https://via.placeholder.com/200x100?text=Cooper" alt="Logo Cooper">
+                        <div class="supplier-tooltip">
+                            <h4 class="tooltip-title">Cooper</h4>
+                            <div class="tooltip-info">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Paris, France</span>
+                            </div>
+                            <div class="tooltip-info">
+                                <i class="fas fa-star"></i>
+                                <span>Spécialité : Principes actifs anti-inflammatoires</span>
+                            </div>
+                            <div class="tooltip-info">
+                                <i class="fas fa-flask"></i>
+                                <span>Types de produits : Acide acétylsalicylique, Paracétamol, Ibuprofène</span>
+                            </div>
+                            <div class="supplier-actions">
+                                <a href="#" class="btn btn-primary">Voir produits</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="supplier-badge">Certifié BPF</div>
+                    <div class="supplier-details">
+                        <h3>Cooper</h3>
+                        <p>Fournisseur leader de principes actifs</p>
+                    </div>
+                </div>
+                
+                <!-- Fournisseur 2: BASF Pharma -->
+                <div class="supplier-card">
+                    <div class="supplier-logo">
+                        <img src="https://via.placeholder.com/200x100?text=BASF+Pharma" alt="Logo BASF Pharma">
+                        <div class="supplier-tooltip">
+                            <h4 class="tooltip-title">BASF Pharma</h4>
+                            <div class="tooltip-info">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Ludwigshafen, Allemagne</span>
+                            </div>
+                            <div class="tooltip-info">
+                                <i class="fas fa-star"></i>
+                                <span>Spécialité : Excipients et polymères pharmaceutiques</span>
+                            </div>
+                            <div class="tooltip-info">
+                                <i class="fas fa-flask"></i>
+                                <span>Types de produits : Polymères d'enrobage, Agents liants, Désintégrants</span>
+                            </div>
+                            <div class="supplier-actions">
+                                <a href="#" class="btn btn-primary">Voir produits</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="supplier-badge">Premium</div>
+                    <div class="supplier-details">
+                        <h3>BASF Pharma</h3>
+                        <p>Expert en excipients pharmaceutiques</p>
+                    </div>
+                </div>
+                
+                <!-- Fournisseur 3: Sanofi Chimie -->
+                <div class="supplier-card">
+                    <div class="supplier-logo">
+                        <img src="https://via.placeholder.com/200x100?text=Sanofi+Chimie" alt="Logo Sanofi Chimie">
+                        <div class="supplier-tooltip">
+                            <h4 class="tooltip-title">Sanofi Chimie</h4>
+                            <div class="tooltip-info">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Lyon, France</span>
+                            </div>
+                            <div class="tooltip-info">
+                                <i class="fas fa-star"></i>
+                                <span>Spécialité : Principes actifs cardiovasculaires</span>
+                            </div>
+                            <div class="tooltip-info">
+                                <i class="fas fa-flask"></i>
+                                <span>Types de produits : Atorvastatine, Clopidogrel, Ramipril</span>
+                            </div>
+                            <div class="supplier-actions">
+                                <a href="#" class="btn btn-primary">Voir produits</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="supplier-badge">Certifié BPF</div>
+                    <div class="supplier-details">
+                        <h3>Sanofi Chimie</h3>
+                        <p>Leader en principes actifs cardiovasculaires</p>
+                    </div>
+                </div>
+                
+                <!-- Fournisseur 4: Givaudan -->
+                <div class="supplier-card">
+                    <div class="supplier-logo">
+                        <img src="https://via.placeholder.com/200x100?text=Givaudan" alt="Logo Givaudan">
+                        <div class="supplier-tooltip">
+                            <h4 class="tooltip-title">Givaudan</h4>
+                            <div class="tooltip-info">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Genève, Suisse</span>
+                            </div>
+                            <div class="tooltip-info">
+                                <i class="fas fa-star"></i>
+                                <span>Spécialité : Arômes et parfums pharmaceutiques</span>
+                            </div>
+                            <div class="tooltip-info">
+                                <i class="fas fa-flask"></i>
+                                <span>Types de produits : Arômes médicinaux, Édulcorants, Masqueurs d'amertume</span>
+                            </div>
+                            <div class="supplier-actions">
+                                <a href="#" class="btn btn-primary">Voir produits</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="supplier-badge">Premium</div>
+                    <div class="supplier-details">
+                        <h3>Givaudan</h3>
+                        <p>Spécialiste des arômes pharmaceutiques</p>
+                    </div>
+                </div>
+                
+                <!-- Fournisseur 5: Roquette Pharma -->
+                <div class="supplier-card">
+                    <div class="supplier-logo">
+                        <img src="https://via.placeholder.com/200x100?text=Roquette+Pharma" alt="Logo Roquette Pharma">
+                        <div class="supplier-tooltip">
+                            <h4 class="tooltip-title">Roquette Pharma</h4>
+                            <div class="tooltip-info">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Lestrem, France</span>
+                            </div>
+                            <div class="tooltip-info">
+                                <i class="fas fa-star"></i>
+                                <span>Spécialité : Excipients à base de plantes</span>
+                            </div>
+                            <div class="tooltip-info">
+                                <i class="fas fa-flask"></i>
+                                <span>Types de produits : Amidon modifié, Sorbitol, Mannitol</span>
+                            </div>
+                            <div class="supplier-actions">
+                                <a href="#" class="btn btn-primary">Voir produits</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="supplier-details">
+                        <h3>Roquette Pharma</h3>
+                        <p>Expert en excipients naturels</p>
+                    </div>
+                </div>
+                
+              
+                
+                
+                  </div>    <!-- Fournisseur 6: Colorcon -->
+                <div class="supplier-card">
+                    <div class="supplier-logo">
+                        <img src="https://via.placeholder.com/200x100?text=Colorcon" alt="Logo Colorcon">
+                        <div class="supplier-tooltip">
+                            <h4 class="tooltip-title">Colorcon</h4>
+                            <div class="tooltip-info">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Dartford, Royaume-Uni</span>
+                            </div>
+                            <div class="tooltip-info">
+                                <i class="fas fa-star"></i>
+                                <span>Spécialité : Colorants et enrobages pharmaceutiques</span>
+                            </div>
+                            <div class="tooltip-info">
+                                <i class="fas fa-flask"></i>
+                                <span>Types de produits : Colorants, Films d'enrobage, Agents de brillance</span>
+                            </div>
+                            <div class="supplier-actions">
+                                <a href="#" class="btn btn-primary">Voir produits</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="supplier-details">
+                        <h3>Colorcon</h3>
+                        <p>Leader en colorants pharmaceutiques</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="pagination">
+                <a href="#" class="page-item active">1</a>
+                <a href="#" class="page-item">2</a>
+                <a href="#" class="page-item">3</a>
+                <a href="#" class="page-item"><i class="fas fa-angle-right"></i></a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>À propos de Chem Spot</h3>
+                    <p>Chem Spot est la plateforme de référence pour les matières premières pharmaceutiques en France, connectant laboratoires et fournisseurs depuis 2020.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Liens rapides</h3>
+                    <ul>
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="#">Catalogue</a></li>
+                        <li><a href="fournisseurs.html">Fournisseurs</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Contact</h3>
+                    <p>75 Avenue des Champs-Élysées, 75008 Paris</p>
+                    <p>+33 1 45 86 70 00</p>
+                    <p>contact@chemspot.fr</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Chem Spot. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
