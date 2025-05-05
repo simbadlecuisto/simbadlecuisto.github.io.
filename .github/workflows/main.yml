@@ -1,0 +1,47 @@
+name: Deploy to GitHub Pages
+
+# Contrôles quand le workflow s'exécute
+on:
+  # Déclenche le workflow lors d'un push sur la branche principale
+  push:
+    branches: [ "main" ]
+  # Permet d'exécuter ce workflow manuellement depuis l'interface GitHub Actions
+  workflow_dispatch:
+
+# Autorisations nécessaires pour le déploiement GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Un seul déploiement à la fois
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # Job unique pour déployer
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      # Étape 1: Récupérer le code source
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      # Étape 2: Configurer GitHub Pages
+      - name: Setup Pages
+        uses: actions/configure-pages@v2
+      
+      # Étape 3: Téléverser l'artefact (tout le contenu du dépôt)
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: '.'
+      
+      # Étape 4: Déployer sur GitHub Pages
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
