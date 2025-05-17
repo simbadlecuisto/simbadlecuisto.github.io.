@@ -416,12 +416,6 @@
             cursor: pointer;
         }
         
-<ul class="nav-menu">
-    <li><a href="index.html">Accueil</a></li>
-    <li><a href="#">Catalogue</a></li>
-    <li><a href="#">Fournisseurs</a></li>
-    <li><a href="#">Contact</a></li>
-</ul>
         .btn-primary {
             background-color: var(--primary);
             color: white;
@@ -433,11 +427,13 @@
             background-color: var(--primary-light);
             color: white;
         }
+        
         .img-logo-companion {
-    height: 150px;
-    object-fit: contain;
-    margin-left: 15px;
-}
+            height: 150px;
+            object-fit: contain;
+            margin-left: 15px;
+        }
+        
         .btn-outline {
             background-color: transparent;
             color: var(--primary);
@@ -564,8 +560,7 @@
                 gap: 2rem;
             }
         }
-        <ul>
-  
+        
         @media (max-width: 576px) {
             .product-grid {
                 grid-template-columns: 1fr;
@@ -576,6 +571,160 @@
                 flex-wrap: wrap;
             }
         }
+        
+        /* NOUVELLES RÈGLES CSS POUR LES MODIFICATIONS DEMANDÉES */
+        
+        /* Barre de recherche de fournisseurs (partie bleue) */
+        .supplier-search {
+            background-color: var(--primary-light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            color: white;
+        }
+
+        .supplier-search h2 {
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .supplier-search-form {
+            display: flex;
+            width: 100%;
+        }
+
+        .supplier-search-form input {
+            padding: 0.8rem 1rem;
+            border: none;
+            border-radius: 4px 0 0 4px;
+            width: 100%;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .supplier-search-form button {
+            padding: 0 1.5rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .supplier-search-form button:hover {
+            background-color: #1e3a5f;
+        }
+
+        /* Grille de fournisseurs (partie jaune) */
+        .supplier-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1.5rem;
+            background-color: #ffff99;
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+
+        .supplier-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            border: 2px solid var(--border);
+            height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .supplier-card:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+            z-index: 10;
+        }
+
+        .supplier-image {
+            height: 120px;
+            width: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            background-color: #f1f5f9;
+            border-radius: 50%;
+        }
+
+        .supplier-content {
+            padding: 1rem;
+        }
+
+        .supplier-content h4 {
+            margin: 0;
+            color: var(--primary);
+        }
+
+        .supplier-country {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-top: 0.5rem;
+        }
+
+        /* Info-bulle au survol */
+        .tooltip {
+            visibility: hidden;
+            width: 250px;
+            background-color: white;
+            color: var(--text);
+            text-align: left;
+            border-radius: 6px;
+            padding: 1rem;
+            position: absolute;
+            z-index: 20;
+            bottom: 110%;
+            left: 50%;
+            margin-left: -125px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+            border: 1px solid var(--border);
+        }
+
+        .tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -8px;
+            border-width: 8px;
+            border-style: solid;
+            border-color: white transparent transparent transparent;
+        }
+
+        .supplier-card:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .tooltip-content p {
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+        }
+
+        .tooltip-content p:first-child {
+            margin-top: 0;
+        }
+
+        .tooltip-content p:last-child {
+            margin-bottom: 0;
+        }
     </style>
 </head>
 <body>
@@ -583,12 +732,13 @@
         <div class="container">
             <div class="header-content">
                
-                <div style="display: flex; align-items: center;"></div>
+                <div style="display: flex; align-items: center;">
                     <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/chemspotV1-dt6tDoOKp1wAyi8oRMzxzufIVBfiu9.png" alt="Chem Spot Logo" class="logo">
                     <!-- Image gon.png à côté du logo -->
                     <img src="gon.png" alt="Gon" class="img-logo-companion">
+                </div>
                 <ul class="nav-menu">
-                    <li><a href="index.html">Accueil</a></li> <!-- MODIFIÉ: changé de "#" à "index.html" -->
+                    <li><a href="index.html">Accueil</a></li>
                     <li><a href="catalogue.html">Catalogue</a></li>
                     <li><a href="#">Fournisseurs</a></li>
                     <li><a href="#">Contact</a></li>
@@ -605,6 +755,7 @@
     <main class="main-content">
         <div class="container">
             <div class="page-layout">
+                <!-- Partie ROUGE : Sidebar modifiée avec catégories de fournisseurs et régulations -->
                 <aside class="sidebar">
                     <div class="filter-section">
                         <h3>Catégories</h3>
@@ -620,100 +771,104 @@
                     <div class="filter-section">
                         <h3>Fournisseurs</h3>
                         <ul>
-                            <li><a href="#">Cooper</a></li>
-                            <li><a href="#">BASF Pharma</a></li>
-                            <li><a href="#">Sanofi Chimie</a></li>
-                            <li><a href="#">Givaudan</a></li>
+                            <li><a href="#">Européens</a></li>
+                            <li><a href="#">Américains</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="filter-section">
+                        <h3>Réglementation</h3>
+                        <ul>
+                            <li><a href="#">EMA (Europe)</a></li>
+                            <li><a href="#">FDA (États-Unis)</a></li>
+                            <li><a href="#">ICH (International)</a></li>
+                            <li><a href="#">ANSM (France)</a></li>
                         </ul>
                     </div>
                 </aside>
                 
                 <div class="content-area">
-                    <div class="supplier-header">
+                    <!-- Partie BLEUE : Barre de recherche des fournisseurs -->
+                    <div class="supplier-search">
                         <h2>Matières premières pharmaceutiques de Cooper</h2>
-                        <div class="supplier-info">
-                            <div class="supplier-details">
-                                <h3>Cooper</h3>
-                                <p><strong>Localisation :</strong> Paris, France</p>
-                                <p><strong>Certifications :</strong> ISO 9001, BPF</p>
-                                <p><strong>Contact :</strong> +33 1 45 86 70 00 | contact@cooper.fr</p>
-                            </div>
+                        <div class="search-container">
+                            <form class="supplier-search-form">
+                                <input type="text" placeholder="Rechercher un fournisseur...">
+                                <button type="submit"><i class="fas fa-search"></i></button>
+                            </form>
                         </div>
                     </div>
                     
-                    <div class="product-grid">
-                        <div class="product-card">
-                            <div class="product-image">
-                                <span>Image Produit</span>
+                    <!-- Partie JAUNE : Grille des fournisseurs avec infobulles -->
+                    <div class="supplier-grid">
+                        <div class="supplier-card">
+                            <div class="supplier-image">
+                                <!-- Le logo sera ajouté ici -->
+                                <span>Logo Cooper</span>
                             </div>
-                            <div class="product-content">
-                                <h4>Acide acétylsalicylique</h4>
-                                <span class="product-category">Principe actif anti-inflammatoire</span>
-                                <div class="product-details">
-                                    <p><strong>Poids moléculaire :</strong> 180.16 g/mol</p>
-                                    <p><strong>Pureté :</strong> ≥99.0%</p>
-                                </div>
-                                <p class="product-price">45€/kg</p>
-                                <div class="product-actions">
-                                    <a href="#" class="btn btn-primary">Demander un devis</a>
-                                    <a href="#" class="btn btn-outline"><i class="fas fa-info-circle"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="product-card">
-                            <div class="product-image">
-                                <span>Image Produit</span>
-                            </div>
-                            <div class="product-content">
-                                <h4>Paracétamol</h4>
-                                <span class="product-category">Analgésique et antipyrétique</span>
-                                <div class="product-details">
-                                    <p><strong>Poids moléculaire :</strong> 151.16 g/mol</p>
-                                    <p><strong>Pureté :</strong> ≥98.0%</p>
-                                </div>
-                                <p class="product-price">38€/kg</p>
-                                <div class="product-actions">
-                                    <a href="#" class="btn btn-primary">Demander un devis</a>
-                                    <a href="#" class="btn btn-outline"><i class="fas fa-info-circle"></i></a>
+                            <div class="supplier-content">
+                                <h4>Cooper</h4>
+                                <span class="supplier-country">France</span>
+                                <div class="tooltip">
+                                    <div class="tooltip-content">
+                                        <p><strong>Pays :</strong> France</p>
+                                        <p><strong>Types de produits :</strong> Principes actifs, Excipients</p>
+                                        <p><strong>Réglementation :</strong> EMA, ANSM</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="product-card">
-                            <div class="product-image">
-                                <span>Image Produit</span>
+                        <div class="supplier-card">
+                            <div class="supplier-image">
+                                <!-- Le logo sera ajouté ici -->
+                                <span>Logo BASF</span>
                             </div>
-                            <div class="product-content">
-                                <h4>Ibuprofène</h4>
-                                <span class="product-category">Anti-inflammatoire non stéroïdien</span>
-                                <div class="product-details">
-                                    <p><strong>Poids moléculaire :</strong> 206.29 g/mol</p>
-                                    <p><strong>Pureté :</strong> ≥98.5%</p>
-                                </div>
-                                <p class="product-price">52€/kg</p>
-                                <div class="product-actions">
-                                    <a href="#" class="btn btn-primary">Demander un devis</a>
-                                    <a href="#" class="btn btn-outline"><i class="fas fa-info-circle"></i></a>
+                            <div class="supplier-content">
+                                <h4>BASF Pharma</h4>
+                                <span class="supplier-country">Allemagne</span>
+                                <div class="tooltip">
+                                    <div class="tooltip-content">
+                                        <p><strong>Pays :</strong> Allemagne</p>
+                                        <p><strong>Types de produits :</strong> Excipients, Colorants</p>
+                                        <p><strong>Réglementation :</strong> EMA, ICH</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="product-card">
-                            <div class="product-image">
-                                <span>Image Produit</span>
+                        <div class="supplier-card">
+                            <div class="supplier-image">
+                                <!-- Le logo sera ajouté ici -->
+                                <span>Logo Sanofi</span>
                             </div>
-                            <div class="product-content">
-                                <h4>Lactose monohydraté</h4>
-                                <span class="product-category">Excipient couramment utilisé</span>
-                                <div class="product-details">
-                                    <p><strong>Poids moléculaire :</strong> 360.31 g/mol</p>
-                                    <p><strong>Pureté :</strong> ≥99.0%</p>
+                            <div class="supplier-content">
+                                <h4>Sanofi Chimie</h4>
+                                <span class="supplier-country">France</span>
+                                <div class="tooltip">
+                                    <div class="tooltip-content">
+                                        <p><strong>Pays :</strong> France</p>
+                                        <p><strong>Types de produits :</strong> Principes actifs, Solvants</p>
+                                        <p><strong>Réglementation :</strong> EMA, ANSM, ICH</p>
+                                    </div>
                                 </div>
-                                <p class="product-price">15€/kg</p>
-                                <div class="product-actions">
-                                    <a href="#" class="btn btn-primary">Demander un devis</a>
-                                    <a href="#" class="btn btn-outline"><i class="fas fa-info-circle"></i></a>
+                            </div>
+                        </div>
+                        
+                        <div class="supplier-card">
+                            <div class="supplier-image">
+                                <!-- Le logo sera ajouté ici -->
+                                <span>Logo Givaudan</span>
+                            </div>
+                            <div class="supplier-content">
+                                <h4>Givaudan</h4>
+                                <span class="supplier-country">Suisse</span>
+                                <div class="tooltip">
+                                    <div class="tooltip-content">
+                                        <p><strong>Pays :</strong> Suisse</p>
+                                        <p><strong>Types de produits :</strong> Arômes, Colorants</p>
+                                        <p><strong>Réglementation :</strong> EMA, ICH</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -734,8 +889,8 @@
                 <div class="footer-column">
                     <h3>Liens rapides</h3>
                     <ul>
-                        <li><a href="index.html">Accueil</a></li> <!-- MODIFIÉ: changé de "#" à "index.html" -->
-                        <li><a href="#">Catalogue</a></li>
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="catalogue.html">Catalogue</a></li>
                         <li><a href="#">Fournisseurs</a></li>
                         <li><a href="#">Contact</a></li>
                     </ul>
