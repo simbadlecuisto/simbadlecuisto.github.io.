@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chem Spot - Fournisseurs de Matières Premières Pharmaceutiques</title>
+    <title>Chem Spot - Marketplace B2B des Matières Premières Pharmaceutiques</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Reset et variables */
@@ -12,12 +12,16 @@
             --primary-light: #4299e1;
             --secondary: #718096;
             --accent: #4fd1c5;
+            --success: #48bb78;
+            --warning: #ed8936;
+            --danger: #f56565;
             --background: #f7fafc;
             --card-bg: #ffffff;
             --text: #2d3748;
             --text-light: #718096;
             --border: #e2e8f0;
             --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
             --transition: all 0.3s ease;
         }
         
@@ -93,7 +97,7 @@
         }
         
         .logo {
-            height: 200px;
+            height: 60px;
             object-fit: contain;
         }
         
@@ -137,139 +141,278 @@
             width: 100%;
         }
         
-        .search-form {
+        .header-actions {
             display: flex;
-            max-width: 300px;
-        }
-        
-        .search-form input {
-            padding: 0.7rem 1rem;
-            border: 1px solid var(--border);
-            border-radius: 4px 0 0 4px;
-            width: 100%;
-            font-size: 0.9rem;
-            outline: none;
-            transition: var(--transition);
-        }
-        
-        .search-form input:focus {
-            border-color: var(--primary-light);
-            box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.2);
-        }
-        
-        .search-form button {
-            padding: 0 1.25rem;
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 0 4px 4px 0;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        
-        .search-form button:hover {
-            background-color: var(--primary-light);
-        }
-        
-        /* Page header */
-        .page-header {
-            background-color: var(--primary);
-            color: white;
-            padding: 3rem 0;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .page-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, rgba(44, 82, 130, 0.95), rgba(44, 82, 130, 0.8));
-            z-index: 1;
-        }
-        
-        .page-header::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('data:image/svg+xml;utf8,<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><path d="M20 0 L20 40 M0 20 L40 20" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></svg>');
-            background-size: 30px 30px;
-            z-index: 0;
-        }
-        
-        .page-header-content {
-            position: relative;
-            z-index: 2;
-        }
-        
-        .page-header h1 {
-            color: white;
-            margin-bottom: 1rem;
-            font-size: 2.25rem;
-        }
-        
-        .page-header p {
-            max-width: 700px;
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 1.125rem;
-        }
-        
-        /* Main content */
-        .main-content {
-            padding: 3rem 0;
-        }
-        
-        /* Filter bar */
-        .filter-bar {
-            background-color: var(--card-bg);
-            border-radius: 8px;
-            box-shadow: var(--shadow);
-            padding: 1.25rem;
-            margin-bottom: 2rem;
-            display: flex;
-            flex-wrap: wrap;
             gap: 1rem;
             align-items: center;
         }
         
-        .filter-label {
-            font-weight: 500;
-            color: var(--text);
-        }
-        
-        .filter-btn {
-            padding: 0.5rem 1rem;
-            background-color: transparent;
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            color: var(--text-light);
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            border: none;
             cursor: pointer;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
             transition: var(--transition);
             font-size: 0.9rem;
         }
         
-        .filter-btn:hover, .filter-btn.active {
+        .btn-primary {
             background-color: var(--primary);
             color: white;
-            border-color: var(--primary);
         }
         
-        /* Suppliers grid */
+        .btn-primary:hover {
+            background-color: var(--primary-light);
+            color: white;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #38a169;
+            color: white;
+        }
+        
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 4rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="rgba(255,255,255,0.05)" fill-opacity="0.05"><circle cx="30" cy="30" r="3"/></g></svg>');
+            background-size: 60px 60px;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .hero h1 {
+            color: white;
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        /* Quick Search */
+        .quick-search {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .search-form {
+            display: flex;
+            gap: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .search-form input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            background-color: white;
+        }
+        
+        .search-form button {
+            padding: 1rem 2rem;
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+        }
+        
+        .search-form button:hover {
+            background-color: #319795;
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 4rem 0;
+            background-color: white;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .feature-card {
+            text-align: center;
+            padding: 2rem;
+            background-color: var(--background);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 1rem;
+        }
+        
+        /* Value Proposition */
+        .value-prop {
+            padding: 4rem 0;
+            background: linear-gradient(45deg, #f7fafc 0%, #edf2f7 100%);
+        }
+        
+        .value-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        
+        .value-content h2 {
+            font-size: 2.25rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .value-list {
+            list-style: none;
+            margin: 2rem 0;
+        }
+        
+        .value-list li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        .value-list i {
+            color: var(--success);
+            margin-right: 1rem;
+            font-size: 1.25rem;
+        }
+        
+        /* Suppliers Preview */
+        .suppliers-preview {
+            padding: 4rem 0;
+            background-color: white;
+        }
+        
         .suppliers-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 1.5rem;
+            margin-top: 2rem;
         }
         
         .supplier-card {
             background-color: var(--card-bg);
-            border-radius: 8px;
+            border-radius: 12px;
             overflow: hidden;
             box-shadow: var(--shadow);
             border: 1px solid var(--border);
@@ -279,44 +422,75 @@
         
         .supplier-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.08);
+            box-shadow: var(--shadow-lg);
         }
         
-        .supplier-logo {
-            height: 180px;
-            background-color: #f8fafc;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .supplier-header {
             padding: 1.5rem;
-            position: relative;
-        }
-        
-        .supplier-logo img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-        
-        .supplier-details {
-            padding: 1.25rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
             text-align: center;
         }
         
-        .supplier-details h3 {
-            margin-bottom: 0.5rem;
+        .supplier-logo {
+            width: 60px;
+            height: 60px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+            color: var(--primary);
+            font-weight: 700;
         }
         
-        .supplier-details p {
+        .supplier-details {
+            padding: 1.5rem;
+        }
+        
+        .supplier-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .supplier-location {
             color: var(--text-light);
             font-size: 0.9rem;
+        }
+        
+        .supplier-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .rating-stars {
+            color: #fbbf24;
+        }
+        
+        .supplier-specialties {
+            margin: 1rem 0;
+        }
+        
+        .specialty-tag {
+            display: inline-block;
+            background-color: var(--background);
+            color: var(--text);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin: 0.25rem 0.25rem 0.25rem 0;
         }
         
         .supplier-badge {
             position: absolute;
             top: 1rem;
             right: 1rem;
-            background-color: var(--accent);
+            background-color: var(--success);
             color: white;
             font-size: 0.75rem;
             font-weight: 600;
@@ -324,86 +498,31 @@
             border-radius: 20px;
         }
         
-        /* Tooltip */
-        .supplier-tooltip {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(44, 82, 130, 0.95);
+        /* CTA Section */
+        .cta-section {
+            padding: 4rem 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
             color: white;
-            padding: 1.5rem;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        
-        .supplier-logo:hover .supplier-tooltip {
-            opacity: 1;
-        }
-        
-        .tooltip-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
             text-align: center;
         }
         
-        .tooltip-info {
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: flex-start;
-        }
-        
-        .tooltip-info i {
-            color: var(--accent);
-            margin-right: 0.5rem;
-            min-width: 20px;
-            margin-top: 4px;
-        }
-        
-        .supplier-actions {
-            display: flex;
-            justify-content: center;
-            gap: 0.75rem;
-            margin-top: 1.25rem;
-        }
-        
-        .supplier-actions .btn {
-            font-size: 0.85rem;
-            padding: 0.5rem 1rem;
-        }
-        
-        /* Pagination */
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 3rem;
-            gap: 0.5rem;
-        }
-        
-        .page-item {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 6px;
-            background-color: var(--card-bg);
-            border: 1px solid var(--border);
-            color: var(--text);
-            font-weight: 500;
-            transition: var(--transition);
-        }
-        
-        .page-item:hover, .page-item.active {
-            background-color: var(--primary);
-            border-color: var(--primary);
+        .cta-content h2 {
             color: white;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .cta-content p {
+            font-size: 1.125rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
         }
         
         /* Footer */
@@ -411,21 +530,14 @@
             background-color: #2d3748;
             color: #cbd5e0;
             padding: 3rem 0 1.5rem;
-            margin-top: 4rem;
         }
         
         .footer-content {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 2rem;
         }
         
-        .footer-column {
-            flex: 1;
-            min-width: 200px;
-        }
-      
         .footer-column h3 {
             color: white;
             margin-bottom: 1.25rem;
@@ -477,10 +589,63 @@
             font-size: 0.9rem;
         }
         
+        /* Market Data Widget */
+        .market-widget {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+        
+        .widget-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .price-item:last-child {
+            border-bottom: none;
+        }
+        
+        .price-name {
+            font-weight: 500;
+        }
+        
+        .price-value {
+            font-weight: 600;
+        }
+        
+        .price-up {
+            color: var(--success);
+        }
+        
+        .price-down {
+            color: var(--danger);
+        }
+        
         /* Responsive design */
         @media (max-width: 992px) {
-            .suppliers-grid {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            .value-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .hero-stats {
+                gap: 1.5rem;
+            }
+            
+            .stat-number {
+                font-size: 2rem;
             }
         }
         
@@ -496,337 +661,775 @@
                 justify-content: space-between;
             }
             
-            .search-form {
+            .header-actions {
                 width: 100%;
-                max-width: none;
+                justify-content: center;
             }
             
-            .page-header {
-                padding: 2rem 0;
+            .hero h1 {
+                font-size: 2rem;
             }
             
-            .page-header h1 {
-                font-size: 1.75rem;
+            .hero-subtitle {
+                font-size: 1rem;
             }
             
-            .filter-bar {
+            .search-form {
                 flex-direction: column;
-                align-items: flex-start;
+                gap: 1rem;
             }
             
-            .suppliers-grid {
-                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            }
-            
-            .footer-content {
+            .hero-stats {
                 flex-direction: column;
-                gap: 2rem;
+                gap: 1rem;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
             }
         }
         
         @media (max-width: 576px) {
-            .suppliers-grid {
-                grid-template-columns: 1fr;
-            }
-            
             .nav-menu {
                 gap: 1rem;
                 flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero {
+                padding: 2rem 0;
             }
         }
-        /* Style pour les images personnalisées */
-.img-center {
-    display: block;
-    margin: 30px auto;
-    width: 80%;
-    max-width: 3000px;
-    border-radius: 8px;
-    box-shadow: var(--shadow);
-}
-
-
-
+        
+        /* Animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
     </style>
-    
 </head>
 <body>
- 
     <header>
         <div class="container">
             <div class="header-content">
                 <div style="display: flex; align-items: center;">
                     <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/chemspotV1-dt6tDoOKp1wAyi8oRMzxzufIVBfiu9.png" alt="Chem Spot Logo" class="logo">
-                    <!-- Image gon.png à côté du logo -->
-               
                 </div>
                 <ul class="nav-menu">
-                    <li><a href="index.html">Accueil</a></li>
-                    <li><a href="catalogue.html">Catalogue</a></li>
-                    <li><a href="fournisseurs.html" class="active">Fournisseurs</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <li><a href="#accueil" class="active">Accueil</a></li>
+                    <li><a href="#catalogue">Catalogue</a></li>
+                    <li><a href="#fournisseurs">Fournisseurs</a></li>
+                    <li><a href="#contact">Contact</a></li>
                 </ul>
                 
-                <form class="search-form">
-                    <input type="text" placeholder="Rechercher un fournisseur...">
-                    <button type="submit"><i class="fas fa-search"></i></button>
-                </form>
+                <div class="header-actions">
+                    <a href="#inscription" class="btn btn-outline btn-sm">S'inscrire</a>
+                    <a href="#connexion" class="btn btn-primary btn-sm">Se connecter</a>
+                </div>
             </div>
         </div>
     </header>
 
-    <section class="page-header">
+    <section class="hero" id="accueil">
         <div class="container">
-            <div class="page-header-content">
-                <h1>Nos Fournisseurs de Matières Premières</h1>
-                <p>Découvrez notre réseau de fournisseurs certifiés proposant des matières premières pharmaceutiques de haute qualité, conformes aux normes internationales.</p>
+            <div class="hero-content animate-fade-in">
+                <h1>La Marketplace B2B des Matières Premières Pharmaceutiques</h1>
+                <p class="hero-subtitle">
+                    Connectez-vous directement avec les fournisseurs d'APIs, excipients et matières premières. 
+                    Transactions sécurisées, prix transparents, livraison garantie.
+                </p>
+                
+                <div class="quick-search">
+                    <h3 style="color: white; text-align: center; margin-bottom: 1rem;">Trouvez votre matière première</h3>
+                    <form class="search-form">
+                        <input type="text" placeholder="Ex: Paracétamol, Excipients, API...">
+                        <button type="submit">
+                            <i class="fas fa-search"></i> Rechercher
+                        </button>
+                    </form>
+                </div>
+                
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">500+</span>
+                        <span class="stat-label">Produits disponibles</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">50+</span>
+                        <span class="stat-label">Fournisseurs vérifiés</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">€2M+</span>
+                        <span class="stat-label">Transactions sécurisées</span>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-<ul>
-    <li><a href="index.html">Accueil</a></li>
-    <li><a href="catalogue.html">Catalogue</a></li>
-    <li><a href="fournisseurs.html">Fournisseurs</a></li>
-    <li><a href="#">Contact</a></li>
-</ul>
-<!-- Image kamaji.png au centre -->
-<div class="container">
-    <img src="ouibadakor.png"  class="img-center">
-</div>
-    <main class="main-content">
+    <section class="features">
         <div class="container">
-            <div class="filter-bar">
-                <span class="filter-label">Filtrer par :</span>
-                <button class="filter-btn active">Tous</button>
-                <button class="filter-btn">Principes actifs</button>
-                <button class="filter-btn">Excipients</button>
-                <button class="filter-btn">Arômes et colorants</button>
-                <button class="filter-btn">Conservateurs</button>
+            <div class="section-title">
+                <h2>Pourquoi choisir Chem Spot ?</h2>
+                <p class="section-subtitle">
+                    Simplifiez vos achats pharmaceutiques avec notre plateforme tout-en-un
+                </p>
             </div>
-           
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Fournisseurs Certifiés</h3>
+                    <p>Tous nos fournisseurs sont audités et certifiés BPF/GMP. Documentation complète disponible.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Prix Transparents</h3>
+                    <p>Accédez aux prix en temps réel et aux tendances du marché. Négociez directement avec les fournisseurs.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-truck"></i>
+                    </div>
+                    <h3>Livraison Sécurisée</h3>
+                    <p>Suivi GPS temps réel, chaîne du froid respectée, assurance incluse sur toutes les livraisons.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h3>Paiements Sécurisés</h3>
+                    <p>Système d'escrow intégré. L'argent n'est libéré qu'après validation de la livraison.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3>Support Expert</h3>
+                    <p>Équipe de pharmaciens disponible 7j/7 pour vous conseiller sur vos achats.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3>Réseau Mondial</h3>
+                    <p>Accès à un réseau de fournisseurs en Inde, Chine, Europe et Amérique du Nord.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
+    <section class="value-prop">
+        <div class="container">
+            <div class="value-grid">
+                <div class="value-content">
+                    <h2>Économisez temps et argent sur vos achats</h2>
+                    <p>Fini les appels téléphoniques interminables et les négociations par email. Avec Chem Spot, trouvez, comparez et achetez vos matières premières en quelques clics.</p>
+                    
+                    <ul class="value-list">
+                        <li><i class="fas fa-check-circle"></i> Comparaison automatique des prix</li>
+                        <li><i class="fas fa-check-circle"></i> Négociation en temps réel</li>
+                        <li><i class="fas fa-check-circle"></i> Documentation automatique</li>
+                        <li><i class="fas fa-check-circle"></i> Suivi logistique complet</li>
+                        <li><i class="fas fa-check-circle"></i> Alertes sur les tendances marché</li>
+                    </ul>
+                    
+                    <a href="#demo" class="btn btn-primary">Demander une démo gratuite</a>
+                </div>
+                
+                <div class="market-widget">
+                    <div class="widget-title">
+                        <i class="fas fa-chart-bar"></i> Prix du marché aujourd'hui
+                    </div>
+                    
+                    <div class="price-item">
+                        <span class="price-name">Paracétamol (Inde)</span>
+                        <span class="price-value price-up">15.2€/kg <i class="fas fa-arrow-up"></i></span>
+                    </div>
+                    
+                    <div class="price-item">
+                        <span class="price-name">Ibuprofène (Chine)</span>
+                        <span class="price-value price-down">22.8€/kg <i class="fas fa-arrow-down"></i></span>
+                    </div>
+                    
+                    <div class="price-item">
+                        <span class="price-name">Aspirine (Europe)</span>
+                        <span class="price-value">18.5€/kg</span>
+                    </div>
+                    
+                    <div class="price-item">
+                        <span class="price-name">Lactose (France)</span>
+                        <span class="price-value price-up">3.2€/kg <i class="fas fa-arrow-up"></i></span>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 1rem;">
+                        <a href="#" style="color: var(--primary); font-size: 0.9rem;">
+                            <i class="fas fa-external-link-alt"></i> Voir tous les prix
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="suppliers-preview" id="fournisseurs">
+        <div class="container">
+            <div class="section-title">
+                <h2>Nos Fournisseurs Partenaires</h2>
+                <p class="section-subtitle">
+                    Découvrez notre réseau de fournisseurs certifiés dans le monde entier
+                </p>
+            </div>
+            
             <div class="suppliers-grid">
-                <!-- Fournisseur 1: Cooper -->
                 <div class="supplier-card">
-                    <div class="supplier-logo">
-                        <img src="https://via.placeholder.com/200x100?text=Cooper" alt="Logo Cooper">
-                        <div class="supplier-tooltip">
-                            <h4 class="tooltip-title">Cooper</h4>
-                            <div class="tooltip-info">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span>Paris, France</span>
-                            </div>
-                            <div class="tooltip-info">
-                                <i class="fas fa-star"></i>
-                                <span>Spécialité : Principes actifs anti-inflammatoires</span>
-                            </div>
-                            <div class="tooltip-info">
-                                <i class="fas fa-flask"></i>
-                                <span>Types de produits : Acide acétylsalicylique, Paracétamol, Ibuprofène</span>
-                            </div>
-                            <div class="supplier-actions">
-                                <a href="#" class="btn btn-primary">Voir produits</a>
+                    <div class="supplier-badge">Certifié BPF</div>
+                    <div class="supplier-header">
+                        <div class="supplier-logo">PH</div>
+                        <h3>PharmaCorp India</h3>
+                    </div>
+                    <div class="supplier-details">
+                        <div class="supplier-meta">
+                            <span class="supplier-location">
+                                <i class="fas fa-map-marker-alt"></i> Mumbai, Inde
+                            </span>
+                            <div class="supplier-rating">
+                                <span class="rating-stars">★★★★★</span>
+                                <span>4.8</span>
                             </div>
                         </div>
-                    </div>
-                    <div class="supplier-badge">Certifié BPF</div>
-                    <div class="supplier-details">
-                        <h3>Cooper</h3>
-                        <p>Fournisseur leader de principes actifs</p>
+                        <p>Spécialiste des principes actifs anti-inflammatoires</p>
+                        <div class="supplier-specialties">
+                            <span class="specialty-tag">Paracétamol</span>
+                            <span class="specialty-tag">Ibuprofène</span>
+                            <span class="specialty-tag">Aspirine</span>
+                        </div>
+                        <div style="text-align: center;">
+                            <a href="#" class="btn btn-primary btn-sm">Voir produits</a>
+                        </div>
                     </div>
                 </div>
                 
-                <!-- Fournisseur 2: BASF Pharma -->
                 <div class="supplier-card">
-                    <div class="supplier-logo">
-                        <img src="https://via.placeholder.com/200x100?text=BASF+Pharma" alt="Logo BASF Pharma">
-                        <div class="supplier-tooltip">
-                            <h4 class="tooltip-title">BASF Pharma</h4>
-                            <div class="tooltip-info">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span>Ludwigshafen, Allemagne</span>
-                            </div>
-                            <div class="tooltip-info">
-                                <i class="fas fa-star"></i>
-                                <span>Spécialité : Excipients et polymères pharmaceutiques</span>
-                            </div>
-                            <div class="tooltip-info">
-                                <i class="fas fa-flask"></i>
-                                <span>Types de produits : Polymères d'enrobage, Agents liants, Désintégrants</span>
-                            </div>
-                            <div class="supplier-actions">
-                                <a href="#" class="btn btn-primary">Voir produits</a>
-                            </div>
-                        </div>
-                    </div>
                     <div class="supplier-badge">Premium</div>
-                    <div class="supplier-details">
+                    <div class="supplier-header">
+                        <div class="supplier-logo">BF</div>
                         <h3>BASF Pharma</h3>
-                        <p>Expert en excipients pharmaceutiques</p>
+                    </div>
+                    <div class="supplier-details">
+                        <div class="supplier-meta">
+                            <span class="supplier-location">
+                                <i class="fas fa-map-marker-alt"></i> Allemagne
+                            </span>
+                            <div class="supplier-rating">
+                                <span class="rating-stars">★★★★★</span>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                        <p>Leader mondial des excipients pharmaceutiques</p>
+                        <div class="supplier-specialties">
+                            <span class="specialty-tag">Polymères</span>
+                            <span class="specialty-tag">Liants</span>
+                            <span class="specialty-tag">Enrobages</span>
+                        </div>
+                        <div style="text-align: center;">
+                            <a href="#" class="btn btn-primary btn-sm">Voir produits</a>
+                        </div>
                     </div>
                 </div>
                 
-                <!-- Fournisseur 3: Sanofi Chimie -->
                 <div class="supplier-card">
-                    <div class="supplier-logo">
-                        <img src="https://via.placeholder.com/200x100?text=Sanofi+Chimie" alt="Logo Sanofi Chimie">
-                        <div class="supplier-tooltip">
-                            <h4 class="tooltip-title">Sanofi Chimie</h4>
-                            <div class="tooltip-info">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span>Lyon, France</span>
-                            </div>
-                            <div class="tooltip-info">
-                                <i class="fas fa-star"></i>
-                                <span>Spécialité : Principes actifs cardiovasculaires</span>
-                            </div>
-                            <div class="tooltip-info">
-                                <i class="fas fa-flask"></i>
-                                <span>Types de produits : Atorvastatine, Clopidogrel, Ramipril</span>
-                            </div>
-                            <div class="supplier-actions">
-                                <a href="#" class="btn btn-primary">Voir produits</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="supplier-badge">Certifié BPF</div>
-                    <div class="supplier-details">
+                    <div class="supplier-badge">Nouveau</div>
+                    <div class="supplier-header">
+                        <div class="supplier-logo">SC</div>
                         <h3>Sanofi Chimie</h3>
-                        <p>Leader en principes actifs cardiovasculaires</p>
+                    </div>
+                    <div class="supplier-details">
+                        <div class="supplier-meta">
+                            <span class="supplier-location">
+                                <i class="fas fa-map-marker-alt"></i> Lyon, France
+                            </span>
+                            <div class="supplier-rating">
+                                <span class="rating-stars">★★★★☆</span>
+                                <span>4.6</span>
+                            </div>
+                        </div>
+                        <p>Spécialiste cardiovasculaire et métabolisme</p>
+                        <div class="supplier-specialties">
+                            <span class="specialty-tag">Atorvastatine</span>
+                            <span class="specialty-tag">Clopidogrel</span>
+                            <span class="specialty-tag">Ramipril</span>
+                        </div>
+                        <div style="text-align: center;">
+                            <a href="#" class="btn btn-primary btn-sm">Voir produits</a>
+                        </div>
                     </div>
                 </div>
                 
-                <!-- Fournisseur 4: Givaudan -->
                 <div class="supplier-card">
-                    <div class="supplier-logo">
-                        <img src="https://via.placeholder.com/200x100?text=Givaudan" alt="Logo Givaudan">
-                        <div class="supplier-tooltip">
-                            <h4 class="tooltip-title">Givaudan</h4>
-                            <div class="tooltip-info">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span>Genève, Suisse</span>
-                            </div>
-                            <div class="tooltip-info">
-                                <i class="fas fa-star"></i>
-                                <span>Spécialité : Arômes et parfums pharmaceutiques</span>
-                            </div>
-                            <div class="tooltip-info">
-                                <i class="fas fa-flask"></i>
-                                <span>Types de produits : Arômes médicinaux, Édulcorants, Masqueurs d'amertume</span>
-                            </div>
-                            <div class="supplier-actions">
-                                <a href="#" class="btn btn-primary">Voir produits</a>
+                    <div class="supplier-badge">Vérifié</div>
+                    <div class="supplier-header">
+                        <div class="supplier-logo">GV</div>
+                        <h3>Givaudan Pharma</h3>
+                    </div>
+                    <div class="supplier-details">
+                        <div class="supplier-meta">
+                            <span class="supplier-location">
+                                <i class="fas fa-map-marker-alt"></i> Genève, Suisse
+                            </span>
+                            <div class="supplier-rating">
+                                <span class="rating-stars">★★★★★</span>
+                                <span>4.7</span>
                             </div>
                         </div>
-                    </div>
-                    <div class="supplier-badge">Premium</div>
-                    <div class="supplier-details">
-                        <h3>Givaudan</h3>
-                        <p>Spécialiste des arômes pharmaceutiques</p>
+                        <p>Expert en arômes et masqueurs d'amertume</p>
+                        <div class="supplier-specialties">
+                            <span class="specialty-tag">Arômes</span>
+                            <span class="specialty-tag">Édulcorants</span>
+                            <span class="specialty-tag">Colorants</span>
+                        </div>
+                        <div style="text-align: center;">
+                            <a href="#" class="btn btn-primary btn-sm">Voir produits</a>
+                        </div>
                     </div>
                 </div>
                 
-                <!-- Fournisseur 5: Roquette Pharma -->
                 <div class="supplier-card">
-                    <div class="supplier-logo">
-                        <img src="https://via.placeholder.com/200x100?text=Roquette+Pharma" alt="Logo Roquette Pharma">
-                        <div class="supplier-tooltip">
-                            <h4 class="tooltip-title">Roquette Pharma</h4>
-                            <div class="tooltip-info">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span>Lestrem, France</span>
-                            </div>
-                            <div class="tooltip-info">
-                                <i class="fas fa-star"></i>
-                                <span>Spécialité : Excipients à base de plantes</span>
-                            </div>
-                            <div class="tooltip-info">
-                                <i class="fas fa-flask"></i>
-                                <span>Types de produits : Amidon modifié, Sorbitol, Mannitol</span>
-                            </div>
-                            <div class="supplier-actions">
-                                <a href="#" class="btn btn-primary">Voir produits</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="supplier-details">
+                    <div class="supplier-badge">Certifié BPF</div>
+                    <div class="supplier-header">
+                        <div class="supplier-logo">RQ</div>
                         <h3>Roquette Pharma</h3>
-                        <p>Expert en excipients naturels</p>
+                    </div>
+                    <div class="supplier-details">
+                        <div class="supplier-meta">
+                            <span class="supplier-location">
+                                <i class="fas fa-map-marker-alt"></i> Lestrem, France
+                            </span>
+                            <div class="supplier-rating">
+                                <span class="rating-stars">★★★★☆</span>
+                                <span>4.5</span>
+                            </div>
+                        </div>
+                        <p>Excipients naturels et amidon modifié</p>
+                        <div class="supplier-specialties">
+                            <span class="specialty-tag">Amidon</span>
+                            <span class="specialty-tag">Sorbitol</span>
+                            <span class="specialty-tag">Mannitol</span>
+                        </div>
+                        <div style="text-align: center;">
+                            <a href="#" class="btn btn-primary btn-sm">Voir produits</a>
+                        </div>
                     </div>
                 </div>
                 
-              
-                
-                
-                  </div>    <!-- Fournisseur 6: Colorcon -->
                 <div class="supplier-card">
-                    <div class="supplier-logo">
-                        <img src="https://via.placeholder.com/200x100?text=Colorcon" alt="Logo Colorcon">
-                        <div class="supplier-tooltip">
-                            <h4 class="tooltip-title">Colorcon</h4>
-                            <div class="tooltip-info">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span>Dartford, Royaume-Uni</span>
-                            </div>
-                            <div class="tooltip-info">
-                                <i class="fas fa-star"></i>
-                                <span>Spécialité : Colorants et enrobages pharmaceutiques</span>
-                            </div>
-                            <div class="tooltip-info">
-                                <i class="fas fa-flask"></i>
-                                <span>Types de produits : Colorants, Films d'enrobage, Agents de brillance</span>
-                            </div>
-                            <div class="supplier-actions">
-                                <a href="#" class="btn btn-primary">Voir produits</a>
-                            </div>
-                        </div>
+                    <div class="supplier-badge">Express</div>
+                    <div class="supplier-header">
+                        <div class="supplier-logo">CC</div>
+                        <h3>ChemChina Exports</h3>
                     </div>
                     <div class="supplier-details">
-                        <h3>Colorcon</h3>
-                        <p>Leader en colorants pharmaceutiques</p>
+                        <div class="supplier-meta">
+                            <span class="supplier-location">
+                                <i class="fas fa-map-marker-alt"></i> Shanghai, Chine
+                            </span>
+                            <div class="supplier-rating">
+                                <span class="rating-stars">★★★★☆</span>
+                                <span>4.4</span>
+                            </div>
+                        </div>
+                        <p>APIs génériques à prix compétitifs</p>
+                        <div class="supplier-specialties">
+                            <span class="specialty-tag">Antibiotiques</span>
+                            <span class="specialty-tag">Vitamines</span>
+                            <span class="specialty-tag">Hormones</span>
+                        </div>
+                        <div style="text-align: center;">
+                            <a href="#" class="btn btn-primary btn-sm">Voir produits</a>
+                        </div>
                     </div>
                 </div>
             </div>
             
-            <div class="pagination">
-                <a href="#" class="page-item active">1</a>
-                <a href="#" class="page-item">2</a>
-                <a href="#" class="page-item">3</a>
-                <a href="#" class="page-item"><i class="fas fa-angle-right"></i></a>
+            <div style="text-align: center; margin-top: 2rem;">
+                <a href="#fournisseurs" class="btn btn-outline">Voir tous les fournisseurs</a>
             </div>
         </div>
-    </main>
+    </section>
+
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Prêt à révolutionner vos achats pharmaceutiques ?</h2>
+                <p>Rejoignez plus de 200+ entreprises qui font confiance à Chem Spot pour leurs approvisionnements</p>
+                
+                <div class="cta-buttons">
+                    <a href="#inscription-fournisseur" class="btn btn-success">
+                        <i class="fas fa-store"></i> Devenir fournisseur (Gratuit)
+                    </a>
+                    <a href="#inscription-acheteur" class="btn btn-outline" style="background-color: white; color: var(--primary);">
+                        <i class="fas fa-shopping-cart"></i> Créer un compte acheteur
+                    </a>
+                </div>
+                
+                <div style="margin-top: 2rem; font-size: 0.9rem; opacity: 0.8;">
+                    <i class="fas fa-lock"></i> Inscription gratuite • Pas de frais cachés • Support 24/7
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Témoignages -->
+    <section style="padding: 4rem 0; background-color: white;">
+        <div class="container">
+            <div class="section-title">
+                <h2>Ce que disent nos clients</h2>
+                <p class="section-subtitle">Découvrez les témoignages de nos utilisateurs</p>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem;">
+                <div style="background-color: var(--background); padding: 2rem; border-radius: 12px; border: 1px solid var(--border);">
+                    <div style="color: #fbbf24; font-size: 1.5rem; margin-bottom: 1rem;">★★★★★</div>
+                    <p style="font-style: italic; margin-bottom: 1.5rem;">"Grâce à Chem Spot, nous avons réduit nos coûts d'approvisionnement de 25% et nos délais de 40%. Une révolution pour notre laboratoire."</p>
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div style="width: 50px; height: 50px; background-color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">
+                            DM
+                        </div>
+                        <div>
+                            <div style="font-weight: 600;">Dr. Marie Dubois</div>
+                            <div style="color: var(--text-light); font-size: 0.9rem;">Directrice R&D, Laboratoire Dupont</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background-color: var(--background); padding: 2rem; border-radius: 12px; border: 1px solid var(--border);">
+                    <div style="color: #fbbf24; font-size: 1.5rem; margin-bottom: 1rem;">★★★★★</div>
+                    <p style="font-style: italic; margin-bottom: 1.5rem;">"L'interface est intuitive et le support client exceptionnel. Nous avons trouvé des fournisseurs que nous n'aurions jamais découverts autrement."</p>
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div style="width: 50px; height: 50px; background-color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">
+                            JL
+                        </div>
+                        <div>
+                            <div style="font-weight: 600;">Jean Lecomte</div>
+                            <div style="color: var(--text-light); font-size: 0.9rem;">Responsable Achats, BioMed France</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background-color: var(--background); padding: 2rem; border-radius: 12px; border: 1px solid var(--border);">
+                    <div style="color: #fbbf24; font-size: 1.5rem; margin-bottom: 1rem;">★★★★☆</div>
+                    <p style="font-style: italic; margin-bottom: 1.5rem;">"Plateforme fiable avec des fournisseurs de qualité. La traçabilité est parfaite pour nos audits qualité."</p>
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div style="width: 50px; height: 50px; background-color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">
+                            SB
+                        </div>
+                        <div>
+                            <div style="font-weight: 600;">Sophie Bernard</div>
+                            <div style="color: var(--text-light); font-size: 0.9rem;">QA Manager, Generic Plus</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Blog/Actualités -->
+    <section style="padding: 4rem 0; background: linear-gradient(45deg, #f7fafc 0%, #edf2f7 100%);">
+        <div class="container">
+            <div class="section-title">
+                <h2>Actualités & Insights</h2>
+                <p class="section-subtitle">Restez informé des dernières tendances du marché pharmaceutique</p>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem;">
+                <article style="background-color: white; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--border);">
+                    <div style="height: 200px; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div style="padding: 1.5rem;">
+                        <div style="color: var(--text-light); font-size: 0.85rem; margin-bottom: 0.5rem;">
+                            <i class="fas fa-calendar"></i> 15 Mars 2024
+                        </div>
+                        <h3 style="margin-bottom: 1rem;">Évolution des prix des APIs : Tendances Q1 2024</h3>
+                        <p style="color: var(--text-light); margin-bottom: 1rem;">Analyse détaillée de l'évolution des prix des principaux APIs au premier trimestre 2024...</p>
+                        <a href="#" style="color: var(--primary); font-weight: 500;">Lire la suite <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+                
+                <article style="background-color: white; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--border);">
+                    <div style="height: 200px; background: linear-gradient(135deg, var(--success) 0%, #38a169 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div style="padding: 1.5rem;">
+                        <div style="color: var(--text-light); font-size: 0.85rem; margin-bottom: 0.5rem;">
+                            <i class="fas fa-calendar"></i> 12 Mars 2024
+                        </div>
+                        <h3 style="margin-bottom: 1rem;">Nouvelles réglementations FDA 2024</h3>
+                        <p style="color: var(--text-light); margin-bottom: 1rem;">Impact des nouvelles directives FDA sur l'importation d'APIs depuis l'Asie...</p>
+                        <a href="#" style="color: var(--primary); font-weight: 500;">Lire la suite <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+                
+                <article style="background-color: white; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--border);">
+                    <div style="height: 200px; background: linear-gradient(135deg, var(--warning) 0%, #d69e2e 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <div style="padding: 1.5rem;">
+                        <div style="color: var(--text-light); font-size: 0.85rem; margin-bottom: 0.5rem;">
+                            <i class="fas fa-calendar"></i> 8 Mars 2024
+                        </div>
+                        <h3 style="margin-bottom: 1rem;">Guide : Sourcing en Inde post-COVID</h3>
+                        <p style="color: var(--text-light); margin-bottom: 1rem;">Meilleures pratiques pour sécuriser votre supply chain avec les fournisseurs indiens...</p>
+                        <a href="#" style="color: var(--primary); font-weight: 500;">Lire la suite <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+            </div>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <a href="#blog" class="btn btn-outline">Voir tous les articles</a>
+            </div>
+        </div>
+    </section>
 
     <footer>
         <div class="container">
             <div class="footer-content">
                 <div class="footer-column">
-                    <h3>À propos de Chem Spot</h3>
-                    <p>Chem Spot est la plateforme de référence pour les matières premières pharmaceutiques en France, connectant laboratoires et fournisseurs depuis 2020.</p>
+                    <h3>Chem Spot</h3>
+                    <p>La marketplace B2B de référence pour les matières premières pharmaceutiques. Connectez-vous avec les meilleurs fournisseurs mondiaux en toute sécurité.</p>
+                    <div style="margin-top: 1.5rem;">
+                        <a href="#" style="margin-right: 1rem; font-size: 1.5rem;"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" style="margin-right: 1rem; font-size: 1.5rem;"><i class="fab fa-twitter"></i></a>
+                        <a href="#" style="margin-right: 1rem; font-size: 1.5rem;"><i class="fab fa-youtube"></i></a>
+                    </div>
                 </div>
                 
                 <div class="footer-column">
-                    <h3>Liens rapides</h3>
+                    <h3>Produits</h3>
                     <ul>
-                        <li><a href="index.html">Accueil</a></li>
-                        <li><a href="#">Catalogue</a></li>
-                        <li><a href="fournisseurs.html">Fournisseurs</a></li>
+                        <li><a href="#">Principes Actifs</a></li>
+                        <li><a href="#">Excipients</a></li>
+                        <li><a href="#">Arômes & Colorants</a></li>
+                        <li><a href="#">Conservateurs</a></li>
+                        <li><a href="#">Matières Premières Bio</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="#">Audit Fournisseurs</a></li>
+                        <li><a href="#">Analyse Qualité</a></li>
+                        <li><a href="#">Logistique</a></li>
+                        <li><a href="#">Support Réglementaire</a></li>
+                        <li><a href="#">Formation</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="#">Centre d'aide</a></li>
                         <li><a href="#">Contact</a></li>
+                        <li><a href="#">Documentation API</a></li>
+                        <li><a href="#">Statut des services</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Entreprise</h3>
+                    <ul>
+                        <li><a href="#">À propos</a></li>
+                        <li><a href="#">Carrières</a></li>
+                        <li><a href="#">Presse</a></li>
+                        <li><a href="#">Partenaires</a></li>
+                        <li><a href="#">Investisseurs</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-column">
                     <h3>Contact</h3>
-                    <p>75 Avenue des Champs-Élysées, 75008 Paris</p>
-                    <p>+33 1 45 86 70 00</p>
-                    <p>contact@chemspot.fr</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 75 Avenue des Champs-Élysées<br>75008 Paris, France</p>
+                    <p><i class="fas fa-phone"></i> +33 1 45 86 70 00</p>
+                    <p><i class="fas fa-envelope"></i> contact@chemspot.fr</p>
+                    <p><i class="fas fa-clock"></i> Lun-Ven 9h-18h</p>
                 </div>
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; 2025 Chem Spot. Tous droits réservés.</p>
+                <p>&copy; 2024 Chem Spot. Tous droits réservés. | 
+                   <a href="#" style="color: #cbd5e0;">Mentions légales</a> | 
+                   <a href="#" style="color: #cbd5e0;">Politique de confidentialité</a> | 
+                   <a href="#" style="color: #cbd5e0;">CGU</a>
+                </p>
             </div>
         </div>
     </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Animation au scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fade-in');
+                }
+            });
+        }, observerOptions);
+
+        // Observer les cartes
+        document.querySelectorAll('.feature-card, .supplier-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // Smooth scroll pour les liens d'ancrage
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Simulation de recherche en temps réel
+        const searchInput = document.querySelector('.search-form input');
+        if (searchInput) {
+            searchInput.addEventListener('input', function(e) {
+                const query = e.target.value.toLowerCase();
+                if (query.length > 2) {
+                    // Ici on pourrait ajouter des suggestions de recherche
+                    console.log('Recherche:', query);
+                }
+            });
+        }
+
+        // Simulation des prix en temps réel (pour la démo)
+        function updatePrices() {
+            const priceElements = document.querySelectorAll('.price-value');
+            priceElements.forEach(el => {
+                if (Math.random() > 0.7) { // 30% de chance de changement
+                    const currentPrice = parseFloat(el.textContent);
+                    const change = (Math.random() - 0.5) * 0.2; // ±10% max
+                    const newPrice = (currentPrice * (1 + change)).toFixed(1);
+                    
+                    // Animation du changement
+                    el.style.transition = 'all 0.3s ease';
+                    el.style.transform = 'scale(1.1)';
+                    
+                    setTimeout(() => {
+                        el.textContent = newPrice + '€/kg';
+                        el.style.transform = 'scale(1)';
+                    }, 150);
+                }
+            });
+        }
+
+        // Mettre à jour les prix toutes les 30 secondes (pour la démo)
+        setInterval(updatePrices, 30000);
+
+        // Effet de typing pour le titre principal
+        function typeWriter(element, text, speed = 100) {
+            let i = 0;
+            element.innerHTML = '';
+            
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            
+            type();
+        }
+
+        // Démarrer l'effet de typing au chargement
+        window.addEventListener('load', () => {
+            const heroTitle = document.querySelector('.hero h1');
+            const originalText = heroTitle.textContent;
+            typeWriter(heroTitle, originalText, 50);
+        });
+
+        // Formulaire de contact/inscription (simulation)
+        function handleFormSubmit(formType) {
+            alert(`Merci pour votre intérêt ! Nous vous contacterons sous 24h pour ${formType}.`);
+        }
+
+        // Gestion responsive du menu mobile
+        function toggleMobileMenu() {
+            const navMenu = document.querySelector('.nav-menu');
+            navMenu.classList.toggle('mobile-open');
+        }
+
+        // Animation des compteurs dans les stats
+        function animateCounters() {
+            const counters = document.querySelectorAll('.stat-number');
+            
+            counters.forEach(counter => {
+                const target = parseInt(counter.textContent);
+                const increment = target / 100;
+                let current = 0;
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        counter.textContent = target + (counter.textContent.includes('€') ? '€' : '') + (counter.textContent.includes('+') ? '+' : '');
+                        clearInterval(timer);
+                    } else {
+                        counter.textContent = Math.floor(current) + (counter.textContent.includes('€') ? '€' : '') + (counter.textContent.includes('+') ? '+' : '');
+                    }
+                }, 20);
+            });
+        }
+
+        // Démarrer l'animation des compteurs quand la section est visible
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounters();
+                    statsObserver.disconnect();
+                }
+            });
+        });
+
+        const statsSection = document.querySelector('.hero-stats');
+        if (statsSection) {
+            statsObserver.observe(statsSection);
+        }
+    </script>
 </body>
 </html>
