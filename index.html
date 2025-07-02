@@ -6,10 +6,11 @@
     <title>Chem Spot - Marketplace B2B des Matières Premières Pharmaceutiques</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Reset et variables */
+        /* Variables CSS améliorées */
         :root {
             --primary: #2c5282;
             --primary-light: #4299e1;
+            --primary-dark: #1a365d;
             --secondary: #718096;
             --accent: #4fd1c5;
             --success: #48bb78;
@@ -21,10 +22,14 @@
             --text-light: #718096;
             --border: #e2e8f0;
             --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+            --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            --gradient-success: linear-gradient(135deg, var(--success) 0%, #38a169 100%);
         }
         
+        /* Reset global */
         * {
             margin: 0;
             padding: 0;
@@ -32,86 +37,76 @@
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             line-height: 1.6;
             background-color: var(--background);
             color: var(--text);
+            overflow-x: hidden;
         }
         
-        /* Typographie */
-        h1, h2, h3, h4 {
-            font-weight: 600;
-            line-height: 1.3;
-            margin-bottom: 1rem;
-            color: var(--primary);
-        }
-        
-        h2 {
-            font-size: 1.75rem;
-        }
-        
-        h3 {
-            font-size: 1.35rem;
-            color: var(--text);
-        }
-        
-        h4 {
-            font-size: 1.15rem;
-        }
-        
-        p {
-            margin-bottom: 0.75rem;
-        }
-        
-        a {
-            text-decoration: none;
-            color: var(--primary);
-            transition: var(--transition);
-        }
-        
-        a:hover {
-            color: var(--primary-light);
-        }
-        
-        /* Layout */
+        /* Styles de base améliorés */
         .container {
-            width: 90%;
-            max-width: 1280px;
+            width: 95%;
+            max-width: 1400px;
             margin: 0 auto;
+            padding: 0 1rem;
         }
         
-        /* Header */
+        /* Header avec fonctionnalités */
         header {
-            background-color: var(--card-bg);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
             box-shadow: var(--shadow);
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
             padding: 1rem 0;
+            border-bottom: 1px solid var(--border);
         }
         
         .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 2rem;
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
         
         .logo {
-            height: 60px;
-            object-fit: contain;
+            height: 50px;
+            width: auto;
+        }
+        
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
         }
         
         .nav-menu {
             display: flex;
             list-style: none;
-            gap: 2rem;
+            gap: 2.5rem;
+            align-items: center;
         }
         
         .nav-menu a {
             font-weight: 500;
             color: var(--text);
+            text-decoration: none;
             position: relative;
-            padding: 0.5rem 0;
+            padding: 0.75rem 0;
+            transition: var(--transition);
+        }
+        
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: var(--primary);
         }
         
         .nav-menu a::after {
@@ -120,23 +115,13 @@
             width: 0;
             height: 2px;
             bottom: 0;
-            left: 0;
-            background-color: var(--accent);
+            left: 50%;
+            background: var(--gradient-primary);
             transition: var(--transition);
+            transform: translateX(-50%);
         }
         
-        .nav-menu a:hover {
-            color: var(--primary);
-        }
-        
-        .nav-menu a:hover::after {
-            width: 100%;
-        }
-        
-        .nav-menu a.active {
-            color: var(--primary);
-        }
-        
+        .nav-menu a:hover::after,
         .nav-menu a.active::after {
             width: 100%;
         }
@@ -147,47 +132,70 @@
             align-items: center;
         }
         
+        /* Système de boutons avancé */
         .btn {
             padding: 0.75rem 1.5rem;
-            border-radius: 6px;
+            border-radius: 8px;
             border: none;
             cursor: pointer;
-            font-weight: 500;
+            font-weight: 600;
             text-decoration: none;
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
             transition: var(--transition);
             font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: var(--transition);
+        }
+        
+        .btn:hover::before {
+            left: 100%;
         }
         
         .btn-primary {
-            background-color: var(--primary);
+            background: var(--gradient-primary);
             color: white;
+            box-shadow: 0 4px 15px rgba(44, 82, 130, 0.3);
         }
         
         .btn-primary:hover {
-            background-color: var(--primary-light);
-            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(44, 82, 130, 0.4);
         }
         
         .btn-outline {
-            background-color: transparent;
+            background: transparent;
             color: var(--primary);
             border: 2px solid var(--primary);
         }
         
         .btn-outline:hover {
-            background-color: var(--primary);
+            background: var(--primary);
             color: white;
+            transform: translateY(-2px);
         }
         
         .btn-success {
-            background-color: var(--success);
+            background: var(--gradient-success);
             color: white;
+            box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
         }
         
-        .btn-success:hover {
-            background-color: #38a169;
-            color: white;
+        .btn-lg {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
         }
         
         .btn-sm {
@@ -195,11 +203,11 @@
             font-size: 0.85rem;
         }
         
-        /* Hero Section */
+        /* Hero section avec animations */
         .hero {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            background: var(--gradient-primary);
             color: white;
-            padding: 4rem 0;
+            padding: 6rem 0;
             position: relative;
             overflow: hidden;
         }
@@ -211,208 +219,404 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('data:image/svg+xml;utf8,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="rgba(255,255,255,0.05)" fill-opacity="0.05"><circle cx="30" cy="30" r="3"/></g></svg>');
-            background-size: 60px 60px;
+            background: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse"><path d="m 60 0 l 0 60 l -60 0 l 0 -60 z" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100%" height="100%" fill="url(%23grid)"/></svg>');
+            animation: moveGrid 20s linear infinite;
+        }
+        
+        @keyframes moveGrid {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(60px, 60px); }
         }
         
         .hero-content {
             position: relative;
             z-index: 2;
             text-align: center;
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
         }
         
         .hero h1 {
             color: white;
-            font-size: 3rem;
+            font-size: 3.5rem;
             margin-bottom: 1.5rem;
-            font-weight: 700;
+            font-weight: 800;
+            line-height: 1.2;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         
         .hero-subtitle {
-            font-size: 1.25rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
+            font-size: 1.3rem;
+            margin-bottom: 3rem;
+            opacity: 0.95;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
         }
         
-        .hero-stats {
+        /* Système de recherche avancé */
+        .search-container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin: 3rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .search-tabs {
             display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
             justify-content: center;
-            gap: 3rem;
-            margin-top: 3rem;
+        }
+        
+        .search-tab {
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+        
+        .search-tab.active,
+        .search-tab:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .search-form {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .search-input-container {
+            position: relative;
+        }
+        
+        .search-form input {
+            width: 100%;
+            padding: 1.2rem 1.5rem 1.2rem 3rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            outline: none;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: var(--transition);
+        }
+        
+        .search-form input:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+        
+        .search-form button {
+            padding: 1.2rem 2rem;
+            background: var(--gradient-success);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+            box-shadow: 0 4px 20px rgba(72, 187, 120, 0.3);
+        }
+        
+        .search-form button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(72, 187, 120, 0.4);
+        }
+        
+        /* Stats avec animations */
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
         
         .stat-item {
             text-align: center;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            transition: var(--transition);
+        }
+        
+        .stat-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
         }
         
         .stat-number {
             font-size: 2.5rem;
-            font-weight: 700;
+            font-weight: 800;
             color: var(--accent);
             display: block;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         
         .stat-label {
-            font-size: 0.9rem;
-            opacity: 0.8;
+            font-size: 0.95rem;
+            opacity: 0.9;
+            margin-top: 0.5rem;
         }
         
-        /* Quick Search */
-        .quick-search {
-            background-color: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 12px;
-            padding: 2rem;
-            margin-top: 2rem;
+        /* Sections de contenu */
+        .section {
+            padding: 5rem 0;
         }
         
-        .search-form {
-            display: flex;
-            gap: 1rem;
-            max-width: 600px;
-            margin: 0 auto;
+        .section-white {
+            background: white;
         }
         
-        .search-form input {
-            flex: 1;
-            padding: 1rem 1.5rem;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            outline: none;
-            background-color: white;
-        }
-        
-        .search-form button {
-            padding: 1rem 2rem;
-            background-color: var(--accent);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: var(--transition);
-            font-weight: 600;
-        }
-        
-        .search-form button:hover {
-            background-color: #319795;
-        }
-        
-        /* Features Section */
-        .features {
-            padding: 4rem 0;
-            background-color: white;
+        .section-gray {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
         }
         
         .section-title {
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: 4rem;
         }
         
         .section-title h2 {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
+            font-weight: 700;
             margin-bottom: 1rem;
+            color: var(--primary);
         }
         
         .section-subtitle {
-            font-size: 1.125rem;
+            font-size: 1.2rem;
             color: var(--text-light);
-            max-width: 600px;
+            max-width: 700px;
             margin: 0 auto;
+            line-height: 1.6;
         }
         
+        /* Grille de fonctionnalités */
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
         }
         
         .feature-card {
-            text-align: center;
-            padding: 2rem;
-            background-color: var(--background);
-            border-radius: 12px;
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 16px;
             border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
             transition: var(--transition);
         }
         
         .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--gradient-primary);
+            color: white;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            box-shadow: 0 8px 20px rgba(44, 82, 130, 0.3);
+        }
+        
+        .feature-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .feature-card p {
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+        
+        /* Catalogue interactif */
+        .catalog-section {
+            background: white;
+            padding: 5rem 0;
+        }
+        
+        .catalog-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--background);
+            border: 2px solid var(--border);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            color: var(--text);
+        }
+        
+        .filter-btn.active,
+        .filter-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        
+        .product-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .product-card:hover {
             transform: translateY(-5px);
             box-shadow: var(--shadow-lg);
         }
         
-        .feature-icon {
-            width: 80px;
-            height: 80px;
-            background-color: var(--primary);
+        .product-header {
+            background: var(--gradient-primary);
             color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .product-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 1.5rem;
-            font-size: 2rem;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
         }
         
-        .feature-card h3 {
-            margin-bottom: 1rem;
+        .product-details {
+            padding: 1.5rem;
         }
         
-        /* Value Proposition */
-        .value-prop {
-            padding: 4rem 0;
-            background: linear-gradient(45deg, #f7fafc 0%, #edf2f7 100%);
-        }
-        
-        .value-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-        }
-        
-        .value-content h2 {
-            font-size: 2.25rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .value-list {
-            list-style: none;
-            margin: 2rem 0;
-        }
-        
-        .value-list li {
+        .product-meta {
             display: flex;
+            justify-content: space-between;
             align-items: center;
             margin-bottom: 1rem;
-            font-size: 1.1rem;
         }
         
-        .value-list i {
+        .product-price {
+            font-size: 1.2rem;
+            font-weight: 700;
             color: var(--success);
-            margin-right: 1rem;
-            font-size: 1.25rem;
         }
         
-        /* Suppliers Preview */
-        .suppliers-preview {
-            padding: 4rem 0;
-            background-color: white;
+        .product-specs {
+            margin: 1rem 0;
         }
         
+        .spec-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+        
+        .spec-item:last-child {
+            border-bottom: none;
+        }
+        
+        .spec-label {
+            color: var(--text-light);
+        }
+        
+        .spec-value {
+            font-weight: 600;
+        }
+        
+        .availability-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--success);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+        }
+        
+        /* Fournisseurs */
         .suppliers-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
         }
         
         .supplier-card {
-            background-color: var(--card-bg);
-            border-radius: 12px;
+            background: var(--card-bg);
+            border-radius: 16px;
             overflow: hidden;
             box-shadow: var(--shadow);
             border: 1px solid var(--border);
@@ -421,271 +625,326 @@
         }
         
         .supplier-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-lg);
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
         }
         
         .supplier-header {
-            padding: 1.5rem;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            padding: 2rem;
+            background: var(--gradient-primary);
             color: white;
             text-align: center;
+            position: relative;
         }
         
         .supplier-logo {
-            width: 60px;
-            height: 60px;
-            background-color: white;
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 1rem;
-            font-size: 1.5rem;
-            color: var(--primary);
+            font-size: 2rem;
             font-weight: 700;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
         }
         
         .supplier-details {
-            padding: 1.5rem;
-        }
-        
-        .supplier-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        
-        .supplier-location {
-            color: var(--text-light);
-            font-size: 0.9rem;
+            padding: 2rem;
         }
         
         .supplier-rating {
             display: flex;
             align-items: center;
-            gap: 0.25rem;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
         }
         
         .rating-stars {
             color: #fbbf24;
+            font-size: 1.1rem;
+        }
+        
+        .rating-score {
+            font-weight: 600;
+            color: var(--primary);
         }
         
         .supplier-specialties {
-            margin: 1rem 0;
+            margin: 1.5rem 0;
         }
         
         .specialty-tag {
             display: inline-block;
-            background-color: var(--background);
+            background: var(--background);
             color: var(--text);
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
+            padding: 0.4rem 0.8rem;
+            border-radius: 16px;
             font-size: 0.8rem;
-            margin: 0.25rem 0.25rem 0.25rem 0;
+            margin: 0.25rem;
+            transition: var(--transition);
+        }
+        
+        .specialty-tag:hover {
+            background: var(--primary);
+            color: white;
         }
         
         .supplier-badge {
             position: absolute;
             top: 1rem;
             right: 1rem;
-            background-color: var(--success);
+            background: var(--success);
             color: white;
             font-size: 0.75rem;
             font-weight: 600;
-            padding: 0.35rem 0.75rem;
+            padding: 0.5rem 1rem;
             border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        /* Modal système */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+        }
+        
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            box-shadow: var(--shadow-xl);
+            animation: modalSlideIn 0.3s ease-out;
+        }
+        
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .close {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+            transition: var(--transition);
+        }
+        
+        .close:hover {
+            color: var(--danger);
+        }
+        
+        /* Formulaires */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: white;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(44, 82, 130, 0.1);
+        }
+        
+        /* Notifications */
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 2rem;
+            background: var(--success);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            z-index: 1500;
+            animation: notificationSlide 0.3s ease-out;
+        }
+        
+        @keyframes notificationSlide {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
         
         /* CTA Section */
         .cta-section {
-            padding: 4rem 0;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            background: var(--gradient-primary);
             color: white;
+            padding: 5rem 0;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="2" fill="rgba(255,255,255,0.1)"/></svg>');
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .cta-content {
+            position: relative;
+            z-index: 2;
         }
         
         .cta-content h2 {
             color: white;
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-        
-        .cta-content p {
-            font-size: 1.125rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
+            font-size: 2.8rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
         }
         
         .cta-buttons {
             display: flex;
             justify-content: center;
-            gap: 1rem;
+            gap: 1.5rem;
             flex-wrap: wrap;
+            margin-top: 2rem;
         }
         
-        /* Footer */
+        /* Footer amélioré */
         footer {
-            background-color: #2d3748;
-            color: #cbd5e0;
-            padding: 3rem 0 1.5rem;
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
+            padding: 4rem 0 2rem;
         }
         
         .footer-content {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
+            gap: 3rem;
+            margin-bottom: 3rem;
         }
         
         .footer-column h3 {
             color: white;
-            margin-bottom: 1.25rem;
-            position: relative;
-            padding-bottom: 0.75rem;
-            font-size: 1.15rem;
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
         }
         
-        .footer-column h3::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 40px;
-            height: 3px;
-            background-color: var(--accent);
-        }
-        
-        .footer-column p {
-            margin-bottom: 1rem;
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-        
-        .footer-column ul {
-            list-style: none;
-        }
-        
+        .footer-column p,
         .footer-column li {
             margin-bottom: 0.75rem;
+            line-height: 1.6;
         }
         
         .footer-column a {
             color: #cbd5e0;
             transition: var(--transition);
-            display: inline-block;
         }
         
         .footer-column a:hover {
-            color: white;
-            transform: translateX(5px);
+            color: var(--accent);
         }
         
         .footer-bottom {
             text-align: center;
             padding-top: 2rem;
-            margin-top: 2rem;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 0.9rem;
         }
         
-        /* Market Data Widget */
-        .market-widget {
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-        }
-        
-        .widget-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--primary);
-        }
-        
-        .price-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.75rem 0;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .price-item:last-child {
-            border-bottom: none;
-        }
-        
-        .price-name {
-            font-weight: 500;
-        }
-        
-        .price-value {
-            font-weight: 600;
-        }
-        
-        .price-up {
-            color: var(--success);
-        }
-        
-        .price-down {
-            color: var(--danger);
-        }
-        
-        /* Responsive design */
-        @media (max-width: 992px) {
-            .value-grid {
-                grid-template-columns: 1fr;
-                gap: 2rem;
+        /* Design responsive amélioré */
+        @media (max-width: 1024px) {
+            .hero h1 {
+                font-size: 2.8rem;
             }
             
-            .hero-stats {
-                gap: 1.5rem;
-            }
-            
-            .stat-number {
-                font-size: 2rem;
+            .section-title h2 {
+                font-size: 2.2rem;
             }
         }
         
         @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 0 1rem;
+            }
+            
             .header-content {
                 flex-direction: column;
                 gap: 1rem;
-                align-items: flex-start;
             }
             
             .nav-menu {
-                width: 100%;
-                justify-content: space-between;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1.5rem;
             }
             
-            .header-actions {
-                width: 100%;
-                justify-content: center;
+            .hero {
+                padding: 4rem 0;
             }
             
             .hero h1 {
-                font-size: 2rem;
-            }
-            
-            .hero-subtitle {
-                font-size: 1rem;
+                font-size: 2.2rem;
             }
             
             .search-form {
-                flex-direction: column;
-                gap: 1rem;
+                grid-template-columns: 1fr;
             }
             
             .hero-stats {
-                flex-direction: column;
+                grid-template-columns: 1fr;
                 gap: 1rem;
             }
             
-            .section-title h2 {
-                font-size: 2rem;
+            .features-grid,
+            .suppliers-grid {
+                grid-template-columns: 1fr;
             }
             
             .cta-buttons {
@@ -694,70 +953,136 @@
             }
         }
         
-        @media (max-width: 576px) {
-            .nav-menu {
-                gap: 1rem;
-                flex-wrap: wrap;
-                justify-content: center;
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 1.8rem;
             }
             
-            .hero {
-                padding: 2rem 0;
+            .section-title h2 {
+                font-size: 1.8rem;
+            }
+            
+            .modal-content {
+                margin: 10% auto;
+                width: 95%;
             }
         }
         
-        /* Animation */
+        /* Animations d'entrée */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+        
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
         
-        .animate-fade-in {
-            animation: fadeInUp 0.6s ease-out;
+        .slide-in-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            animation: slideInLeft 0.6s ease-out forwards;
+        }
+        
+        @keyframes slideInLeft {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .slide-in-right {
+            opacity: 0;
+            transform: translateX(50px);
+            animation: slideInRight 0.6s ease-out forwards;
+        }
+        
+        @keyframes slideInRight {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        /* Loading states */
+        .loading {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: loading 1.5s infinite;
+        }
+        
+        @keyframes loading {
+            0% { left: -100%; }
+            100% { left: 100%; }
         }
     </style>
 </head>
 <body>
+    <!-- Header avec navigation fonctionnelle -->
     <header>
         <div class="container">
             <div class="header-content">
-                <div style="display: flex; align-items: center;">
+                <div class="logo-section">
                     <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/chemspotV1-dt6tDoOKp1wAyi8oRMzxzufIVBfiu9.png" alt="Chem Spot Logo" class="logo">
+                    <span class="logo-text">Chem Spot</span>
                 </div>
+                
                 <ul class="nav-menu">
-                    <li><a href="#accueil" class="active">Accueil</a></li>
-                    <li><a href="#catalogue">Catalogue</a></li>
-                    <li><a href="#fournisseurs">Fournisseurs</a></li>
-                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="#accueil" class="nav-link active" data-section="accueil">Accueil</a></li>
+                    <li><a href="#catalogue" class="nav-link" data-section="catalogue">Catalogue</a></li>
+                    <li><a href="#fournisseurs" class="nav-link" data-section="fournisseurs">Fournisseurs</a></li>
+                    <li><a href="#contact" class="nav-link" data-section="contact">Contact</a></li>
                 </ul>
                 
                 <div class="header-actions">
-                    <a href="#inscription" class="btn btn-outline btn-sm">S'inscrire</a>
-                    <a href="#connexion" class="btn btn-primary btn-sm">Se connecter</a>
+                    <button class="btn btn-outline btn-sm" onclick="openModal('loginModal')">
+                        <i class="fas fa-sign-in-alt"></i> Connexion
+                    </button>
+                    <button class="btn btn-primary btn-sm" onclick="openModal('registerModal')">
+                        <i class="fas fa-user-plus"></i> Inscription
+                    </button>
                 </div>
             </div>
         </div>
     </header>
 
+    <!-- Hero Section Interactive -->
     <section class="hero" id="accueil">
         <div class="container">
-            <div class="hero-content animate-fade-in">
+            <div class="hero-content fade-in">
                 <h1>La Marketplace B2B des Matières Premières Pharmaceutiques</h1>
                 <p class="hero-subtitle">
                     Connectez-vous directement avec les fournisseurs d'APIs, excipients et matières premières. 
                     Transactions sécurisées, prix transparents, livraison garantie.
                 </p>
                 
-                <div class="quick-search">
-                    <h3 style="color: white; text-align: center; margin-bottom: 1rem;">Trouvez votre matière première</h3>
-                    <form class="search-form">
-                        <input type="text" placeholder="Ex: Paracétamol, Excipients, API...">
+                <div class="search-container">
+                    <div class="search-tabs">
+                        <div class="search-tab active" data-tab="api">Principes Actifs</div>
+                        <div class="search-tab" data-tab="excipient">Excipients</div>
+                        <div class="search-tab" data-tab="autre">Autres</div>
+                    </div>
+                    
+                    <form class="search-form" onsubmit="performSearch(event)">
+                        <div class="search-input-container">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="searchInput" placeholder="Ex: Paracétamol, Lactose, Stéarate de magnésium..." autocomplete="off">
+                            <div id="searchSuggestions" class="search-suggestions"></div>
+                        </div>
                         <button type="submit">
                             <i class="fas fa-search"></i> Rechercher
                         </button>
@@ -766,589 +1091,1016 @@
                 
                 <div class="hero-stats">
                     <div class="stat-item">
-                        <span class="stat-number">500+</span>
+                        <span class="stat-number" data-target="847">0</span>
                         <span class="stat-label">Produits disponibles</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-number">50+</span>
+                        <span class="stat-number" data-target="127">0</span>
                         <span class="stat-label">Fournisseurs vérifiés</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-number">€2M+</span>
-                        <span class="stat-label">Transactions sécurisées</span>
+                        <span class="stat-number" data-target="5.2">0</span>
+                        <span class="stat-label">€M+ Transactions</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" data-target="24">0</span>
+                        <span class="stat-label">Pays couverts</span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="features">
+    <!-- Section Fonctionnalités -->
+    <section class="section section-white">
         <div class="container">
-            <div class="section-title">
+            <div class="section-title fade-in">
                 <h2>Pourquoi choisir Chem Spot ?</h2>
                 <p class="section-subtitle">
-                    Simplifiez vos achats pharmaceutiques avec notre plateforme tout-en-un
+                    Une plateforme complète qui révolutionne vos achats pharmaceutiques avec des outils avancés et un service premium
                 </p>
             </div>
             
             <div class="features-grid">
-                <div class="feature-card">
+                <div class="feature-card fade-in">
                     <div class="feature-icon">
-                        <i class="fas fa-shield-alt"></i>
+                        <i class="fas fa-shield-virus"></i>
                     </div>
-                    <h3>Fournisseurs Certifiés</h3>
-                    <p>Tous nos fournisseurs sont audités et certifiés BPF/GMP. Documentation complète disponible.</p>
+                    <h3>Certification BPF/GMP</h3>
+                    <p>Tous nos fournisseurs sont audités selon les standards internationaux. Documentation complète et traçabilité garantie pour chaque produit.</p>
                 </div>
                 
-                <div class="feature-card">
+                <div class="feature-card fade-in">
                     <div class="feature-icon">
                         <i class="fas fa-chart-line"></i>
                     </div>
-                    <h3>Prix Transparents</h3>
-                    <p>Accédez aux prix en temps réel et aux tendances du marché. Négociez directement avec les fournisseurs.</p>
+                    <h3>Prix en Temps Réel</h3>
+                    <p>Accédez aux cotations actualisées en continu. Comparez les prix, négociez directement et bénéficiez des meilleures conditions du marché.</p>
                 </div>
                 
-                <div class="feature-card">
+                <div class="feature-card fade-in">
                     <div class="feature-icon">
-                        <i class="fas fa-truck"></i>
+                        <i class="fas fa-shipping-fast"></i>
                     </div>
-                    <h3>Livraison Sécurisée</h3>
-                    <p>Suivi GPS temps réel, chaîne du froid respectée, assurance incluse sur toutes les livraisons.</p>
+                    <h3>Logistique Intégrée</h3>
+                    <p>Suivi GPS temps réel, chaîne du froid respectée, assurance incluse. Livraison express disponible pour les commandes urgentes.</p>
                 </div>
                 
-                <div class="feature-card">
+                <div class="feature-card fade-in">
                     <div class="feature-icon">
                         <i class="fas fa-lock"></i>
                     </div>
                     <h3>Paiements Sécurisés</h3>
-                    <p>Système d'escrow intégré. L'argent n'est libéré qu'après validation de la livraison.</p>
+                    <p>Système d'escrow blockchain intégré. Paiements cryptés, protection anti-fraude et assurance transaction incluse.</p>
                 </div>
                 
-                <div class="feature-card">
+                <div class="feature-card fade-in">
                     <div class="feature-icon">
-                        <i class="fas fa-headset"></i>
+                        <i class="fas fa-microscope"></i>
                     </div>
-                    <h3>Support Expert</h3>
-                    <p>Équipe de pharmaciens disponible 7j/7 pour vous conseiller sur vos achats.</p>
+                    <h3>Analyses Qualité</h3>
+                    <p>Laboratoire partenaire certifié ISO 17025. Analyses COA, tests de pureté et certificats de conformité inclus.</p>
                 </div>
                 
-                <div class="feature-card">
+                <div class="feature-card fade-in">
                     <div class="feature-icon">
-                        <i class="fas fa-globe"></i>
+                        <i class="fas fa-robot"></i>
                     </div>
-                    <h3>Réseau Mondial</h3>
-                    <p>Accès à un réseau de fournisseurs en Inde, Chine, Europe et Amérique du Nord.</p>
+                    <h3>IA Prédictive</h3>
+                    <p>Algorithmes avancés pour prédire les tendances de prix, optimiser vos stocks et anticiper les ruptures d'approvisionnement.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="value-prop">
+    <!-- Catalogue Interactif -->
+    <section class="catalog-section" id="catalogue">
         <div class="container">
-            <div class="value-grid">
-                <div class="value-content">
-                    <h2>Économisez temps et argent sur vos achats</h2>
-                    <p>Fini les appels téléphoniques interminables et les négociations par email. Avec Chem Spot, trouvez, comparez et achetez vos matières premières en quelques clics.</p>
-                    
-                    <ul class="value-list">
-                        <li><i class="fas fa-check-circle"></i> Comparaison automatique des prix</li>
-                        <li><i class="fas fa-check-circle"></i> Négociation en temps réel</li>
-                        <li><i class="fas fa-check-circle"></i> Documentation automatique</li>
-                        <li><i class="fas fa-check-circle"></i> Suivi logistique complet</li>
-                        <li><i class="fas fa-check-circle"></i> Alertes sur les tendances marché</li>
-                    </ul>
-                    
-                    <a href="#demo" class="btn btn-primary">Demander une démo gratuite</a>
-                </div>
-                
-                <div class="market-widget">
-                    <div class="widget-title">
-                        <i class="fas fa-chart-bar"></i> Prix du marché aujourd'hui
-                    </div>
-                    
-                    <div class="price-item">
-                        <span class="price-name">Paracétamol (Inde)</span>
-                        <span class="price-value price-up">15.2€/kg <i class="fas fa-arrow-up"></i></span>
-                    </div>
-                    
-                    <div class="price-item">
-                        <span class="price-name">Ibuprofène (Chine)</span>
-                        <span class="price-value price-down">22.8€/kg <i class="fas fa-arrow-down"></i></span>
-                    </div>
-                    
-                    <div class="price-item">
-                        <span class="price-name">Aspirine (Europe)</span>
-                        <span class="price-value">18.5€/kg</span>
-                    </div>
-                    
-                    <div class="price-item">
-                        <span class="price-name">Lactose (France)</span>
-                        <span class="price-value price-up">3.2€/kg <i class="fas fa-arrow-up"></i></span>
-                    </div>
-                    
-                    <div style="text-align: center; margin-top: 1rem;">
-                        <a href="#" style="color: var(--primary); font-size: 0.9rem;">
-                            <i class="fas fa-external-link-alt"></i> Voir tous les prix
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="suppliers-preview" id="fournisseurs">
-        <div class="container">
-            <div class="section-title">
-                <h2>Nos Fournisseurs Partenaires</h2>
+            <div class="section-title fade-in">
+                <h2>Catalogue Intelligent</h2>
                 <p class="section-subtitle">
-                    Découvrez notre réseau de fournisseurs certifiés dans le monde entier
+                    Explorez notre base de données de plus de 800 produits pharmaceutiques avec recherche avancée et filtres intelligents
+                </p>
+            </div>
+            
+            <div class="catalog-filters fade-in">
+                <button class="filter-btn active" data-filter="all">Tous les produits</button>
+                <button class="filter-btn" data-filter="api">Principes Actifs</button>
+                <button class="filter-btn" data-filter="excipient">Excipients</button>
+                <button class="filter-btn" data-filter="colorant">Colorants</button>
+                <button class="filter-btn" data-filter="arome">Arômes</button>
+                <button class="filter-btn" data-filter="conservateur">Conservateurs</button>
+            </div>
+            
+            <div class="products-grid" id="productsGrid">
+                <!-- Les produits seront générés dynamiquement -->
+            </div>
+            
+            <div style="text-align: center; margin-top: 3rem;">
+                <button class="btn btn-outline btn-lg" onclick="loadMoreProducts()">
+                    <i class="fas fa-plus"></i> Charger plus de produits
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Fournisseurs -->
+    <section class="section section-gray" id="fournisseurs">
+        <div class="container">
+            <div class="section-title fade-in">
+                <h2>Réseau de Fournisseurs Premium</h2>
+                <p class="section-subtitle">
+                    Découvrez notre écosystème de fournisseurs certifiés dans plus de 24 pays
                 </p>
             </div>
             
             <div class="suppliers-grid">
-                <div class="supplier-card">
-                    <div class="supplier-badge">Certifié BPF</div>
-                    <div class="supplier-header">
-                        <div class="supplier-logo">PH</div>
-                        <h3>PharmaCorp India</h3>
-                    </div>
-                    <div class="supplier-details">
-                        <div class="supplier-meta">
-                            <span class="supplier-location">
-                                <i class="fas fa-map-marker-alt"></i> Mumbai, Inde
-                            </span>
-                            <div class="supplier-rating">
-                                <span class="rating-stars">★★★★★</span>
-                                <span>4.8</span>
-                            </div>
-                        </div>
-                        <p>Spécialiste des principes actifs anti-inflammatoires</p>
-                        <div class="supplier-specialties">
-                            <span class="specialty-tag">Paracétamol</span>
-                            <span class="specialty-tag">Ibuprofène</span>
-                            <span class="specialty-tag">Aspirine</span>
-                        </div>
-                        <div style="text-align: center;">
-                            <a href="#" class="btn btn-primary btn-sm">Voir produits</a>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="supplier-card">
-                    <div class="supplier-badge">Premium</div>
-                    <div class="supplier-header">
-                        <div class="supplier-logo">BF</div>
-                        <h3>BASF Pharma</h3>
-                    </div>
-                    <div class="supplier-details">
-                        <div class="supplier-meta">
-                            <span class="supplier-location">
-                                <i class="fas fa-map-marker-alt"></i> Allemagne
-                            </span>
-                            <div class="supplier-rating">
-                                <span class="rating-stars">★★★★★</span>
-                                <span>4.9</span>
-                            </div>
-                        </div>
-                        <p>Leader mondial des excipients pharmaceutiques</p>
-                        <div class="supplier-specialties">
-                            <span class="specialty-tag">Polymères</span>
-                            <span class="specialty-tag">Liants</span>
-                            <span class="specialty-tag">Enrobages</span>
-                        </div>
-                        <div style="text-align: center;">
-                            <a href="#" class="btn btn-primary btn-sm">Voir produits</a>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="supplier-card">
-                    <div class="supplier-badge">Nouveau</div>
-                    <div class="supplier-header">
-                        <div class="supplier-logo">SC</div>
-                        <h3>Sanofi Chimie</h3>
-                    </div>
-                    <div class="supplier-details">
-                        <div class="supplier-meta">
-                            <span class="supplier-location">
-                                <i class="fas fa-map-marker-alt"></i> Lyon, France
-                            </span>
-                            <div class="supplier-rating">
-                                <span class="rating-stars">★★★★☆</span>
-                                <span>4.6</span>
-                            </div>
-                        </div>
-                        <p>Spécialiste cardiovasculaire et métabolisme</p>
-                        <div class="supplier-specialties">
-                            <span class="specialty-tag">Atorvastatine</span>
-                            <span class="specialty-tag">Clopidogrel</span>
-                            <span class="specialty-tag">Ramipril</span>
-                        </div>
-                        <div style="text-align: center;">
-                            <a href="#" class="btn btn-primary btn-sm">Voir produits</a>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="supplier-card">
-                    <div class="supplier-badge">Vérifié</div>
-                    <div class="supplier-header">
-                        <div class="supplier-logo">GV</div>
-                        <h3>Givaudan Pharma</h3>
-                    </div>
-                    <div class="supplier-details">
-                        <div class="supplier-meta">
-                            <span class="supplier-location">
-                                <i class="fas fa-map-marker-alt"></i> Genève, Suisse
-                            </span>
-                            <div class="supplier-rating">
-                                <span class="rating-stars">★★★★★</span>
-                                <span>4.7</span>
-                            </div>
-                        </div>
-                        <p>Expert en arômes et masqueurs d'amertume</p>
-                        <div class="supplier-specialties">
-                            <span class="specialty-tag">Arômes</span>
-                            <span class="specialty-tag">Édulcorants</span>
-                            <span class="specialty-tag">Colorants</span>
-                        </div>
-                        <div style="text-align: center;">
-                            <a href="#" class="btn btn-primary btn-sm">Voir produits</a>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="supplier-card">
-                    <div class="supplier-badge">Certifié BPF</div>
-                    <div class="supplier-header">
-                        <div class="supplier-logo">RQ</div>
-                        <h3>Roquette Pharma</h3>
-                    </div>
-                    <div class="supplier-details">
-                        <div class="supplier-meta">
-                            <span class="supplier-location">
-                                <i class="fas fa-map-marker-alt"></i> Lestrem, France
-                            </span>
-                            <div class="supplier-rating">
-                                <span class="rating-stars">★★★★☆</span>
-                                <span>4.5</span>
-                            </div>
-                        </div>
-                        <p>Excipients naturels et amidon modifié</p>
-                        <div class="supplier-specialties">
-                            <span class="specialty-tag">Amidon</span>
-                            <span class="specialty-tag">Sorbitol</span>
-                            <span class="specialty-tag">Mannitol</span>
-                        </div>
-                        <div style="text-align: center;">
-                            <a href="#" class="btn btn-primary btn-sm">Voir produits</a>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="supplier-card">
-                    <div class="supplier-badge">Express</div>
-                    <div class="supplier-header">
-                        <div class="supplier-logo">CC</div>
-                        <h3>ChemChina Exports</h3>
-                    </div>
-                    <div class="supplier-details">
-                        <div class="supplier-meta">
-                            <span class="supplier-location">
-                                <i class="fas fa-map-marker-alt"></i> Shanghai, Chine
-                            </span>
-                            <div class="supplier-rating">
-                                <span class="rating-stars">★★★★☆</span>
-                                <span>4.4</span>
-                            </div>
-                        </div>
-                        <p>APIs génériques à prix compétitifs</p>
-                        <div class="supplier-specialties">
-                            <span class="specialty-tag">Antibiotiques</span>
-                            <span class="specialty-tag">Vitamines</span>
-                            <span class="specialty-tag">Hormones</span>
-                        </div>
-                        <div style="text-align: center;">
-                            <a href="#" class="btn btn-primary btn-sm">Voir produits</a>
-                        </div>
-                    </div>
-                </div>
+                <!-- Les fournisseurs seront générés dynamiquement -->
             </div>
             
-            <div style="text-align: center; margin-top: 2rem;">
-                <a href="#fournisseurs" class="btn btn-outline">Voir tous les fournisseurs</a>
+            <div style="text-align: center; margin-top: 3rem;">
+                <button class="btn btn-primary btn-lg" onclick="openModal('supplierModal')">
+                    <i class="fas fa-handshake"></i> Devenir Fournisseur Partenaire
+                </button>
             </div>
         </div>
     </section>
 
+    <!-- Section CTA -->
     <section class="cta-section">
         <div class="container">
-            <div class="cta-content">
-                <h2>Prêt à révolutionner vos achats pharmaceutiques ?</h2>
-                <p>Rejoignez plus de 200+ entreprises qui font confiance à Chem Spot pour leurs approvisionnements</p>
+            <div class="cta-content fade-in">
+                <h2>Prêt à transformer vos achats pharmaceutiques ?</h2>
+                <p>Rejoignez plus de 500+ entreprises qui font confiance à Chem Spot pour leurs approvisionnements critiques</p>
                 
                 <div class="cta-buttons">
-                    <a href="#inscription-fournisseur" class="btn btn-success">
-                        <i class="fas fa-store"></i> Devenir fournisseur (Gratuit)
-                    </a>
-                    <a href="#inscription-acheteur" class="btn btn-outline" style="background-color: white; color: var(--primary);">
-                        <i class="fas fa-shopping-cart"></i> Créer un compte acheteur
-                    </a>
+                    <button class="btn btn-success btn-lg" onclick="openModal('demoModal')">
+                        <i class="fas fa-play"></i> Demander une démo gratuite
+                    </button>
+                    <button class="btn btn-outline btn-lg" style="background: white; color: var(--primary);" onclick="openModal('registerModal')">
+                        <i class="fas fa-rocket"></i> Commencer maintenant
+                    </button>
                 </div>
                 
-                <div style="margin-top: 2rem; font-size: 0.9rem; opacity: 0.8;">
-                    <i class="fas fa-lock"></i> Inscription gratuite • Pas de frais cachés • Support 24/7
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Section Témoignages -->
-    <section style="padding: 4rem 0; background-color: white;">
-        <div class="container">
-            <div class="section-title">
-                <h2>Ce que disent nos clients</h2>
-                <p class="section-subtitle">Découvrez les témoignages de nos utilisateurs</p>
-            </div>
-            
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem;">
-                <div style="background-color: var(--background); padding: 2rem; border-radius: 12px; border: 1px solid var(--border);">
-                    <div style="color: #fbbf24; font-size: 1.5rem; margin-bottom: 1rem;">★★★★★</div>
-                    <p style="font-style: italic; margin-bottom: 1.5rem;">"Grâce à Chem Spot, nous avons réduit nos coûts d'approvisionnement de 25% et nos délais de 40%. Une révolution pour notre laboratoire."</p>
-                    <div style="display: flex; align-items: center; gap: 1rem;">
-                        <div style="width: 50px; height: 50px; background-color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">
-                            DM
-                        </div>
-                        <div>
-                            <div style="font-weight: 600;">Dr. Marie Dubois</div>
-                            <div style="color: var(--text-light); font-size: 0.9rem;">Directrice R&D, Laboratoire Dupont</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div style="background-color: var(--background); padding: 2rem; border-radius: 12px; border: 1px solid var(--border);">
-                    <div style="color: #fbbf24; font-size: 1.5rem; margin-bottom: 1rem;">★★★★★</div>
-                    <p style="font-style: italic; margin-bottom: 1.5rem;">"L'interface est intuitive et le support client exceptionnel. Nous avons trouvé des fournisseurs que nous n'aurions jamais découverts autrement."</p>
-                    <div style="display: flex; align-items: center; gap: 1rem;">
-                        <div style="width: 50px; height: 50px; background-color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">
-                            JL
-                        </div>
-                        <div>
-                            <div style="font-weight: 600;">Jean Lecomte</div>
-                            <div style="color: var(--text-light); font-size: 0.9rem;">Responsable Achats, BioMed France</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div style="background-color: var(--background); padding: 2rem; border-radius: 12px; border: 1px solid var(--border);">
-                    <div style="color: #fbbf24; font-size: 1.5rem; margin-bottom: 1rem;">★★★★☆</div>
-                    <p style="font-style: italic; margin-bottom: 1.5rem;">"Plateforme fiable avec des fournisseurs de qualité. La traçabilité est parfaite pour nos audits qualité."</p>
-                    <div style="display: flex; align-items: center; gap: 1rem;">
-                        <div style="width: 50px; height: 50px; background-color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">
-                            SB
-                        </div>
-                        <div>
-                            <div style="font-weight: 600;">Sophie Bernard</div>
-                            <div style="color: var(--text-light); font-size: 0.9rem;">QA Manager, Generic Plus</div>
-                        </div>
-                    </div>
+                <div style="margin-top: 2rem; font-size: 0.95rem; opacity: 0.9;">
+                    <i class="fas fa-shield-alt"></i> Inscription gratuite • Support 24/7 • Première commande sans commission
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Section Blog/Actualités -->
-    <section style="padding: 4rem 0; background: linear-gradient(45deg, #f7fafc 0%, #edf2f7 100%);">
-        <div class="container">
-            <div class="section-title">
-                <h2>Actualités & Insights</h2>
-                <p class="section-subtitle">Restez informé des dernières tendances du marché pharmaceutique</p>
-            </div>
-            
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem;">
-                <article style="background-color: white; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--border);">
-                    <div style="height: 200px; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <div style="padding: 1.5rem;">
-                        <div style="color: var(--text-light); font-size: 0.85rem; margin-bottom: 0.5rem;">
-                            <i class="fas fa-calendar"></i> 15 Mars 2024
-                        </div>
-                        <h3 style="margin-bottom: 1rem;">Évolution des prix des APIs : Tendances Q1 2024</h3>
-                        <p style="color: var(--text-light); margin-bottom: 1rem;">Analyse détaillée de l'évolution des prix des principaux APIs au premier trimestre 2024...</p>
-                        <a href="#" style="color: var(--primary); font-weight: 500;">Lire la suite <i class="fas fa-arrow-right"></i></a>
-                    </div>
-                </article>
-                
-                <article style="background-color: white; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--border);">
-                    <div style="height: 200px; background: linear-gradient(135deg, var(--success) 0%, #38a169 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <div style="padding: 1.5rem;">
-                        <div style="color: var(--text-light); font-size: 0.85rem; margin-bottom: 0.5rem;">
-                            <i class="fas fa-calendar"></i> 12 Mars 2024
-                        </div>
-                        <h3 style="margin-bottom: 1rem;">Nouvelles réglementations FDA 2024</h3>
-                        <p style="color: var(--text-light); margin-bottom: 1rem;">Impact des nouvelles directives FDA sur l'importation d'APIs depuis l'Asie...</p>
-                        <a href="#" style="color: var(--primary); font-weight: 500;">Lire la suite <i class="fas fa-arrow-right"></i></a>
-                    </div>
-                </article>
-                
-                <article style="background-color: white; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--border);">
-                    <div style="height: 200px; background: linear-gradient(135deg, var(--warning) 0%, #d69e2e 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">
-                        <i class="fas fa-globe"></i>
-                    </div>
-                    <div style="padding: 1.5rem;">
-                        <div style="color: var(--text-light); font-size: 0.85rem; margin-bottom: 0.5rem;">
-                            <i class="fas fa-calendar"></i> 8 Mars 2024
-                        </div>
-                        <h3 style="margin-bottom: 1rem;">Guide : Sourcing en Inde post-COVID</h3>
-                        <p style="color: var(--text-light); margin-bottom: 1rem;">Meilleures pratiques pour sécuriser votre supply chain avec les fournisseurs indiens...</p>
-                        <a href="#" style="color: var(--primary); font-weight: 500;">Lire la suite <i class="fas fa-arrow-right"></i></a>
-                    </div>
-                </article>
-            </div>
-            
-            <div style="text-align: center; margin-top: 2rem;">
-                <a href="#blog" class="btn btn-outline">Voir tous les articles</a>
-            </div>
-        </div>
-    </section>
-
+    <!-- Footer -->
     <footer>
         <div class="container">
             <div class="footer-content">
                 <div class="footer-column">
                     <h3>Chem Spot</h3>
-                    <p>La marketplace B2B de référence pour les matières premières pharmaceutiques. Connectez-vous avec les meilleurs fournisseurs mondiaux en toute sécurité.</p>
+                    <p>La marketplace B2B de référence pour les matières premières pharmaceutiques. Innovation, sécurité et performance au service de votre supply chain.</p>
                     <div style="margin-top: 1.5rem;">
                         <a href="#" style="margin-right: 1rem; font-size: 1.5rem;"><i class="fab fa-linkedin"></i></a>
                         <a href="#" style="margin-right: 1rem; font-size: 1.5rem;"><i class="fab fa-twitter"></i></a>
                         <a href="#" style="margin-right: 1rem; font-size: 1.5rem;"><i class="fab fa-youtube"></i></a>
+                        <a href="#" style="margin-right: 1rem; font-size: 1.5rem;"><i class="fab fa-telegram"></i></a>
                     </div>
                 </div>
                 
                 <div class="footer-column">
                     <h3>Produits</h3>
-                    <ul>
+                    <ul style="list-style: none;">
                         <li><a href="#">Principes Actifs</a></li>
-                        <li><a href="#">Excipients</a></li>
+                        <li><a href="#">Excipients Pharmaceutiques</a></li>
                         <li><a href="#">Arômes & Colorants</a></li>
                         <li><a href="#">Conservateurs</a></li>
-                        <li><a href="#">Matières Premières Bio</a></li>
+                        <li><a href="#">APIs Personnalisés</a></li>
+                        <li><a href="#">Produits Bio</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-column">
                     <h3>Services</h3>
-                    <ul>
+                    <ul style="list-style: none;">
                         <li><a href="#">Audit Fournisseurs</a></li>
-                        <li><a href="#">Analyse Qualité</a></li>
-                        <li><a href="#">Logistique</a></li>
-                        <li><a href="#">Support Réglementaire</a></li>
-                        <li><a href="#">Formation</a></li>
+                        <li><a href="#">Analyses Qualité</a></li>
+                        <li><a href="#">Logistique Spécialisée</a></li>
+                        <li><a href="#">Conseil Réglementaire</a></li>
+                        <li><a href="#">Formation Équipes</a></li>
+                        <li><a href="#">API Management</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-column">
                     <h3>Support</h3>
-                    <ul>
-                        <li><a href="#">Centre d'aide</a></li>
-                        <li><a href="#">Contact</a></li>
+                    <ul style="list-style: none;">
+                        <li><a href="#">Centre d'aide 24/7</a></li>
+                        <li><a href="#">Chat en direct</a></li>
                         <li><a href="#">Documentation API</a></li>
                         <li><a href="#">Statut des services</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-column">
-                    <h3>Entreprise</h3>
-                    <ul>
-                        <li><a href="#">À propos</a></li>
-                        <li><a href="#">Carrières</a></li>
-                        <li><a href="#">Presse</a></li>
-                        <li><a href="#">Partenaires</a></li>
-                        <li><a href="#">Investisseurs</a></li>
+                        <li><a href="#">Formation utilisateurs</a></li>
+                        <li><a href="#">Webinaires</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-column">
                     <h3>Contact</h3>
-                    <p><i class="fas fa-map-marker-alt"></i> 75 Avenue des Champs-Élysées<br>75008 Paris, France</p>
-                    <p><i class="fas fa-phone"></i> +33 1 45 86 70 00</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 15 Rue de la Paix<br>25000 Besançon, France</p>
+                    <p><i class="fas fa-phone"></i> +33 3 81 25 40 60</p>
                     <p><i class="fas fa-envelope"></i> contact@chemspot.fr</p>
-                    <p><i class="fas fa-clock"></i> Lun-Ven 9h-18h</p>
+                    <p><i class="fas fa-clock"></i> 24/7 Support disponible</p>
+                    <p><i class="fas fa-certificate"></i> Certifié ISO 9001:2015</p>
                 </div>
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; 2024 Chem Spot. Tous droits réservés. | 
-                   <a href="#" style="color: #cbd5e0;">Mentions légales</a> | 
-                   <a href="#" style="color: #cbd5e0;">Politique de confidentialité</a> | 
-                   <a href="#" style="color: #cbd5e0;">CGU</a>
+                <p>&copy; 2024 Chem Spot SAS. Tous droits réservés. | 
+                   <a href="#">Mentions légales</a> | 
+                   <a href="#">RGPD</a> | 
+                   <a href="#">CGU</a> | 
+                   <a href="#">API Terms</a>
                 </p>
             </div>
         </div>
     </footer>
 
-    <!-- Scripts -->
+    <!-- Modals -->
+    <!-- Modal de Connexion -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            <h2 style="margin-bottom: 2rem; color: var(--primary);">
+                <i class="fas fa-sign-in-alt"></i> Connexion
+            </h2>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label class="form-label">Email professionnel</label>
+                    <input type="email" class="form-input" required placeholder="votre@entreprise.com">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Mot de passe</label>
+                    <input type="password" class="form-input" required placeholder="••••••••">
+                </div>
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: flex; align-items: center; gap: 0.5rem;">
+                        <input type="checkbox"> Se souvenir de moi
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-bottom: 1rem;">
+                    <i class="fas fa-sign-in-alt"></i> Se connecter
+                </button>
+                <div style="text-align: center;">
+                    <a href="#" style="color: var(--primary);">Mot de passe oublié ?</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal d'Inscription -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('registerModal')">&times;</span>
+            <h2 style="margin-bottom: 2rem; color: var(--primary);">
+                <i class="fas fa-user-plus"></i> Créer un compte
+            </h2>
+            <form onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label class="form-label">Type de compte</label>
+                    <select class="form-input" required>
+                        <option value="">Sélectionner...</option>
+                        <option value="buyer">Acheteur (Laboratoire/Pharma)</option>
+                        <option value="supplier">Fournisseur</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Nom de l'entreprise</label>
+                    <input type="text" class="form-input" required placeholder="Laboratoire XYZ">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email professionnel</label>
+                    <input type="email" class="form-input" required placeholder="contact@votre-entreprise.com">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Téléphone</label>
+                    <input type="tel" class="form-input" required placeholder="+33 1 23 45 67 89">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Mot de passe</label>
+                    <input type="password" class="form-input" required placeholder="••••••••">
+                </div>
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: flex; align-items: center; gap: 0.5rem;">
+                        <input type="checkbox" required> J'accepte les <a href="#" style="color: var(--primary);">CGU</a> et la <a href="#" style="color: var(--primary);">politique de confidentialité</a>
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <i class="fas fa-user-plus"></i> Créer mon compte
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Demande de Démo -->
+    <div id="demoModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('demoModal')">&times;</span>
+            <h2 style="margin-bottom: 2rem; color: var(--primary);">
+                <i class="fas fa-play"></i> Demander une démo personnalisée
+            </h2>
+            <form onsubmit="handleDemo(event)">
+                <div class="form-group">
+                    <label class="form-label">Nom complet</label>
+                    <input type="text" class="form-input" required placeholder="Jean Dupont">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Entreprise</label>
+                    <input type="text" class="form-input" required placeholder="Laboratoire ABC">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Poste</label>
+                    <input type="text" class="form-input" required placeholder="Responsable Achats">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" required placeholder="j.dupont@laboratoire-abc.com">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Téléphone</label>
+                    <input type="tel" class="form-input" required placeholder="+33 1 23 45 67 89">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Besoins spécifiques</label>
+                    <textarea class="form-input" rows="3" placeholder="Décrivez vos besoins en approvisionnement pharmaceutique..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-success" style="width: 100%;">
+                    <i class="fas fa-calendar"></i> Planifier ma démo gratuite
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Fournisseur -->
+    <div id="supplierModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('supplierModal')">&times;</span>
+            <h2 style="margin-bottom: 2rem; color: var(--primary);">
+                <i class="fas fa-handshake"></i> Devenir Fournisseur Partenaire
+            </h2>
+            <div style="background: var(--background); padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+                <h4 style="color: var(--success); margin-bottom: 1rem;">
+                    <i class="fas fa-gift"></i> Offre de lancement
+                </h4>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin-bottom: 0.5rem;"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i> Inscription gratuite</li>
+                    <li style="margin-bottom: 0.5rem;"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i> 6 mois sans commission</li>
+                    <li style="margin-bottom: 0.5rem;"><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i> Support dédié inclus</li>
+                    <li><i class="fas fa-check" style="color: var(--success); margin-right: 0.5rem;"></i> Formation gratuite équipes</li>
+                </ul>
+            </div>
+            <form onsubmit="handleSupplier(event)">
+                <div class="form-group">
+                    <label class="form-label">Nom de l'entreprise</label>
+                    <input type="text" class="form-input" required placeholder="PharmaCorp International">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Pays de production</label>
+                    <select class="form-input" required>
+                        <option value="">Sélectionner...</option>
+                        <option value="france">France</option>
+                        <option value="allemagne">Allemagne</option>
+                        <option value="inde">Inde</option>
+                        <option value="chine">Chine</option>
+                        <option value="usa">États-Unis</option>
+                        <option value="autre">Autre</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Spécialités produits</label>
+                    <select class="form-input" required multiple>
+                        <option value="api">Principes Actifs</option>
+                        <option value="excipients">Excipients</option>
+                        <option value="colorants">Colorants</option>
+                        <option value="aromes">Arômes</option>
+                        <option value="conservateurs">Conservateurs</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Certifications</label>
+                    <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="checkbox" value="bpf"> BPF/GMP
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="checkbox" value="iso"> ISO 9001
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="checkbox" value="fda"> FDA
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="checkbox" value="ema"> EMA
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Contact principal</label>
+                    <input type="email" class="form-input" required placeholder="commercial@pharmacorp.com">
+                </div>
+                <button type="submit" class="btn btn-success" style="width: 100%;">
+                    <i class="fas fa-handshake"></i> Rejoindre le réseau Chem Spot
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts JavaScript Avancés -->
     <script>
-        // Animation au scroll
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+        // Données simulées
+        const products = [
+            {
+                id: 1,
+                name: "Paracétamol",
+                category: "api",
+                price: "15.20",
+                origin: "Inde",
+                purity: "99.8%",
+                stock: "En stock",
+                supplier: "PharmaCorp India",
+                cas: "103-90-2",
+                formula: "C8H9NO2"
+            },
+            {
+                id: 2,
+                name: "Lactose Monohydraté",
+                category: "excipient",
+                price: "3.45",
+                origin: "France",
+                purity: "99.5%",
+                stock: "En stock",
+                supplier: "Roquette Pharma",
+                cas: "64044-51-5",
+                formula: "C12H22O11·H2O"
+            },
+            {
+                id: 3,
+                name: "Ibuprofène",
+                category: "api",
+                price: "22.80",
+                origin: "Chine",
+                purity: "99.9%",
+                stock: "Stock limité",
+                supplier: "ChemChina Exports",
+                cas: "15687-27-1",
+                formula: "C13H18O2"
+            },
+            {
+                id: 4,
+                name: "Stéarate de Magnésium",
+                category: "excipient",
+                price: "4.20",
+                origin: "Allemagne",
+                purity: "99.0%",
+                stock: "En stock",
+                supplier: "BASF Pharma",
+                cas: "557-04-0",
+                formula: "C36H70MgO4"
+            },
+            {
+                id: 5,
+                name: "Aspirine",
+                category: "api",
+                price: "18.50",
+                origin: "Suisse",
+                purity: "99.7%",
+                stock: "En stock",
+                supplier: "Novartis Ingredients",
+                cas: "50-78-2",
+                formula: "C9H8O4"
+            },
+            {
+                id: 6,
+                name: "Colorant Rouge E124",
+                category: "colorant",
+                price: "45.60",
+                origin: "Allemagne",
+                purity: "98.5%",
+                stock: "En stock",
+                supplier: "ColorTech GmbH",
+                cas: "25956-17-6",
+                formula: "C20H11N2NaO10S3"
+            }
+        ];
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate-fade-in');
-                }
-            });
-        }, observerOptions);
+        const suppliers = [
+            {
+                name: "PharmaCorp India",
+                logo: "PH",
+                country: "Mumbai, Inde",
+                rating: 4.8,
+                specialties: ["Paracétamol", "Ibuprofène", "Aspirine"],
+                badge: "Certifié BPF",
+                verified: true
+            },
+            {
+                name: "BASF Pharma",
+                logo: "BF",
+                country: "Ludwigshafen, Allemagne",
+                rating: 4.9,
+                specialties: ["Polymères", "Liants", "Enrobages"],
+                badge: "Premium",
+                verified: true
+            },
+            {
+                name: "Roquette Pharma",
+                logo: "RQ",
+                country: "Lestrem, France",
+                rating: 4.7,
+                specialties: ["Amidon", "Sorbitol", "Mannitol"],
+                badge: "Local",
+                verified: true
+            },
+            {
+                name: "ChemChina Exports",
+                logo: "CC",
+                country: "Shanghai, Chine",
+                rating: 4.4,
+                specialties: ["Antibiotiques", "Vitamines", "Hormones"],
+                badge: "Express",
+                verified: true
+            },
+            {
+                name: "Novartis Ingredients",
+                logo: "NV",
+                country: "Bâle, Suisse",
+                rating: 4.9,
+                specialties: ["APIs Premium", "Oncologie", "Neurologie"],
+                badge: "Premium",
+                verified: true
+            },
+            {
+                name: "Givaudan Pharma",
+                logo: "GV",
+                country: "Genève, Suisse",
+                rating: 4.6,
+                specialties: ["Arômes", "Édulcorants", "Masqueurs"],
+                badge: "Innovation",
+                verified: true
+            }
+        ];
 
-        // Observer les cartes
-        document.querySelectorAll('.feature-card, .supplier-card').forEach(card => {
-            observer.observe(card);
+        // Suggestions de recherche
+        const searchSuggestions = [
+            "Paracétamol", "Ibuprofène", "Aspirine", "Lactose", "Stéarate de magnésium",
+            "Cellulose microcristalline", "Dioxyde de titane", "Gélatine", "Amidon",
+            "Sorbitol", "Mannitol", "Acide citrique", "Hydroxypropylcellulose"
+        ];
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
         });
 
-        // Smooth scroll pour les liens d'ancrage
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
+        function initializeApp() {
+            setupEventListeners();
+            renderProducts();
+            renderSuppliers();
+            setupSearch();
+            animateCounters();
+            setupScrollAnimations();
+        }
 
-        // Simulation de recherche en temps réel
-        const searchInput = document.querySelector('.search-form input');
-        if (searchInput) {
-            searchInput.addEventListener('input', function(e) {
-                const query = e.target.value.toLowerCase();
-                if (query.length > 2) {
-                    // Ici on pourrait ajouter des suggestions de recherche
-                    console.log('Recherche:', query);
+        // Configuration des écouteurs d'événements
+        function setupEventListeners() {
+            // Navigation
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const section = this.getAttribute('data-section');
+                    scrollToSection(section);
+                    updateActiveNav(this);
+                });
+            });
+
+            // Onglets de recherche
+            document.querySelectorAll('.search-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.search-tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    updateSearchPlaceholder(this.getAttribute('data-tab'));
+                });
+            });
+
+            // Filtres de catalogue
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    filterProducts(this.getAttribute('data-filter'));
+                });
+            });
+
+            // Fermeture des modals en cliquant à l'extérieur
+            window.addEventListener('click', function(e) {
+                if (e.target.classList.contains('modal')) {
+                    e.target.style.display = 'none';
                 }
             });
         }
 
-        // Simulation des prix en temps réel (pour la démo)
+        // Système de recherche intelligent
+        function setupSearch() {
+            const searchInput = document.getElementById('searchInput');
+            const suggestions = document.getElementById('searchSuggestions');
+
+            searchInput.addEventListener('input', function() {
+                const query = this.value.toLowerCase();
+                if (query.length > 1) {
+                    showSuggestions(query);
+                } else {
+                    hideSuggestions();
+                }
+            });
+
+            searchInput.addEventListener('blur', function() {
+                setTimeout(hideSuggestions, 200);
+            });
+        }
+
+        function showSuggestions(query) {
+            const suggestions = document.getElementById('searchSuggestions');
+            const filtered = searchSuggestions.filter(item => 
+                item.toLowerCase().includes(query)
+            ).slice(0, 5);
+
+            if (filtered.length > 0) {
+                suggestions.innerHTML = filtered.map(item => 
+                    `<div class="suggestion-item" onclick="selectSuggestion('${item}')">${item}</div>`
+                ).join('');
+                suggestions.style.display = 'block';
+            } else {
+                hideSuggestions();
+            }
+        }
+
+        function hideSuggestions() {
+            const suggestions = document.getElementById('searchSuggestions');
+            suggestions.style.display = 'none';
+        }
+
+        function selectSuggestion(item) {
+            document.getElementById('searchInput').value = item;
+            hideSuggestions();
+            performSearch(null, item);
+        }
+
+        // Recherche principale
+        function performSearch(event, query = null) {
+            if (event) event.preventDefault();
+            
+            const searchTerm = query || document.getElementById('searchInput').value;
+            if (!searchTerm.trim()) {
+                showNotification('Veuillez saisir un terme de recherche', 'warning');
+                return;
+            }
+
+            showNotification(`Recherche de "${searchTerm}" en cours...`, 'info');
+            
+            // Simulation de recherche
+            setTimeout(() => {
+                const results = products.filter(product => 
+                    product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    product.category.toLowerCase().includes(searchTerm.toLowerCase())
+                );
+
+                if (results.length > 0) {
+                    displaySearchResults(results, searchTerm);
+                    scrollToSection('catalogue');
+                } else {
+                    showNotification(`Aucun résultat trouvé pour "${searchTerm}"`, 'warning');
+                }
+            }, 1000);
+        }
+
+        function displaySearchResults(results, searchTerm) {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = '';
+            
+            results.forEach(product => {
+                grid.appendChild(createProductCard(product));
+            });
+
+            showNotification(`${results.length} produit(s) trouvé(s) pour "${searchTerm}"`, 'success');
+        }
+
+        // Rendu des produits
+        function renderProducts() {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = '';
+            
+            products.slice(0, 6).forEach(product => {
+                grid.appendChild(createProductCard(product));
+            });
+        }
+
+        function createProductCard(product) {
+            const card = document.createElement('div');
+            card.className = 'product-card fade-in';
+            card.innerHTML = `
+                <div class="availability-badge">${product.stock}</div>
+                <div class="product-header">
+                    <div class="product-icon">
+                        <i class="fas fa-pills"></i>
+                    </div>
+                    <h3>${product.name}</h3>
+                </div>
+                <div class="product-details">
+                    <div class="product-meta">
+                        <span class="product-price">${product.price}€/kg</span>
+                        <span style="font-size: 0.8rem; color: var(--text-light);">
+                            <i class="fas fa-map-marker-alt"></i> ${product.origin}
+                        </span>
+                    </div>
+                    <div class="product-specs">
+                        <div class="spec-item">
+                            <span class="spec-label">Pureté:</span>
+                            <span class="spec-value">${product.purity}</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">CAS:</span>
+                            <span class="spec-value">${product.cas}</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Formule:</span>
+                            <span class="spec-value">${product.formula}</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Fournisseur:</span>
+                            <span class="spec-value">${product.supplier}</span>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                        <button class="btn btn-primary btn-sm" style="flex: 1;" onclick="requestQuote(${product.id})">
+                            <i class="fas fa-calculator"></i> Devis
+                        </button>
+                        <button class="btn btn-outline btn-sm" onclick="viewDetails(${product.id})">
+                            <i class="fas fa-info"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            return card;
+        }
+
+        // Rendu des fournisseurs
+        function renderSuppliers() {
+            const container = document.querySelector('.suppliers-grid');
+            container.innerHTML = '';
+            
+            suppliers.forEach(supplier => {
+                container.appendChild(createSupplierCard(supplier));
+            });
+        }
+
+        function createSupplierCard(supplier) {
+            const card = document.createElement('div');
+            card.className = 'supplier-card fade-in';
+            card.innerHTML = `
+                <div class="supplier-badge">${supplier.badge}</div>
+                <div class="supplier-header">
+                    <div class="supplier-logo">${supplier.logo}</div>
+                    <h3>${supplier.name}</h3>
+                </div>
+                <div class="supplier-details">
+                    <div class="supplier-meta">
+                        <span class="supplier-location">
+                            <i class="fas fa-map-marker-alt"></i> ${supplier.country}
+                        </span>
+                        <div class="supplier-rating">
+                            <span class="rating-stars">${'★'.repeat(Math.floor(supplier.rating))}${supplier.rating % 1 ? '☆' : ''}</span>
+                            <span class="rating-score">${supplier.rating}</span>
+                        </div>
+                    </div>
+                    <p>Fournisseur certifié spécialisé dans les matières premières de haute qualité</p>
+                    <div class="supplier-specialties">
+                        ${supplier.specialties.map(spec => 
+                            `<span class="specialty-tag">${spec}</span>`
+                        ).join('')}
+                    </div>
+                    <div style="display: flex; gap: 0.5rem; margin-top: 1.5rem;">
+                        <button class="btn btn-primary btn-sm" style="flex: 1;" onclick="contactSupplier('${supplier.name}')">
+                            <i class="fas fa-envelope"></i> Contacter
+                        </button>
+                        <button class="btn btn-outline btn-sm" onclick="viewSupplierProfile('${supplier.name}')">
+                            <i class="fas fa-eye"></i> Profil
+                        </button>
+                    </div>
+                </div>
+            `;
+            return card;
+        }
+
+        // Fonctions d'interaction
+        function requestQuote(productId) {
+            const product = products.find(p => p.id === productId);
+            showNotification(`Demande de devis envoyée pour ${product.name}. Vous recevrez une réponse sous 2h.`, 'success');
+        }
+
+        function viewDetails(productId) {
+            const product = products.find(p => p.id === productId);
+            alert(`Détails pour ${product.name}:\n\nCAS: ${product.cas}\nFormule: ${product.formula}\nPureté: ${product.purity}\nOrigine: ${product.origin}\nFournisseur: ${product.supplier}`);
+        }
+
+        function contactSupplier(supplierName) {
+            showNotification(`Message envoyé à ${supplierName}. Ils vous répondront sous 24h.`, 'success');
+        }
+
+        function viewSupplierProfile(supplierName) {
+            showNotification(`Ouverture du profil de ${supplierName}...`, 'info');
+        }
+
+        // Filtrage des produits
+        function filterProducts(category) {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = '';
+            
+            const filtered = category === 'all' ? products : products.filter(p => p.category === category);
+            
+            filtered.forEach(product => {
+                grid.appendChild(createProductCard(product));
+            });
+
+            showNotification(`${filtered.length} produit(s) affiché(s)`, 'info');
+        }
+
+        function loadMoreProducts() {
+            showNotification('Chargement de produits supplémentaires...', 'info');
+            // Simulation du chargement
+            setTimeout(() => {
+                showNotification('Tous les produits ont été chargés', 'success');
+            }, 1500);
+        }
+
+        // Gestion des modals
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Gestion des formulaires
+        function handleLogin(event) {
+            event.preventDefault();
+            showNotification('Connexion en cours...', 'info');
+            setTimeout(() => {
+                closeModal('loginModal');
+                showNotification('Connexion réussie ! Bienvenue sur Chem Spot.', 'success');
+            }, 2000);
+        }
+
+        function handleRegister(event) {
+            event.preventDefault();
+            showNotification('Création du compte en cours...', 'info');
+            setTimeout(() => {
+                closeModal('registerModal');
+                showNotification('Compte créé avec succès ! Un email de validation vous a été envoyé.', 'success');
+            }, 2000);
+        }
+
+        function handleDemo(event) {
+            event.preventDefault();
+            showNotification('Demande de démo enregistrée...', 'info');
+            setTimeout(() => {
+                closeModal('demoModal');
+                showNotification('Demande enregistrée ! Notre équipe vous contactera sous 24h pour planifier votre démo personnalisée.', 'success');
+            }, 2000);
+        }
+
+        function handleSupplier(event) {
+            event.preventDefault();
+            showNotification('Candidature en cours de traitement...', 'info');
+            setTimeout(() => {
+                closeModal('supplierModal');
+                showNotification('Candidature envoyée ! Notre équipe d\'audit vous contactera sous 48h pour valider votre dossier.', 'success');
+            }, 2000);
+        }
+
+        // Système de notifications
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            
+            const colors = {
+                success: '#48bb78',
+                warning: '#ed8936',
+                error: '#f56565',
+                info: '#4299e1'
+            };
+            
+            notification.style.backgroundColor = colors[type];
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check' : type === 'warning' ? 'exclamation' : type === 'error' ? 'times' : 'info'}-circle"></i>
+                ${message}
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 5000);
+        }
+
+        // Animation des compteurs
+        function animateCounters() {
+            const counters = document.querySelectorAll('.stat-number');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateCounter(entry.target);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            });
+            
+            counters.forEach(counter => observer.observe(counter));
+        }
+
+        function animateCounter(element) {
+            const target = parseFloat(element.getAttribute('data-target'));
+            const suffix = element.textContent.includes('€') ? '€M+' : 
+                          element.textContent.includes('+') ? '+' : '';
+            
+            let current = 0;
+            const increment = target / 100;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    element.textContent = target + suffix;
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(current * 10) / 10 + suffix;
+                }
+            }, 20);
+        }
+
+        // Animations au scroll
+        function setupScrollAnimations() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationDelay = `${Math.random() * 0.5}s`;
+                        entry.target.classList.add('fade-in');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            document.querySelectorAll('.feature-card, .product-card, .supplier-card').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // Navigation
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        }
+
+        function updateActiveNav(activeLink) {
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            activeLink.classList.add('active');
+        }
+
+        function updateSearchPlaceholder(tab) {
+            const input = document.getElementById('searchInput');
+            const placeholders = {
+                api: 'Ex: Paracétamol, Ibuprofène, Aspirine...',
+                excipient: 'Ex: Lactose, Stéarate de magnésium, Cellulose...',
+                autre: 'Ex: Colorants, Arômes, Conservateurs...'
+            };
+            input.placeholder = placeholders[tab] || 'Rechercher un produit...';
+        }
+
+        // Simulation des prix en temps réel
         function updatePrices() {
-            const priceElements = document.querySelectorAll('.price-value');
+            const priceElements = document.querySelectorAll('.product-price');
             priceElements.forEach(el => {
-                if (Math.random() > 0.7) { // 30% de chance de changement
+                if (Math.random() > 0.8) { // 20% chance de mise à jour
                     const currentPrice = parseFloat(el.textContent);
-                    const change = (Math.random() - 0.5) * 0.2; // ±10% max
-                    const newPrice = (currentPrice * (1 + change)).toFixed(1);
+                    const change = (Math.random() - 0.5) * 0.1; // ±5% max
+                    const newPrice = (currentPrice * (1 + change)).toFixed(2);
                     
-                    // Animation du changement
                     el.style.transition = 'all 0.3s ease';
-                    el.style.transform = 'scale(1.1)';
+                    el.style.transform = 'scale(1.05)';
                     
                     setTimeout(() => {
                         el.textContent = newPrice + '€/kg';
@@ -1358,78 +2110,96 @@
             });
         }
 
-        // Mettre à jour les prix toutes les 30 secondes (pour la démo)
+        // Mise à jour des prix toutes les 30 secondes
         setInterval(updatePrices, 30000);
 
-        // Effet de typing pour le titre principal
-        function typeWriter(element, text, speed = 100) {
-            let i = 0;
-            element.innerHTML = '';
-            
-            function type() {
-                if (i < text.length) {
-                    element.innerHTML += text.charAt(i);
-                    i++;
-                    setTimeout(type, speed);
-                }
+        // Gestion du scroll pour l'header
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(255, 255, 255, 0.98)';
+                header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+                header.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.05)';
             }
-            
-            type();
-        }
-
-        // Démarrer l'effet de typing au chargement
-        window.addEventListener('load', () => {
-            const heroTitle = document.querySelector('.hero h1');
-            const originalText = heroTitle.textContent;
-            typeWriter(heroTitle, originalText, 50);
         });
 
-        // Formulaire de contact/inscription (simulation)
-        function handleFormSubmit(formType) {
-            alert(`Merci pour votre intérêt ! Nous vous contacterons sous 24h pour ${formType}.`);
-        }
-
-        // Gestion responsive du menu mobile
-        function toggleMobileMenu() {
-            const navMenu = document.querySelector('.nav-menu');
-            navMenu.classList.toggle('mobile-open');
-        }
-
-        // Animation des compteurs dans les stats
-        function animateCounters() {
-            const counters = document.querySelectorAll('.stat-number');
-            
-            counters.forEach(counter => {
-                const target = parseInt(counter.textContent);
-                const increment = target / 100;
-                let current = 0;
-                
-                const timer = setInterval(() => {
-                    current += increment;
-                    if (current >= target) {
-                        counter.textContent = target + (counter.textContent.includes('€') ? '€' : '') + (counter.textContent.includes('+') ? '+' : '');
-                        clearInterval(timer);
-                    } else {
-                        counter.textContent = Math.floor(current) + (counter.textContent.includes('€') ? '€' : '') + (counter.textContent.includes('+') ? '+' : '');
-                    }
-                }, 20);
-            });
-        }
-
-        // Démarrer l'animation des compteurs quand la section est visible
-        const statsObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    animateCounters();
-                    statsObserver.disconnect();
-                }
-            });
+        // Gestion des erreurs globales
+        window.addEventListener('error', function(e) {
+            console.error('Erreur détectée:', e.error);
+            showNotification('Une erreur s\'est produite. Veuillez rafraîchir la page.', 'error');
         });
 
-        const statsSection = document.querySelector('.hero-stats');
-        if (statsSection) {
-            statsObserver.observe(statsSection);
-        }
+        // Performance monitoring
+        window.addEventListener('load', function() {
+            console.log('Site chargé en:', performance.now(), 'ms');
+        });
     </script>
+
+    <!-- Styles pour les suggestions de recherche -->
+    <style>
+        .search-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            z-index: 100;
+            display: none;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .suggestion-item {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-item:hover {
+            background: var(--background);
+            color: var(--primary);
+        }
+
+        /* Styles responsives pour les modals */
+        @media (max-width: 768px) {
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+                padding: 1.5rem;
+            }
+        }
+
+        /* Animations supplémentaires */
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Styles pour le mode sombre (future implémentation) */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background: #1a202c;
+                --card-bg: #2d3748;
+                --text: #e2e8f0;
+                --text-light: #a0aec0;
+                --border: #4a5568;
+            }
+        }
+    </style>
 </body>
 </html>
