@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chem Spot - Marketplace B2B des Matières Premières Pharmaceutiques</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/chemspotV1-dt6tDoOKp1wAyi8oRMzxzufIVBfiu9.png" alt="Chem Spot Logo" class="logo">
+                    <span class="logo-text">Chem Spot</span>
+                </div>
+                
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link active">Accueil</a></li>
+                    <li><a href="catalogue.html" class="nav-link">Catalogue</a></li>
+                    <li><a href="fournisseurs.html" class="nav-link">Fournisseurs</a></li>
+                    <li><a href="contact.html" class="nav-link">Contact</a></li>
+                </ul>
+                
+                <div class="header-actions">
+                    <button class="btn btn-outline btn-sm" onclick="openModal('loginModal')">
+                        <i class="fas fa-sign-in-alt"></i> Connexion
+                    </button>
+                    <button class="btn btn-primary btn-sm" onclick="openModal('registerModal')">
+                        <i class="fas fa-user-plus"></i> Inscription
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content fade-in">
+                <h1>La Marketplace B2B des Matières Premières Pharmaceutiques</h1>
+                <p class="hero-subtitle">
+                    Connectez-vous directement avec les fournisseurs d'APIs, excipients et matières premières. 
+                    Transactions sécurisées, prix transparents, livraison garantie.
+                </p>
+                
+                <div class="search-container">
+                    <div class="search-tabs">
+                        <div class="search-tab active" data-tab="api">Principes Actifs</div>
+                        <div class="search-tab" data-tab="excipient">Excipients</div>
+                        <div class="search-tab" data-tab="autre">Autres</div>
+                    </div>
+                    
+                    <form class="search-form" onsubmit="performSearch(event)">
+                        <div class="search-input-container">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="searchInput" placeholder="Ex: Paracétamol, Lactose, Stéarate de magnésium..." autocomplete="off">
+                            <div id="searchSuggestions" class="search-suggestions"></div>
+                        </div>
+                        <button type="submit">
+                            <i class="fas fa-search"></i> Rechercher
+                        </button>
+                    </form>
+                </div>
+                
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number" data-target="847">0</span>
+                        <span class="stat-label">Produits disponibles</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" data-target="127">0</span>
+                        <span class="stat-label">Fournisseurs vérifiés</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" data-target="5.2">0</span>
+                        <span class="stat-label">€M+ Transactions</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" data-target="24">0</span>
+                        <span class="stat-label">Pays couverts</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Fonctionnalités -->
+    <section class="section section-white">
+        <div class="container">
+            <div class="section-title fade-in">
+                <h2>Pourquoi choisir Chem Spot ?</h2>
+                <p class="section-subtitle">
+                    Une plateforme complète qui révolutionne vos achats pharmaceutiques
+                </p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-virus"></i>
+                    </div>
+                    <h3>Certification BPF/GMP</h3>
+                    <p>Tous nos fournisseurs sont audités selon les standards internationaux. Documentation complète et traçabilité garantie.</p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Prix en Temps Réel</h3>
+                    <p>Accédez aux cotations actualisées en continu. Comparez les prix et négociez directement.</p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-shipping-fast"></i>
+                    </div>
+                    <h3>Logistique Intégrée</h3>
+                    <p>Suivi GPS temps réel, chaîne du froid respectée, assurance incluse.</p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h3>Paiements Sécurisés</h3>
+                    <p>Système d'escrow blockchain intégré. Paiements cryptés et protection anti-fraude.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section CTA -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content fade-in">
+                <h2>Prêt à transformer vos achats pharmaceutiques ?</h2>
+                <p>Rejoignez plus de 500+ entreprises qui font confiance à Chem Spot</p>
+                
+                <div class="cta-buttons">
+                    <button class="btn btn-success btn-lg" onclick="openModal('demoModal')">
+                        <i class="fas fa-play"></i> Demander une démo gratuite
+                    </button>
+                    <a href="catalogue.html" class="btn btn-outline btn-lg" style="background: white; color: var(--primary);">
+                        <i class="fas fa-search"></i> Explorer le catalogue
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Chem Spot</h3>
+                    <p>La marketplace B2B de référence pour les matières premières pharmaceutiques.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Produits</h3>
+                    <ul>
+                        <li><a href="catalogue.html">Principes Actifs</a></li>
+                        <li><a href="catalogue.html">Excipients</a></li>
+                        <li><a href="catalogue.html">Colorants</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="#">Audit Fournisseurs</a></li>
+                        <li><a href="#">Analyses Qualité</a></li>
+                        <li><a href="#">Logistique</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Contact</h3>
+                    <p><i class="fas fa-phone"></i> +33 3 81 25 40 60</p>
+                    <p><i class="fas fa-envelope"></i> contact@chemspot.fr</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Chem Spot SAS. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            <h2><i class="fas fa-sign-in-alt"></i> Connexion</h2>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Mot de passe</label>
+                    <input type="password" class="form-input" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    Se connecter
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('registerModal')">&times;</span>
+            <h2><i class="fas fa-user-plus"></i> Inscription</h2>
+            <form onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label class="form-label">Entreprise</label>
+                    <input type="text" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Mot de passe</label>
+                    <input type="password" class="form-input" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    Créer mon compte
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="demoModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('demoModal')">&times;</span>
+            <h2><i class="fas fa-play"></i> Demander une démo</h2>
+            <form onsubmit="handleDemo(event)">
+                <div class="form-group">
+                    <label class="form-label">Nom</label>
+                    <input type="text" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Entreprise</label>
+                    <input type="text" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" required>
+                </div>
+                <button type="submit" class="btn btn-success" style="width: 100%;">
+                    Planifier ma démo
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/search.js"></script>
+</body>
+</html>
