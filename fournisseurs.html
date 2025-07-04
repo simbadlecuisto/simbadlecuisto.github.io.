@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fournisseurs - Chem Spot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/chemspotV1-dt6tDoOKp1wAyi8oRMzxzufIVBfiu9.png" alt="Chem Spot Logo" class="logo">
+                    <span class="logo-text">Chem Spot</span>
+                </div>
+                
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link">Accueil</a></li>
+                    <li><a href="catalogue.html" class="nav-link">Catalogue</a></li>
+                    <li><a href="fournisseurs.html" class="nav-link active">Fournisseurs</a></li>
+                    <li><a href="contact.html" class="nav-link">Contact</a></li>
+                </ul>
+                
+                <div class="header-actions">
+                    <button class="btn btn-outline btn-sm" onclick="openModal('loginModal')">
+                        <i class="fas fa-sign-in-alt"></i> Connexion
+                    </button>
+                    <button class="btn btn-primary btn-sm" onclick="openModal('registerModal')">
+                        <i class="fas fa-user-plus"></i> Inscription
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <div class="page-header-content">
+                <h1><i class="fas fa-handshake"></i> Réseau de Fournisseurs</h1>
+                <p>Découvrez notre écosystème de fournisseurs certifiés dans plus de 24 pays</p>
+                
+                <!-- CTA pour devenir fournisseur -->
+                <div class="supplier-cta">
+                    <button class="btn btn-success btn-lg" onclick="openModal('supplierModal')">
+                        <i class="fas fa-plus"></i> Devenir Fournisseur Partenaire
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistiques fournisseurs -->
+    <section class="suppliers-stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-number">127</span>
+                        <span class="stat-label">Fournisseurs actifs</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-number">24</span>
+                        <span class="stat-label">Pays représentés</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-number">98%</span>
+                        <span class="stat-label">Certifiés BPF/GMP</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-number">4.7</span>
+                        <span class="stat-label">Note moyenne</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filtres et Liste des fournisseurs -->
+    <section class="suppliers-section">
+        <div class="container">
+            <!-- Filtres -->
+            <div class="suppliers-filters">
+                <h3><i class="fas fa-filter"></i> Filtrer les fournisseurs</h3>
+                <div class="filters-row">
+                    <div class="filter-group">
+                        <label>Pays:</label>
+                        <select id="countryFilter" onchange="filterSuppliers()">
+                            <option value="">Tous les pays</option>
+                            <option value="France">France</option>
+                            <option value="Allemagne">Allemagne</option>
+                            <option value="Inde">Inde</option>
+                            <option value="Chine">Chine</option>
+                            <option value="Suisse">Suisse</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Spécialité:</label>
+                        <select id="specialtyFilter" onchange="filterSuppliers()">
+                            <option value="">Toutes spécialités</option>
+                            <option value="Principes Actifs">Principes Actifs</option>
+                            <option value="Excipients">Excipients</option>
+                            <option value="Colorants">Colorants</option>
+                            <option value="Arômes">Arômes</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Certification:</label>
+                        <select id="certificationFilter" onchange="filterSuppliers()">
+                            <option value="">Toutes certifications</option>
+                            <option value="BPF">BPF/GMP</option>
+                            <option value="ISO">ISO 9001</option>
+                            <option value="FDA">FDA</option>
+                            <option value="EMA">EMA</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Note minimum:</label>
+                        <select id="ratingFilter" onchange="filterSuppliers()">
+                            <option value="">Toutes notes</option>
+                            <option value="4.5">4.5+ étoiles</option>
+                            <option value="4.0">4.0+ étoiles</option>
+                            <option value="3.5">3.5+ étoiles</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Liste des fournisseurs -->
+            <div class="suppliers-grid" id="suppliersGrid">
+                <!-- Les fournisseurs seront générés dynamiquement -->
+            </div>
+            
+            <!-- Pagination -->
+            <div class="pagination" id="suppliersPagination">
+                <!-- Pagination générée dynamiquement -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Section devenir fournisseur -->
+    <section class="become-supplier-section">
+        <div class="container">
+            <div class="become-supplier-content">
+                <div class="become-supplier-text">
+                    <h2>Rejoignez notre réseau de fournisseurs d'excellence</h2>
+                    <p>Développez votre activité en rejoignant la marketplace leader des matières premières pharmaceutiques</p>
+                    
+                    <div class="benefits-list">
+                        <div class="benefit-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Accès à un marché de 500+ laboratoires</span>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Commission réduite les 6 premiers mois</span>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Support dédié et formation incluse</span>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Outils de gestion avancés</span>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary btn-lg" onclick="openModal('supplierModal')">
+                        <i class="fas fa-handshake"></i> Candidater maintenant
+                    </button>
+                </div>
+                
+                <div class="become-supplier-image">
+                    <div class="supplier-mockup">
+                        <i class="fas fa-industry"></i>
+                        <h4>Interface Fournisseur</h4>
+                        <p>Gérez vos produits, commandes et analyses en temps réel</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal détail fournisseur -->
+    <div id="supplierDetailModal" class="modal">
+        <div class="modal-content modal-large">
+            <span class="close" onclick="closeModal('supplierDetailModal')">&times;</span>
+            <div id="supplierDetailContent">
+                <!-- Contenu généré dynamiquement -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal candidature fournisseur -->
+    <div id="supplierModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('supplierModal')">&times;</span>
+            <h2><i class="fas fa-handshake"></i> Devenir Fournisseur Partenaire</h2>
+            
+            <div class="offer-highlight">
+                <h4><i class="fas fa-gift"></i> Offre de lancement</h4>
+                <ul>
+                    <li><i class="fas fa-check"></i> Inscription gratuite</li>
+                    <li><i class="fas fa-check"></i> 6 mois sans commission</li>
+                    <li><i class="fas fa-check"></i> Support dédié inclus</li>
+                    <li><i class="fas fa-check"></i> Formation gratuite équipes</li>
+                </ul>
+            </div>
+            
+            <form onsubmit="handleSupplierApplication(event)">
+                <div class="form-group">
+                    <label class="form-label">Nom de l'entreprise</label>
+                    <input type="text" class="form-input" required placeholder="PharmaCorp International">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Pays de production</label>
+                    <select class="form-input" required>
+                        <option value="">Sélectionner...</option>
+                        <option value="france">France</option>
+                        <option value="allemagne">Allemagne</option>
+                        <option value="inde">Inde</option>
+                        <option value="chine">Chine</option>
+                        <option value="usa">États-Unis</option>
+                        <option value="autre">Autre</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Spécialités produits</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" value="api"> Principes Actifs</label>
+                        <label><input type="checkbox" value="excipients"> Excipients</label>
+                        <label><input type="checkbox" value="colorants"> Colorants</label>
+                        <label><input type="checkbox" value="aromes"> Arômes</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Certifications</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" value="bpf"> BPF/GMP</label>
+                        <label><input type="checkbox" value="iso"> ISO 9001</label>
+                        <label><input type="checkbox" value="fda"> FDA</label>
+                        <label><input type="checkbox" value="ema"> EMA</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Contact principal</label>
+                    <input type="email" class="form-input" required placeholder="commercial@pharmacorp.com">
+                </div>
+                
+                <button type="submit" class="btn btn-success" style="width: 100%;">
+                    <i class="fas fa-handshake"></i> Envoyer ma candidature
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Chem Spot</h3>
+                    <p>La marketplace B2B de référence pour les matières premières pharmaceutiques.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Pour les Fournisseurs</h3>
+                    <ul>
+                        <li><a href="#" onclick="openModal('supplierModal')">Devenir partenaire</a></li>
+                        <li><a href="#">Guide d'intégration</a></li>
+                        <li><a href="#">Support fournisseurs</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Contact</h3>
+                    <p><i class="fas fa-phone"></i> +33 3 81 25 40 60</p>
+                    <p><i class="fas fa-envelope"></i> fournisseurs@chemspot.fr</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/api.js"></script>
+</body>
+</html>
