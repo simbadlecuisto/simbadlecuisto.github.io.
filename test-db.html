@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Rapide - ChemSpot DB</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 800px; 
+            margin: 40px auto; 
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .step {
+            margin: 20px 0;
+            padding: 15px;
+            border-left: 4px solid #2c5282;
+            background: #f8f9fa;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        button {
+            background: #2c5282;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        button:hover { background: #1a365d; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        .result {
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .loading { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .product {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+        .instructions {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Test de votre Base de Données ChemSpot</h1>
+        
+        <div class="instructions">
+            <h3>📋 Instructions :</h3>
+            <ol>
+                <li>Allez dans votre projet Supabase → Settings → API</li>
+                <li>Copiez votre <strong>Project URL</strong> et <strong>anon public key</strong></li>
+                <li>Collez-les ci-dessous</li>
+                <li>Cliquez sur "Tester"</li>
+            </ol>
+        </div>
+
+        <div class="step">
+            <h3>🔑 Étape 1 : Configurez vos clés</h3>
+            <label>Project URL :</label>
+            <input type="text" id="supabaseUrl" placeholder="https://xxxxxxxxxx.supabase.co">
+            
+            <label>Anon Key :</label>
+            <input type="text" id="supabaseKey" placeholder="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...">
+        </div>
+
+        <div class="step">
+            <h3>🚀 Étape 2 : Testez la connexion</h3>
+            <button onclick="testEverything()" id="testBtn">🔍 Tester ma Base de Données</button>
+        </div>
+
+        <div id="results"></div>
+    </div>
+
+    <!-- Chargement de Supabase depuis CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <script>
+        let supabase = null;
+        
+        async function testEverything() {
+            const url = document.getElementById('supabaseUrl').value.trim();
+            const key = document.getElementById('supabaseKey').value.trim();
+            const resultsDiv = document.getElementById('results');
+            const testBtn = document.getElementById('testBtn');
+            
+            // Validation des entrées
+            if (!url || !key) {
+                resultsDiv.innerHTML = '<div class="result error">❌ Veuillez remplir les deux champs !</div>';
+                return;
+            }
+            
+            if (!url.includes('supabase.co')) {
+                resultsDiv.innerHTML = '<div class="result error">❌ L\'URL semble incorrecte. Elle doit contenir "supabase.co"</div>';
+                return;
+            }
+            
+            testBtn.disabled = true;
+            testBtn.textContent = '🔄 Test en cours...';
+            resultsDiv.innerHTML = '<div class="result loading">🔄 Connexion à Supabase...</div>';
+            
+            try {
+                // Initialiser Supabase
+                supabase = window.supabase.createClient(url, key);
+                
+                // Test 1: Connexion basique
+                resultsDiv.innerHTML += '<div class="result loading">📡 Test de connexion...</div>';
+                
+                const { data: testData, error: testError } = await supabase
+                    .from('users')
+                    .select('count')
+                    .limit(1);
+                
+                if (testError) {
+                    throw new Error(`Erreur de connexion: ${testError.message}`);
+                }
+                
+                resultsDiv.innerHTML += '<div class="result success">✅ Connexion réussie !</div>';
+                
+                // Test 2: Vérifier les tables
+                resultsDiv.innerHTML += '<div class="result loading">🗃️ Vérification des tables...</div>';
+                
+                const tables = ['users', 'suppliers', 'products', 'quotes', 'orders'];
+                for (const table of tables) {
+                    const { error } = await supabase.from(table).select('count').limit(1);
+                    if (error) {
+                        throw new Error(`Table "${table}" non trouvée: ${error.message}`);
+                    }
+                }
+                
+                resultsDiv.innerHTML += '<div class="result success">✅ Toutes les tables existent !</div>';
+                
+                // Test 3: Charger les produits
+                resultsDiv.innerHTML += '<div class="result loading">💊 Chargement des produits...</div>';
+                
+                const { data: products, error: productsError } = await supabase
+                    .from('products')
+                    .select(`
+                        *,
+                        suppliers (
+                            company_name,
+                            country,
+                            rating
+                        )
+                    `)
+                    .limit(10);
+                
+                if (productsError) {
+                    throw new Error(`Erreur produits: ${productsError.message}`);
+                }
+                
+                if (products.length === 0) {
+                    resultsDiv.innerHTML += '<div class="result error">⚠️ Aucun produit trouvé. Avez-vous exécuté le script de données de test ?</div>';
+                } else {
+                    resultsDiv.innerHTML += `<div class="result success">✅ ${products.length} produits trouvés !</div>`;
+                    
+                    // Afficher les produits
+                    const productsHtml = products.map(product => `
+                        <div class="product">
+                            <h4>💊 ${product.name}</h4>
+                            <p><strong>Prix:</strong> ${product.price}€/${product.unit || 'kg'}</p>
+                            <p><strong>Catégorie:</strong> ${product.category}</p>
+                            <p><strong>Pureté:</strong> ${product.purity}%</p>
+                            ${product.suppliers ? `<p><strong>Fournisseur:</strong> ${product.suppliers.company_name} (${product.suppliers.country}) ⭐${product.suppliers.rating}</p>` : ''}
+                        </div>
+                    `).join('');
+                    
+                    resultsDiv.innerHTML += `
+                        <div class="step">
+                            <h3>🎉 Vos produits en base :</h3>
+                            ${productsHtml}
+                        </div>
+                    `;
+                }
+                
+                // Test 4: Compter les fournisseurs
+                const { count: supplierCount, error: supplierError } = await supabase
+                    .from('suppliers')
+                    .select('*', { count: 'exact', head: true });
+                
+                if (!supplierError) {
+                    resultsDiv.innerHTML += `<div class="result success">✅ ${supplierCount} fournisseurs en base</div>`;
+                }
+                
+                // Succès final
+                resultsDiv.innerHTML += `
+                    <div class="result success">
+                        🎉 <strong>FÉLICITATIONS !</strong><br>
+                        Votre base de données ChemSpot fonctionne parfaitement !<br>
+                        Vous êtes prêt pour l'étape suivante : connecter votre site web.
+                    </div>
+                `;
+                
+            } catch (error) {
+                console.error('Erreur:', error);
+                resultsDiv.innerHTML += `<div class="result error">❌ <strong>Erreur:</strong> ${error.message}</div>`;
+                
+                // Suggestions d'aide
+                resultsDiv.innerHTML += `
+                    <div class="result error">
+                        <strong>💡 Vérifications à faire :</strong><br>
+                        1. L'URL doit commencer par "https://" et finir par ".supabase.co"<br>
+                        2. La clé doit commencer par "eyJ"<br>
+                        3. Avez-vous bien exécuté le script SQL pour créer les tables ?<br>
+                        4. Avez-vous ajouté les données de test ?
+                    </div>
+                `;
+            } finally {
+                testBtn.disabled = false;
+                testBtn.textContent = '🔍 Tester ma Base de Données';
+            }
+        }
+        
+        // Auto-focus sur le premier champ
+        document.getElementById('supabaseUrl').focus();
+        
+        // Permettre test avec Entrée
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                testEverything();
+            }
+        });
+    </script>
+</body>
+</html>
