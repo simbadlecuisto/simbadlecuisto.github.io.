@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Base de Données - Chem Spot</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .product-card { 
+            border: 1px solid #ddd; 
+            padding: 20px; 
+            margin: 10px 0; 
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        .loading { color: #666; }
+        .error { color: red; }
+        .success { color: green; }
+        button {
+            background: #2c5282;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px 10px 0;
+        }
+        button:hover { background: #1a365d; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test de la Base de Données ChemSpot</h1>
+    
+    <div>
+        <button onclick="testConnection()">Tester la Connexion</button>
+        <button onclick="loadProducts()">Charger les Produits</button>
+        <button onclick="loadSuppliers()">Charger les Fournisseurs</button>
+    </div>
+    
+    <div id="status"></div>
+    <div id="results"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // 🔑 REMPLACEZ CES VALEURS PAR LES VÔTRES
+        const SUPABASE_URL = 'VOTRE_SUPABASE_URL_ICI'
+        const SUPABASE_ANON_KEY = 'VOTRE_SUPABASE_ANON_KEY_ICI'
+        
+        // Initialiser Supabase
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+        
+        const statusDiv = document.getElementById('status')
+        const resultsDiv = document.getElementById('results')
+        
+        // Test de connexion
+        async function testConnection() {
+            statusDiv.innerHTML = '<p class="loading">🔄 Test de connexion...</p>'
+            
+            try {
+                const { data, error } = await supabase
+                    .from('users')
+                    .select('count')
+                    .limit(1)
+                
+                if (error) throw error
+                
+                statusDiv.innerHTML = '<p class="success">✅ Connexion réussie !</p>'
+            } catch (error) {
+                statusDiv.innerHTML = `<p class="error">❌ Erreur: ${error.message}</p>`
+            }
+        }
+        
+        // Charger les produits
+        async function loadProducts() {
+            statusDiv.innerHTML = '<p class="loading">🔄 Chargement des produits...</p>'
+            
+            try {
+                const { data: products, error } = await supabase
+                    .from('products')
+                    .select(`
+                        *,
+                        suppliers (
+                            company_name,
+                            country,
+                            rating
+                        )
+                    `)
+                
+                if (error) throw error
+                
+                statusDiv.innerHTML = `<p class="success">✅ ${products.length} produits chargés</p>`
+                
+                resultsDiv.innerHTML = products.map(product => `
+                    <div class="product-card">
+                        <h3>💊 ${product.name}</h3>
+                        <p><strong>Prix:</strong> ${product.price}€/${product.unit}</p>
+                        <p><strong>Pureté:</strong> ${product.purity}%</p>
+                        <p><strong>CAS:</strong> ${product.cas_number}</p>
+                        <p><strong>Fournisseur:</strong> ${product.suppliers.company_name} (${product.suppliers.country})</p>
+                        <p><strong>Note:</strong> ⭐ ${product.suppliers.rating}/5</p>
+                    </div>
+                `).join('')
+                
+            } catch (error) {
+                statusDiv.innerHTML = `<p class="error">❌ Erreur: ${error.message}</p>`
+            }
+        }
+        
+        // Charger les fournisseurs
+        async function loadSuppliers() {
+            statusDiv.innerHTML = '<p class="loading">🔄 Chargement des fournisseurs...</p>'
+            
+            try {
+                const { data: suppliers, error } = await supabase
+                    .from('suppliers')
+                    .select('*')
+                
+                if (error) throw error
+                
+                statusDiv.innerHTML = `<p class="success">✅ ${suppliers.length} fournisseurs chargés</p>`
+                
+                resultsDiv.innerHTML = suppliers.map(supplier => `
+                    <div class="product-card">
+                        <h3>🏭 ${supplier.company_name}</h3>
+                        <p><strong>Pays:</strong> ${supplier.country}</p>
+                        <p><strong>Note:</strong> ⭐ ${supplier.rating}/5</p>
+                        <p><strong>Certifié:</strong> ${supplier.verified ? '✅ Oui' : '❌ Non'}</p>
+                        <p><strong>Spécialités:</strong> ${supplier.specialties.join(', ')}</p>
+                        <p>${supplier.description}</p>
+                    </div>
+                `).join('')
+                
+            } catch (error) {
+                statusDiv.innerHTML = `<p class="error">❌ Erreur: ${error.message}</p>`
+            }
+        }
+        
+        // Test automatique au chargement
+        window.onload = function() {
+            if (SUPABASE_URL === 'VOTRE_SUPABASE_URL_ICI') {
+                statusDiv.innerHTML = '<p class="error">⚠️ Veuillez configurer vos clés Supabase dans le code !</p>'
+            } else {
+                testConnection()
+            }
+        }
+    </script>
+</body>
+</html>
