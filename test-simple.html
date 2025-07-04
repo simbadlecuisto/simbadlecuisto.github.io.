@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test DB - ChemSpot</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; }
+        button { background: #2c5282; color: white; padding: 15px 30px; border: none; border-radius: 5px; cursor: pointer; }
+        .result { margin: 20px 0; padding: 15px; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .product { border: 1px solid #ddd; padding: 10px; margin: 10px 0; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test Base de Données ChemSpot</h1>
+    
+    <p><strong>Instructions :</strong> Récupérez vos clés dans Supabase → Settings → API</p>
+    
+    <input type="text" id="url" placeholder="Project URL (https://xxx.supabase.co)">
+    <input type="text" id="key" placeholder="anon public key (eyJ0eXAi...)">
+    <button onclick="test()">🔍 TESTER</button>
+    
+    <div id="result"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        async function test() {
+            const url = document.getElementById('url').value;
+            const key = document.getElementById('key').value;
+            const result = document.getElementById('result');
+            
+            if (!url || !key) {
+                result.innerHTML = '<div class="result error">❌ Remplissez les 2 champs !</div>';
+                return;
+            }
+            
+            result.innerHTML = '<div class="result">🔄 Test en cours...</div>';
+            
+            try {
+                const supabase = window.supabase.createClient(url, key);
+                
+                // Test connexion
+                const { data, error } = await supabase.from('products').select('*').limit(3);
+                
+                if (error) throw error;
+                
+                result.innerHTML = `
+                    <div class="result success">✅ CONNEXION RÉUSSIE !</div>
+                    <div class="result success">🎉 ${data.length} produits trouvés</div>
+                    ${data.map(p => `<div class="product">💊 ${p.name} - ${p.price}€</div>`).join('')}
+                `;
+                
+            } catch (err) {
+                result.innerHTML = `<div class="result error">❌ Erreur: ${err.message}</div>`;
+            }
+        }
+    </script>
+</body>
+</html>
