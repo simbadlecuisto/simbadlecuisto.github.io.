@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Chem Spot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/chemspotV1-dt6tDoOKp1wAyi8oRMzxzufIVBfiu9.png" alt="Chem Spot Logo" class="logo">
+                    <span class="logo-text">Chem Spot</span>
+                </div>
+                
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link">Accueil</a></li>
+                    <li><a href="catalogue.html" class="nav-link">Catalogue</a></li>
+                    <li><a href="fournisseurs.html" class="nav-link">Fournisseurs</a></li>
+                    <li><a href="contact.html" class="nav-link active">Contact</a></li>
+                </ul>
+                
+                <div class="header-actions">
+                    <button class="btn btn-outline btn-sm" onclick="openModal('loginModal')">
+                        <i class="fas fa-sign-in-alt"></i> Connexion
+                    </button>
+                    <button class="btn btn-primary btn-sm" onclick="openModal('registerModal')">
+                        <i class="fas fa-user-plus"></i> Inscription
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <div class="page-header-content">
+                <h1><i class="fas fa-envelope"></i> Contactez-nous</h1>
+                <p>Notre équipe d'experts est là pour vous accompagner dans tous vos projets</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Informations de contact -->
+    <section class="contact-info-section">
+        <div class="container">
+            <div class="contact-cards">
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3>Support Client 24/7</h3>
+                    <p>Notre équipe de support est disponible en permanence pour répondre à vos questions</p>
+                    <div class="contact-details">
+                        <p><i class="fas fa-phone"></i> +33 3 81 25 40 60</p>
+                        <p><i class="fas fa-envelope"></i> support@chemspot.fr</p>
+                        <p><i class="fas fa-comments"></i> Chat en direct disponible</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="startLiveChat()">
+                        <i class="fas fa-comments"></i> Démarrer un chat
+                    </button>
+                </div>
+                
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h3>Équipe Commerciale</h3>
+                    <p>Discutez avec nos experts pour développer votre activité et optimiser vos achats</p>
+                    <div class="contact-details">
+                        <p><i class="fas fa-phone"></i> +33 3 81 25 40 61</p>
+                        <p><i class="fas fa-envelope"></i> commercial@chemspot.fr</p>
+                        <p><i class="fas fa-calendar"></i> Rendez-vous sur demande</p>
+                    </div>
+                    <button class="btn btn-success" onclick="openModal('demoModal')">
+                        <i class="fas fa-calendar-plus"></i> Planifier un RDV
+                    </button>
+                </div>
+                
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h3>Support Technique</h3>
+                    <p>Assistance pour l'intégration API, la formation et l'utilisation de la plateforme</p>
+                    <div class="contact-details">
+                        <p><i class="fas fa-phone"></i> +33 3 81 25 40 62</p>
+                        <p><i class="fas fa-envelope"></i> technique@chemspot.fr</p>
+                        <p><i class="fas fa-book"></i> Documentation complète</p>
+                    </div>
+                    <button class="btn btn-outline" onclick="openDocumentation()">
+                        <i class="fas fa-book"></i> Voir la documentation
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Formulaire de contact -->
+    <section class="contact-form-section">
+        <div class="container">
+            <div class="contact-form-container">
+                <div class="contact-form-header">
+                    <h2>Envoyez-nous un message</h2>
+                    <p>Remplissez le formulaire ci-dessous et nous vous répondrons sous 24h</p>
+                </div>
+                
+                <form class="contact-form" onsubmit="handleContactForm(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Prénom *</label>
+                            <input type="text" class="form-input" required placeholder="Jean">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nom *</label>
+                            <input type="text" class="form-input" required placeholder="Dupont">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Email *</label>
+                            <input type="email" class="form-input" required placeholder="jean.dupont@entreprise.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Téléphone</label>
+                            <input type="tel" class="form-input" placeholder="+33 1 23 45 67 89">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Entreprise *</label>
+                            <input type="text" class="form-input" required placeholder="Laboratoire ABC">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Poste</label>
+                            <input type="text" class="form-input" placeholder="Responsable Achats">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Sujet *</label>
+                        <select class="form-input" required>
+                            <option value="">Sélectionnez un sujet</option>
+                            <option value="general">Question générale</option>
+                            <option value="quote">Demande de devis</option>
+                            <option value="supplier">Devenir fournisseur</option>
+                            <option value="technical">Support technique</option>
+                            <option value="partnership">Partenariat</option>
+                            <option value="other">Autre</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Message *</label>
+                        <textarea class="form-input" rows="6" required placeholder="Décrivez votre demande en détail..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" required>
+                            <span>J'accepte que mes données soient utilisées pour me recontacter concernant ma demande *</span>
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox">
+                            <span>Je souhaite recevoir la newsletter Chem Spot avec les actualités du secteur</span>
+                        </label>
+                    </div>
+                    
+                    <div class="form-submit">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-paper-plane"></i> Envoyer le message
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Questions Fréquentes</h2>
+                <p>Trouvez rapidement les réponses aux questions les plus courantes</p>
+            </div>
+            
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h4>Comment puis-je passer ma première commande ?</h4>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Après inscription, parcourez notre catalogue, sélectionnez vos produits et demandez un devis. Notre équipe vous accompagne dans tout le processus de commande.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h4>Quelles sont les garanties qualité ?</h4>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Tous nos fournisseurs sont certifiés BPF/GMP. Chaque lot est accompagné de son certificat d'analyse (COA) et peut être testé par notre laboratoire partenaire.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h4>Quels sont les délais de livraison ?</h4>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Les délais varient selon l'origine et le produit : 3-7 jours pour l'Europe, 10-21 jours pour l'Asie. Le suivi GPS est inclus pour toutes les expéditions.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h4>Comment devenir fournisseur sur Chem Spot ?</h4>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Remplissez notre formulaire de candidature. Notre équipe d'audit évaluera vos certifications et installations avant validation. Le processus prend environ 2-4 semaines.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h4>Y a-t-il des quantités minimales de commande ?</h4>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Les MOQ varient selon le fournisseur et le produit, généralement entre 1kg et 25kg. Ces informations sont indiquées sur chaque fiche produit.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h4>Proposez-vous une API pour l'intégration ?</h4>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Oui, notre API REST complète permet l'intégration avec vos systèmes ERP/WMS. Documentation et support technique inclus pour les entreprises partenaires.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Localisation -->
+    <section class="location-section">
+        <div class="container">
+            <div class="location-content">
+                <div class="location-info">
+                    <h2><i class="fas fa-map-marker-alt"></i> Notre Siège Social</h2>
+                    <div class="address-card">
+                        <h3>Chem Spot SAS</h3>
+                        <p><i class="fas fa-building"></i> 15 Rue de la Paix</p>
+                        <p><i class="fas fa-map-marker-alt"></i> 25000 Besançon, France</p>
+                        <p><i class="fas fa-phone"></i> +33 3 81 25 40 60</p>
+                        <p><i class="fas fa-envelope"></i> contact@chemspot.fr</p>
+                        
+                        <div class="business-hours">
+                            <h4><i class="fas fa-clock"></i> Horaires d'ouverture</h4>
+                            <p>Lundi - Vendredi: 9h00 - 18h00</p>
+                            <p>Support 24/7 disponible en ligne</p>
+                        </div>
+                        
+                        <div class="certifications">
+                            <h4><i class="fas fa-certificate"></i> Certifications</h4>
+                            <p>• ISO 9001:2015 certifié</p>
+                            <p>• Agrément ANSM</p>
+                            <p>• Membre de la CCI Doubs</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="location-map">
+                    <div class="map-placeholder">
+                        <i class="fas fa-map"></i>
+                        <h4>Carte Interactive</h4>
+                        <p>Cliquez pour ouvrir dans Google Maps</p>
+                        <button class="btn btn-outline" onclick="openGoogleMaps()">
+                            <i class="fas fa-external-link-alt"></i> Voir sur Google Maps
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal démo -->
+    <div id="demoModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('demoModal')">&times;</span>
+            <h2><i class="fas fa-calendar-plus"></i> Planifier un rendez-vous</h2>
+            <form onsubmit="handleAppointment(event)">
+                <div class="form-group">
+                    <label class="form-label">Nom complet</label>
+                    <input type="text" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Entreprise</label>
+                    <input type="text" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Type de rendez-vous</label>
+                    <select class="form-input" required>
+                        <option value="">Sélectionner...</option>
+                        <option value="demo">Démonstration produit</option>
+                        <option value="commercial">Entretien commercial</option>
+                        <option value="technique">Support technique</option>
+                        <option value="partenariat">Discussion partenariat</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Message</label>
+                    <textarea class="form-input" rows="3" placeholder="Décrivez vos besoins..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-success" style="width: 100%;">
+                    <i class="fas fa-calendar-check"></i> Planifier le rendez-vous
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Chem Spot</h3>
+                    <p>Votre partenaire de confiance pour l'approvisionnement en matières premières pharmaceutiques.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Contact Rapide</h3>
+                    <ul>
+                        <li><i class="fas fa-phone"></i> +33 3 81 25 40 60</li>
+                        <li><i class="fas fa-envelope"></i> contact@chemspot.fr</li>
+                        <li><i class="fas fa-comments"></i> Chat en direct 24/7</li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Suivez-nous</h3>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                        <a href="#"><i class="fab fa-twitter"></i> Twitter</a>
+                        <a href="#"><i class="fab fa-youtube"></i> YouTube</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>
