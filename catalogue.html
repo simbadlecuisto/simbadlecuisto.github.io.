@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catalogue - Chem Spot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/chemspotV1-dt6tDoOKp1wAyi8oRMzxzufIVBfiu9.png" alt="Chem Spot Logo" class="logo">
+                    <span class="logo-text">Chem Spot</span>
+                </div>
+                
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link">Accueil</a></li>
+                    <li><a href="catalogue.html" class="nav-link active">Catalogue</a></li>
+                    <li><a href="fournisseurs.html" class="nav-link">Fournisseurs</a></li>
+                    <li><a href="contact.html" class="nav-link">Contact</a></li>
+                </ul>
+                
+                <div class="header-actions">
+                    <button class="btn btn-outline btn-sm" onclick="openModal('loginModal')">
+                        <i class="fas fa-sign-in-alt"></i> Connexion
+                    </button>
+                    <button class="btn btn-primary btn-sm" onclick="openModal('registerModal')">
+                        <i class="fas fa-user-plus"></i> Inscription
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <div class="page-header-content">
+                <h1><i class="fas fa-pills"></i> Catalogue des Produits</h1>
+                <p>Découvrez notre gamme complète de matières premières pharmaceutiques</p>
+                
+                <!-- Barre de recherche intégrée -->
+                <div class="catalog-search">
+                    <form class="search-form" onsubmit="performCatalogSearch(event)">
+                        <div class="search-input-container">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="catalogSearchInput" placeholder="Rechercher un produit..." autocomplete="off">
+                            <div id="catalogSearchSuggestions" class="search-suggestions"></div>
+                        </div>
+                        <button type="submit">
+                            <i class="fas fa-search"></i> Rechercher
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filtres et Catalogue -->
+    <section class="catalog-section">
+        <div class="container">
+            <!-- Filtres -->
+            <div class="catalog-filters-container">
+                <div class="filters-header">
+                    <h3><i class="fas fa-filter"></i> Filtrer les produits</h3>
+                    <button class="btn btn-outline btn-sm" onclick="resetFilters()">
+                        <i class="fas fa-undo"></i> Réinitialiser
+                    </button>
+                </div>
+                
+                <div class="filters-grid">
+                    <!-- Catégories -->
+                    <div class="filter-group">
+                        <h4>Catégories</h4>
+                        <div class="filter-options">
+                            <label class="filter-option">
+                                <input type="checkbox" data-filter="category" value="api" checked>
+                                <span>Principes Actifs</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" data-filter="category" value="excipient" checked>
+                                <span>Excipients</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" data-filter="category" value="colorant" checked>
+                                <span>Colorants</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" data-filter="category" value="arome" checked>
+                                <span>Arômes</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Origine -->
+                    <div class="filter-group">
+                        <h4>Pays d'origine</h4>
+                        <div class="filter-options">
+                            <label class="filter-option">
+                                <input type="checkbox" data-filter="origin" value="France">
+                                <span>France</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" data-filter="origin" value="Allemagne">
+                                <span>Allemagne</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" data-filter="origin" value="Inde">
+                                <span>Inde</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" data-filter="origin" value="Chine">
+                                <span>Chine</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Prix -->
+                    <div class="filter-group">
+                        <h4>Gamme de prix (€/kg)</h4>
+                        <div class="price-range">
+                            <input type="range" id="priceMin" min="0" max="100" value="0" onchange="updatePriceFilter()">
+                            <input type="range" id="priceMax" min="0" max="100" value="100" onchange="updatePriceFilter()">
+                            <div class="price-display">
+                                <span id="priceDisplay">0€ - 100€</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Stock -->
+                    <div class="filter-group">
+                        <h4>Disponibilité</h4>
+                        <div class="filter-options">
+                            <label class="filter-option">
+                                <input type="checkbox" data-filter="stock" value="En stock" checked>
+                                <span>En stock</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox" data-filter="stock" value="Stock limité">
+                                <span>Stock limité</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Résultats -->
+            <div class="catalog-results">
+                <div class="results-header">
+                    <div class="results-count">
+                        <span id="resultsCount">0 produits trouvés</span>
+                    </div>
+                    <div class="sort-options">
+                        <label>Trier par:</label>
+                        <select id="sortSelect" onchange="sortProducts()">
+                            <option value="name">Nom A-Z</option>
+                            <option value="price-asc">Prix croissant</option>
+                            <option value="price-desc">Prix décroissant</option>
+                            <option value="purity">Pureté</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="products-grid" id="catalogProductsGrid">
+                    <!-- Les produits seront générés dynamiquement -->
+                </div>
+                
+                <div class="pagination" id="pagination">
+                    <!-- Pagination générée dynamiquement -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal détail produit -->
+    <div id="productModal" class="modal">
+        <div class="modal-content modal-large">
+            <span class="close" onclick="closeModal('productModal')">&times;</span>
+            <div id="productModalContent">
+                <!-- Contenu généré dynamiquement -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Chem Spot</h3>
+                    <p>La marketplace B2B de référence pour les matières premières pharmaceutiques.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Produits</h3>
+                    <ul>
+                        <li><a href="catalogue.html">Principes Actifs</a></li>
+                        <li><a href="catalogue.html">Excipients</a></li>
+                        <li><a href="catalogue.html">Colorants</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Contact</h3>
+                    <p><i class="fas fa-phone"></i> +33 3 81 25 40 60</p>
+                    <p><i class="fas fa-envelope"></i> contact@chemspot.fr</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/api.js"></script>
+</body>
+</html>
