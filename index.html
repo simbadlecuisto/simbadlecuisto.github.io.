@@ -3,326 +3,503 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChemSpot - Plateforme B2B Chimie</title>
-    
-    <!-- Vos CSS existants -->
-    <link rel="stylesheet" href="css/style.css">
+    <title>Chem Spot - Marketplace B2B des Matières Premières Pharmaceutiques</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/responsive.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    
     <!-- Ajout Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.js"></script>
-    
-    <style>
-        /* Styles pour la connexion base de données */
-        .connection-status {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            color: white;
-            font-size: 0.8rem;
-            z-index: 1001;
-            transition: all 0.3s ease;
-        }
-        
-        .connection-status.connected {
-            background: #27ae60;
-        }
-        
-        .connection-status.disconnected {
-            background: #e74c3c;
-        }
-        
-        .loading {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 2rem;
-            flex-direction: column;
-            gap: 1rem;
-        }
-        
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #3498db;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .status-message {
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            display: none;
-        }
-        
-        .status-message.success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        
-        .status-message.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-    </style>
 </head>
 <body>
-    <!-- Status de connexion -->
-    <div id="connectionStatus" class="connection-status disconnected">
-        🔌 Connexion à la base de données...
-    </div>
-
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="#" class="logo" onclick="showPage('home')">
-                <i class="fas fa-flask"></i>
-                ChemSpot
-            </a>
-            <ul class="nav-links">
-                <li><a href="#" onclick="showPage('home')" class="nav-link active">Accueil</a></li>
-                <li><a href="#" onclick="showPage('catalog')" class="nav-link">Catalogue</a></li>
-                <li><a href="#" onclick="showPage('suppliers')" class="nav-link">Fournisseurs</a></li>
-                <li><a href="#" onclick="showPage('contact')" class="nav-link">Contact</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <!-- Contenu Principal -->
-    <div class="main-content">
-        <!-- Page d'Accueil -->
-        <div id="home" class="page active">
-            <div class="hero">
-                <h1>Bienvenue sur ChemSpot</h1>
-                <p>La plateforme B2B de référence pour l'approvisionnement en produits chimiques</p>
-                <div class="hero-stats">
-                    <div class="stat-item">
-                        <span class="stat-number" id="statsSuppliers">0</span>
-                        <span>Fournisseurs Vérifiés</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number" id="statsProducts">0</span>
-                        <span>Produits Disponibles</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number" id="statsQuotes">0</span>
-                        <span>Devis Traités</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="search-section">
-                <h2>🔍 Recherche Rapide</h2>
-                <div class="search-container">
-                    <input type="text" id="quickSearch" class="search-input" placeholder="Rechercher un produit (nom, CAS, formule...)">
-                    <button class="search-btn" onclick="quickSearch()">
-                        <i class="fas fa-search"></i> Rechercher
-                    </button>
-                </div>
-            </div>
-
-            <!-- Produits Populaires -->
-            <div>
-                <h2>🔥 Produits Populaires</h2>
-                <div id="popularProducts" class="products-grid">
-                    <div class="loading">
-                        <div class="spinner"></div>
-                        <p>Chargement des produits...</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Page Catalogue -->
-        <div id="catalog" class="page">
-            <h1>📋 Catalogue Produits</h1>
-            
-            <div class="search-section">
-                <div class="search-container">
-                    <input type="text" id="catalogSearch" class="search-input" placeholder="Rechercher un produit...">
-                    <button class="search-btn" onclick="searchProducts()">
-                        <i class="fas fa-search"></i> Rechercher
-                    </button>
-                </div>
-                <div class="filters">
-                    <select id="categoryFilter" class="filter-select" onchange="filterProducts()">
-                        <option value="">Toutes les catégories</option>
-                    </select>
-                    <select id="supplierFilter" class="filter-select" onchange="filterProducts()">
-                        <option value="">Tous les fournisseurs</option>
-                    </select>
-                    <select id="priceFilter" class="filter-select" onchange="filterProducts()">
-                        <option value="">Tous les prix</option>
-                        <option value="0-50">0 - 50€</option>
-                        <option value="50-100">50 - 100€</option>
-                        <option value="100+">100€+</option>
-                    </select>
-                </div>
-            </div>
-
-            <div id="catalogProducts" class="products-grid">
-                <div class="loading">
-                    <div class="spinner"></div>
-                    <p>Chargement du catalogue...</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Page Fournisseurs -->
-        <div id="suppliers" class="page">
-            <h1>🏢 Nos Fournisseurs Partenaires</h1>
-            
-            <div id="suppliersContainer" class="suppliers-grid">
-                <div class="loading">
-                    <div class="spinner"></div>
-                    <p>Chargement des fournisseurs...</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Page Contact -->
-        <div id="contact" class="page">
-            <h1>📞 Contactez-nous</h1>
-            
-            <div class="contact-container">
-                <div class="contact-info">
-                    <h3>Informations de Contact</h3>
-                    <div class="contact-details">
-                        <p><i class="fas fa-map-marker-alt"></i> 123 Avenue de la Chimie, 75001 Paris</p>
-                        <p><i class="fas fa-phone"></i> +33 1 23 45 67 89</p>
-                        <p><i class="fas fa-envelope"></i> contact@chemspot.com</p>
-                        <p><i class="fas fa-clock"></i> Lun-Ven: 9h-18h</p>
-                    </div>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/chemspotV1-dt6tDoOKp1wAyi8oRMzxzufIVBfiu9.png" alt="Chem Spot Logo" class="logo">
+                    <span class="logo-text">Chem Spot</span>
                 </div>
                 
-                <div class="contact-form">
-                    <h3>Envoyez-nous un message</h3>
-                    <form onsubmit="sendMessage(event)">
-                        <div class="form-group">
-                            <label class="form-label">Nom complet</label>
-                            <input type="text" class="form-input" required>
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link active">Accueil</a></li>
+                    <li><a href="catalogue.html" class="nav-link">Catalogue</a></li>
+                    <li><a href="fournisseurs.html" class="nav-link">Fournisseurs</a></li>
+                    <li><a href="contact.html" class="nav-link">Contact</a></li>
+                </ul>
+                
+                <div class="header-actions">
+                    <button class="btn btn-outline btn-sm" onclick="openModal('loginModal')">
+                        <i class="fas fa-sign-in-alt"></i> Connexion
+                    </button>
+                    <button class="btn btn-primary btn-sm" onclick="openModal('registerModal')">
+                        <i class="fas fa-user-plus"></i> Inscription
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content fade-in">
+                <h1>La Marketplace B2B des Matières Premières Pharmaceutiques</h1>
+                <p class="hero-subtitle">
+                    Connectez-vous directement avec les fournisseurs d'APIs, excipients et matières premières. 
+                    Transactions sécurisées, prix transparents, livraison garantie.
+                </p>
+                
+                <div class="search-container">
+                    <div class="search-tabs">
+                        <div class="search-tab active" data-tab="api">Principes Actifs</div>
+                        <div class="search-tab" data-tab="excipient">Excipients</div>
+                        <div class="search-tab" data-tab="autre">Autres</div>
+                    </div>
+                    
+                    <form class="search-form" onsubmit="performSearch(event)">
+                        <div class="search-input-container">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="searchInput" placeholder="Ex: Paracétamol, Lactose, Stéarate de magnésium..." autocomplete="off">
+                            <div id="searchSuggestions" class="search-suggestions"></div>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">Email</label>
-                            <input type="email" class="form-input" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Message</label>
-                            <textarea class="form-input form-textarea" required></textarea>
-                        </div>
-                        <button type="submit" class="btn-primary">Envoyer le message</button>
+                        <button type="submit">
+                            <i class="fas fa-search"></i> Rechercher
+                        </button>
                     </form>
                 </div>
+                
+                <!-- Statistiques modifiées pour la base de données -->
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number" id="statsProducts" data-target="0">0</span>
+                        <span class="stat-label">Produits disponibles</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="statsSuppliers" data-target="0">0</span>
+                        <span class="stat-label">Fournisseurs vérifiés</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="statsQuotes" data-target="0">0</span>
+                        <span class="stat-label">Devis traités</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" data-target="24">24</span>
+                        <span class="stat-label">Pays couverts</span>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Modal de Demande de Devis -->
-    <div id="quoteModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">Demande de Devis</h2>
-                <button class="close" onclick="closeQuoteModal()">&times;</button>
+    <!-- Section Fonctionnalités -->
+    <section class="section section-white">
+        <div class="container">
+            <div class="section-title fade-in">
+                <h2>Pourquoi choisir Chem Spot ?</h2>
+                <p class="section-subtitle">
+                    Une plateforme complète qui révolutionne vos achats pharmaceutiques
+                </p>
             </div>
             
-            <div id="statusMessage" class="status-message"></div>
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-virus"></i>
+                    </div>
+                    <h3>Certification BPF/GMP</h3>
+                    <p>Tous nos fournisseurs sont audités selon les standards internationaux. Documentation complète et traçabilité garantie.</p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Prix en Temps Réel</h3>
+                    <p>Accédez aux cotations actualisées en continu. Comparez les prix et négociez directement.</p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-shipping-fast"></i>
+                    </div>
+                    <h3>Logistique Intégrée</h3>
+                    <p>Suivi GPS temps réel, chaîne du froid respectée, assurance incluse.</p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h3>Paiements Sécurisés</h3>
+                    <p>Système d'escrow blockchain intégré. Paiements cryptés et protection anti-fraude.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section CTA -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content fade-in">
+                <h2>Prêt à transformer vos achats pharmaceutiques ?</h2>
+                <p>Rejoignez plus de 500+ entreprises qui font confiance à Chem Spot</p>
+                
+                <div class="cta-buttons">
+                    <button class="btn btn-success btn-lg" onclick="openModal('demoModal')">
+                        <i class="fas fa-play"></i> Demander une démo gratuite
+                    </button>
+                    <a href="catalogue.html" class="btn btn-outline btn-lg" style="background: white; color: var(--primary);">
+                        <i class="fas fa-search"></i> Explorer le catalogue
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Chem Spot</h3>
+                    <p>La marketplace B2B de référence pour les matières premières pharmaceutiques.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Produits</h3>
+                    <ul>
+                        <li><a href="catalogue.html">Principes Actifs</a></li>
+                        <li><a href="catalogue.html">Excipients</a></li>
+                        <li><a href="catalogue.html">Colorants</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="#">Audit Fournisseurs</a></li>
+                        <li><a href="#">Analyses Qualité</a></li>
+                        <li><a href="#">Logistique</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Contact</h3>
+                    <p><i class="fas fa-phone"></i> +33 3 81 25 40 60</p>
+                    <p><i class="fas fa-envelope"></i> contact@chemspot.fr</p>
+                </div>
+            </div>
             
-            <form id="quoteForm" onsubmit="submitQuote(event)">
-                <div id="productInfo" class="product-info">
-                    <!-- Informations du produit sélectionné -->
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Quantité souhaitée</label>
-                    <input type="number" id="quoteQuantity" class="form-input" min="1" required>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Votre nom</label>
-                    <input type="text" id="quoteName" class="form-input" required>
-                </div>
-                
+            <div class="footer-bottom">
+                <p>&copy; 2024 Chem Spot SAS. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            <h2><i class="fas fa-sign-in-alt"></i> Connexion</h2>
+            <form onsubmit="handleLogin(event)">
                 <div class="form-group">
                     <label class="form-label">Email</label>
-                    <input type="email" id="quoteEmail" class="form-input" required>
+                    <input type="email" class="form-input" required>
                 </div>
-                
                 <div class="form-group">
-                    <label class="form-label">Entreprise</label>
-                    <input type="text" id="quoteCompany" class="form-input" required>
+                    <label class="form-label">Mot de passe</label>
+                    <input type="password" class="form-input" required>
                 </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Message (optionnel)</label>
-                    <textarea id="quoteMessage" class="form-input form-textarea" placeholder="Informations supplémentaires, conditions particulières..."></textarea>
-                </div>
-                
-                <button type="submit" class="btn-primary">Envoyer la demande de devis</button>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    Se connecter
+                </button>
             </form>
         </div>
     </div>
 
-    <!-- Vos scripts existants -->
-    <script src="js/navigation.js"></script>
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('registerModal')">&times;</span>
+            <h2><i class="fas fa-user-plus"></i> Inscription</h2>
+            <form onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label class="form-label">Entreprise</label>
+                    <input type="text" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Mot de passe</label>
+                    <input type="password" class="form-input" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    Créer mon compte
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="demoModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('demoModal')">&times;</span>
+            <h2><i class="fas fa-play"></i> Demander une démo</h2>
+            <form onsubmit="handleDemo(event)">
+                <div class="form-group">
+                    <label class="form-label">Nom</label>
+                    <input type="text" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Entreprise</label>
+                    <input type="text" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" required>
+                </div>
+                <button type="submit" class="btn btn-success" style="width: 100%;">
+                    Planifier ma démo
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
     <script src="js/search.js"></script>
-    <script src="js/modal.js"></script>
     
-    <!-- Nouveau script pour la base de données -->
-    <script src="js/database.js"></script>
-    
+    <!-- Script Base de Données Intégré -->
     <script>
-        // Initialisation globale
-        document.addEventListener('DOMContentLoaded', () => {
-            // Initialiser la base de données si disponible
-            if (typeof initializeDatabase === 'function') {
-                initializeDatabase();
-            } else {
-                console.warn('Database module not loaded, using static data');
-                loadStaticData();
+        // Configuration Supabase
+        const SUPABASE_URL = 'https://jkaffpgqbyhuihvyvtld.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE2NTgzOTQsImV4cCI6MjA2NzIzNDM5NH0.OIjoz6uoPV25Nraral4YN_gz7q6COBW3dAVIYhBy1pI';
+
+        let supabase;
+        let allProducts = [];
+        let allSuppliers = [];
+
+        // Initialisation de la base de données
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // Créer le client Supabase
+                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                
+                // Charger les données
+                await loadDatabaseData();
+                
+                console.log('✅ Base de données connectée avec succès !');
+                
+                // Afficher un indicateur de connexion
+                showConnectionStatus(true);
+                
+            } catch (error) {
+                console.error('❌ Erreur de connexion à la base de données:', error);
+                showConnectionStatus(false);
             }
         });
-        
-        function loadStaticData() {
-            // Fallback vers les données statiques si la base n'est pas disponible
-            updateStats(3, 8, 2);
-            updateConnectionStatus(false);
-        }
-        
-        function updateConnectionStatus(connected) {
-            const statusEl = document.getElementById('connectionStatus');
-            if (connected) {
-                statusEl.className = 'connection-status connected';
-                statusEl.innerHTML = '✅ Connecté à la base de données';
-                setTimeout(() => {
-                    statusEl.style.display = 'none';
-                }, 3000);
-            } else {
-                statusEl.className = 'connection-status disconnected';
-                statusEl.innerHTML = '⚠️ Mode hors ligne';
-                setTimeout(() => {
-                    statusEl.style.display = 'none';
-                }, 5000);
+
+        // Charger les données depuis Supabase
+        async function loadDatabaseData() {
+            try {
+                // Charger les fournisseurs
+                const { data: suppliers, error: suppliersError } = await supabase
+                    .from('suppliers')
+                    .select('*');
+                
+                if (suppliersError) throw suppliersError;
+                allSuppliers = suppliers || [];
+
+                // Charger les produits avec informations fournisseurs
+                const { data: products, error: productsError } = await supabase
+                    .from('products')
+                    .select('*, suppliers(*)')
+                    .eq('availability_status', 'available');
+                
+                if (productsError) throw productsError;
+                allProducts = products || [];
+
+                // Charger les stats des devis
+                const { data: quotes, error: quotesError } = await supabase
+                    .from('quotes')
+                    .select('id');
+                
+                if (quotesError) throw quotesError;
+
+                // Mettre à jour les statistiques
+                updateHeroStats(allSuppliers.length, allProducts.length, quotes?.length || 0);
+
+                // Mettre à jour les suggestions de recherche
+                updateSearchSuggestions();
+
+            } catch (error) {
+                console.error('Erreur lors du chargement des données:', error);
+                throw error;
             }
         }
-        
-        function updateStats(suppliersCount, productsCount, quotesCount) {
-            document.getElementById('statsSuppliers').textContent = suppliersCount;
-            document.getElementById('statsProducts').textContent = productsCount;
-            document.getElementById('statsQuotes').textContent = quotesCount;
+
+        // Mettre à jour les statistiques du hero
+        function updateHeroStats(suppliersCount, productsCount, quotesCount) {
+            // Mise à jour avec animation
+            animateCounter('statsSuppliers', suppliersCount);
+            animateCounter('statsProducts', productsCount);
+            animateCounter('statsQuotes', quotesCount);
         }
+
+        // Animation des compteurs
+        function animateCounter(elementId, targetValue) {
+            const element = document.getElementById(elementId);
+            if (!element) return;
+            
+            const startValue = 0;
+            const duration = 2000; // 2 secondes
+            const startTime = performance.now();
+            
+            function updateCounter(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                const currentValue = Math.floor(startValue + (targetValue - startValue) * progress);
+                element.textContent = currentValue;
+                element.setAttribute('data-target', targetValue);
+                
+                if (progress < 1) {
+                    requestAnimationFrame(updateCounter);
+                }
+            }
+            
+            requestAnimationFrame(updateCounter);
+        }
+
+        // Mettre à jour les suggestions de recherche
+        function updateSearchSuggestions() {
+            // Créer une liste de suggestions basée sur les vrais produits
+            window.searchSuggestions = [
+                ...allProducts.slice(0, 10).map(p => p.name),
+                ...allProducts.slice(0, 5).map(p => p.category),
+                ...allProducts.filter(p => p.cas_number).slice(0, 5).map(p => p.cas_number)
+            ].filter((value, index, self) => self.indexOf(value) === index);
+        }
+
+        // Fonction de recherche améliorée (remplace celle de search.js)
+        function performSearch(event) {
+            if (event) event.preventDefault();
+            
+            const query = document.getElementById('searchInput').value.trim();
+            if (!query) return;
+            
+            // Recherche dans les vraies données
+            const results = searchInDatabase(query);
+            
+            if (results.length > 0) {
+                // Rediriger vers la page catalogue avec les résultats
+                sessionStorage.setItem('searchResults', JSON.stringify(results));
+                sessionStorage.setItem('searchQuery', query);
+                window.location.href = 'catalogue.html';
+            } else {
+                alert(`Aucun résultat trouvé pour "${query}". Essayez avec un autre terme.`);
+            }
+        }
+
+        // Recherche dans la base de données
+        function searchInDatabase(query) {
+            const lowerQuery = query.toLowerCase();
+            
+            return allProducts.filter(product => {
+                return (
+                    product.name.toLowerCase().includes(lowerQuery) ||
+                    (product.cas_number && product.cas_number.toLowerCase().includes(lowerQuery)) ||
+                    (product.formula && product.formula.toLowerCase().includes(lowerQuery)) ||
+                    product.category.toLowerCase().includes(lowerQuery) ||
+                    (product.description && product.description.toLowerCase().includes(lowerQuery))
+                );
+            });
+        }
+
+        // Afficher le statut de connexion
+        function showConnectionStatus(connected) {
+            // Créer un indicateur visuel temporaire
+            const statusDiv = document.createElement('div');
+            statusDiv.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 10px 20px;
+                border-radius: 5px;
+                color: white;
+                font-weight: bold;
+                z-index: 10000;
+                transition: all 0.3s ease;
+                ${connected ? 'background: #27ae60;' : 'background: #e74c3c;'}
+            `;
+            statusDiv.textContent = connected ? '✅ Base de données connectée' : '❌ Erreur de connexion';
+            
+            document.body.appendChild(statusDiv);
+            
+            // Supprimer après 3 secondes
+            setTimeout(() => {
+                statusDiv.style.opacity = '0';
+                setTimeout(() => {
+                    if (document.body.contains(statusDiv)) {
+                        document.body.removeChild(statusDiv);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Fonction pour envoyer un devis (amélioration du système existant)
+        async function sendQuoteRequest(productId, userEmail, message, quantity = 1) {
+            if (!supabase) {
+                alert('Base de données non disponible');
+                return false;
+            }
+            
+            const product = allProducts.find(p => p.id === productId);
+            if (!product) {
+                alert('Produit non trouvé');
+                return false;
+            }
+            
+            try {
+                const { data, error } = await supabase
+                    .from('quotes')
+                    .insert([{
+                        product_id: productId,
+                        supplier_id: product.supplier_id,
+                        quantity: parseInt(quantity),
+                        unit_price: product.price,
+                        total_price: parseInt(quantity) * product.price,
+                        message: message,
+                        user_id: 4, // ID utilisateur de test
+                        status: 'pending',
+                        valid_until: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+                    }]);
+                
+                if (error) throw error;
+                
+                console.log('✅ Devis envoyé avec succès:', data);
+                
+                // Mettre à jour le compteur de devis
+                const currentQuotes = parseInt(document.getElementById('statsQuotes').textContent) + 1;
+                animateCounter('statsQuotes', currentQuotes);
+                
+                return true;
+                
+            } catch (error) {
+                console.error('❌ Erreur lors de l\'envoi du devis:', error);
+                return false;
+            }
+        }
+
+        // Rendre les fonctions disponibles globalement
+        window.ChemSpotDB = {
+            searchInDatabase,
+            sendQuoteRequest,
+            getAllProducts: () => allProducts,
+            getAllSuppliers: () => allSuppliers
+        };
     </script>
 </body>
 </html>
