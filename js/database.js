@@ -94,20 +94,25 @@ async function loadAllData() {
 // Afficher les fournisseurs - ADAPTÉ AUX VRAIES COLONNES
 function displaySuppliers() {
     const container = document.getElementById('suppliersContainer');
-    if (!container) return;
+    if (!container) {
+        console.log('⚠️ Container suppliersContainer non trouvé');
+        return;
+    }
     
     if (allSuppliers.length === 0) {
         container.innerHTML = `
-            <div class="empty-state">
-                <i class="fas fa-building"></i>
-                <h3>Aucun fournisseur disponible</h3>
-                <p>Les fournisseurs seront bientôt disponibles</p>
+            <div class="empty-state" style="grid-column: 1/-1; text-align: center; padding: 3rem;">
+                <i class="fas fa-building" style="font-size: 3rem; color: #cbd5e0; margin-bottom: 1rem;"></i>
+                <h3 style="color: #4a5568; margin-bottom: 0.5rem;">Aucun fournisseur disponible</h3>
+                <p style="color: #718096;">Les fournisseurs seront bientôt disponibles</p>
             </div>
         `;
         return;
     }
 
+    console.log(`🔄 Affichage de ${allSuppliers.length} fournisseurs`);
     container.innerHTML = allSuppliers.map(supplier => createSupplierCard(supplier)).join('');
+    container.style.display = 'grid';
 }
 
 // Créer une carte fournisseur - ADAPTÉ AUX VRAIES COLONNES
@@ -239,16 +244,17 @@ function displayFilteredSuppliers(suppliers) {
     
     if (suppliers.length === 0) {
         container.innerHTML = `
-            <div class="empty-state">
-                <i class="fas fa-search"></i>
-                <h3>Aucun fournisseur trouvé</h3>
-                <p>Aucun fournisseur ne correspond à vos critères</p>
+            <div class="empty-state" style="grid-column: 1/-1; text-align: center; padding: 3rem;">
+                <i class="fas fa-search" style="font-size: 3rem; color: #cbd5e0; margin-bottom: 1rem;"></i>
+                <h3 style="color: #4a5568; margin-bottom: 0.5rem;">Aucun fournisseur trouvé</h3>
+                <p style="color: #718096;">Aucun fournisseur ne correspond à vos critères</p>
             </div>
         `;
         return;
     }
 
     container.innerHTML = suppliers.map(supplier => createSupplierCard(supplier)).join('');
+    container.style.display = 'grid';
 }
 
 // Réinitialiser les filtres
@@ -410,6 +416,66 @@ function loadFallbackData() {
     console.log('✅ Données de fallback chargées');
 }
 
+// Fonctions pour le catalogue - compatible avec catalogue.html
+function displayProducts(products) {
+    const container = document.getElementById('catalogProductsGrid');
+    if (!container) return;
+    
+    if (!products || products.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state" style="grid-column: 1/-1; text-align: center; padding: 3rem;">
+                <i class="fas fa-flask" style="font-size: 3rem; color: #cbd5e0; margin-bottom: 1rem;"></i>
+                <h3 style="color: #4a5568; margin-bottom: 0.5rem;">Aucun produit trouvé</h3>
+                <p style="color: #718096;">Aucun produit ne correspond à vos critères</p>
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = products.map(product => createProductCard(product)).join('');
+}
+
+function createProductCard(product) {
+    return `
+        <div class="product-card" onclick="showProductDetails(${product.id})">
+            <div class="product-image">
+                <i class="fas fa-flask"></i>
+            </div>
+            <div class="product-info">
+                <h3 class="product-name">${product.name}</h3>
+                <p class="product-formula">${product.formula || ''}</p>
+                <p class="product-cas">CAS: ${product.cas_number || 'N/A'}</p>
+                <div class="product-details">
+                    <span class="product-purity">Pureté: ${product.purity}%</span>
+                    <span class="product-category">${product.category}</span>
+                </div>
+                <div class="product-price">
+                    <span class="price">${product.price}€/${product.unit}</span>
+                </div>
+                <div class="product-supplier">
+                    ${product.suppliers ? product.suppliers.name : 'Fournisseur disponible'}
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Initialisation automatique pour les pages qui le nécessitent
+document.addEventListener('DOMContentLoaded', () => {
+    // Détecter si on est sur la page fournisseurs
+    if (window.location.pathname.includes('fournisseurs.html')) {
+        console.log('🔄 Page fournisseurs détectée');
+        if (typeof loadSuppliers === 'undefined') {
+            // Si la fonction loadSuppliers n'existe pas, on initialise
+            setTimeout(() => {
+                if (allSuppliers.length === 0) {
+                    initializeDatabase();
+                }
+            }, 1000);
+        }
+    }
+});
+
 // Exporter les fonctions principales pour les autres scripts
 if (typeof window !== 'undefined') {
     window.ChemSpotDB = {
@@ -420,6 +486,8 @@ if (typeof window !== 'undefined') {
         contactSupplier,
         visitWebsite,
         viewSupplierProducts,
+        displaySuppliers,
+        displayProducts,
         getAllProducts: () => allProducts,
         getAllSuppliers: () => allSuppliers
     };
@@ -430,4 +498,7 @@ if (typeof window !== 'undefined') {
     window.contactSupplier = contactSupplier;
     window.visitWebsite = visitWebsite;
     window.viewSupplierProducts = viewSupplierProducts;
+    window.displaySuppliers = displaySuppliers;
+    window.allSuppliers = allSuppliers;
+    window.allProducts = allProducts;
 }
