@@ -53,9 +53,10 @@ async function loadAllData() {
 
         // Charger les produits avec informations fournisseurs
        // Charger les produits avec informations fournisseurs
+// On demande juste l'essentiel au début !
 const { data: products, error: productsError } = await supabase
     .from('products')
-    .select('*') // D'abord on demande juste les produits
+    .select('id, name'); // Comme demander juste 2 Lego au lieu de 10 D'abord on demande juste les produits
     
     .order('name');
         
