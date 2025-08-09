@@ -55,16 +55,8 @@ async function loadAllData() {
        // Charger les produits avec informations fournisseurs
 const { data: products, error: productsError } = await supabase
     .from('products')
-    .select(`
-        *,
-        supplier_id (  // Changez 'suppliers' par le nom exact de votre colonne de relation
-            id,
-            name,
-            country,
-            speciality,
-            website
-        )
-    `)
+    .select('*') // D'abord on demande juste les produits
+    
     .order('name');
         
         if (productsError) throw productsError;
