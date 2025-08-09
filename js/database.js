@@ -52,19 +52,20 @@ async function loadAllData() {
         console.log(`✅ ${allSuppliers.length} fournisseurs chargés`);
 
         // Charger les produits avec informations fournisseurs
-        const { data: products, error: productsError } = await supabase
-            .from('products')
-            .select(`
-                *,
-                suppliers (
-                    id,
-                    name,
-                    country,
-                    speciality,
-                    website
-                )
-            `)
-            .order('name');
+       // Charger les produits avec informations fournisseurs
+const { data: products, error: productsError } = await supabase
+    .from('products')
+    .select(`
+        *,
+        supplier_id (  // Changez 'suppliers' par le nom exact de votre colonne de relation
+            id,
+            name,
+            country,
+            speciality,
+            website
+        )
+    `)
+    .order('name');
         
         if (productsError) throw productsError;
         allProducts = products || [];
