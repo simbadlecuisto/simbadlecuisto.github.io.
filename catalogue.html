@@ -5,11 +5,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catalogue - Chem Spot</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="./css/main.css">
-    <link rel="stylesheet" href="./css/components.css">
-    <link rel="stylesheet" href="./css/responsive.css">
-    <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.js"></script>
+    
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #f8fafc; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        
+        header { background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 15px 0; }
+        .header-content { display: flex; justify-content: space-between; align-items: center; }
+        .logo-section { display: flex; align-items: center; gap: 10px; }
+        .logo { height: 40px; }
+        .logo-text { font-size: 1.5rem; font-weight: 700; color: #4F46E5; }
+        
+        .nav-menu { display: flex; list-style: none; gap: 30px; }
+        .nav-link { text-decoration: none; color: #374151; font-weight: 500; }
+        .nav-link.active { color: #4F46E5; }
+        
+        .hero { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 60px 0; text-align: center; }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 15px; }
+        .hero p { font-size: 1.2rem; margin-bottom: 30px; opacity: 0.9; }
+        
+        .search-bar { max-width: 500px; margin: 0 auto; display: flex; background: white; border-radius: 25px; overflow: hidden; }
+        .search-bar input { flex: 1; padding: 15px 20px; border: none; font-size: 1rem; outline: none; }
+        .search-bar button { background: #4F46E5; color: white; border: none; padding: 15px 20px; cursor: pointer; }
+        
+        .results-section { padding: 40px 0; }
+        .results-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .results-info { font-size: 1.1rem; color: #374151; font-weight: 600; }
+        
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
+        .product-card { background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 20px; transition: transform 0.3s; }
+        .product-card:hover { transform: translateY(-5px); }
+        
+        .product-name { font-size: 1.2rem; font-weight: 600; color: #1f2937; margin-bottom: 10px; }
+        .product-category { background: #eff6ff; color: #1e40af; padding: 4px 12px; border-radius: 15px; font-size: 0.8rem; display: inline-block; margin-bottom: 15px; }
+        .product-details { margin-bottom: 15px; }
+        .detail-row { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.9rem; }
+        .detail-row .label { color: #6b7280; }
+        .detail-row .value { color: #374151; font-weight: 600; }
+        .product-price { font-size: 1.3rem; font-weight: 700; color: #4F46E5; margin-bottom: 15px; }
+        
+        .btn-quote { background: #10b981; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; width: 100%; font-weight: 600; }
+        .btn-quote:hover { background: #059669; }
+        .btn-quote:disabled { background: #9ca3af; cursor: not-allowed; }
+        
+        .status { position: fixed; top: 20px; right: 20px; padding: 12px 20px; border-radius: 6px; color: white; font-weight: 600; z-index: 1000; }
+        .status.success { background: #10b981; }
+        .status.error { background: #ef4444; }
+        .status.loading { background: #3b82f6; }
+        
+        .empty-state { text-align: center; padding: 60px 20px; color: #6b7280; }
+        .empty-state i { font-size: 3rem; margin-bottom: 20px; opacity: 0.5; }
+        .empty-state h3 { font-size: 1.5rem; margin-bottom: 10px; color: #374151; }
+    </style>
 </head>
 <body>
     <!-- Header -->
@@ -27,231 +76,53 @@
                     <li><a href="fournisseurs.html" class="nav-link">Fournisseurs</a></li>
                     <li><a href="contact.html" class="nav-link">Contact</a></li>
                 </ul>
-                
-                <div class="header-actions">
-                    <button class="btn btn-outline btn-sm">
-                        <i class="fas fa-sign-in-alt"></i> Connexion
-                    </button>
-                    <button class="btn btn-primary btn-sm">
-                        <i class="fas fa-user-plus"></i> Inscription
-                    </button>
-                </div>
             </div>
         </div>
     </header>
 
-    <!-- Hero Section Catalogue -->
-    <section class="catalogue-hero">
+    <!-- Hero -->
+    <section class="hero">
         <div class="container">
-            <div class="hero-content">
-                <h1>Notre Catalogue</h1>
-                <p>Découvrez notre sélection de matières premières pharmaceutiques</p>
-                
-                <!-- Barre de recherche -->
-                <div class="search-bar">
-                    <input type="text" id="catalogueSearch" placeholder="Rechercher un produit, CAS, formule..." onkeyup="performCatalogueSearch()">
-                    <button onclick="performCatalogueSearch()">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </div>
+            <h1>Notre Catalogue</h1>
+            <p>Découvrez notre sélection de matières premières pharmaceutiques</p>
+            
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Rechercher un produit...">
+                <button onclick="search()"><i class="fas fa-search"></i></button>
             </div>
         </div>
     </section>
 
-    <!-- Section Filtres -->
-    <section class="filters-section">
-        <div class="container">
-            <div class="filters-container">
-                <div class="filter-group">
-                    <label>Catégories</label>
-                    <select id="categoryFilter" onchange="applyFilters()">
-                        <option value="">Toutes les catégories</option>
-                    </select>
-                </div>
-                
-                <div class="filter-group">
-                    <label>Pays d'origine</label>
-                    <select id="countryFilter" onchange="applyFilters()">
-                        <option value="">Tous les pays</option>
-                    </select>
-                </div>
-                
-                <div class="filter-group">
-                    <label>Prix (€/kg)</label>
-                    <div class="price-range">
-                        <input type="range" id="priceRange" min="0" max="100" value="100" onchange="updatePriceDisplay(); applyFilters()">
-                        <span>0€ - <span id="priceValue">100</span>€</span>
-                    </div>
-                </div>
-                
-                <div class="filter-group">
-                    <label>Disponibilité</label>
-                    <div class="checkbox-group">
-                        <label><input type="checkbox" id="availableOnly" onchange="applyFilters()"> En stock seulement</label>
-                    </div>
-                </div>
-                
-                <button class="btn-reset" onclick="resetFilters()">
-                    <i class="fas fa-undo"></i> Réinitialiser
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Section Résultats -->
+    <!-- Results -->
     <section class="results-section">
         <div class="container">
             <div class="results-header">
                 <div class="results-info">
                     <span id="resultsCount">Chargement des produits...</span>
                 </div>
-                <div class="view-options">
-                    <select id="sortBy" onchange="applySorting()">
-                        <option value="name-asc">Nom A-Z</option>
-                        <option value="name-desc">Nom Z-A</option>
-                        <option value="price-asc">Prix croissant</option>
-                        <option value="price-desc">Prix décroissant</option>
-                    </select>
-                </div>
             </div>
 
-            <!-- Grille des produits -->
             <div class="products-grid" id="productsGrid">
-                <!-- Les produits seront chargés ici -->
-            </div>
-
-            <!-- Pagination -->
-            <div class="pagination" id="pagination">
-                <!-- Pagination générée automatiquement -->
+                <!-- Produits chargés ici -->
             </div>
         </div>
     </section>
 
-    <!-- Modal Devis -->
-    <div id="quoteModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeQuoteModal()">&times;</span>
-            <h2><i class="fas fa-quote-left"></i> Demander un devis</h2>
-            
-            <div id="productInfo" class="product-info">
-                <!-- Informations du produit sélectionné -->
-            </div>
-            
-            <form id="quoteForm" onsubmit="submitQuote(event)">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Quantité demandée</label>
-                        <input type="number" id="quoteQuantity" required min="1" placeholder="Ex: 100">
-                    </div>
-                    <div class="form-group">
-                        <label>Unité</label>
-                        <select id="quoteUnit">
-                            <option value="kg">kg</option>
-                            <option value="L">L</option>
-                            <option value="comprimé">comprimé</option>
-                            <option value="gélule">gélule</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Votre nom</label>
-                        <input type="text" id="quoteName" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input type="email" id="quoteEmail" required>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label>Entreprise</label>
-                    <input type="text" id="quoteCompany" required>
-                </div>
-                
-                <div class="form-group">
-                    <label>Message (optionnel)</label>
-                    <textarea id="quoteMessage" rows="4" placeholder="Informations complémentaires sur votre demande..."></textarea>
-                </div>
-                
-                <button type="submit" class="btn btn-success">
-                    <i class="fas fa-paper-plane"></i> Envoyer la demande
-                </button>
-            </form>
-            
-            <div id="quoteStatus" class="status-message" style="display: none;"></div>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h3>Chem Spot</h3>
-                    <p>La marketplace B2B de référence pour les matières premières pharmaceutiques.</p>
-                </div>
-                
-                <div class="footer-column">
-                    <h3>Support</h3>
-                    <ul>
-                        <li><a href="contact.html">Contact</a></li>
-                        <li><a href="#">FAQ</a></li>
-                        <li><a href="#">Guide d'achat</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-column">
-                    <h3>Légal</h3>
-                    <ul>
-                        <li><a href="#">CGV</a></li>
-                        <li><a href="#">Confidentialité</a></li>
-                        <li><a href="#">Mentions légales</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-column">
-                    <h3>Contact</h3>
-                    <p><i class="fas fa-phone"></i> +33 3 81 25 40 60</p>
-                    <p><i class="fas fa-envelope"></i> contact@chemspot.fr</p>
-                </div>
-            </div>
-            
-            <div class="footer-bottom">
-                <p>&copy; 2024 Chem Spot SAS. Tous droits réservés.</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Scripts -->
-    <script src="./js/main.js"></script>
-    
-    <!-- ✅ SCRIPT CATALOGUE CORRIGÉ -->
     <script>
-        // Configuration Supabase
         const SUPABASE_URL = 'https://jkaffpgqbyhuihvyvtld.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE2NTgzOTQsImV4cCI6MjA2NzIzNDM5NH0.OIjoz6uoPV25Nraral4YN_gz7q6COBW3dAVIYhBy1pI';
 
         let supabase;
         let allProducts = [];
-        let filteredProducts = [];
-        let currentPage = 1;
-        const productsPerPage = 12;
-        let selectedProduct = null;
 
-        // ✅ INITIALISATION SIMPLIFIÉE
+        // Initialisation
         document.addEventListener('DOMContentLoaded', async () => {
-            console.log('🚀 Initialisation du catalogue...');
+            showStatus('Initialisation en cours...', 'loading');
             
             try {
-                // Message de chargement
-                updateResultsCount('Connexion à la base de données...');
-                
                 // Attendre Supabase
                 let attempts = 0;
                 while (typeof window.supabase === 'undefined' && attempts < 10) {
-                    console.log('⏳ Attente Supabase, tentative', attempts + 1);
                     await new Promise(resolve => setTimeout(resolve, 500));
                     attempts++;
                 }
@@ -260,1081 +131,172 @@
                     throw new Error('Supabase non chargé');
                 }
                 
-                // Créer client Supabase
                 supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                console.log('✅ Supabase connecté');
+                showStatus('Chargement des produits...', 'loading');
                 
-                updateResultsCount('Chargement des produits...');
-                
-                // Charger les produits
                 await loadProducts();
                 
             } catch (error) {
-                console.error('❌ Erreur:', error);
-                updateResultsCount('Erreur de chargement');
-                loadTestProducts();
+                console.error('Erreur:', error);
+                showStatus('Erreur de chargement', 'error');
+                loadFallbackProducts();
             }
         });
 
-        // ✅ CHARGEMENT DES PRODUITS SIMPLIFIÉ
+        // Charger les produits
         async function loadProducts() {
             try {
-                console.log('📦 Chargement depuis pharma_products...');
-                
                 const { data: products, error } = await supabase
                     .from('pharma_products')
                     .select('*')
                     .order('name');
                 
-                if (error) {
-                    console.error('Erreur Supabase:', error);
-                    throw error;
-                }
+                if (error) throw error;
                 
                 allProducts = products || [];
-                filteredProducts = [...allProducts];
-                
-                console.log(`✅ ${allProducts.length} produits chargés`);
-                
-                // Mettre à jour l'affichage
-                updateResultsCount();
-                populateFilters();
                 displayProducts();
+                updateCount();
                 
-                showAlert(`✅ ${allProducts.length} produits chargés avec succès !`, 'success');
+                showStatus(`${allProducts.length} produits chargés !`, 'success');
                 
             } catch (error) {
-                console.error('❌ Erreur chargement:', error);
+                console.error('Erreur Supabase:', error);
                 throw error;
             }
         }
 
-        // ✅ AFFICHAGE DES PRODUITS SIMPLIFIÉ
+        // Afficher les produits
         function displayProducts() {
             const grid = document.getElementById('productsGrid');
-            if (!grid) {
-                console.error('❌ Element productsGrid non trouvé');
-                return;
-            }
             
-            console.log(`📦 Affichage de ${filteredProducts.length} produits`);
-            
-            if (filteredProducts.length === 0) {
+            if (allProducts.length === 0) {
                 grid.innerHTML = `
-                    <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: #666;">
-                        <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 20px; opacity: 0.5;"></i>
+                    <div class="empty-state">
+                        <i class="fas fa-search"></i>
                         <h3>Aucun produit trouvé</h3>
-                        <p>Essayez de modifier vos critères de recherche</p>
-                        <button onclick="resetFilters()" style="margin-top: 15px; padding: 10px 20px; background: #4F46E5; color: white; border: none; border-radius: 6px; cursor: pointer;">
-                            Réinitialiser les filtres
-                        </button>
+                        <p>Les produits sont en cours de chargement...</p>
                     </div>
                 `;
                 return;
             }
             
-            // Pagination
-            const startIndex = (currentPage - 1) * productsPerPage;
-            const endIndex = startIndex + productsPerPage;
-            const productsToShow = filteredProducts.slice(startIndex, endIndex);
-            
-            grid.innerHTML = productsToShow.map(product => createSimpleProductCard(product)).join('');
-            
-            // Mettre à jour la pagination
-            updatePagination();
-            
-            console.log(`✅ ${productsToShow.length} produits affichés (page ${currentPage})`);
+            grid.innerHTML = allProducts.map(product => createProductCard(product)).join('');
         }
 
-        // ✅ CARTE PRODUIT SIMPLIFIÉE
-        function createSimpleProductCard(product) {
+        // Créer une carte produit
+        function createProductCard(product) {
             const name = product.name || 'Produit sans nom';
             const price = product.price || 'Prix sur demande';
             const category = product.category || 'Non catégorisé';
             const stock = product.stock || 0;
             const manufacturer = product.manufacturer || 'Fabricant non spécifié';
-            const stockText = stock > 0 ? 'En stock' : 'Rupture';
-            const stockColor = stock > 0 ? '#10b981' : '#ef4444';
             
             return `
                 <div class="product-card">
-                    <div class="product-header">
-                        <h3 class="product-name">${name}</h3>
-                        <span class="stock-badge" style="background: ${stockColor}; color: white; padding: 4px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 600;">${stockText}</span>
+                    <div class="product-name">${name}</div>
+                    <div class="product-category">${category}</div>
+                    
+                    <div class="product-details">
+                        <div class="detail-row">
+                            <span class="label">Fabricant:</span>
+                            <span class="value">${manufacturer}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Stock:</span>
+                            <span class="value">${stock} unités</span>
+                        </div>
                     </div>
                     
-                    <div class="product-body">
-                        <div class="product-category">${category}</div>
-                        
-                        <div class="product-details">
-                            <div class="detail-row">
-                                <span class="label">Fabricant:</span>
-                                <span class="value">${manufacturer}</span>
-                            </div>
-                            <div class="detail-row">
-                                <span class="label">Stock:</span>
-                                <span class="value">${stock} unités</span>
-                            </div>
-                            ${product.requires_prescription ? 
-                                '<div class="prescription-required">🔒 Sur ordonnance</div>' : 
-                                '<div class="prescription-free">✅ Vente libre</div>'
-                            }
-                        </div>
-                        
-                        <div class="product-description">
-                            ${(product.description || 'Aucune description disponible').substring(0, 120)}...
-                        </div>
-                        
-                        <div class="product-price">
-                            <span class="price">${price}€</span>
-                            <span class="unit">par unité</span>
-                        </div>
-                        
-                        <div class="product-actions">
-                            <button class="btn-quote" onclick="openQuoteModal(${product.id})" ${stock === 0 ? 'disabled' : ''}>
-                                <i class="fas fa-envelope"></i> Demander un devis
-                            </button>
-                            <button class="btn-details" onclick="viewProductDetails(${product.id})">
-                                <i class="fas fa-info-circle"></i> Détails
-                            </button>
-                        </div>
-                    </div>
+                    <div class="product-price">${price}€</div>
+                    
+                    <button class="btn-quote" onclick="requestQuote(${product.id})" ${stock === 0 ? 'disabled' : ''}>
+                        <i class="fas fa-envelope"></i> Demander un devis
+                    </button>
                 </div>
             `;
         }
 
-        // ✅ RECHERCHE CATALOGUE
-        function performCatalogueSearch() {
-            const query = document.getElementById('catalogueSearch').value.toLowerCase().trim();
-            
-            if (!query) {
-                filteredProducts = [...allProducts];
-            } else {
-                filteredProducts = allProducts.filter(product => 
-                    (product.name && product.name.toLowerCase().includes(query)) ||
-                    (product.category && product.category.toLowerCase().includes(query)) ||
-                    (product.manufacturer && product.manufacturer.toLowerCase().includes(query)) ||
-                    (product.description && product.description.toLowerCase().includes(query)) ||
-                    (product.dosage && product.dosage.toLowerCase().includes(query))
-                );
-            }
-            
-            console.log(`🔍 Recherche "${query}": ${filteredProducts.length} résultats`);
-            
-            currentPage = 1;
-            updateResultsCount();
-            displayProducts();
-        }
-
-        // ✅ FILTRES
-        function populateFilters() {
-            // Filtres des catégories
-            const categories = [...new Set(allProducts.map(p => p.category))].filter(Boolean);
-            const categoryFilter = document.getElementById('categoryFilter');
-            if (categoryFilter && categories.length > 0) {
-                categoryFilter.innerHTML = '<option value="">Toutes les catégories</option>' +
-                    categories.map(cat => `<option value="${cat}">${cat}</option>`).join('');
-            }
-            
-            // Filtres des pays (fabricants)
-            const countries = [...new Set(allProducts.map(p => p.manufacturer))].filter(Boolean);
-            const countryFilter = document.getElementById('countryFilter');
-            if (countryFilter && countries.length > 0) {
-                countryFilter.innerHTML = '<option value="">Tous les fabricants</option>' +
-                    countries.map(country => `<option value="${country}">${country}</option>`).join('');
-            }
-        }
-
-        function applyFilters() {
-            const categoryFilter = document.getElementById('categoryFilter').value;
-            const countryFilter = document.getElementById('countryFilter').value;
-            const priceRange = document.getElementById('priceRange').value;
-            const availableOnly = document.getElementById('availableOnly').checked;
-            const searchQuery = document.getElementById('catalogueSearch').value.toLowerCase().trim();
-            
-            filteredProducts = allProducts.filter(product => {
-                // Filtre recherche
-                const matchesSearch = !searchQuery || 
-                    (product.name && product.name.toLowerCase().includes(searchQuery)) ||
-                    (product.category && product.category.toLowerCase().includes(searchQuery)) ||
-                    (product.manufacturer && product.manufacturer.toLowerCase().includes(searchQuery));
-                
-                // Filtre catégorie
-                const matchesCategory = !categoryFilter || product.category === categoryFilter;
-                
-                // Filtre pays/fabricant
-                const matchesCountry = !countryFilter || product.manufacturer === countryFilter;
-                
-                // Filtre prix
-                const matchesPrice = !product.price || product.price <= priceRange;
-                
-                // Filtre disponibilité
-                const matchesAvailability = !availableOnly || (product.stock && product.stock > 0);
-                
-                return matchesSearch && matchesCategory && matchesCountry && matchesPrice && matchesAvailability;
-            });
-            
-            currentPage = 1;
-            updateResultsCount();
-            displayProducts();
-            
-            console.log(`🔧 Filtres appliqués: ${filteredProducts.length} produits`);
-        }
-
-        function resetFilters() {
-            document.getElementById('categoryFilter').value = '';
-            document.getElementById('countryFilter').value = '';
-            document.getElementById('priceRange').value = 100;
-            document.getElementById('availableOnly').checked = false;
-            document.getElementById('catalogueSearch').value = '';
-            updatePriceDisplay();
-            
-            filteredProducts = [...allProducts];
-            currentPage = 1;
-            updateResultsCount();
-            displayProducts();
-            
-            console.log('🔄 Filtres réinitialisés');
-        }
-
-        // ✅ TRI
-        function applySorting() {
-            const sortBy = document.getElementById('sortBy').value;
-            
-            filteredProducts.sort((a, b) => {
-                switch (sortBy) {
-                    case 'name-asc':
-                        return (a.name || '').localeCompare(b.name || '');
-                    case 'name-desc':
-                        return (b.name || '').localeCompare(a.name || '');
-                    case 'price-asc':
-                        return (a.price || 0) - (b.price || 0);
-                    case 'price-desc':
-                        return (b.price || 0) - (a.price || 0);
-                    default:
-                        return 0;
-                }
-            });
-            
-            displayProducts();
-            console.log(`📊 Tri appliqué: ${sortBy}`);
-        }
-
-        // ✅ UTILITAIRES
-        function updateResultsCount(customMessage = null) {
-            const resultsCount = document.getElementById('resultsCount');
-            if (resultsCount) {
-                if (customMessage) {
-                    resultsCount.textContent = customMessage;
-                } else {
-                    resultsCount.textContent = `${filteredProducts.length} produit${filteredProducts.length > 1 ? 's' : ''} trouvé${filteredProducts.length > 1 ? 's' : ''}`;
-                }
-            }
-        }
-
-        function updatePriceDisplay() {
-            const priceRange = document.getElementById('priceRange');
-            const priceValue = document.getElementById('priceValue');
-            if (priceRange && priceValue) {
-                priceValue.textContent = priceRange.value;
-            }
-        }
-
-        function updatePagination() {
-            const pagination = document.getElementById('pagination');
-            if (!pagination) return;
-            
-            const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
-            
-            if (totalPages <= 1) {
-                pagination.innerHTML = '';
-                return;
-            }
-            
-            let paginationHTML = '';
-            
-            // Bouton précédent
-            if (currentPage > 1) {
-                paginationHTML += `<button onclick="changePage(${currentPage - 1})">« Précédent</button>`;
-            }
-            
-            // Numéros de pages
-            for (let i = 1; i <= totalPages; i++) {
-                if (i === currentPage) {
-                    paginationHTML += `<button class="active">${i}</button>`;
-                } else {
-                    paginationHTML += `<button onclick="changePage(${i})">${i}</button>`;
-                }
-            }
-            
-            // Bouton suivant
-            if (currentPage < totalPages) {
-                paginationHTML += `<button onclick="changePage(${currentPage + 1})">Suivant »</button>`;
-            }
-            
-            pagination.innerHTML = paginationHTML;
-        }
-
-        function changePage(page) {
-            currentPage = page;
-            displayProducts();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // ✅ MODAL DEVIS
-        function openQuoteModal(productId) {
-            selectedProduct = allProducts.find(p => p.id === productId);
-            if (!selectedProduct) return;
-            
-            const modal = document.getElementById('quoteModal');
-            const productInfo = document.getElementById('productInfo');
-            
-            if (productInfo) {
-                productInfo.innerHTML = `
-                    <h4>${selectedProduct.name}</h4>
-                    <div class="product-summary">
-                        <p><strong>Catégorie:</strong> ${selectedProduct.category || 'N/A'}</p>
-                        <p><strong>Prix:</strong> ${selectedProduct.price || 'Sur demande'}€</p>
-                        <p><strong>Fabricant:</strong> ${selectedProduct.manufacturer || 'N/A'}</p>
-                        <p><strong>Stock disponible:</strong> ${selectedProduct.stock || 0} unités</p>
-                    </div>
-                `;
-            }
-            
-            if (modal) {
-                modal.style.display = 'block';
-            }
-        }
-
-        function closeQuoteModal() {
-            const modal = document.getElementById('quoteModal');
-            if (modal) {
-                modal.style.display = 'none';
-            }
-            
-            // Réinitialiser le formulaire
-            const form = document.getElementById('quoteForm');
-            if (form) {
-                form.reset();
-            }
-            
-            selectedProduct = null;
-        }
-
-        async function submitQuote(event) {
-            event.preventDefault();
-            
-            if (!selectedProduct || !supabase) {
-                showAlert('Erreur: produit non sélectionné', 'error');
-                return;
-            }
-            
-            const formData = {
-                product_id: selectedProduct.id,
-                quantity: document.getElementById('quoteQuantity').value,
-                unit: document.getElementById('quoteUnit').value,
-                name: document.getElementById('quoteName').value,
-                email: document.getElementById('quoteEmail').value,
-                company: document.getElementById('quoteCompany').value,
-                message: document.getElementById('quoteMessage').value,
-                created_at: new Date().toISOString()
-            };
-            
-            try {
-                showAlert('Envoi en cours...', 'loading');
-                
-                const { data, error } = await supabase
-                    .from('quotes')
-                    .insert([{
-                        product_id: formData.product_id,
-                        quantity: parseInt(formData.quantity),
-                        message: formData.message,
-                        user_id: 4, // ID utilisateur test
-                        status: 'pending'
-                    }]);
-                
-                if (error) throw error;
-                
-                showAlert('Devis envoyé avec succès !', 'success');
-                
-                setTimeout(() => {
-                    closeQuoteModal();
-                }, 2000);
-                
-            } catch (error) {
-                console.error('❌ Erreur envoi devis:', error);
-                showAlert('Erreur lors de l\'envoi', 'error');
-            }
-        }
-
-        function viewProductDetails(productId) {
-            const product = allProducts.find(p => p.id === productId);
-            if (product) {
-                alert(`Détails du produit:\n\n${product.name}\nCatégorie: ${product.category}\nPrix: ${product.price}€\nFabricant: ${product.manufacturer}\n\nDescription:\n${product.description}`);
-            }
-        }
-
-        // ✅ DONNÉES DE FALLBACK
-        function loadTestProducts() {
-            console.log('📦 Chargement produits de fallback...');
-            
+        // Produits de fallback
+        function loadFallbackProducts() {
             allProducts = [
                 {
                     id: 1,
                     name: 'Paracétamol USP 500mg',
                     category: 'Analgésique',
                     price: 15.20,
-                    dosage: '500mg',
                     manufacturer: 'PharmaPlus',
-                    description: 'Principe actif analgésique et antipyrétique de qualité USP',
-                    stock: 850,
-                    requires_prescription: false
+                    stock: 850
                 },
                 {
                     id: 2,
                     name: 'Aspirine API 99%',
-                    category: 'Analgésique', 
+                    category: 'Analgésique',
                     price: 22.40,
-                    dosage: '300mg',
                     manufacturer: 'MediCorp',
-                    description: 'Acide acétylsalicylique pureté pharmaceutique',
-                    stock: 720,
-                    requires_prescription: false
+                    stock: 720
                 },
                 {
                     id: 3,
                     name: 'Ibuprofène Ph.Eur',
                     category: 'Anti-inflammatoire',
                     price: 28.90,
-                    dosage: '400mg',
                     manufacturer: 'EuroPharma',
-                    description: 'AINS pour douleurs et inflammations',
-                    stock: 0,
-                    requires_prescription: true
-                },
-                {
-                    id: 4,
-                    name: 'Lactose Monohydraté',
-                    category: 'Excipient',
-                    price: 3.45,
-                    dosage: 'N/A',
-                    manufacturer: 'Roquette Pharma',
-                    description: 'Excipient de charge et de remplissage',
-                    stock: 2500,
-                    requires_prescription: false
-                },
-                {
-                    id: 5,
-                    name: 'Stéarate de Magnésium',
-                    category: 'Excipient',
-                    price: 4.20,
-                    dosage: 'N/A',
-                    manufacturer: 'BASF Pharma',
-                    description: 'Agent lubrifiant pour comprimés',
-                    stock: 1200,
-                    requires_prescription: false
+                    stock: 0
                 }
             ];
             
-            filteredProducts = [...allProducts];
-            updateResultsCount();
-            populateFilters();
             displayProducts();
-            
-            showAlert('Mode test - données limitées', 'warning');
+            updateCount();
+            showStatus('Mode test - 3 produits', 'error');
         }
 
-        // ✅ NOTIFICATIONS
-        function showAlert(message, type = 'info') {
-            const alertDiv = document.createElement('div');
-            alertDiv.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                padding: 15px 20px;
-                border-radius: 8px;
-                color: white;
-                font-weight: 600;
-                z-index: 10000;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-                max-width: 400px;
-                ${type === 'success' ? 'background: #10b981;' : 
-                  type === 'error' ? 'background: #ef4444;' : 
-                  type === 'warning' ? 'background: #f59e0b;' : 
-                  'background: #3b82f6;'}
-            `;
-            alertDiv.textContent = message;
-            
-            document.body.appendChild(alertDiv);
-            
-            setTimeout(() => {
-                alertDiv.style.opacity = '0';
-                alertDiv.style.transform = 'translateY(-20px)';
-                setTimeout(() => alertDiv.remove(), 300);
-            }, 4000);
+        // Fonctions utilitaires
+        function updateCount() {
+            document.getElementById('resultsCount').textContent = 
+                `${allProducts.length} produit${allProducts.length > 1 ? 's' : ''} trouvé${allProducts.length > 1 ? 's' : ''}`;
         }
 
-        // ✅ FERMER MODAL EN CLIQUANT DEHORS
-        window.addEventListener('click', function(event) {
-            const modal = document.getElementById('quoteModal');
-            if (event.target === modal) {
-                closeQuoteModal();
-            }
-        });
-
-        // ✅ RECHERCHE EN TEMPS RÉEL
-        document.getElementById('catalogueSearch')?.addEventListener('input', function() {
-            clearTimeout(this.searchTimeout);
-            this.searchTimeout = setTimeout(() => {
-                performCatalogueSearch();
-            }, 300);
-        });
-
-        // ✅ INITIALISER LE SLIDER DE PRIX
-        document.addEventListener('DOMContentLoaded', function() {
-            updatePriceDisplay();
-        });
-
-        // ✅ GESTION DES SESSIONS DE RECHERCHE
-        window.addEventListener('load', function() {
-            // Récupérer les résultats de recherche depuis la page d'accueil
-            const searchResults = sessionStorage.getItem('searchResults');
-            const searchQuery = sessionStorage.getItem('searchQuery');
+        function search() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
             
-            if (searchResults && searchQuery) {
-                try {
-                    const results = JSON.parse(searchResults);
-                    document.getElementById('catalogueSearch').value = searchQuery;
-                    
-                    // Attendre que les données soient chargées
-                    setTimeout(() => {
-                        filteredProducts = results;
-                        updateResultsCount();
-                        displayProducts();
-                        
-                        showAlert(`Résultats pour "${searchQuery}"`, 'success');
-                    }, 1000);
-                    
-                    // Nettoyer la session
-                    sessionStorage.removeItem('searchResults');
-                    sessionStorage.removeItem('searchQuery');
-                    
-                } catch (error) {
-                    console.error('Erreur parsing recherche:', error);
-                }
+            if (!query) {
+                displayProducts();
+                return;
             }
-        });
+            
+            const filtered = allProducts.filter(product => 
+                product.name.toLowerCase().includes(query) ||
+                product.category.toLowerCase().includes(query) ||
+                product.manufacturer.toLowerCase().includes(query)
+            );
+            
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = filtered.map(product => createProductCard(product)).join('');
+            
+            document.getElementById('resultsCount').textContent = 
+                `${filtered.length} produit${filtered.length > 1 ? 's' : ''} trouvé${filtered.length > 1 ? 's' : ''}`;
+        }
 
-        // ✅ RENDRE LES FONCTIONS ACCESSIBLES GLOBALEMENT
-        window.performCatalogueSearch = performCatalogueSearch;
-        window.applyFilters = applyFilters;
-        window.resetFilters = resetFilters;
-        window.applySorting = applySorting;
-        window.changePage = changePage;
-        window.openQuoteModal = openQuoteModal;
-        window.closeQuoteModal = closeQuoteModal;
-        window.submitQuote = submitQuote;
-        window.viewProductDetails = viewProductDetails;
-        window.updatePriceDisplay = updatePriceDisplay;
+        function requestQuote(productId) {
+            const product = allProducts.find(p => p.id === productId);
+            if (product) {
+                alert(`Demande de devis pour: ${product.name}\nPrix: ${product.price}€\n\nFonctionnalité en cours de développement.`);
+            }
+        }
+
+        function showStatus(message, type) {
+            // Supprimer les anciens status
+            document.querySelectorAll('.status').forEach(el => el.remove());
+            
+            const statusDiv = document.createElement('div');
+            statusDiv.className = `status ${type}`;
+            statusDiv.textContent = message;
+            document.body.appendChild(statusDiv);
+            
+            if (type !== 'loading') {
+                setTimeout(() => statusDiv.remove(), 4000);
+            }
+        }
     </script>
-    
-    <!-- Styles intégrés pour le catalogue -->
-    <style>
-        .catalogue-hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 80px 0 60px;
-        }
-        
-        .catalogue-hero h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            text-align: center;
-        }
-        
-        .catalogue-hero p {
-            font-size: 1.2rem;
-            text-align: center;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-        }
-        
-        .search-bar {
-            max-width: 600px;
-            margin: 0 auto;
-            display: flex;
-            background: white;
-            border-radius: 50px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-        
-        .search-bar input {
-            flex: 1;
-            padding: 15px 20px;
-            border: none;
-            font-size: 1rem;
-            outline: none;
-        }
-        
-        .search-bar button {
-            background: var(--primary, #4F46E5);
-            color: white;
-            border: none;
-            padding: 15px 25px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        
-        .search-bar button:hover {
-            background: var(--primary-dark, #3730A3);
-        }
-        
-        .filters-section {
-            background: #f8fafc;
-            padding: 30px 0;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        
-        .filters-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            align-items: end;
-        }
-        
-        .filter-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #374151;
-        }
-        
-        .filter-group select,
-        .filter-group input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            font-size: 0.9rem;
-        }
-        
-        .price-range {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .price-range input[type="range"] {
-            flex: 1;
-        }
-        
-        .checkbox-group label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: normal;
-        }
-        
-        .btn-reset {
-            background: #ef4444;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        
-        .btn-reset:hover {
-            background: #dc2626;
-        }
-        
-        .results-section {
-            padding: 40px 0;
-        }
-        
-        .results-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-        
-        .results-info {
-            font-size: 1.1rem;
-            color: #374151;
-            font-weight: 600;
-        }
-        
-        .view-options select {
-            padding: 8px 12px;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-        }
-        
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
-            margin-bottom: 40px;
-        }
-        
-        .product-card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
-            overflow: hidden;
-            border: 1px solid #e5e7eb;
-        }
-        
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.1);
-        }
-        
-        .product-header {
-            padding: 20px 20px 15px;
-            border-bottom: 1px solid #f3f4f6;
-            position: relative;
-        }
-        
-        .product-name {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #1f2937;
-            margin: 0 0 5px 0;
-            line-height: 1.3;
-        }
-        
-        .stock-badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-        }
-        
-        .product-body {
-            padding: 20px;
-        }
-        
-        .product-category {
-            display: inline-block;
-            background: #eff6ff;
-            color: #1e40af;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            margin-bottom: 15px;
-        }
-        
-        .product-details {
-            margin-bottom: 15px;
-        }
-        
-        .detail-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-            font-size: 0.9rem;
-        }
-        
-        .detail-row .label {
-            color: #6b7280;
-            font-weight: 500;
-        }
-        
-        .detail-row .value {
-            color: #374151;
-            font-weight: 600;
-        }
-        
-        .prescription-required,
-        .prescription-free {
-            margin: 10px 0;
-            padding: 8px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            text-align: center;
-        }
-        
-        .prescription-required {
-            background: #fef3c7;
-            color: #92400e;
-        }
-        
-        .prescription-free {
-            background: #d1fae5;
-            color: #065f46;
-        }
-        
-        .product-description {
-            color: #6b7280;
-            font-size: 0.9rem;
-            line-height: 1.4;
-            margin-bottom: 15px;
-        }
-        
-        .product-price {
-            display: flex;
-            align-items: baseline;
-            gap: 5px;
-            margin-bottom: 20px;
-        }
-        
-        .product-price .price {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--primary, #4F46E5);
-        }
-        
-        .product-price .unit {
-            color: #6b7280;
-            font-size: 0.9rem;
-        }
-        
-        .product-actions {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .btn-quote,
-        .btn-details {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-align: center;
-        }
-        
-        .btn-quote {
-            background: var(--success, #10b981);
-            color: white;
-        }
-        
-        .btn-quote:hover:not(:disabled) {
-            background: #16a34a;
-            transform: translateY(-1px);
-        }
-        
-        .btn-quote:disabled {
-            background: #9ca3af;
-            cursor: not-allowed;
-        }
-        
-        .btn-details {
-            background: #f3f4f6;
-            color: #374151;
-            border: 1px solid #d1d5db;
-        }
-        
-        .btn-details:hover {
-            background: #e5e7eb;
-        }
-        
-        .pagination {
-            display: flex;
-            justify-content: center;
-            gap: 5px;
-            margin-top: 40px;
-        }
-        
-        .pagination button {
-            padding: 10px 15px;
-            border: 1px solid #d1d5db;
-            background: white;
-            color: #374151;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .pagination button:hover {
-            background: #f3f4f6;
-        }
-        
-        .pagination button.active {
-            background: var(--primary, #4F46E5);
-            color: white;
-            border-color: var(--primary, #4F46E5);
-        }
-        
-        /* Modal styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            backdrop-filter: blur(5px);
-        }
-        
-        .modal-content {
-            background-color: white;
-            margin: 5% auto;
-            padding: 30px;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 600px;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
-            animation: modalSlideIn 0.3s ease;
-        }
-        
-        @keyframes modalSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            line-height: 1;
-        }
-        
-        .close:hover {
-            color: #000;
-        }
-        
-        .product-info {
-            background: #f8fafc;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 25px;
-        }
-        
-        .product-info h4 {
-            margin: 0 0 15px 0;
-            color: #1f2937;
-            font-size: 1.3rem;
-        }
-        
-        .product-summary p {
-            margin: 5px 0;
-            color: #374151;
-        }
-        
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #374151;
-        }
-        
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
-        }
-        
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--primary, #4F46E5);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-        }
-        
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .btn-success {
-            background: var(--success, #10b981);
-            color: white;
-        }
-        
-        .btn-success:hover {
-            background: #16a34a;
-        }
-        
-        .status-message {
-            padding: 12px;
-            border-radius: 6px;
-            margin-top: 15px;
-            font-weight: 600;
-        }
-        
-        .status-message.success {
-            background: #d1fae5;
-            color: #065f46;
-        }
-        
-        .status-message.error {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            .catalogue-hero h1 {
-                font-size: 2rem;
-            }
-            
-            .filters-container {
-                grid-template-columns: 1fr;
-            }
-            
-            .results-header {
-                flex-direction: column;
-                align-items: stretch;
-                text-align: center;
-            }
-            
-            .products-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-            
-            .product-actions {
-                flex-direction: column;
-            }
-        }
-    </style>
 </body>
 </html>
