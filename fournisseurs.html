@@ -346,7 +346,7 @@
     <!-- Scripts -->
     <script src="js/main.js"></script>
     
-    <!-- Script Supabase ADAPTÉ À TES VRAIES DONNÉES -->
+    <!-- Script Supabase CORRIGÉ - SANS FONCTIONS MANQUANTES -->
     <script>
         // Configuration Supabase
         const SUPABASE_URL = 'https://jkaffpgqbyhuihvyvtld.supabase.co';
@@ -591,11 +591,6 @@
         function viewProducts(supplierId) {
             // Rediriger vers le catalogue avec filtre fournisseur
             window.location.href = `catalogue.html?supplier=${supplierId}`;
-        }
-
-        // Fonction pour recharger si nécessaire
-        function reloadSuppliers() {
-            location.reload();
         }
     </script>
 </body>
