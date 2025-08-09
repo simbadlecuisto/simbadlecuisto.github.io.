@@ -45,3 +45,328 @@
     <section class="page-header">
         <div class="container">
             <div class="page-header-content">
+                <h1>Nos Fournisseurs Certifiés</h1>
+                <p>Découvrez notre réseau de partenaires vérifiés et certifiés BPF/GMP</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contenu Principal -->
+    <main class="section">
+        <div class="container">
+            <!-- Filtres -->
+            <div class="filters-section">
+                <h3 style="margin-bottom: 1.5rem; color: var(--primary);">
+                    <i class="fas fa-filter"></i> Filtrer les fournisseurs
+                </h3>
+                <div class="filters-grid">
+                    <div class="filter-group">
+                        <label for="countryFilter">Pays</label>
+                        <select id="countryFilter" onchange="filterSuppliers()">
+                            <option value="">Tous les pays</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="specialtyFilter">Spécialité</label>
+                        <select id="specialtyFilter" onchange="filterSuppliers()">
+                            <option value="">Toutes les spécialités</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <button class="btn btn-outline" onclick="resetFilters()">
+                            <i class="fas fa-undo"></i> Réinitialiser
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Résultats -->
+            <div class="results-header">
+                <h2>Fournisseurs Disponibles</h2>
+                <div id="resultsCount" class="results-count"></div>
+            </div>
+
+            <!-- Messages d'état -->
+            <div id="connectionStatus" class="connection-status" style="display: none;"></div>
+            <div id="loadingMessage" class="loading-message">
+                <i class="fas fa-spinner fa-spin"></i> Chargement des fournisseurs...
+            </div>
+            <div id="errorMessage" class="error-message" style="display: none;"></div>
+
+            <!-- Grille des fournisseurs -->
+            <div id="suppliersContainer" class="suppliers-grid" style="display: none;">
+                <!-- Les fournisseurs seront chargés ici par JavaScript -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Chem Spot</h3>
+                    <p>La marketplace B2B leader pour les matières premières pharmaceutiques en France.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="catalogue.html">Catalogue</a></li>
+                        <li><a href="fournisseurs.html">Fournisseurs</a></li>
+                        <li><a href="contact.html">Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact</h3>
+                    <p>📧 contact@chemspot.com</p>
+                    <p>📞 +33 1 23 45 67 89</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Chem Spot. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Configuration Supabase
+        const SUPABASE_URL = 'https://jkaffpgqbyhuihvyvtld.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE2NTgzOTQsImV4cCI6MjA2NzIzNDM5NH0.OIjoz6uoPV25Nraral4YN_gz7q6COBW3dAVIYhBy1pI';
+
+        let supabase;
+        let allSuppliers = [];
+        let filteredSuppliers = [];
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                console.log('🔄 Initialisation page fournisseurs...');
+                
+                // Vérifier si Supabase est chargé
+                if (typeof window.supabase === 'undefined') {
+                    throw new Error('Supabase non chargé');
+                }
+                
+                // Créer le client Supabase
+                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                console.log('✅ Client Supabase créé');
+                
+                // Charger les fournisseurs
+                await loadSuppliers();
+                
+            } catch (error) {
+                console.error('❌ Erreur initialisation:', error);
+                showError('Erreur de connexion à la base de données');
+            }
+        });
+
+        async function loadSuppliers() {
+            try {
+                console.log('🔄 Chargement fournisseurs depuis Supabase...');
+                
+                // Requête pour récupérer TOUS les fournisseurs
+                const { data: suppliers, error } = await supabase
+                    .from('suppliers')
+                    .select('*')
+                    .order('name');
+
+                if (error) {
+                    console.error('❌ Erreur Supabase:', error);
+                    throw error;
+                }
+
+                console.log(`✅ ${suppliers.length} fournisseurs chargés:`, suppliers);
+                
+                allSuppliers = suppliers || [];
+                filteredSuppliers = [...allSuppliers];
+                
+                // Initialiser les filtres
+                initializeFilters();
+                
+                // Afficher les fournisseurs
+                displaySuppliers();
+                
+            } catch (error) {
+                console.error('❌ Erreur chargement:', error);
+                showError(`Erreur: ${error.message}`);
+            }
+        }
+
+        function initializeFilters() {
+            // Remplir le filtre pays
+            const countries = [...new Set(allSuppliers.map(s => s.country).filter(Boolean))];
+            const countryFilter = document.getElementById('countryFilter');
+            countryFilter.innerHTML = '<option value="">Tous les pays</option>' +
+                countries.map(country => `<option value="${country}">${country}</option>`).join('');
+
+            // Remplir le filtre spécialités
+            const specialties = [...new Set(allSuppliers.map(s => s.speciality).filter(Boolean))];
+            const specialtyFilter = document.getElementById('specialtyFilter');
+            specialtyFilter.innerHTML = '<option value="">Toutes les spécialités</option>' +
+                specialties.map(specialty => `<option value="${specialty}">${specialty}</option>`).join('');
+        }
+
+        function displaySuppliers() {
+            const loadingEl = document.getElementById('loadingMessage');
+            const errorEl = document.getElementById('errorMessage');
+            const containerEl = document.getElementById('suppliersContainer');
+            const countEl = document.getElementById('resultsCount');
+
+            // Cacher loading/error
+            loadingEl.style.display = 'none';
+            errorEl.style.display = 'none';
+
+            // Mettre à jour compteur
+            countEl.textContent = `${filteredSuppliers.length} fournisseur(s) trouvé(s)`;
+
+            if (filteredSuppliers.length === 0) {
+                containerEl.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1/-1; text-align: center; padding: 3rem;">
+                        <i class="fas fa-search" style="font-size: 3rem; color: #cbd5e0; margin-bottom: 1rem;"></i>
+                        <h3 style="color: #4a5568; margin-bottom: 0.5rem;">Aucun fournisseur trouvé</h3>
+                        <p style="color: #718096;">Essayez de modifier vos critères de recherche</p>
+                    </div>
+                `;
+                containerEl.style.display = 'grid';
+                return;
+            }
+
+            // Générer les cartes
+            const suppliersHTML = filteredSuppliers.map(supplier => createSupplierCard(supplier)).join('');
+            containerEl.innerHTML = suppliersHTML;
+            containerEl.style.display = 'grid';
+
+            console.log(`✅ ${filteredSuppliers.length} fournisseurs affichés`);
+        }
+
+        function createSupplierCard(supplier) {
+            // Fonction pour obtenir emoji pays
+            function getCountryFlag(country) {
+                const flags = {
+                    'France': '🇫🇷', 'Allemagne': '🇩🇪', 'Inde': '🇮🇳', 'Chine': '🇨🇳',
+                    'Italie': '🇮🇹', 'Espagne': '🇪🇸', 'Pays-Bas': '🇳🇱', 'Belgique': '🇧🇪',
+                    'Suisse': '🇨🇭', 'Pologne': '🇵🇱', 'USA': '🇺🇸', 'États-Unis': '🇺🇸',
+                    'Japon': '🇯🇵', 'Corée': '🇰🇷', 'Brésil': '🇧🇷'
+                };
+                return flags[country] || '🌍';
+            }
+
+            return `
+                <div class="supplier-card">
+                    <div class="supplier-header">
+                        <h3 class="supplier-name">${supplier.name || 'Nom non disponible'}</h3>
+                        <div class="supplier-id">#${supplier.id}</div>
+                    </div>
+                    
+                    <div class="supplier-info">
+                        ${supplier.country ? `
+                            <div class="info-item">
+                                <span class="country-flag">${getCountryFlag(supplier.country)}</span>
+                                <strong>Pays :</strong> ${supplier.country}
+                            </div>
+                        ` : ''}
+                        
+                        ${supplier.website ? `
+                            <div class="info-item">
+                                <i class="fas fa-globe"></i>
+                                <strong>Site web :</strong> <a href="${supplier.website}" target="_blank">${supplier.website}</a>
+                            </div>
+                        ` : ''}
+                        
+                        ${supplier.contact_email ? `
+                            <div class="info-item">
+                                <i class="fas fa-envelope"></i>
+                                <strong>Email :</strong> <a href="mailto:${supplier.contact_email}">${supplier.contact_email}</a>
+                            </div>
+                        ` : ''}
+                        
+                        ${supplier.speciality ? `
+                            <div class="info-item">
+                                <i class="fas fa-tags"></i>
+                                <strong>Spécialité :</strong> ${supplier.speciality}
+                            </div>
+                        ` : ''}
+                    </div>
+                    
+                    ${supplier.speciality ? `
+                        <div class="specialties">
+                            <span class="specialty-tag">${supplier.speciality}</span>
+                        </div>
+                    ` : ''}
+                    
+                    <div class="supplier-actions">
+                        <button class="btn btn-primary" onclick="contactSupplier(${supplier.id}, '${supplier.name}', '${supplier.contact_email || ''}')">
+                            <i class="fas fa-envelope"></i> Contacter
+                        </button>
+                        ${supplier.website ? `
+                            <button class="btn btn-outline" onclick="visitWebsite('${supplier.website}')">
+                                <i class="fas fa-external-link-alt"></i> Site web
+                            </button>
+                        ` : ''}
+                        <button class="btn btn-outline" onclick="viewProducts(${supplier.id})">
+                            <i class="fas fa-eye"></i> Produits
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function filterSuppliers() {
+            const country = document.getElementById('countryFilter').value;
+            const specialty = document.getElementById('specialtyFilter').value;
+
+            filteredSuppliers = allSuppliers.filter(supplier => {
+                const matchCountry = !country || supplier.country === country;
+                const matchSpecialty = !specialty || supplier.speciality === specialty;
+                return matchCountry && matchSpecialty;
+            });
+
+            displaySuppliers();
+        }
+
+        function resetFilters() {
+            document.getElementById('countryFilter').value = '';
+            document.getElementById('specialtyFilter').value = '';
+            filteredSuppliers = [...allSuppliers];
+            displaySuppliers();
+        }
+
+        function showError(message) {
+            const loadingEl = document.getElementById('loadingMessage');
+            const errorEl = document.getElementById('errorMessage');
+            const containerEl = document.getElementById('suppliersContainer');
+            const countEl = document.getElementById('resultsCount');
+
+            loadingEl.style.display = 'none';
+            containerEl.style.display = 'none';
+            countEl.textContent = '';
+            
+            errorEl.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${message}`;
+            errorEl.style.display = 'block';
+        }
+
+        function contactSupplier(supplierId, supplierName, email) {
+            const subject = encodeURIComponent(`Demande de renseignements - ${supplierName} via ChemSpot`);
+            const body = encodeURIComponent(`Bonjour,\n\nJe vous contacte via la plateforme ChemSpot concernant vos produits.\n\nCordialement`);
+            
+            if (email) {
+                window.open(`mailto:${email}?subject=${subject}&body=${body}`);
+            } else {
+                window.location.href = `mailto:?subject=${subject}&body=${body}`;
+            }
+        }
+
+        function visitWebsite(url) {
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'https://' + url;
+            }
+            window.open(url, '_blank');
+        }
+
+        function viewProducts(supplierId) {
+            window.location.href = `catalogue.html?supplier=${supplierId}`;
+        }
+    </script>
+</body>
+</html>
