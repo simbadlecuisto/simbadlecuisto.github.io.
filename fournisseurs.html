@@ -1,597 +1,286 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fournisseurs - Chem Spot</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/components.css">
-    <link rel="stylesheet" href="css/responsive.css">
-    
-    <!-- Supabase CDN -->
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    
-    <style>
-        .suppliers-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-        
-        .supplier-card {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            border: 1px solid #e2e8f0;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .supplier-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-        }
-        
-        .supplier-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 1rem;
-            border-bottom: 1px solid #e2e8f0;
-            padding-bottom: 1rem;
-        }
-        
-        .supplier-name {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: #1a365d;
-            margin: 0;
-        }
-        
-        .supplier-id {
-            background: #f7fafc;
-            color: #4a5568;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 500;
-        }
-        
-        .supplier-info {
-            margin-bottom: 1rem;
-        }
-        
-        .info-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 0.75rem;
-            font-size: 0.875rem;
-            color: #4a5568;
-        }
-        
-        .info-item i {
-            margin-right: 0.75rem;
-            width: 20px;
-            text-align: center;
-            color: #3b82f6;
-        }
-        
-        .country-flag {
-            font-size: 1.2rem;
-            margin-right: 0.5rem;
-        }
-        
-        .specialties {
-            margin-top: 1rem;
-        }
-        
-        .specialty-tag {
-            background: #3b82f6;
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            margin-right: 0.5rem;
-            margin-bottom: 0.5rem;
-            display: inline-block;
-        }
-        
-        .supplier-actions {
-            margin-top: 1.5rem;
-            display: flex;
-            gap: 0.75rem;
-            flex-wrap: wrap;
-        }
-        
-        .btn {
-            padding: 0.75rem 1rem;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-            font-size: 0.875rem;
-            font-weight: 500;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: all 0.3s ease;
-            flex: 1;
-            justify-content: center;
-            min-width: 120px;
-        }
-        
-        .btn-primary {
-            background: #3b82f6;
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background: #2563eb;
-            transform: translateY(-1px);
-        }
-        
-        .btn-outline {
-            background: transparent;
-            color: #3b82f6;
-            border: 1px solid #3b82f6;
-        }
-        
-        .btn-outline:hover {
-            background: #3b82f6;
-            color: white;
-            transform: translateY(-1px);
-        }
-        
-        .loading {
-            text-align: center;
-            padding: 3rem;
-            color: #6b7280;
-        }
-        
-        .loading i {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            color: #3b82f6;
-        }
-        
-        .error {
-            text-align: center;
-            padding: 2rem;
-            color: #dc2626;
-            background: #fee2e2;
-            border-radius: 8px;
-            margin: 1rem 0;
-        }
-        
-        .connection-status {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 1rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 500;
-            z-index: 1000;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        
-        .connection-status.connected {
-            background: #10b981;
-            color: white;
-        }
-        
-        .connection-status.disconnected {
-            background: #dc2626;
-            color: white;
-        }
-        
-        .filters-section {
-            background: #f8fafc;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin-bottom: 2rem;
-        }
-        
-        .filters-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            align-items: end;
-        }
-        
-        .filter-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: #374151;
-        }
-        
-        .filter-group select {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            font-size: 0.875rem;
-        }
-        
-        .results-count {
-            margin: 1rem 0;
-            color: #6b7280;
-            font-weight: 500;
-        }
-    </style>
-</head>
-<body>
-    <!-- Status de connexion -->
-    <div id="connectionStatus" class="connection-status" style="display: none;"></div>
+// REMPLACE LE SCRIPT DANS FOURNISSEURS.HTML PAR CELUI-CI :
 
-    <!-- Header -->
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <div class="logo-section">
-                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/chemspotV1-dt6tDoOKp1wAyi8oRMzxzufIVBfiu9.png" alt="Chem Spot Logo" class="logo">
-                    <span class="logo-text">Chem Spot</span>
+// Configuration Supabase
+const SUPABASE_URL = 'https://jkaffpgqbyhuihvyvtld.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE2NTgzOTQsImV4cCI6MjA2NzIzNDM5NH0.OIjoz6uoPV25Nraral4YN_gz7q6COBW3dAVIYhBy1pI';
+
+let supabase;
+let allSuppliers = [];
+let filteredSuppliers = [];
+
+// Initialisation
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        console.log('🔄 Initialisation page fournisseurs...');
+        
+        // Créer le client Supabase
+        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        console.log('✅ Client Supabase créé');
+        
+        // Mettre à jour le statut
+        updateConnectionStatus(true);
+        
+        // Charger les fournisseurs
+        await loadSuppliers();
+        
+    } catch (error) {
+        console.error('❌ Erreur initialisation:', error);
+        updateConnectionStatus(false);
+        showError('Erreur de connexion à la base de données');
+    }
+});
+
+function updateConnectionStatus(connected) {
+    const statusEl = document.getElementById('connectionStatus');
+    if (connected) {
+        statusEl.className = 'connection-status connected';
+        statusEl.innerHTML = '✅ Connecté à la base de données';
+        statusEl.style.display = 'block';
+        setTimeout(() => {
+            statusEl.style.display = 'none';
+        }, 3000);
+    } else {
+        statusEl.className = 'connection-status disconnected';
+        statusEl.innerHTML = '❌ Erreur de connexion';
+        statusEl.style.display = 'block';
+    }
+}
+
+async function loadSuppliers() {
+    try {
+        console.log('🔄 Chargement fournisseurs depuis Supabase...');
+        
+        // REQUÊTE CORRIGÉE : RÉCUPÉRER TOUTES LES COLONNES
+        const { data: suppliers, error } = await supabase
+            .from('suppliers')
+            .select('*')  // ← MODIFIÉ : Récupère toutes les colonnes
+            .order('name');
+
+        if (error) {
+            console.error('❌ Erreur Supabase:', error);
+            throw error;
+        }
+
+        console.log(`✅ ${suppliers.length} fournisseurs chargés:`, suppliers);
+        console.log('📊 Premier fournisseur:', suppliers[0]); // Pour voir la structure
+        
+        allSuppliers = suppliers || [];
+        filteredSuppliers = [...allSuppliers];
+        
+        // Initialiser les filtres
+        initializeFilters();
+        
+        // Afficher les fournisseurs
+        displaySuppliers();
+        
+    } catch (error) {
+        console.error('❌ Erreur chargement:', error);
+        showError(`Erreur: ${error.message}`);
+    }
+}
+
+function initializeFilters() {
+    // Remplir le filtre pays
+    const countries = [...new Set(allSuppliers.map(s => s.country).filter(Boolean))];
+    const countryFilter = document.getElementById('countryFilter');
+    countryFilter.innerHTML = '<option value="">Tous les pays</option>' +
+        countries.map(country => `<option value="${country}">${country}</option>`).join('');
+
+    // Remplir le filtre spécialités
+    const specialties = [...new Set(allSuppliers.map(s => s.speciality).filter(Boolean))];
+    const specialtyFilter = document.getElementById('specialtyFilter');
+    specialtyFilter.innerHTML = '<option value="">Toutes les spécialités</option>' +
+        specialties.map(specialty => `<option value="${specialty}">${specialty}</option>`).join('');
+}
+
+function displaySuppliers() {
+    const loadingEl = document.getElementById('loadingMessage');
+    const errorEl = document.getElementById('errorMessage');
+    const containerEl = document.getElementById('suppliersContainer');
+    const countEl = document.getElementById('resultsCount');
+
+    // Cacher loading/error
+    loadingEl.style.display = 'none';
+    errorEl.style.display = 'none';
+
+    // Mettre à jour compteur
+    countEl.textContent = `${filteredSuppliers.length} fournisseur(s) trouvé(s)`;
+
+    if (filteredSuppliers.length === 0) {
+        containerEl.innerHTML = `
+            <div class="empty-state" style="grid-column: 1/-1; text-align: center; padding: 3rem;">
+                <i class="fas fa-search" style="font-size: 3rem; color: #cbd5e0; margin-bottom: 1rem;"></i>
+                <h3 style="color: #4a5568; margin-bottom: 0.5rem;">Aucun fournisseur trouvé</h3>
+                <p style="color: #718096;">Essayez de modifier vos critères de recherche</p>
+            </div>
+        `;
+        containerEl.style.display = 'grid';
+        return;
+    }
+
+    // Générer les cartes
+    const suppliersHTML = filteredSuppliers.map(supplier => createSupplierCard(supplier)).join('');
+    containerEl.innerHTML = suppliersHTML;
+    containerEl.style.display = 'grid';
+
+    console.log(`✅ ${filteredSuppliers.length} fournisseurs affichés`);
+}
+
+function createSupplierCard(supplier) {
+    // Fonction pour obtenir emoji pays
+    function getCountryFlag(country) {
+        const flags = {
+            'France': '🇫🇷', 'Allemagne': '🇩🇪', 'Inde': '🇮🇳', 'Chine': '🇨🇳',
+            'Italie': '🇮🇹', 'Espagne': '🇪🇸', 'Pays-Bas': '🇳🇱', 'Belgique': '🇧🇪',
+            'Suisse': '🇨🇭', 'Pologne': '🇵🇱', 'USA': '🇺🇸', 'États-Unis': '🇺🇸',
+            'Japon': '🇯🇵', 'Corée': '🇰🇷', 'Brésil': '🇧🇷', 'Allemagne/Belgique': '🇩🇪🇧🇪',
+            'Allemagne/Suisse': '🇩🇪🇨🇭', 'Espagne': '🇪🇸', 'Allemagne/Royaume-Uni': '🇩🇪🇬🇧'
+        };
+        return flags[country] || '🌍';
+    }
+
+    // Gérer les certifications (peut être un array ou string)
+    let certificationsDisplay = '';
+    if (supplier.certifications) {
+        let certs = supplier.certifications;
+        if (typeof certs === 'string') {
+            certs = certs.split(',').map(c => c.trim());
+        }
+        if (Array.isArray(certs)) {
+            certificationsDisplay = certs.slice(0, 3).map(cert => 
+                `<span class="cert-badge">${cert}</span>`
+            ).join('');
+            if (certs.length > 3) {
+                certificationsDisplay += `<span class="cert-badge">+${certs.length - 3}</span>`;
+            }
+        }
+    }
+
+    return `
+        <div class="supplier-card">
+            <div class="supplier-header">
+                <h3 class="supplier-name">${supplier.name || 'Nom non disponible'}</h3>
+                <div class="supplier-id">#${supplier.id}</div>
+            </div>
+            
+            <div class="supplier-info">
+                ${supplier.country ? `
+                    <div class="info-item">
+                        <span class="country-flag">${getCountryFlag(supplier.country)}</span>
+                        <strong>Pays :</strong> ${supplier.country}
+                    </div>
+                ` : ''}
+                
+                ${supplier.website ? `
+                    <div class="info-item">
+                        <i class="fas fa-globe"></i>
+                        <strong>Site web :</strong> <a href="${supplier.website}" target="_blank">${supplier.website}</a>
+                    </div>
+                ` : ''}
+                
+                ${supplier.contact_email ? `
+                    <div class="info-item">
+                        <i class="fas fa-envelope"></i>
+                        <strong>Email :</strong> <a href="mailto:${supplier.contact_email}">${supplier.contact_email}</a>
+                    </div>
+                ` : ''}
+                
+                ${supplier.speciality ? `
+                    <div class="info-item">
+                        <i class="fas fa-tags"></i>
+                        <strong>Spécialité :</strong> ${supplier.speciality}
+                    </div>
+                ` : ''}
+            </div>
+            
+            ${certificationsDisplay ? `
+                <div class="certifications" style="margin: 1rem 0;">
+                    <strong>Certifications :</strong><br>
+                    ${certificationsDisplay}
                 </div>
-                
-                <ul class="nav-menu">
-                    <li><a href="index.html" class="nav-link">Accueil</a></li>
-                    <li><a href="catalogue.html" class="nav-link">Catalogue</a></li>
-                    <li><a href="fournisseurs.html" class="nav-link active">Fournisseurs</a></li>
-                    <li><a href="contact.html" class="nav-link">Contact</a></li>
-                </ul>
-                
-                <div class="header-actions">
-                    <button class="btn btn-outline btn-sm" onclick="openModal('loginModal')">
-                        <i class="fas fa-sign-in-alt"></i> Connexion
+            ` : ''}
+            
+            ${supplier.speciality ? `
+                <div class="specialties">
+                    <span class="specialty-tag">${supplier.speciality}</span>
+                </div>
+            ` : ''}
+            
+            ${supplier.notes ? `
+                <div class="supplier-notes" style="margin-top: 1rem; padding: 0.75rem; background: #f8fafc; border-radius: 6px; font-size: 0.875rem; color: #4a5568;">
+                    <strong>Notes :</strong> ${supplier.notes}
+                </div>
+            ` : ''}
+            
+            <div class="supplier-actions">
+                <button class="btn btn-primary" onclick="contactSupplier(${supplier.id}, '${supplier.name}', '${supplier.contact_email || ''}')">
+                    <i class="fas fa-envelope"></i> Contacter
+                </button>
+                ${supplier.website ? `
+                    <button class="btn btn-outline" onclick="visitWebsite('${supplier.website}')">
+                        <i class="fas fa-external-link-alt"></i> Site web
                     </button>
-                    <button class="btn btn-primary btn-sm" onclick="openModal('registerModal')">
-                        <i class="fas fa-user-plus"></i> Inscription
-                    </button>
-                </div>
+                ` : ''}
+                <button class="btn btn-outline" onclick="viewProducts(${supplier.id})">
+                    <i class="fas fa-eye"></i> Produits
+                </button>
             </div>
         </div>
-    </header>
+    `;
+}
 
-    <!-- Page Header -->
-    <section class="page-header">
-        <div class="container">
-            <div class="page-header-content">
-                <h1><i class="fas fa-industry"></i> Nos Fournisseurs Partenaires</h1>
-                <p>Découvrez notre réseau mondial de fournisseurs certifiés</p>
-            </div>
-        </div>
-    </section>
+function filterSuppliers() {
+    const country = document.getElementById('countryFilter').value;
+    const specialty = document.getElementById('specialtyFilter').value;
 
-    <!-- Section Fournisseurs -->
-    <section class="suppliers-section">
-        <div class="container">
-            <!-- Filtres -->
-            <div class="filters-section">
-                <h3><i class="fas fa-filter"></i> Filtrer les fournisseurs</h3>
-                <div class="filters-row">
-                    <div class="filter-group">
-                        <label>Pays :</label>
-                        <select id="countryFilter" onchange="filterSuppliers()">
-                            <option value="">Tous les pays</option>
-                        </select>
-                    </div>
-                    
-                    <div class="filter-group">
-                        <label>Spécialité :</label>
-                        <select id="specialtyFilter" onchange="filterSuppliers()">
-                            <option value="">Toutes les spécialités</option>
-                        </select>
-                    </div>
-                    
-                    <div class="filter-group">
-                        <button class="btn btn-outline" onclick="resetFilters()">
-                            <i class="fas fa-undo"></i> Réinitialiser
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Compteur de résultats -->
-            <div id="resultsCount" class="results-count">
-                Chargement...
-            </div>
-            
-            <!-- Messages -->
-            <div id="loadingMessage" class="loading">
-                <i class="fas fa-spinner fa-spin"></i>
-                <br>Chargement des fournisseurs...
-            </div>
-            
-            <div id="errorMessage" class="error" style="display: none;">
-                <i class="fas fa-exclamation-triangle"></i> Erreur de chargement des données
-            </div>
-            
-            <!-- Grille des fournisseurs -->
-            <div id="suppliersContainer" class="suppliers-grid" style="display: none;">
-                <!-- Les fournisseurs seront générés ici -->
-            </div>
-        </div>
-    </section>
+    filteredSuppliers = allSuppliers.filter(supplier => {
+        const matchCountry = !country || supplier.country === country;
+        const matchSpecialty = !specialty || supplier.speciality === specialty;
+        return matchCountry && matchSpecialty;
+    });
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h3>Chem Spot</h3>
-                    <p>La marketplace B2B de référence pour les matières premières pharmaceutiques.</p>
-                </div>
-                
-                <div class="footer-column">
-                    <h3>Produits</h3>
-                    <ul>
-                        <li><a href="catalogue.html">Principes Actifs</a></li>
-                        <li><a href="catalogue.html">Excipients</a></li>
-                        <li><a href="catalogue.html">Colorants</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-column">
-                    <h3>Contact</h3>
-                    <p><i class="fas fa-phone"></i> +33 3 81 25 40 60</p>
-                    <p><i class="fas fa-envelope"></i> contact@chemspot.fr</p>
-                </div>
-            </div>
-        </div>
-    </footer>
+    displaySuppliers();
+}
 
-    <!-- Scripts -->
-    <script src="js/main.js"></script>
+function resetFilters() {
+    document.getElementById('countryFilter').value = '';
+    document.getElementById('specialtyFilter').value = '';
+    filteredSuppliers = [...allSuppliers];
+    displaySuppliers();
+}
+
+function showError(message) {
+    const loadingEl = document.getElementById('loadingMessage');
+    const errorEl = document.getElementById('errorMessage');
+    const containerEl = document.getElementById('suppliersContainer');
+    const countEl = document.getElementById('resultsCount');
+
+    loadingEl.style.display = 'none';
+    containerEl.style.display = 'none';
+    countEl.textContent = '';
     
-    <!-- Script Supabase CORRIGÉ - SANS FONCTIONS MANQUANTES -->
-    <script>
-        // Configuration Supabase
-        const SUPABASE_URL = 'https://jkaffpgqbyhuihvyvtld.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE2NTgzOTQsImV4cCI6MjA2NzIzNDM5NH0.OIjoz6uoPV25Nraral4YN_gz7q6COBW3dAVIYhBy1pI';
+    errorEl.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${message}`;
+    errorEl.style.display = 'block';
+}
 
-        let supabase;
-        let allSuppliers = [];
-        let filteredSuppliers = [];
+function contactSupplier(supplierId, supplierName, email) {
+    const subject = encodeURIComponent(`Demande de renseignements - ${supplierName} via ChemSpot`);
+    const body = encodeURIComponent(`Bonjour,\n\nJe vous contacte via la plateforme ChemSpot concernant vos produits.\n\nCordialement`);
+    
+    if (email) {
+        window.open(`mailto:${email}?subject=${subject}&body=${body}`);
+    } else {
+        window.location.href = `mailto:?subject=${subject}&body=${body}`;
+    }
+}
 
-        // Initialisation
-        document.addEventListener('DOMContentLoaded', async () => {
-            try {
-                console.log('🔄 Initialisation page fournisseurs...');
-                
-                // Créer le client Supabase
-                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                console.log('✅ Client Supabase créé');
-                
-                // Mettre à jour le statut
-                updateConnectionStatus(true);
-                
-                // Charger les fournisseurs
-                await loadSuppliers();
-                
-            } catch (error) {
-                console.error('❌ Erreur initialisation:', error);
-                updateConnectionStatus(false);
-                showError('Erreur de connexion à la base de données');
-            }
-        });
+function visitWebsite(url) {
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        url = 'https://' + url;
+    }
+    window.open(url, '_blank');
+}
 
-        function updateConnectionStatus(connected) {
-            const statusEl = document.getElementById('connectionStatus');
-            if (connected) {
-                statusEl.className = 'connection-status connected';
-                statusEl.innerHTML = '✅ Connecté à la base de données';
-                statusEl.style.display = 'block';
-                setTimeout(() => {
-                    statusEl.style.display = 'none';
-                }, 3000);
-            } else {
-                statusEl.className = 'connection-status disconnected';
-                statusEl.innerHTML = '❌ Erreur de connexion';
-                statusEl.style.display = 'block';
-            }
-        }
-
-        async function loadSuppliers() {
-            try {
-                console.log('🔄 Chargement fournisseurs depuis Supabase...');
-                
-                // REQUÊTE ADAPTÉE À TES VRAIES COLONNES
-                const { data: suppliers, error } = await supabase
-                    .from('suppliers')
-                    .select('id, name, country, speciality, website')
-                    .order('name');
-
-                if (error) {
-                    console.error('❌ Erreur Supabase:', error);
-                    throw error;
-                }
-
-                console.log(`✅ ${suppliers.length} fournisseurs chargés:`, suppliers);
-                
-                allSuppliers = suppliers || [];
-                filteredSuppliers = [...allSuppliers];
-                
-                // Initialiser les filtres
-                initializeFilters();
-                
-                // Afficher les fournisseurs
-                displaySuppliers();
-                
-            } catch (error) {
-                console.error('❌ Erreur chargement:', error);
-                showError(`Erreur: ${error.message}`);
-            }
-        }
-
-        function initializeFilters() {
-            // Remplir le filtre pays
-            const countries = [...new Set(allSuppliers.map(s => s.country).filter(Boolean))];
-            const countryFilter = document.getElementById('countryFilter');
-            countryFilter.innerHTML = '<option value="">Tous les pays</option>' +
-                countries.map(country => `<option value="${country}">${country}</option>`).join('');
-
-            // Remplir le filtre spécialités
-            const specialties = [...new Set(allSuppliers.map(s => s.speciality).filter(Boolean))];
-            const specialtyFilter = document.getElementById('specialtyFilter');
-            specialtyFilter.innerHTML = '<option value="">Toutes les spécialités</option>' +
-                specialties.map(specialty => `<option value="${specialty}">${specialty}</option>`).join('');
-        }
-
-        function displaySuppliers() {
-            const loadingEl = document.getElementById('loadingMessage');
-            const errorEl = document.getElementById('errorMessage');
-            const containerEl = document.getElementById('suppliersContainer');
-            const countEl = document.getElementById('resultsCount');
-
-            // Cacher loading/error
-            loadingEl.style.display = 'none';
-            errorEl.style.display = 'none';
-
-            // Mettre à jour compteur
-            countEl.textContent = `${filteredSuppliers.length} fournisseur(s) trouvé(s)`;
-
-            if (filteredSuppliers.length === 0) {
-                containerEl.innerHTML = `
-                    <div class="empty-state" style="grid-column: 1/-1; text-align: center; padding: 3rem;">
-                        <i class="fas fa-search" style="font-size: 3rem; color: #cbd5e0; margin-bottom: 1rem;"></i>
-                        <h3 style="color: #4a5568; margin-bottom: 0.5rem;">Aucun fournisseur trouvé</h3>
-                        <p style="color: #718096;">Essayez de modifier vos critères de recherche</p>
-                    </div>
-                `;
-                containerEl.style.display = 'grid';
-                return;
-            }
-
-            // Générer les cartes
-            const suppliersHTML = filteredSuppliers.map(supplier => createSupplierCard(supplier)).join('');
-            containerEl.innerHTML = suppliersHTML;
-            containerEl.style.display = 'grid';
-
-            console.log(`✅ ${filteredSuppliers.length} fournisseurs affichés`);
-        }
-
-        function createSupplierCard(supplier) {
-            // Fonction pour obtenir emoji pays
-            function getCountryFlag(country) {
-                const flags = {
-                    'France': '🇫🇷', 'Allemagne': '🇩🇪', 'Inde': '🇮🇳', 'Chine': '🇨🇳',
-                    'Italie': '🇮🇹', 'Espagne': '🇪🇸', 'Pays-Bas': '🇳🇱', 'Belgique': '🇧🇪',
-                    'Suisse': '🇨🇭', 'Pologne': '🇵🇱', 'USA': '🇺🇸', 'États-Unis': '🇺🇸',
-                    'Japon': '🇯🇵', 'Corée': '🇰🇷', 'Brésil': '🇧🇷'
-                };
-                return flags[country] || '🌍';
-            }
-
-            return `
-                <div class="supplier-card">
-                    <div class="supplier-header">
-                        <h3 class="supplier-name">${supplier.name || 'Nom non disponible'}</h3>
-                        <div class="supplier-id">#${supplier.id}</div>
-                    </div>
-                    
-                    <div class="supplier-info">
-                        ${supplier.country ? `
-                            <div class="info-item">
-                                <span class="country-flag">${getCountryFlag(supplier.country)}</span>
-                                <strong>Pays :</strong> ${supplier.country}
-                            </div>
-                        ` : ''}
-                        
-                        ${supplier.website ? `
-                            <div class="info-item">
-                                <i class="fas fa-globe"></i>
-                                <strong>Site web :</strong> <a href="${supplier.website}" target="_blank">${supplier.website}</a>
-                            </div>
-                        ` : ''}
-                        
-                        ${supplier.speciality ? `
-                            <div class="info-item">
-                                <i class="fas fa-tags"></i>
-                                <strong>Spécialité :</strong> ${supplier.speciality}
-                            </div>
-                        ` : ''}
-                    </div>
-                    
-                    ${supplier.speciality ? `
-                        <div class="specialties">
-                            <span class="specialty-tag">${supplier.speciality}</span>
-                        </div>
-                    ` : ''}
-                    
-                    <div class="supplier-actions">
-                        <button class="btn btn-primary" onclick="contactSupplier(${supplier.id}, '${supplier.name}')">
-                            <i class="fas fa-envelope"></i> Contacter
-                        </button>
-                        ${supplier.website ? `
-                            <button class="btn btn-outline" onclick="visitWebsite('${supplier.website}')">
-                                <i class="fas fa-external-link-alt"></i> Site web
-                            </button>
-                        ` : ''}
-                        <button class="btn btn-outline" onclick="viewProducts(${supplier.id})">
-                            <i class="fas fa-eye"></i> Produits
-                        </button>
-                    </div>
-                </div>
-            `;
-        }
-
-        function filterSuppliers() {
-            const country = document.getElementById('countryFilter').value;
-            const specialty = document.getElementById('specialtyFilter').value;
-
-            filteredSuppliers = allSuppliers.filter(supplier => {
-                const matchCountry = !country || supplier.country === country;
-                const matchSpecialty = !specialty || supplier.speciality === specialty;
-                return matchCountry && matchSpecialty;
-            });
-
-            displaySuppliers();
-        }
-
-        function resetFilters() {
-            document.getElementById('countryFilter').value = '';
-            document.getElementById('specialtyFilter').value = '';
-            filteredSuppliers = [...allSuppliers];
-            displaySuppliers();
-        }
-
-        function showError(message) {
-            const loadingEl = document.getElementById('loadingMessage');
-            const errorEl = document.getElementById('errorMessage');
-            const containerEl = document.getElementById('suppliersContainer');
-            const countEl = document.getElementById('resultsCount');
-
-            loadingEl.style.display = 'none';
-            containerEl.style.display = 'none';
-            countEl.textContent = '';
-            
-            errorEl.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${message}`;
-            errorEl.style.display = 'block';
-        }
-
-        function contactSupplier(supplierId, supplierName) {
-            const subject = encodeURIComponent(`Demande de renseignements - ${supplierName} via ChemSpot`);
-            const body = encodeURIComponent(`Bonjour,\n\nJe vous contacte via la plateforme ChemSpot concernant vos produits.\n\nCordialement`);
-            
-            // Ouvrir client email par défaut
-            window.location.href = `mailto:?subject=${subject}&body=${body}`;
-        }
-
-        function visitWebsite(url) {
-            // S'assurer que l'URL a un protocole
-            if (!url.startsWith('http://') && !url.startsWith('https://')) {
-                url = 'https://' + url;
-            }
-            window.open(url, '_blank');
-        }
-
-        function viewProducts(supplierId) {
-            // Rediriger vers le catalogue avec filtre fournisseur
-            window.location.href = `catalogue.html?supplier=${supplierId}`;
-        }
-    </script>
-</body>
-</html>
+function viewProducts(supplierId) {
+    window.location.href = `catalogue.html?supplier=${supplierId}`;
+}
