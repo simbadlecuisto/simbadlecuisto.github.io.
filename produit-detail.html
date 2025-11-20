@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produit - ChemistrySpot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/components.css">
+    <link rel="stylesheet" href="./css/responsive.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        .product-detail-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        .product-header-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .product-main-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .product-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+        
+        .product-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .meta-item {
+            padding: 1rem;
+            background: var(--background);
+            border-radius: 8px;
+        }
+        
+        .meta-label {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 0.25rem;
+        }
+        
+        .meta-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+        
+        .product-description-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .section-title-detail {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .references-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .reference-card {
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: var(--transition);
+        }
+        
+        .reference-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1);
+        }
+        
+        .reference-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+        
+        .reference-grade {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .reference-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .reference-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .reference-detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem;
+            background: var(--background);
+            border-radius: 6px;
+        }
+        
+        .specs-table {
+            margin-top: 1rem;
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 1rem;
+        }
+        
+        .specs-title {
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .spec-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .spec-row:last-child {
+            border-bottom: none;
+        }
+        
+        .spec-name {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .spec-value {
+            font-weight: 600;
+            color: var(--text);
+            font-size: 0.9rem;
+        }
+        
+        .reference-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .btn-add-cart {
+            flex: 1;
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .btn-add-cart:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+        
+        .btn-quote-ref {
+            flex: 1;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .btn-quote-ref:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .back-button {
+            margin-bottom: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        
+        .back-button:hover {
+            gap: 0.75rem;
+        }
+        
+        .no-references {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-light);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/chemspotV1-dt6tDoOKp1wAyi8oRMzxzufIVBfiu9.png" alt="ChemistrySpot Logo" class="logo">
+                    <span class="logo-text">ChemistrySpot</span>
+                </div>
+                
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link">Accueil</a></li>
+                    <li><a href="catalogue.html" class="nav-link active">Catalogue</a></li>
+                    <li><a href="fournisseurs.html" class="nav-link">Fournisseurs</a></li>
+                    <li><a href="contact.html" class="nav-link">Contact</a></li>
+                </ul>
+                
+                <div class="header-actions">
+                    <button class="btn btn-outline btn-sm">
+                        <i class="fas fa-shopping-cart"></i> Panier (0)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenu principal -->
+    <div class="product-detail-container">
+        <a href="catalogue.html" class="back-button">
+            <i class="fas fa-arrow-left"></i> Retour au catalogue
+        </a>
+        
+        <!-- Loading -->
+        <div id="productLoading" style="text-align: center; padding: 4rem 2rem;">
+            <i class="fas fa-spinner fa-spin" style="font-size: 3rem; color: var(--primary);"></i>
+            <p style="margin-top: 1rem; color: var(--text-light);">Chargement du produit...</p>
+        </div>
+        
+        <!-- Contenu produit -->
+        <div id="productContent" style="display: none;">
+            <!-- En-tête produit -->
+            <div class="product-header-section">
+                <div id="productHeader"></div>
+            </div>
+            
+            <!-- Description -->
+            <div class="product-description-section" id="productDescription"></div>
+            
+            <!-- Références disponibles -->
+            <div class="references-section">
+                <h2 class="section-title-detail">
+                    <i class="fas fa-box"></i>
+                    Références disponibles
+                </h2>
+                <div id="referencesContainer"></div>
+            </div>
+        </div>
+        
+        <!-- Erreur -->
+        <div id="productError" style="display: none; text-align: center; padding: 4rem 2rem;">
+            <i class="fas fa-exclamation-triangle" style="font-size: 4rem; color: var(--warning); margin-bottom: 1rem;"></i>
+            <h3 style="color: var(--text);">Produit introuvable</h3>
+            <p style="color: var(--text-light); margin-bottom: 2rem;">Le produit demandé n'existe pas ou n'est plus disponible.</p>
+            <a href="catalogue.html" class="btn btn-primary">
+                <i class="fas fa-arrow-left"></i> Retour au catalogue
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>ChemistrySpot</h3>
+                    <p>La marketplace B2B de référence pour les matières premières pharmaceutiques.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Liens rapides</h3>
+                    <ul>
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="catalogue.html">Catalogue</a></li>
+                        <li><a href="fournisseurs.html">Fournisseurs</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Contact</h3>
+                    <p>Email: contact@chemistryspot.com</p>
+                    <p>Tél: +33 1 23 45 67 89</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 ChemistrySpot. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="./js/supabase-config.js"></script>
+    <script>
+        // ===============================================
+        // PAGE DÉTAIL PRODUIT - PRODUCT-CENTRIC
+        // ===============================================
+        
+        let currentProduct = null;
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Récupérer l'ID du produit depuis l'URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            
+            if (!productId) {
+                showError();
+                return;
+            }
+            
+            // Attendre que Supabase soit prêt
+            await waitForSupabase();
+            
+            // Charger le produit
+            await loadProductDetail(productId);
+        });
+
+        // Attendre que Supabase soit initialisé
+        async function waitForSupabase() {
+            let attempts = 0;
+            while (!window.ChemSpotDB && attempts < 20) {
+                await new Promise(resolve => setTimeout(resolve, 500));
+                attempts++;
+            }
+            if (!window.ChemSpotDB) {
+                throw new Error('ChemSpotDB non disponible');
+            }
+        }
+
+        // Charger le détail du produit
+        async function loadProductDetail(productId) {
+            try {
+                document.getElementById('productLoading').style.display = 'block';
+                document.getElementById('productContent').style.display = 'none';
+                
+                currentProduct = await window.ChemSpotDB.getProductById(parseInt(productId));
+                
+                if (!currentProduct) {
+                    showError();
+                    return;
+                }
+                
+                // Afficher le produit
+                displayProductHeader();
+                displayProductDescription();
+                displayReferences();
+                
+                document.getElementById('productLoading').style.display = 'none';
+                document.getElementById('productContent').style.display = 'block';
+                
+                console.log('✅ Produit chargé:', currentProduct);
+                
+            } catch (error) {
+                console.error('❌ Erreur chargement produit:', error);
+                showError();
+            }
+        }
+
+        // Afficher l'en-tête du produit
+        function displayProductHeader() {
+            const container = document.getElementById('productHeader');
+            
+            const html = `
+                <h1 class="product-main-title">${currentProduct.nom}</h1>
+                ${currentProduct.nom_chimique ? `<p class="product-subtitle">${currentProduct.nom_chimique}</p>` : ''}
+                
+                ${window.ChemSpotDB.createCategoryBadge(currentProduct.categorie, currentProduct.sous_categorie)}
+                
+                <div class="product-meta">
+                    <div class="meta-item">
+                        <div class="meta-label">Numéro CAS</div>
+                        <div class="meta-value">${currentProduct.cas_number || 'N/A'}</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Numéro CE</div>
+                        <div class="meta-value">${currentProduct.ce_number || 'N/A'}</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Formule chimique</div>
+                        <div class="meta-value">${currentProduct.formule_chimique || 'N/A'}</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Références disponibles</div>
+                        <div class="meta-value">${currentProduct.product_references?.length || 0}</div>
+                    </div>
+                </div>
+            `;
+            
+            container.innerHTML = html;
+        }
+
+        // Afficher la description
+        function displayProductDescription() {
+            const container = document.getElementById('productDescription');
+            
+            let html = '<h2 class="section-title-detail"><i class="fas fa-info-circle"></i> Description</h2>';
+            
+            if (currentProduct.description) {
+                html += `<p style="line-height: 1.8; color: var(--text); margin-bottom: 1.5rem;">${currentProduct.description}</p>`;
+            }
+            
+            if (currentProduct.proprietes_principales) {
+                html += `
+                    <div style="background: var(--background); padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                        <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--primary);">
+                            <i class="fas fa-flask"></i> Propriétés principales
+                        </h3>
+                        <p style="line-height: 1.6; color: var(--text);">${currentProduct.proprietes_principales}</p>
+                    </div>
+                `;
+            }
+            
+            if (currentProduct.applications) {
+                html += `
+                    <div style="background: var(--background); padding: 1.5rem; border-radius: 8px;">
+                        <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--primary);">
+                            <i class="fas fa-briefcase"></i> Applications
+                        </h3>
+                        <p style="line-height: 1.6; color: var(--text);">${currentProduct.applications}</p>
+                    </div>
+                `;
+            }
+            
+            container.innerHTML = html;
+        }
+
+        // Afficher les références
+        function displayReferences() {
+            const container = document.getElementById('referencesContainer');
+            const references = currentProduct.product_references || [];
+            
+            if (references.length === 0) {
+                container.innerHTML = `
+                    <div class="no-references">
+                        <i class="fas fa-box-open" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <p>Aucune référence disponible pour ce produit.</p>
+                        <p style="margin-top: 0.5rem;">Contactez-nous pour plus d'informations.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const html = references.map(ref => createReferenceCard(ref)).join('');
+            container.innerHTML = html;
+        }
+
+        // Créer carte de référence
+        function createReferenceCard(reference) {
+            const specs = reference.caracteristiques_techniques || [];
+            
+            return `
+                <div class="reference-card">
+                    <div class="reference-header">
+                        <div>
+                            <div class="reference-grade">${reference.grade || 'Standard'}</div>
+                            <div style="color: var(--text-light); font-size: 0.9rem; margin-top: 0.25rem;">
+                                ${reference.type_grade || ''} • ${reference.reference_code}
+                            </div>
+                        </div>
+                        <div class="reference-price">
+                            ${window.ChemSpotDB.formatPrice(reference.prix_euro)}
+                        </div>
+                    </div>
+                    
+                    <div class="reference-details">
+                        <div class="reference-detail-item">
+                            <span style="color: var(--text-light);">Conditionnement</span>
+                            <span style="font-weight: 600;">${reference.conditionnement}</span>
+                        </div>
+                        <div class="reference-detail-item">
+                            <span style="color: var(--text-light);">Disponibilité</span>
+                            ${window.ChemSpotDB.formatAvailability(reference.stock_disponible, reference.delai_livraison_jours)}
+                        </div>
+                        ${reference.delai_livraison_jours ? `
+                            <div class="reference-detail-item">
+                                <span style="color: var(--text-light);">Délai de livraison</span>
+                                <span style="font-weight: 600;">${reference.delai_livraison_jours} jours</span>
+                            </div>
+                        ` : ''}
+                    </div>
+                    
+                    ${specs.length > 0 ? `
+                        <div class="specs-table">
+                            <div class="specs-title">
+                                <i class="fas fa-microscope"></i>
+                                Spécifications techniques
+                            </div>
+                            ${specs.map(spec => `
+                                <div class="spec-row">
+                                    <span class="spec-name">${spec.nom_caracteristique}</span>
+                                    <span class="spec-value">
+                                        ${spec.valeur}
+                                        ${spec.unite ? ` ${spec.unite}` : ''}
+                                        ${spec.methode_test ? ` (${spec.methode_test})` : ''}
+                                    </span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                    
+                    <div class="reference-actions">
+                        <button class="btn-add-cart" onclick="addToCart(${reference.id})">
+                            <i class="fas fa-shopping-cart"></i> Ajouter au panier
+                        </button>
+                        <button class="btn-quote-ref" onclick="requestQuote(${reference.id})">
+                            <i class="fas fa-file-invoice"></i> Demander un devis
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Ajouter au panier
+        function addToCart(referenceId) {
+            window.ChemSpotDB.showStatus('Produit ajouté au panier (fonctionnalité à venir)', 'success');
+            console.log('Ajout au panier - référence:', referenceId);
+        }
+
+        // Demander un devis
+        function requestQuote(referenceId) {
+            window.ChemSpotDB.showStatus('Demande de devis envoyée (fonctionnalité à venir)', 'success');
+            console.log('Demande devis - référence:', referenceId);
+        }
+
+        // Afficher erreur
+        function showError() {
+            document.getElementById('productLoading').style.display = 'none';
+            document.getElementById('productContent').style.display = 'none';
+            document.getElementById('productError').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
