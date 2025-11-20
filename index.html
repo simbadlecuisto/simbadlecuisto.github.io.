@@ -267,175 +267,60 @@
     </div>
 
     <!-- Scripts -->
+    <script src="./js/supabase-config.js"></script> 
     <script src="./js/main.js"></script>
     <script src="./js/auth.js"></script>
     <script src="./js/search.js"></script>
     
     <!-- Script Base de Données CORRIGÉ -->
     <script>
-        // Configuration Supabase
-        const SUPABASE_URL = 'https://jkaffpgqbyhuihvyvtld.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE2NTgzOTQsImV4cCI6MjA2NzIzNDM5NH0.OIjoz6uoPV25Nraral4YN_gz7q6COBW3dAVIYhBy1pI';
-
-        let supabase;
-        let allProducts = [];
-        let allSuppliers = [];
-
-        // Initialisation de la base de données
-        document.addEventListener('DOMContentLoaded', async () => {
-            try {
-                // Attendre que Supabase soit chargé
-                if (typeof window.supabase === 'undefined') {
-                    console.log('⏳ Attente du chargement de Supabase...');
-                    setTimeout(() => location.reload(), 1000);
-                    return;
-                }
-                
-                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                await loadDatabaseData();
-                console.log('✅ Base de données connectée !');
-                showStatus('✅ DB connectée', 'success');
-            } catch (error) {
-                console.error('❌ Erreur DB:', error);
-                showStatus('❌ Erreur DB', 'error');
-            }
-        });
-
-        // Charger les données - CORRIGÉ POUR LES SUPPLIERS
-        async function loadDatabaseData() {
-            try {
-                console.log('🔄 Chargement des données...');
-                
-                // Charger les fournisseurs - COLONNES CORRECTES
-                const { data: suppliers, error: suppliersError } = await supabase
-                    .from('suppliers')
-                    .select('id, name, country, speciality, website');
-                
-                if (suppliersError) {
-                    console.error('❌ Erreur suppliers:', suppliersError);
-                    allSuppliers = [];
-                } else {
-                    allSuppliers = suppliers || [];
-                    console.log(`✅ ${allSuppliers.length} fournisseurs chargés`);
-                }
-                
-                // Charger les produits
-                const { data: products, error: productsError } = await supabase
-                    .from('products')
-                    .select('*');
-                
-                if (productsError) {
-                    console.error('❌ Erreur products:', productsError);
-                    allProducts = [];
-                } else {
-                    allProducts = products || [];
-                    console.log(`✅ ${allProducts.length} produits chargés`);
-                }
-                
-                // Charger les devis
-                const { data: quotes, error: quotesError } = await supabase
-                    .from('quotes')
-                    .select('id');
-                
-                if (quotesError) {
-                    console.error('❌ Erreur quotes:', quotesError);
-                }
-                
-                // Mettre à jour les stats avec les vraies données
-                updateStats(allSuppliers.length, allProducts.length, quotes?.length || 0);
-                
-                console.log('📊 Données chargées:', {
-                    fournisseurs: allSuppliers.length,
-                    produits: allProducts.length,
-                    devis: quotes?.length || 0
-                });
-                
-            } catch (error) {
-                console.error('❌ Erreur chargement:', error);
-                // Données de fallback en cas d'erreur
-                updateStats(15, 50, 10);
-            }
+    // Mettre à jour les stats au chargement
+    document.addEventListener('DOMContentLoaded', async () => {
+        // Attendre que ChemSpotDB soit prêt
+        let attempts = 0;
+        while (!window.ChemSpotDB && attempts < 20) {
+            await new Promise(resolve => setTimeout(resolve, 500));
+            attempts++;
         }
-
-        // Mettre à jour les statistiques
-        function updateStats(suppliers, products, quotes) {
-            updateCounter('statsSuppliers', suppliers);
-            updateCounter('statsProducts', products);
-            updateCounter('statsQuotes', quotes);
+        
+        if (window.ChemSpotDB) {
+            const stats = window.ChemSpotDB.getStats();
+            updateCounter('statsProducts', stats.totalProducts);
+            updateCounter('statsSuppliers', stats.suppliers);
         }
-
-        // Animation compteur
-        function updateCounter(elementId, targetValue) {
-            const element = document.getElementById(elementId);
-            if (!element) return;
-            
-            let current = 0;
-            const increment = Math.ceil(targetValue / 20);
-            
-            const timer = setInterval(() => {
-                current += increment;
-                if (current >= targetValue) {
-                    current = targetValue;
-                    clearInterval(timer);
-                }
-                element.textContent = current;
-            }, 50);
-        }
-
-        // Fonction de recherche (écrase celle existante)
-        function performSearch(event) {
-            if (event) event.preventDefault();
-            
-            const query = document.getElementById('searchInput')?.value?.trim();
-            if (!query) {
-                alert('Veuillez saisir un terme de recherche');
-                return;
+    });
+    
+    // Fonction animation compteur
+    function updateCounter(elementId, targetValue) {
+        const element = document.getElementById(elementId);
+        if (!element) return;
+        
+        let current = 0;
+        const increment = Math.ceil(targetValue / 30);
+        
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= targetValue) {
+                current = targetValue;
+                clearInterval(timer);
             }
-            
-            console.log('🔍 Recherche:', query);
-            
-            if (allProducts.length === 0) {
-                alert('Base de données en cours de chargement, veuillez patienter...');
-                return;
-            }
-            
-            // Recherche dans les données
-            const results = allProducts.filter(product => 
-                product.name.toLowerCase().includes(query.toLowerCase()) ||
-                (product.cas_number && product.cas_number.toLowerCase().includes(query.toLowerCase())) ||
-                (product.formula && product.formula.toLowerCase().includes(query.toLowerCase())) ||
-                product.category.toLowerCase().includes(query.toLowerCase())
-            );
-            
-            console.log('📊 Résultats:', results.length);
-            
-            if (results.length > 0) {
-                // Rediriger vers le catalogue
-                sessionStorage.setItem('searchResults', JSON.stringify(results));
-                sessionStorage.setItem('searchQuery', query);
-                window.location.href = 'catalogue.html';
-            } else {
-                alert(`❌ Aucun résultat pour "${query}"\n\nEssayez: "acide", "éthanol", "chloroforme", "solvant"`);
-            }
+            element.textContent = current;
+        }, 30);
+    }
+    
+    // Fonction recherche
+    function performSearch(event) {
+        if (event) event.preventDefault();
+        
+        const query = document.getElementById('searchInput')?.value?.trim();
+        if (!query) {
+            alert('Veuillez saisir un terme de recherche');
+            return;
         }
-
-        // Afficher message de statut
-        function showStatus(message, type) {
-            const div = document.createElement('div');
-            div.style.cssText = `
-                position: fixed; top: 20px; right: 20px; padding: 12px 20px;
-                border-radius: 6px; color: white; font-weight: 600; z-index: 10000;
-                ${type === 'success' ? 'background: #10b981;' : 'background: #ef4444;'}
-            `;
-            div.textContent = message;
-            document.body.appendChild(div);
-            setTimeout(() => div.remove(), 3000);
-        }
-
-        // Rendre disponible globalement
-        window.performSearch = performSearch;
-        window.allSuppliers = allSuppliers;
-        window.allProducts = allProducts;
-    </script>
+        
+        // Rediriger vers le catalogue avec la recherche
+        window.location.href = `catalogue.html?search=${encodeURIComponent(query)}`;
+    }
+</script>
 </body>
 </html>
