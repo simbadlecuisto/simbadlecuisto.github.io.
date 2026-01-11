@@ -56,7 +56,7 @@ async function loadAllData() {
         
         // Charger produits
         const { data: products, error: productsError } = await supabase
-            .from('produits')
+            .from('excipients')  // ✅ NOUVELLE TABLE
             .select('*')
             .eq('actif', true)
             .order('nom');
@@ -65,21 +65,11 @@ async function loadAllData() {
         productsCache = products || [];
         console.log(`✅ ${productsCache.length} produits chargés`);
         
-        // Charger références
-        const { data: references, error: referencesError } = await supabase
-            .from('product_references')
-            .select('*')
-            .eq('actif', true)
-            .order('prix_euro');
         
         if (referencesError) throw referencesError;
         referencesCache = references || [];
         console.log(`✅ ${referencesCache.length} références chargées`);
         
-        // Charger caractéristiques
-        const { data: specs, error: specsError } = await supabase
-            .from('caracteristiques_techniques')
-            .select('*');
         
         if (specsError) throw specsError;
         specsCache = specs || [];
@@ -102,7 +92,7 @@ async function loadAllData() {
 async function getAllProductsWithReferences() {
     try {
         const { data, error } = await supabase
-            .from('produits')
+            .from('excipients')  // ✅ NOUVELLE TABLE
             .select(`
                 *,
                 product_references (
@@ -126,7 +116,7 @@ async function getAllProductsWithReferences() {
 async function getProductById(productId) {
     try {
         const { data, error } = await supabase
-            .from('produits')
+            .from('excipients')  // ✅ NOUVELLE TABLE
             .select(`
                 *,
                 product_references (
@@ -151,7 +141,7 @@ async function getProductById(productId) {
 async function getProductByCAS(casNumber) {
     try {
         const { data, error } = await supabase
-            .from('produits')
+            .from('excipients')  // ✅ NOUVELLE TABLE
             .select(`
                 *,
                 product_references (
@@ -176,7 +166,7 @@ async function getProductByCAS(casNumber) {
 async function searchProducts(query, filters = {}) {
     try {
         let queryBuilder = supabase
-            .from('produits')
+            .from('excipients')  // ✅ NOUVELLE TABLE
             .select(`
                 *,
                 product_references (
