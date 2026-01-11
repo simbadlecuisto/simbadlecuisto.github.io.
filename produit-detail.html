@@ -3,580 +3,550 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Produit - ChemistrySpot</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="./css/main.css">
-    <link rel="stylesheet" href="./css/components.css">
-    <link rel="stylesheet" href="./css/responsive.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <title>Détail Excipient - ChemistrySpot</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/responsive.css">
     
     <style>
-        .product-detail-container {
+        /* Styles spécifiques page détail */
+        .detail-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem 1rem;
-        }
-        
-        .product-header-section {
-            background: white;
             padding: 2rem;
+        }
+
+        .breadcrumb {
+            margin-bottom: 2rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .product-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem;
             border-radius: 12px;
             margin-bottom: 2rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-        
-        .product-main-title {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
+
+        .product-header h1 {
+            margin: 0 0 0.5rem 0;
+            font-size: 2.5rem;
         }
-        
+
         .product-subtitle {
-            font-size: 1.1rem;
-            color: var(--text-light);
-            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 1rem;
         }
-        
-        .product-meta {
+
+        .product-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .tag {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .tabs-container {
+            margin-top: 2rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            border-bottom: 2px solid #e0e0e0;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #666;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .tab:hover {
+            color: #667eea;
+        }
+
+        .tab.active {
+            color: #667eea;
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .info-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1.5rem;
-            margin-top: 1.5rem;
-        }
-        
-        .meta-item {
-            padding: 1rem;
-            background: var(--background);
-            border-radius: 8px;
-        }
-        
-        .meta-label {
-            font-size: 0.85rem;
-            color: var(--text-light);
-            margin-bottom: 0.25rem;
-        }
-        
-        .meta-value {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--text);
-        }
-        
-        .product-description-section {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
             margin-bottom: 2rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-        
-        .section-title-detail {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .references-section {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        
-        .reference-card {
-            border: 2px solid #e5e7eb;
-            border-radius: 12px;
+
+        .info-card {
+            background: #f8f9fa;
             padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-card h3 {
+            margin: 0 0 0.5rem 0;
+            color: #333;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-card p {
+            margin: 0;
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .info-card code {
+            background: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+        }
+
+        .content-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
             margin-bottom: 1.5rem;
-            transition: var(--transition);
         }
-        
-        .reference-card:hover {
-            border-color: var(--primary);
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1);
-        }
-        
-        .reference-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
+
+        .content-section h3 {
+            color: #667eea;
+            margin-top: 0;
             margin-bottom: 1rem;
         }
-        
-        .reference-grade {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--primary);
+
+        .content-section ul {
+            padding-left: 1.5rem;
         }
-        
-        .reference-price {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary);
+
+        .content-section li {
+            margin-bottom: 0.5rem;
+            color: #666;
+            line-height: 1.6;
         }
-        
-        .reference-details {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
+
+        .alert-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem 1.5rem;
+            border-radius: 4px;
             margin-bottom: 1rem;
         }
-        
-        .reference-detail-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.5rem;
-            background: var(--background);
-            border-radius: 6px;
+
+        .alert-box h4 {
+            margin: 0 0 0.5rem 0;
+            color: #856404;
         }
-        
-        .specs-table {
-            margin-top: 1rem;
-            background: #f9fafb;
-            border-radius: 8px;
-            padding: 1rem;
+
+        .alert-box p {
+            margin: 0;
+            color: #856404;
         }
-        
-        .specs-title {
-            font-weight: 600;
-            color: var(--text);
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .spec-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.5rem 0;
-            border-bottom: 1px solid #e5e7eb;
-        }
-        
-        .spec-row:last-child {
-            border-bottom: none;
-        }
-        
-        .spec-name {
-            color: var(--text-light);
-            font-size: 0.9rem;
-        }
-        
-        .spec-value {
-            font-weight: 600;
-            color: var(--text);
-            font-size: 0.9rem;
-        }
-        
-        .reference-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        
-        .btn-add-cart {
-            flex: 1;
-            background: var(--success);
-            color: white;
-            border: none;
-            padding: 1rem;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        
-        .btn-add-cart:hover {
-            background: #059669;
-            transform: translateY(-2px);
-        }
-        
-        .btn-quote-ref {
-            flex: 1;
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 1rem;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        
-        .btn-quote-ref:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-        }
-        
+
         .back-button {
-            margin-bottom: 1rem;
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            color: var(--primary);
+            padding: 0.8rem 1.5rem;
+            background: #667eea;
+            color: white;
             text-decoration: none;
-            font-weight: 600;
-            transition: var(--transition);
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.3s;
+            margin-bottom: 2rem;
         }
-        
+
         .back-button:hover {
-            gap: 0.75rem;
+            background: #5568d3;
+            transform: translateX(-5px);
         }
-        
-        .no-references {
+
+        .loading {
             text-align: center;
-            padding: 3rem;
-            color: var(--text-light);
+            padding: 4rem;
+            color: #666;
+        }
+
+        .error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 2rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .chemical-structure {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+
+        .chemical-structure code {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            word-break: break-all;
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
+    <!-- Navigation -->
+    <nav class="navbar">
         <div class="container">
-            <div class="header-content">
-                <div class="logo-section">
-                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/chemspotV1-dt6tDoOKp1wAyi8oRMzxzufIVBfiu9.png" alt="ChemistrySpot Logo" class="logo">
+            <div class="nav-brand">
+                <a href="index.html">
+                    <span class="logo-icon">⚗️</span>
                     <span class="logo-text">ChemistrySpot</span>
-                </div>
-                
-                <ul class="nav-menu">
-                    <li><a href="index.html" class="nav-link">Accueil</a></li>
-                    <li><a href="catalogue.html" class="nav-link active">Catalogue</a></li>
-                    <li><a href="fournisseurs.html" class="nav-link">Fournisseurs</a></li>
-                    <li><a href="contact.html" class="nav-link">Contact</a></li>
-                </ul>
-                
-                <div class="header-actions">
-                    <button class="btn btn-outline btn-sm">
-                        <i class="fas fa-shopping-cart"></i> Panier (0)
-                    </button>
-                </div>
+                </a>
             </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="catalogue.html" class="active">Catalogue</a></li>
+                <li><a href="fournisseurs.html">Fournisseurs</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
         </div>
-    </header>
+    </nav>
 
     <!-- Contenu principal -->
-    <div class="product-detail-container">
-        <a href="catalogue.html" class="back-button">
-            <i class="fas fa-arrow-left"></i> Retour au catalogue
-        </a>
-        
-        <!-- Loading -->
-        <div id="productLoading" style="text-align: center; padding: 4rem 2rem;">
-            <i class="fas fa-spinner fa-spin" style="font-size: 3rem; color: var(--primary);"></i>
-            <p style="margin-top: 1rem; color: var(--text-light);">Chargement du produit...</p>
-        </div>
-        
-        <!-- Contenu produit -->
-        <div id="productContent" style="display: none;">
-            <!-- En-tête produit -->
-            <div class="product-header-section">
-                <div id="productHeader"></div>
-            </div>
-            
-            <!-- Description -->
-            <div class="product-description-section" id="productDescription"></div>
-            
-            <!-- Références disponibles -->
-            <div class="references-section">
-                <h2 class="section-title-detail">
-                    <i class="fas fa-box"></i>
-                    Références disponibles
-                </h2>
-                <div id="referencesContainer"></div>
-            </div>
-        </div>
-        
-        <!-- Erreur -->
-        <div id="productError" style="display: none; text-align: center; padding: 4rem 2rem;">
-            <i class="fas fa-exclamation-triangle" style="font-size: 4rem; color: var(--warning); margin-bottom: 1rem;"></i>
-            <h3 style="color: var(--text);">Produit introuvable</h3>
-            <p style="color: var(--text-light); margin-bottom: 2rem;">Le produit demandé n'existe pas ou n'est plus disponible.</p>
-            <a href="catalogue.html" class="btn btn-primary">
-                <i class="fas fa-arrow-left"></i> Retour au catalogue
+    <main>
+        <div class="detail-container">
+            <!-- Bouton retour -->
+            <a href="catalogue.html" class="back-button">
+                ← Retour au catalogue
             </a>
+
+            <!-- Loading state -->
+            <div id="loading" class="loading">
+                <h2>Chargement des données...</h2>
+            </div>
+
+            <!-- Error state -->
+            <div id="error" class="error" style="display: none;">
+                <h2>⚠️ Erreur de chargement</h2>
+                <p id="error-message"></p>
+                <a href="catalogue.html" style="color: #721c24; text-decoration: underline;">Retour au catalogue</a>
+            </div>
+
+            <!-- Product content (hidden until loaded) -->
+            <div id="product-content" style="display: none;">
+                <!-- Header -->
+                <div class="product-header">
+                    <h1 id="product-name">-</h1>
+                    <p class="product-subtitle" id="product-chemical-name">-</p>
+                    <div class="product-tags">
+                        <span class="tag" id="cas-tag">CAS: -</span>
+                        <span class="tag" id="formula-tag">Formule: -</span>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <div class="tabs-container">
+                    <div class="tabs">
+                        <button class="tab active" onclick="switchTab('caracteristiques')">
+                            🔬 Caractéristiques
+                        </button>
+                        <button class="tab" onclick="switchTab('utilisation')">
+                            💊 Utilisation
+                        </button>
+                        <button class="tab" onclick="switchTab('precautions')">
+                            ⚠️ Précautions
+                        </button>
+                        <button class="tab" onclick="switchTab('chimie')">
+                            ⚛️ Données chimiques
+                        </button>
+                        <button class="tab" onclick="switchTab('references')">
+                            📚 Références
+                        </button>
+                    </div>
+
+                    <!-- Tab 1: Caractéristiques -->
+                    <div id="tab-caracteristiques" class="tab-content active">
+                        <div class="info-grid">
+                            <div class="info-card">
+                                <h3>Numéro CAS</h3>
+                                <p><code id="cas-number">-</code></p>
+                            </div>
+                            <div class="info-card">
+                                <h3>Formule chimique</h3>
+                                <p><code id="formula">-</code></p>
+                            </div>
+                            <div class="info-card">
+                                <h3>Masse molaire</h3>
+                                <p id="masse-molaire">-</p>
+                            </div>
+                            <div class="info-card">
+                                <h3>PubChem CID</h3>
+                                <p><code id="cid-pubchem">-</code></p>
+                            </div>
+                        </div>
+
+                        <div class="content-section">
+                            <h3>Fonction principale</h3>
+                            <p id="fonction-principale">-</p>
+                        </div>
+
+                        <div class="content-section">
+                            <h3>Propriétés clés</h3>
+                            <div id="proprietes-cles">-</div>
+                        </div>
+                    </div>
+
+                    <!-- Tab 2: Utilisation -->
+                    <div id="tab-utilisation" class="tab-content">
+                        <div class="content-section">
+                            <h3>Utilisation typique</h3>
+                            <div id="utilisation-typique">-</div>
+                        </div>
+                    </div>
+
+                    <!-- Tab 3: Précautions -->
+                    <div id="tab-precautions" class="tab-content">
+                        <div class="alert-box">
+                            <h4>⚠️ Important</h4>
+                            <p>Ces informations sont fournies à titre indicatif. Consultez toujours les fiches de données de sécurité (FDS) officielles.</p>
+                        </div>
+                        <div class="content-section">
+                            <h3>Précautions d'emploi</h3>
+                            <div id="precautions">-</div>
+                        </div>
+                    </div>
+
+                    <!-- Tab 4: Données chimiques -->
+                    <div id="tab-chimie" class="tab-content">
+                        <div class="content-section">
+                            <h3>Nom IUPAC</h3>
+                            <p id="iupac-name" style="color: #666;">-</p>
+                        </div>
+
+                        <div class="content-section">
+                            <h3>SMILES</h3>
+                            <div class="chemical-structure">
+                                <code id="smiles">-</code>
+                            </div>
+                        </div>
+
+                        <div class="content-section">
+                            <h3>InChI</h3>
+                            <div class="chemical-structure">
+                                <code id="inchi">-</code>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab 5: Références -->
+                    <div id="tab-references" class="tab-content">
+                        <div class="content-section">
+                            <h3>Références pharmaceutiques</h3>
+                            <div id="references-pharma">-</div>
+                        </div>
+
+                        <div class="content-section">
+                            <h3>Liens externes</h3>
+                            <ul id="external-links">
+                                <li><a href="#" id="pubchem-link" target="_blank">Voir sur PubChem</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+    </main>
 
     <!-- Footer -->
-    <footer>
+    <footer class="footer">
         <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h3>ChemistrySpot</h3>
-                    <p>La marketplace B2B de référence pour les matières premières pharmaceutiques.</p>
-                </div>
-                
-                <div class="footer-column">
-                    <h3>Liens rapides</h3>
-                    <ul>
-                        <li><a href="index.html">Accueil</a></li>
-                        <li><a href="catalogue.html">Catalogue</a></li>
-                        <li><a href="fournisseurs.html">Fournisseurs</a></li>
-                        <li><a href="contact.html">Contact</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-column">
-                    <h3>Contact</h3>
-                    <p>Email: contact@chemistryspot.com</p>
-                    <p>Tél: +33 1 23 45 67 89</p>
-                </div>
-            </div>
-            
-            <div class="footer-bottom">
-                <p>&copy; 2025 ChemistrySpot. Tous droits réservés.</p>
-            </div>
+            <p>&copy; 2025 ChemistrySpot. Plateforme B2B d'excipients pharmaceutiques.</p>
         </div>
     </footer>
 
-    <!-- Scripts -->
-    <script src="./js/supabase-config.js"></script>
-    <script>
-        // ===============================================
-        // PAGE DÉTAIL PRODUIT - PRODUCT-CENTRIC
-        // ===============================================
-        
-        let currentProduct = null;
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
 
-        // Initialisation
-        document.addEventListener('DOMContentLoaded', async () => {
-            // Récupérer l'ID du produit depuis l'URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const productId = urlParams.get('id');
+    <script>
+        // Fonction switch tabs
+        function switchTab(tabName) {
+            // Désactiver tous les tabs
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            // Activer le tab sélectionné
+            event.target.classList.add('active');
+            document.getElementById('tab-' + tabName).classList.add('active');
+        }
+
+        // Récupérer ID depuis URL
+        function getProductId() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('id');
+        }
+
+        // Charger les données du produit
+        async function loadProduct() {
+            const productId = getProductId();
             
             if (!productId) {
-                showError();
+                showError('Aucun produit spécifié dans l\'URL');
                 return;
             }
-            
-            // Attendre que Supabase soit prêt
-            await waitForSupabase();
-            
-            // Charger le produit
-            await loadProductDetail(productId);
-        });
 
-        // Attendre que Supabase soit initialisé
-        async function waitForSupabase() {
-            let attempts = 0;
-            while (!window.ChemSpotDB && attempts < 20) {
-                await new Promise(resolve => setTimeout(resolve, 500));
-                attempts++;
-            }
-            if (!window.ChemSpotDB) {
-                throw new Error('ChemSpotDB non disponible');
-            }
-        }
-
-        // Charger le détail du produit
-        async function loadProductDetail(productId) {
             try {
-                document.getElementById('productLoading').style.display = 'block';
-                document.getElementById('productContent').style.display = 'none';
+                const { data, error } = await supabaseClient
+                    .from('excipients')
+                    .select('*')
+                    .eq('id', productId)
+                    .single();
+
+                if (error) throw error;
                 
-                currentProduct = await window.ChemSpotDB.getProductById(parseInt(productId));
-                
-                if (!currentProduct) {
-                    showError();
+                if (!data) {
+                    showError('Produit non trouvé');
                     return;
                 }
-                
-                // Afficher le produit
-                displayProductHeader();
-                displayProductDescription();
-                displayReferences();
-                
-                document.getElementById('productLoading').style.display = 'none';
-                document.getElementById('productContent').style.display = 'block';
-                
-                console.log('✅ Produit chargé:', currentProduct);
+
+                displayProduct(data);
                 
             } catch (error) {
-                console.error('❌ Erreur chargement produit:', error);
-                showError();
+                console.error('Erreur:', error);
+                showError('Erreur de chargement: ' + error.message);
             }
         }
 
-        // Afficher l'en-tête du produit
-        function displayProductHeader() {
-            const container = document.getElementById('productHeader');
-            
-            const html = `
-                <h1 class="product-main-title">${currentProduct.nom}</h1>
-                ${currentProduct.nom_chimique ? `<p class="product-subtitle">${currentProduct.nom_chimique}</p>` : ''}
-                
-                ${window.ChemSpotDB.createCategoryBadge(currentProduct.categorie, currentProduct.sous_categorie)}
-                
-                <div class="product-meta">
-                    <div class="meta-item">
-                        <div class="meta-label">Numéro CAS</div>
-                        <div class="meta-value">${currentProduct.cas_number || 'N/A'}</div>
-                    </div>
-                    <div class="meta-item">
-                        <div class="meta-label">Numéro CE</div>
-                        <div class="meta-value">${currentProduct.ce_number || 'N/A'}</div>
-                    </div>
-                    <div class="meta-item">
-                        <div class="meta-label">Formule chimique</div>
-                        <div class="meta-value">${currentProduct.formule_chimique || 'N/A'}</div>
-                    </div>
-                    <div class="meta-item">
-                        <div class="meta-label">Références disponibles</div>
-                        <div class="meta-value">${currentProduct.product_references?.length || 0}</div>
-                    </div>
-                </div>
-            `;
-            
-            container.innerHTML = html;
+        // Afficher le produit
+        function displayProduct(product) {
+            // Header
+            document.getElementById('product-name').textContent = product.nom_commun || '-';
+            document.getElementById('product-chemical-name').textContent = product.nom_chimique || '-';
+            document.getElementById('cas-tag').textContent = 'CAS: ' + (product.cas_number || '-');
+            document.getElementById('formula-tag').textContent = 'Formule: ' + (product.formule || '-');
+
+            // Tab Caractéristiques
+            document.getElementById('cas-number').textContent = product.cas_number || '-';
+            document.getElementById('formula').textContent = product.formule || '-';
+            document.getElementById('masse-molaire').textContent = product.masse_molaire ? product.masse_molaire + ' g/mol' : '-';
+            document.getElementById('cid-pubchem').textContent = product.cid_pubchem || '-';
+            document.getElementById('fonction-principale').textContent = product.fonction_principale || '-';
+            document.getElementById('proprietes-cles').innerHTML = formatText(product.proprietes_cles);
+
+            // Tab Utilisation
+            document.getElementById('utilisation-typique').innerHTML = formatText(product.utilisation_typique);
+
+            // Tab Précautions
+            document.getElementById('precautions').innerHTML = formatText(product.precautions);
+
+            // Tab Chimie
+            document.getElementById('iupac-name').textContent = product.iupac_name || '-';
+            document.getElementById('smiles').textContent = product.smiles || '-';
+            document.getElementById('inchi').textContent = product.inchi || '-';
+
+            // Tab Références
+            document.getElementById('references-pharma').innerHTML = formatText(product.references_pharma);
+
+            // Lien PubChem
+            if (product.cid_pubchem) {
+                document.getElementById('pubchem-link').href = `https://pubchem.ncbi.nlm.nih.gov/compound/${product.cid_pubchem}`;
+            }
+
+            // Afficher le contenu
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('product-content').style.display = 'block';
+
+            // Mettre à jour le titre de la page
+            document.title = `${product.nom_commun || 'Excipient'} - ChemistrySpot`;
         }
 
-        // Afficher la description
-        function displayProductDescription() {
-            const container = document.getElementById('productDescription');
+        // Formater texte (convertir retours ligne en <br> ou listes)
+        function formatText(text) {
+            if (!text) return '-';
             
-            let html = '<h2 class="section-title-detail"><i class="fas fa-info-circle"></i> Description</h2>';
-            
-            if (currentProduct.description) {
-                html += `<p style="line-height: 1.8; color: var(--text); margin-bottom: 1.5rem;">${currentProduct.description}</p>`;
+            // Si le texte contient des tirets ou des puces, créer une liste
+            if (text.includes('-') || text.includes('•') || text.includes('\n-')) {
+                const lines = text.split('\n').filter(line => line.trim());
+                if (lines.length > 1) {
+                    return '<ul>' + lines.map(line => {
+                        const cleaned = line.trim().replace(/^[-•]\s*/, '');
+                        return cleaned ? `<li>${cleaned}</li>` : '';
+                    }).join('') + '</ul>';
+                }
             }
             
-            if (currentProduct.proprietes_principales) {
-                html += `
-                    <div style="background: var(--background); padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
-                        <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--primary);">
-                            <i class="fas fa-flask"></i> Propriétés principales
-                        </h3>
-                        <p style="line-height: 1.6; color: var(--text);">${currentProduct.proprietes_principales}</p>
-                    </div>
-                `;
-            }
-            
-            if (currentProduct.applications) {
-                html += `
-                    <div style="background: var(--background); padding: 1.5rem; border-radius: 8px;">
-                        <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--primary);">
-                            <i class="fas fa-briefcase"></i> Applications
-                        </h3>
-                        <p style="line-height: 1.6; color: var(--text);">${currentProduct.applications}</p>
-                    </div>
-                `;
-            }
-            
-            container.innerHTML = html;
-        }
-
-        // Afficher les références
-        function displayReferences() {
-            const container = document.getElementById('referencesContainer');
-            const references = currentProduct.product_references || [];
-            
-            if (references.length === 0) {
-                container.innerHTML = `
-                    <div class="no-references">
-                        <i class="fas fa-box-open" style="font-size: 3rem; margin-bottom: 1rem;"></i>
-                        <p>Aucune référence disponible pour ce produit.</p>
-                        <p style="margin-top: 0.5rem;">Contactez-nous pour plus d'informations.</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            const html = references.map(ref => createReferenceCard(ref)).join('');
-            container.innerHTML = html;
-        }
-
-        // Créer carte de référence
-        function createReferenceCard(reference) {
-            const specs = reference.caracteristiques_techniques || [];
-            
-            return `
-                <div class="reference-card">
-                    <div class="reference-header">
-                        <div>
-                            <div class="reference-grade">${reference.grade || 'Standard'}</div>
-                            <div style="color: var(--text-light); font-size: 0.9rem; margin-top: 0.25rem;">
-                                ${reference.type_grade || ''} • ${reference.reference_code}
-                            </div>
-                        </div>
-                        <div class="reference-price">
-                            ${window.ChemSpotDB.formatPrice(reference.prix_euro)}
-                        </div>
-                    </div>
-                    
-                    <div class="reference-details">
-                        <div class="reference-detail-item">
-                            <span style="color: var(--text-light);">Conditionnement</span>
-                            <span style="font-weight: 600;">${reference.conditionnement}</span>
-                        </div>
-                        <div class="reference-detail-item">
-                            <span style="color: var(--text-light);">Disponibilité</span>
-                            ${window.ChemSpotDB.formatAvailability(reference.stock_disponible, reference.delai_livraison_jours)}
-                        </div>
-                        ${reference.delai_livraison_jours ? `
-                            <div class="reference-detail-item">
-                                <span style="color: var(--text-light);">Délai de livraison</span>
-                                <span style="font-weight: 600;">${reference.delai_livraison_jours} jours</span>
-                            </div>
-                        ` : ''}
-                    </div>
-                    
-                    ${specs.length > 0 ? `
-                        <div class="specs-table">
-                            <div class="specs-title">
-                                <i class="fas fa-microscope"></i>
-                                Spécifications techniques
-                            </div>
-                            ${specs.map(spec => `
-                                <div class="spec-row">
-                                    <span class="spec-name">${spec.nom_caracteristique}</span>
-                                    <span class="spec-value">
-                                        ${spec.valeur}
-                                        ${spec.unite ? ` ${spec.unite}` : ''}
-                                        ${spec.methode_test ? ` (${spec.methode_test})` : ''}
-                                    </span>
-                                </div>
-                            `).join('')}
-                        </div>
-                    ` : ''}
-                    
-                    <div class="reference-actions">
-                        <button class="btn-add-cart" onclick="addToCart(${reference.id})">
-                            <i class="fas fa-shopping-cart"></i> Ajouter au panier
-                        </button>
-                        <button class="btn-quote-ref" onclick="requestQuote(${reference.id})">
-                            <i class="fas fa-file-invoice"></i> Demander un devis
-                        </button>
-                    </div>
-                </div>
-            `;
-        }
-
-        // Ajouter au panier
-        function addToCart(referenceId) {
-            window.ChemSpotDB.showStatus('Produit ajouté au panier (fonctionnalité à venir)', 'success');
-            console.log('Ajout au panier - référence:', referenceId);
-        }
-
-        // Demander un devis
-        function requestQuote(referenceId) {
-            window.ChemSpotDB.showStatus('Demande de devis envoyée (fonctionnalité à venir)', 'success');
-            console.log('Demande devis - référence:', referenceId);
+            // Sinon, simple paragraphe avec retours ligne
+            return '<p>' + text.replace(/\n/g, '<br>') + '</p>';
         }
 
         // Afficher erreur
-        function showError() {
-            document.getElementById('productLoading').style.display = 'none';
-            document.getElementById('productContent').style.display = 'none';
-            document.getElementById('productError').style.display = 'block';
+        function showError(message) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('error').style.display = 'block';
+            document.getElementById('error-message').textContent = message;
         }
+
+        // Charger au démarrage
+        window.addEventListener('DOMContentLoaded', loadProduct);
     </script>
 </body>
 </html>
