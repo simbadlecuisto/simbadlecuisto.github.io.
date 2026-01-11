@@ -220,10 +220,10 @@
             displayExcipients();
         }
 
-        // Voir détails
-        function viewExcipient(id) {
-            alert(`Fiche détaillée excipient ID: ${id}\n(Page en construction)`);
-        }
+     // NOUVEAU
+function viewExcipient(id) {
+    window.location.href = `produit-detail.html?id=${id}`;
+}
 
         // Afficher erreur
         function showError() {
