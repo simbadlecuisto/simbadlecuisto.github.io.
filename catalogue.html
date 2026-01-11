@@ -458,5 +458,93 @@
             document.getElementById('totalCategories').textContent = categories;
         }
     </script>
+<script>
+// Script de chargement du catalogue
+document.addEventListener('DOMContentLoaded', async () => {
+    console.log('📦 Chargement du catalogue...');
+    
+    // Attendre que ChemSpotDB soit prêt
+    let attempts = 0;
+    while (!window.ChemSpotDB && attempts < 20) {
+        await new Promise(resolve => setTimeout(resolve, 500));
+        attempts++;
+    }
+    
+    if (!window.ChemSpotDB) {
+        console.error('❌ ChemSpotDB non disponible');
+        return;
+    }
+    
+    try {
+        // Charger les excipients
+        const excipients = await window.ChemSpotDB.getAllExcipients();
+        console.log(`✅ ${excipients.length} excipients chargés`);
+        
+        // Afficher dans le catalogue
+        displayExcipients(excipients);
+        
+    } catch (error) {
+        console.error('❌ Erreur chargement catalogue:', error);
+    }
+});
+
+// Fonction d'affichage des excipients
+function displayExcipients(excipients) {
+    const container = document.getElementById('productsContainer') || 
+                     document.querySelector('.products-grid') ||
+                     document.querySelector('.catalogue-grid');
+    
+    if (!container) {
+        console.error('❌ Container produits non trouvé');
+        return;
+    }
+    
+    // Vider le loading
+    container.innerHTML = '';
+    
+    // Si aucun excipient
+    if (!excipients || excipients.length === 0) {
+        container.innerHTML = '<p class="no-results">Aucun excipient trouvé</p>';
+        return;
+    }
+    
+    // Afficher les excipients
+    excipients.forEach(excipient => {
+        const card = createExcipientCard(excipient);
+        container.innerHTML += card;
+    });
+    
+    console.log(`✅ ${excipients.length} excipients affichés`);
+}
+
+// Créer une carte excipient
+function createExcipientCard(excipient) {
+    return `
+        <div class="product-card">
+            <div class="product-header">
+                <h3>${excipient.nom_commun || 'Sans nom'}</h3>
+                <span class="product-badge">Excipient</span>
+            </div>
+            <div class="product-details">
+                <p><strong>Nom chimique:</strong> ${excipient.nom_chimique || 'N/A'}</p>
+                <p><strong>CAS:</strong> ${excipient.cas_number || 'N/A'}</p>
+                <p><strong>Formule:</strong> ${excipient.formule || 'N/A'}</p>
+                <p><strong>Fonction:</strong> ${excipient.fonction_principale || 'N/A'}</p>
+            </div>
+            <div class="product-footer">
+                <button class="btn btn-primary" onclick="viewExcipient(${excipient.id})">
+                    <i class="fas fa-eye"></i> Voir détails
+                </button>
+            </div>
+        </div>
+    `;
+}
+
+// Fonction voir détails
+function viewExcipient(id) {
+    window.location.href = `produit-detail.html?id=${id}`;
+}
+</script>
+    
 </body>
 </html>
