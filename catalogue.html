@@ -40,7 +40,7 @@
     <section class="page-header">
         <div class="container">
             <div class="page-header-content">
-                <h1>📦 Catalogue Produits</h1>
+                <h1>📦 Catalogue Excipients</h1>
                 <p>Explorez notre gamme complète d'excipients pharmaceutiques</p>
                 
                 <!-- Barre de recherche -->
@@ -59,87 +59,33 @@
         </div>
     </section>
 
-    <!-- Section Filtres -->
+    <!-- Section Catalogue -->
     <section class="section section-white">
         <div class="container">
             <!-- Stats rapides -->
             <div class="hero-stats" style="margin-bottom: 2rem;">
                 <div class="stat-item">
                     <span class="stat-number" id="displayedProducts">0</span>
-                    <span class="stat-label">Produits affichés</span>
+                    <span class="stat-label">Excipients disponibles</span>
                 </div>
-                <div class="stat-item">
-                    <span class="stat-number" id="displayedReferences">0</span>
-                    <span class="stat-label">Références disponibles</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number" id="totalCategories">0</span>
-                    <span class="stat-label">Catégories</span>
-                </div>
-            </div>
-
-            <!-- Filtres -->
-            <div class="filters-section" style="background: white; border-radius: 12px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                <div class="filters-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                    <h3 style="margin: 0; color: var(--primary);">
-                        <i class="fas fa-filter"></i> Filtres
-                    </h3>
-                    <button class="btn btn-sm btn-outline" onclick="resetFilters()">
-                        <i class="fas fa-redo"></i> Réinitialiser
-                    </button>
-                </div>
-                
-                <div class="filters-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
-                    <div class="filter-group">
-                        <label class="filter-label">Catégorie</label>
-                        <select id="filterCategorie" class="filter-select" onchange="applyFilters()">
-                            <option value="">Toutes les catégories</option>
-                        </select>
-                    </div>
-                    
-                    <div class="filter-group">
-                        <label class="filter-label">Sous-catégorie</label>
-                        <select id="filterSousCategorie" class="filter-select" onchange="applyFilters()">
-                            <option value="">Toutes les sous-catégories</option>
-                        </select>
-                    </div>
-                    
-                    <div class="filter-group">
-                        <label class="filter-label">Disponibilité</label>
-                        <select id="filterStock" class="filter-select" onchange="applyFilters()">
-                            <option value="">Tous</option>
-                            <option value="available">En stock uniquement</option>
-                        </select>
-                    </div>
-                    
-                    <div class="filter-group">
-                        <label class="filter-label">Trier par</label>
-                        <select id="sortBy" class="filter-select" onchange="applyFilters()">
-                            <option value="nom">Nom (A-Z)</option>
-                            <option value="nom-desc">Nom (Z-A)</option>
-                            <option value="prix-asc">Prix croissant</option>
-                            <option value="prix-desc">Prix décroissant</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Résultats -->
-            <div id="catalogResults">
-                <!-- Les produits seront affichés ici -->
-            </div>
-
-            <!-- Message si aucun résultat -->
-            <div id="noResults" style="display: none; text-align: center; padding: 4rem 2rem;">
-                <i class="fas fa-search" style="font-size: 4rem; color: var(--text-light); margin-bottom: 1rem;"></i>
-                <h3 style="color: var(--text-light);">Aucun produit trouvé</h3>
-                <p style="color: var(--text-light);">Essayez de modifier vos filtres de recherche</p>
             </div>
 
             <!-- Loading -->
             <div id="catalogLoading" style="text-align: center; padding: 4rem 2rem;">
                 <i class="fas fa-spinner fa-spin" style="font-size: 3rem; color: var(--primary);"></i>
-                <p style="margin-top: 1rem; color: var(--text-light);">Chargement des produits...</p>
+                <p style="margin-top: 1rem; color: var(--text-light);">Chargement des excipients...</p>
+            </div>
+
+            <!-- Résultats -->
+            <div id="catalogResults" style="display: none;">
+                <div class="products-grid" id="productsGrid"></div>
+            </div>
+
+            <!-- Message si aucun résultat -->
+            <div id="noResults" style="display: none; text-align: center; padding: 4rem 2rem;">
+                <i class="fas fa-search" style="font-size: 4rem; color: var(--text-light); margin-bottom: 1rem;"></i>
+                <h3 style="color: var(--text-light);">Aucun excipient trouvé</h3>
+                <p style="color: var(--text-light);">Essayez une autre recherche</p>
             </div>
         </div>
     </section>
@@ -154,19 +100,8 @@
                 </div>
                 
                 <div class="footer-column">
-                    <h3>Liens rapides</h3>
-                    <ul>
-                        <li><a href="index.html">Accueil</a></li>
-                        <li><a href="catalogue.html">Catalogue</a></li>
-                        <li><a href="fournisseurs.html">Fournisseurs</a></li>
-                        <li><a href="contact.html">Contact</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-column">
                     <h3>Contact</h3>
                     <p>Email: contact@chemistryspot.com</p>
-                    <p>Tél: +33 1 23 45 67 89</p>
                 </div>
             </div>
             
@@ -179,372 +114,124 @@
     <!-- Scripts -->
     <script src="./js/supabase-config.js"></script>
     <script>
-        // ===============================================
-        // CATALOGUE PRODUCT-CENTRIC
-        // ===============================================
-        
-        let allProductsData = [];
-        let filteredProducts = [];
-        let currentFilters = {
-            categorie: '',
-            sousCategorie: '',
-            stock: '',
-            query: ''
-        };
+        let allExcipients = [];
+        let filteredExcipients = [];
 
         // Initialisation
         document.addEventListener('DOMContentLoaded', async () => {
-            // Attendre que Supabase soit prêt
-            await waitForSupabase();
+            console.log('📦 Chargement du catalogue...');
             
-            // Charger les produits
-            await loadCatalogProducts();
-            
-            // Initialiser les filtres
-            initializeFilters();
-            
-            // Afficher les produits
-            displayProducts();
-        });
-
-        // Attendre que Supabase soit initialisé
-        async function waitForSupabase() {
+            // Attendre ChemSpotDB
             let attempts = 0;
             while (!window.ChemSpotDB && attempts < 20) {
                 await new Promise(resolve => setTimeout(resolve, 500));
                 attempts++;
             }
+            
             if (!window.ChemSpotDB) {
-                throw new Error('ChemSpotDB non disponible');
+                console.error('❌ ChemSpotDB non disponible');
+                showError();
+                return;
             }
-        }
-
-        // Charger les produits avec références
-        async function loadCatalogProducts() {
+            
             try {
-                document.getElementById('catalogLoading').style.display = 'block';
-                document.getElementById('catalogResults').style.display = 'none';
+                // Charger excipients
+                allExcipients = await window.ChemSpotDB.getAllExcipients();
+                filteredExcipients = [...allExcipients];
                 
-                allProductsData = await window.ChemSpotDB.getAllProductsWithReferences();
-                filteredProducts = [...allProductsData];
+                console.log(`✅ ${allExcipients.length} excipients chargés`);
                 
-                console.log(`✅ ${allProductsData.length} produits chargés`);
-                
-                // Mettre à jour les stats
-                updateCatalogStats();
+                // Afficher
+                displayExcipients();
                 
             } catch (error) {
-                console.error('❌ Erreur chargement catalogue:', error);
-                window.ChemSpotDB.showStatus('Erreur de chargement', 'error');
-            } finally {
-                document.getElementById('catalogLoading').style.display = 'none';
-                document.getElementById('catalogResults').style.display = 'block';
+                console.error('❌ Erreur:', error);
+                showError();
             }
-        }
+        });
 
-        // Initialiser les filtres
-        function initializeFilters() {
-            const categories = window.ChemSpotDB.getCategories();
-            const subCategories = window.ChemSpotDB.getSubCategories();
-            
-            const categorieSelect = document.getElementById('filterCategorie');
-            categories.forEach(cat => {
-                const option = document.createElement('option');
-                option.value = cat;
-                option.textContent = cat;
-                categorieSelect.appendChild(option);
-            });
-            
-            const subCatSelect = document.getElementById('filterSousCategorie');
-            subCategories.forEach(subCat => {
-                const option = document.createElement('option');
-                option.value = subCat;
-                option.textContent = subCat;
-                subCatSelect.appendChild(option);
-            });
-        }
-
-        // Appliquer les filtres
-        function applyFilters() {
-            currentFilters.categorie = document.getElementById('filterCategorie').value;
-            currentFilters.sousCategorie = document.getElementById('filterSousCategorie').value;
-            currentFilters.stock = document.getElementById('filterStock').value;
-            
-            filteredProducts = allProductsData.filter(product => {
-                // Filtre catégorie
-                if (currentFilters.categorie && product.categorie !== currentFilters.categorie) {
-                    return false;
-                }
-                
-                // Filtre sous-catégorie
-                if (currentFilters.sousCategorie && product.sous_categorie !== currentFilters.sousCategorie) {
-                    return false;
-                }
-                
-                // Filtre stock
-                if (currentFilters.stock === 'available') {
-                    const hasStock = product.product_references?.some(ref => ref.stock_disponible);
-                    if (!hasStock) return false;
-                }
-                
-                // Filtre recherche
-                if (currentFilters.query) {
-                    const query = currentFilters.query.toLowerCase();
-                    const matchName = product.nom?.toLowerCase().includes(query);
-                    const matchCAS = product.cas_number?.toLowerCase().includes(query);
-                    const matchFormula = product.formule_chimique?.toLowerCase().includes(query);
-                    if (!matchName && !matchCAS && !matchFormula) return false;
-                }
-                
-                return true;
-            });
-            
-            // Tri
-            const sortBy = document.getElementById('sortBy').value;
-            sortProducts(sortBy);
-            
-            // Afficher
-            displayProducts();
-            updateCatalogStats();
-        }
-
-        // Trier les produits
-        function sortProducts(sortBy) {
-            switch(sortBy) {
-                case 'nom':
-                    filteredProducts.sort((a, b) => a.nom.localeCompare(b.nom));
-                    break;
-                case 'nom-desc':
-                    filteredProducts.sort((a, b) => b.nom.localeCompare(a.nom));
-                    break;
-                case 'prix-asc':
-                    filteredProducts.sort((a, b) => {
-                        const priceA = getMinPrice(a.product_references);
-                        const priceB = getMinPrice(b.product_references);
-                        return priceA - priceB;
-                    });
-                    break;
-                case 'prix-desc':
-                    filteredProducts.sort((a, b) => {
-                        const priceA = getMinPrice(a.product_references);
-                        const priceB = getMinPrice(b.product_references);
-                        return priceB - priceA;
-                    });
-                    break;
-            }
-        }
-
-        // Obtenir prix minimum
-        function getMinPrice(references) {
-            if (!references || references.length === 0) return Infinity;
-            return Math.min(...references.map(r => r.prix_euro || Infinity));
-        }
-
-        // Afficher les produits
-        function displayProducts() {
-            const container = document.getElementById('catalogResults');
+        // Afficher les excipients
+        function displayExcipients() {
+            const loading = document.getElementById('catalogLoading');
+            const results = document.getElementById('catalogResults');
             const noResults = document.getElementById('noResults');
+            const grid = document.getElementById('productsGrid');
             
-            if (filteredProducts.length === 0) {
-                container.style.display = 'none';
+            loading.style.display = 'none';
+            
+            if (filteredExcipients.length === 0) {
+                results.style.display = 'none';
                 noResults.style.display = 'block';
                 return;
             }
             
-            container.style.display = 'block';
+            results.style.display = 'block';
             noResults.style.display = 'none';
             
-            const html = `
-                <div class="products-grid">
-                    ${filteredProducts.map(product => createProductCard(product)).join('')}
-                </div>
-            `;
-            
-            container.innerHTML = html;
-        }
-
-        // Créer carte produit
-        function createProductCard(product) {
-            const references = product.product_references || [];
-            const minPrice = getMinPrice(references);
-            const maxPrice = references.length > 0 ? Math.max(...references.map(r => r.prix_euro || 0)) : 0;
-            const hasStock = references.some(r => r.stock_disponible);
-            
-            return `
+            grid.innerHTML = filteredExcipients.map(exc => `
                 <div class="product-card fade-in">
-                    <div class="product-name">${product.nom}</div>
-                    ${product.nom_chimique ? `<div style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 0.5rem;">${product.nom_chimique}</div>` : ''}
+                    <div style="margin-bottom: 1rem;">
+                        <h3 style="font-size: 1.3rem; color: var(--primary); margin-bottom: 0.5rem;">
+                            ${exc.nom_commun}
+                        </h3>
+                        <span class="product-badge" style="background: var(--success); color: white; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.85rem;">
+                            Excipient
+                        </span>
+                    </div>
                     
-                    ${window.ChemSpotDB.createCategoryBadge(product.categorie, product.sous_categorie)}
-                    
-                    <div class="product-details">
-                        <div class="detail-row">
-                            <span class="label">CAS:</span>
-                            <span class="value">${product.cas_number || 'N/A'}</span>
-                        </div>
-                        <div class="detail-row">
-                            <span class="label">CE:</span>
-                            <span class="value">${product.ce_number || 'N/A'}</span>
-                        </div>
-                        <div class="detail-row">
-                            <span class="label">Formule:</span>
-                            <span class="value">${product.formule_chimique || 'N/A'}</span>
-                        </div>
-                        <div class="detail-row">
-                            <span class="label">Références:</span>
-                            <span class="value">${references.length} disponible(s)</span>
+                    <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                        <div style="display: grid; gap: 0.5rem; font-size: 0.9rem;">
+                            <div><strong>Nom chimique:</strong> ${exc.nom_chimique || 'N/A'}</div>
+                            <div><strong>CAS:</strong> ${exc.cas_number || 'N/A'}</div>
+                            <div><strong>Formule:</strong> ${exc.formule || 'N/A'}</div>
                         </div>
                     </div>
                     
-                    ${product.description ? `
-                        <p style="font-size: 0.9rem; color: var(--text-light); margin: 1rem 0; line-height: 1.5;">
-                            ${window.ChemSpotDB.truncateText(product.description, 120)}
-                        </p>
-                    ` : ''}
-                    
-                    <div class="product-price">
-                        ${minPrice !== Infinity ? 
-                            (minPrice === maxPrice ? 
-                                window.ChemSpotDB.formatPrice(minPrice) : 
-                                `${window.ChemSpotDB.formatPrice(minPrice)} - ${window.ChemSpotDB.formatPrice(maxPrice)}`
-                            ) : 
-                            'Prix sur demande'}
+                    <div style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 1rem; line-height: 1.5;">
+                        <strong>Fonction:</strong> ${exc.fonction_principale || 'Non spécifiée'}
                     </div>
                     
-                    ${window.ChemSpotDB.formatAvailability(hasStock)}
-                    
-                    <button class="btn-quote" onclick="viewProduct(${product.id})">
-                        <i class="fas fa-eye"></i> Voir détails & références
+                    <button class="btn btn-primary" onclick="viewExcipient(${exc.id})" style="width: 100%;">
+                        <i class="fas fa-eye"></i> Voir détails
                     </button>
                 </div>
-            `;
-        }
-
-        // Voir détail produit
-        function viewProduct(productId) {
-            window.location.href = `produit-detail.html?id=${productId}`;
+            `).join('');
+            
+            // Mettre à jour stats
+            document.getElementById('displayedProducts').textContent = filteredExcipients.length;
         }
 
         // Recherche
         function handleSearch(event) {
             event.preventDefault();
-            currentFilters.query = document.getElementById('catalogSearchInput').value;
-            applyFilters();
-        }
-
-        // Réinitialiser filtres
-        function resetFilters() {
-            document.getElementById('filterCategorie').value = '';
-            document.getElementById('filterSousCategorie').value = '';
-            document.getElementById('filterStock').value = '';
-            document.getElementById('sortBy').value = 'nom';
-            document.getElementById('catalogSearchInput').value = '';
-            currentFilters = {
-                categorie: '',
-                sousCategorie: '',
-                stock: '',
-                query: ''
-            };
-            applyFilters();
-        }
-
-        // Mettre à jour stats
-        function updateCatalogStats() {
-            const totalRefs = filteredProducts.reduce((sum, p) => sum + (p.product_references?.length || 0), 0);
-            const categories = [...new Set(filteredProducts.map(p => p.categorie))].length;
+            const query = document.getElementById('catalogSearchInput').value.toLowerCase().trim();
             
-            document.getElementById('displayedProducts').textContent = filteredProducts.length;
-            document.getElementById('displayedReferences').textContent = totalRefs;
-            document.getElementById('totalCategories').textContent = categories;
+            if (!query) {
+                filteredExcipients = [...allExcipients];
+            } else {
+                filteredExcipients = allExcipients.filter(exc => 
+                    exc.nom_commun?.toLowerCase().includes(query) ||
+                    exc.nom_chimique?.toLowerCase().includes(query) ||
+                    exc.cas_number?.toLowerCase().includes(query) ||
+                    exc.formule?.toLowerCase().includes(query)
+                );
+            }
+            
+            displayExcipients();
+        }
+
+        // Voir détails
+        function viewExcipient(id) {
+            alert(`Fiche détaillée excipient ID: ${id}\n(Page en construction)`);
+        }
+
+        // Afficher erreur
+        function showError() {
+            document.getElementById('catalogLoading').innerHTML = `
+                <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #ef4444;"></i>
+                <p style="margin-top: 1rem; color: #ef4444;">Erreur de chargement</p>
+            `;
         }
     </script>
-<script>
-// Script de chargement du catalogue
-document.addEventListener('DOMContentLoaded', async () => {
-    console.log('📦 Chargement du catalogue...');
-    
-    // Attendre que ChemSpotDB soit prêt
-    let attempts = 0;
-    while (!window.ChemSpotDB && attempts < 20) {
-        await new Promise(resolve => setTimeout(resolve, 500));
-        attempts++;
-    }
-    
-    if (!window.ChemSpotDB) {
-        console.error('❌ ChemSpotDB non disponible');
-        return;
-    }
-    
-    try {
-        // Charger les excipients
-        const excipients = await window.ChemSpotDB.getAllExcipients();
-        console.log(`✅ ${excipients.length} excipients chargés`);
-        
-        // Afficher dans le catalogue
-        displayExcipients(excipients);
-        
-    } catch (error) {
-        console.error('❌ Erreur chargement catalogue:', error);
-    }
-});
-
-// Fonction d'affichage des excipients
-function displayExcipients(excipients) {
-    const container = document.getElementById('productsContainer') || 
-                     document.querySelector('.products-grid') ||
-                     document.querySelector('.catalogue-grid');
-    
-    if (!container) {
-        console.error('❌ Container produits non trouvé');
-        return;
-    }
-    
-    // Vider le loading
-    container.innerHTML = '';
-    
-    // Si aucun excipient
-    if (!excipients || excipients.length === 0) {
-        container.innerHTML = '<p class="no-results">Aucun excipient trouvé</p>';
-        return;
-    }
-    
-    // Afficher les excipients
-    excipients.forEach(excipient => {
-        const card = createExcipientCard(excipient);
-        container.innerHTML += card;
-    });
-    
-    console.log(`✅ ${excipients.length} excipients affichés`);
-}
-
-// Créer une carte excipient
-function createExcipientCard(excipient) {
-    return `
-        <div class="product-card">
-            <div class="product-header">
-                <h3>${excipient.nom_commun || 'Sans nom'}</h3>
-                <span class="product-badge">Excipient</span>
-            </div>
-            <div class="product-details">
-                <p><strong>Nom chimique:</strong> ${excipient.nom_chimique || 'N/A'}</p>
-                <p><strong>CAS:</strong> ${excipient.cas_number || 'N/A'}</p>
-                <p><strong>Formule:</strong> ${excipient.formule || 'N/A'}</p>
-                <p><strong>Fonction:</strong> ${excipient.fonction_principale || 'N/A'}</p>
-            </div>
-            <div class="product-footer">
-                <button class="btn btn-primary" onclick="viewExcipient(${excipient.id})">
-                    <i class="fas fa-eye"></i> Voir détails
-                </button>
-            </div>
-        </div>
-    `;
-}
-
-// Fonction voir détails
-function viewExcipient(id) {
-    window.location.href = `produit-detail.html?id=${id}`;
-}
-</script>
-    
 </body>
 </html>
