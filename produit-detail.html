@@ -29,6 +29,30 @@
             padding: 2rem;
         }
 
+        /* BACK BUTTON */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .back-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateX(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
         /* LOADING */
         .loading {
             text-align: center;
@@ -60,6 +84,36 @@
             padding: 3rem;
             border-radius: 12px;
             margin-bottom: 2rem;
+            display: flex;
+            gap: 2rem;
+            align-items: flex-start;
+        }
+
+        .product-info {
+            flex: 1;
+        }
+
+        .product-structure {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            min-width: 250px;
+        }
+
+        .product-structure img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 4px;
+        }
+
+        .structure-label {
+            text-align: center;
+            color: #667eea;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
         }
 
         .product-header h1 {
@@ -427,10 +481,17 @@
 
             .product-header {
                 padding: 2rem 1.5rem;
+                flex-direction: column;
             }
 
             .product-header h1 {
                 font-size: 1.8rem;
+            }
+
+            .product-structure {
+                width: 100%;
+                max-width: 300px;
+                margin: 0 auto;
             }
 
             .conditions-table {
@@ -446,6 +507,11 @@
 </head>
 <body>
     <div class="container">
+        <!-- BACK BUTTON -->
+        <a href="catalogue.html" class="back-btn" style="display: none;" id="backBtn">
+            <i class="fas fa-arrow-left"></i> Retour au catalogue
+        </a>
+
         <!-- LOADING STATE -->
         <div id="loadingState" class="loading">
             <div class="spinner"></div>
@@ -691,16 +757,31 @@
         // AFFICHAGE DONNÉES
         // ============================================================
         function displayProductHeader(excipient) {
+            const pubchemImage = excipient.cid_pubchem 
+                ? `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/${excipient.cid_pubchem}/PNG?image_size=300x300`
+                : null;
+
             document.getElementById('productHeader').innerHTML = `
-                <h1>${excipient.nom_commun || 'Excipient'}</h1>
-                <p class="product-subtitle">${excipient.nom_chimique || ''}</p>
-                <div class="product-meta">
-                    ${excipient.cas_number ? `<div class="meta-item"><strong>CAS:</strong> ${excipient.cas_number}</div>` : ''}
-                    ${excipient.formule ? `<div class="meta-item"><strong>Formule:</strong> ${excipient.formule}</div>` : ''}
-                    ${excipient.masse_molaire ? `<div class="meta-item"><strong>PM:</strong> ${excipient.masse_molaire} g/mol</div>` : ''}
-                    ${excipient.cid_pubchem ? `<div class="meta-item"><strong>PubChem CID:</strong> ${excipient.cid_pubchem}</div>` : ''}
+                <div class="product-info">
+                    <h1>${excipient.nom_commun || 'Excipient'}</h1>
+                    <p class="product-subtitle">${excipient.nom_chimique || ''}</p>
+                    <div class="product-meta">
+                        ${excipient.cas_number ? `<div class="meta-item"><strong>CAS:</strong> ${excipient.cas_number}</div>` : ''}
+                        ${excipient.formule ? `<div class="meta-item"><strong>Formule:</strong> ${excipient.formule}</div>` : ''}
+                        ${excipient.masse_molaire ? `<div class="meta-item"><strong>PM:</strong> ${excipient.masse_molaire} g/mol</div>` : ''}
+                        ${excipient.cid_pubchem ? `<div class="meta-item"><strong>PubChem CID:</strong> ${excipient.cid_pubchem}</div>` : ''}
+                    </div>
                 </div>
+                ${pubchemImage ? `
+                    <div class="product-structure">
+                        <img src="${pubchemImage}" alt="Structure chimique" onerror="this.parentElement.style.display='none'">
+                        <div class="structure-label">Structure 2D</div>
+                    </div>
+                ` : ''}
             `;
+            
+            // Afficher le bouton retour
+            document.getElementById('backBtn').style.display = 'inline-flex';
         }
 
         function displayConditionnements(conditionnements) {
