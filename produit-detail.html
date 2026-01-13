@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lactose - ChemistrySpot</title>
+    <title>Produit - ChemistrySpot</title>
+    
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -25,6 +28,30 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
+        }
+
+        /* LOADING */
+        .loading {
+            text-align: center;
+            padding: 4rem;
+            color: #667eea;
+            font-size: 1.2rem;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         /* HEADER PRODUIT */
@@ -114,7 +141,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* TABLEAU CONDITIONNEMENTS (Style Sigma) */
+        /* SECTIONS */
         .section {
             background: white;
             padding: 2rem;
@@ -133,6 +160,7 @@
             gap: 0.5rem;
         }
 
+        /* TABLEAU CONDITIONNEMENTS */
         .conditions-table {
             width: 100%;
             border-collapse: collapse;
@@ -186,11 +214,6 @@
             color: #856404;
         }
 
-        .badge-danger {
-            background: #f8d7da;
-            color: #721c24;
-        }
-
         .btn {
             padding: 0.5rem 1rem;
             border: none;
@@ -207,17 +230,6 @@
 
         .btn-primary:hover {
             background: #5568d3;
-        }
-
-        .btn-outline {
-            background: white;
-            border: 1px solid #667eea;
-            color: #667eea;
-        }
-
-        .btn-outline:hover {
-            background: #667eea;
-            color: white;
         }
 
         /* MARKET STATS */
@@ -387,17 +399,25 @@
             line-height: 1.6;
         }
 
-        /* CHART PLACEHOLDER */
-        .chart-container {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            height: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .info-note {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
             color: #999;
-            font-style: italic;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
         }
 
         /* RESPONSIVE */
@@ -427,53 +447,260 @@
 </head>
 <body>
     <div class="container">
-        <!-- HEADER PRODUIT -->
-        <div class="product-header">
-            <h1>Lactose Monohydrate</h1>
-            <p class="product-subtitle">D-Lactose monohydrate, β-D-Gal-(1→4)-D-Glc, 4-O-β-D-Galactopyranosyl-D-glucose, Sucre de lait</p>
-            
-            <div class="product-meta">
-                <div class="meta-item">
-                    <strong>CAS:</strong> 63-42-3
+        <!-- LOADING STATE -->
+        <div id="loadingState" class="loading">
+            <div class="spinner"></div>
+            <div>Chargement des données...</div>
+        </div>
+
+        <!-- MAIN CONTENT (caché au départ) -->
+        <div id="mainContent" style="display: none;">
+            <!-- HEADER PRODUIT -->
+            <div class="product-header" id="productHeader">
+                <!-- Rempli dynamiquement -->
+            </div>
+
+            <!-- TABS -->
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('conditionnements')">
+                    💰 Prix & Conditionnements
+                </button>
+                <button class="tab" onclick="switchTab('marche')">
+                    📊 Analyse Marché
+                </button>
+                <button class="tab" onclick="switchTab('fournisseurs')">
+                    🏭 Fournisseurs
+                </button>
+                <button class="tab" onclick="switchTab('alertes')">
+                    🔔 Alertes Réglementaires
+                </button>
+            </div>
+
+            <!-- TAB 1: CONDITIONNEMENTS -->
+            <div id="tab-conditionnements" class="tab-content active">
+                <div class="section">
+                    <h2 class="section-title">
+                        <i class="fas fa-box"></i> Conditionnements Disponibles
+                    </h2>
+                    <div id="conditionnementsContent"></div>
                 </div>
-                <div class="meta-item">
-                    <strong>Formule:</strong> C₁₂H₂₂O₁₁ · H₂O
+            </div>
+
+            <!-- TAB 2: MARCHÉ -->
+            <div id="tab-marche" class="tab-content">
+                <div class="section">
+                    <h2 class="section-title">
+                        <i class="fas fa-chart-line"></i> Analyse Marché
+                    </h2>
+                    <div id="marcheContent"></div>
                 </div>
-                <div class="meta-item">
-                    <strong>PM:</strong> 360.31 g/mol
+            </div>
+
+            <!-- TAB 3: FOURNISSEURS -->
+            <div id="tab-fournisseurs" class="tab-content">
+                <div class="section">
+                    <h2 class="section-title">
+                        <i class="fas fa-industry"></i> Fournisseurs Référencés
+                    </h2>
+                    <div id="fournisseursContent"></div>
                 </div>
-                <div class="meta-item">
-                    <strong>PubChem CID:</strong> 84571
+            </div>
+
+            <!-- TAB 4: ALERTES -->
+            <div id="tab-alertes" class="tab-content">
+                <div class="section">
+                    <h2 class="section-title">
+                        <i class="fas fa-bell"></i> Alertes Réglementaires Récentes
+                    </h2>
+                    <div id="alertesContent"></div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- TABS -->
-        <div class="tabs">
-            <button class="tab active" onclick="switchTab('conditionnements')">
-                💰 Prix & Conditionnements
-            </button>
-            <button class="tab" onclick="switchTab('marche')">
-                📊 Analyse Marché
-            </button>
-            <button class="tab" onclick="switchTab('fournisseurs')">
-                🏭 Fournisseurs
-            </button>
-            <button class="tab" onclick="switchTab('alertes')">
-                🔔 Alertes Réglementaires
-            </button>
-            <button class="tab" onclick="switchTab('caracteristiques')">
-                🔬 Caractéristiques
-            </button>
-        </div>
+    <script>
+        // ============================================================
+        // CONFIGURATION SUPABASE
+        // ============================================================
+        const SUPABASE_URL = 'https://jkaffpgqbyhuihvyvtld.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE2NTgzOTQsImV4cCI6MjA2NzIzNDM5NH0.OIjoz6uoPV25Nraral4YN_gz7q6COBW3dAVIYhBy1pI';
 
-        <!-- TAB 1: CONDITIONNEMENTS -->
-        <div id="tab-conditionnements" class="tab-content active">
-            <div class="section">
-                <h2 class="section-title">
-                    <i class="fas fa-box"></i> Conditionnements Disponibles
-                </h2>
+        let supabase;
+        let currentExcipientId = 10; // Lactose par défaut
 
+        // ============================================================
+        // INITIALISATION
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // Init Supabase
+                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                console.log('✅ Supabase connecté');
+
+                // Récupérer ID depuis URL si présent
+                const urlParams = new URLSearchParams(window.location.search);
+                const idParam = urlParams.get('id');
+                if (idParam) {
+                    currentExcipientId = parseInt(idParam);
+                }
+
+                // Charger toutes les données
+                await loadAllData();
+
+            } catch (error) {
+                console.error('❌ Erreur initialisation:', error);
+                document.getElementById('loadingState').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div>Erreur de connexion à la base de données</div>
+                        <div style="font-size: 0.9rem; margin-top: 1rem;">${error.message}</div>
+                    </div>
+                `;
+            }
+        });
+
+        // ============================================================
+        // CHARGEMENT DONNÉES
+        // ============================================================
+        async function loadAllData() {
+            try {
+                // 1. Charger excipient
+                const excipient = await loadExcipient(currentExcipientId);
+                if (!excipient) {
+                    throw new Error('Excipient non trouvé');
+                }
+
+                // 2. Charger toutes les données en parallèle
+                const [conditionnements, marche, fournisseurs, alertes] = await Promise.all([
+                    loadConditionnements(currentExcipientId),
+                    loadMarcheData(currentExcipientId),
+                    loadFournisseurs(currentExcipientId),
+                    loadAlertes(currentExcipientId)
+                ]);
+
+                // 3. Afficher tout
+                displayProductHeader(excipient);
+                displayConditionnements(conditionnements);
+                displayMarche(marche);
+                displayFournisseurs(fournisseurs);
+                displayAlertes(alertes);
+
+                // 4. Afficher le contenu
+                document.getElementById('loadingState').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+
+                console.log('✅ Toutes les données chargées');
+
+            } catch (error) {
+                console.error('❌ Erreur chargement données:', error);
+                throw error;
+            }
+        }
+
+        // ============================================================
+        // REQUÊTES SUPABASE
+        // ============================================================
+        async function loadExcipient(id) {
+            const { data, error } = await supabase
+                .from('excipients')
+                .select('*')
+                .eq('id', id)
+                .single();
+
+            if (error) throw error;
+            return data;
+        }
+
+        async function loadConditionnements(excipientId) {
+            const { data, error } = await supabase
+                .from('conditionnements')
+                .select(`
+                    *,
+                    fournisseurs (nom, pays, flag_emoji)
+                `)
+                .eq('excipient_id', excipientId)
+                .order('prix_eur', { ascending: true });
+
+            if (error) throw error;
+            return data || [];
+        }
+
+        async function loadMarcheData(excipientId) {
+            const { data, error } = await supabase
+                .from('marche_data')
+                .select('*')
+                .eq('excipient_id', excipientId)
+                .single();
+
+            if (error && error.code !== 'PGRST116') throw error; // Ignorer "not found"
+            return data;
+        }
+
+        async function loadFournisseurs(excipientId) {
+            // Récupérer IDs fournisseurs liés à cet excipient
+            const { data: conditionnements, error: condError } = await supabase
+                .from('conditionnements')
+                .select('fournisseur_id')
+                .eq('excipient_id', excipientId);
+
+            if (condError) throw condError;
+
+            const fournisseurIds = [...new Set(conditionnements.map(c => c.fournisseur_id))];
+
+            if (fournisseurIds.length === 0) return [];
+
+            // Récupérer détails fournisseurs
+            const { data, error } = await supabase
+                .from('fournisseurs')
+                .select('*')
+                .in('id', fournisseurIds);
+
+            if (error) throw error;
+            return data || [];
+        }
+
+        async function loadAlertes(excipientId) {
+            const { data, error } = await supabase
+                .from('alertes_reglementaires')
+                .select('*')
+                .eq('excipient_id', excipientId)
+                .order('date_alerte', { ascending: false })
+                .limit(10);
+
+            if (error) throw error;
+            return data || [];
+        }
+
+        // ============================================================
+        // AFFICHAGE DONNÉES
+        // ============================================================
+        function displayProductHeader(excipient) {
+            document.getElementById('productHeader').innerHTML = `
+                <h1>${excipient.nom_commun || 'Excipient'}</h1>
+                <p class="product-subtitle">${excipient.nom_chimique || ''}</p>
+                <div class="product-meta">
+                    ${excipient.cas_number ? `<div class="meta-item"><strong>CAS:</strong> ${excipient.cas_number}</div>` : ''}
+                    ${excipient.formule ? `<div class="meta-item"><strong>Formule:</strong> ${excipient.formule}</div>` : ''}
+                    ${excipient.masse_molaire ? `<div class="meta-item"><strong>PM:</strong> ${excipient.masse_molaire} g/mol</div>` : ''}
+                    ${excipient.cid_pubchem ? `<div class="meta-item"><strong>PubChem CID:</strong> ${excipient.cid_pubchem}</div>` : ''}
+                </div>
+            `;
+        }
+
+        function displayConditionnements(conditionnements) {
+            const container = document.getElementById('conditionnementsContent');
+
+            if (!conditionnements || conditionnements.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-box-open"></i>
+                        <div>Aucun conditionnement disponible</div>
+                    </div>
+                `;
+                return;
+            }
+
+            const tableHTML = `
                 <table class="conditions-table">
                     <thead>
                         <tr>
@@ -487,328 +714,226 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td><strong>L1001</strong></td>
-                            <td>500 g</td>
-                            <td><span class="badge badge-success"><i class="fas fa-check-circle"></i> En stock</span></td>
-                            <td><span class="price">45,00 €</span></td>
-                            <td>🇫🇷 Armor Pharma</td>
-                            <td>USP/Ph.Eur</td>
-                            <td><button class="btn btn-primary btn-sm"><i class="fas fa-file-alt"></i> Devis</button></td>
-                        </tr>
-                        <tr>
-                            <td><strong>L1002</strong></td>
-                            <td>1 kg</td>
-                            <td><span class="badge badge-success"><i class="fas fa-check-circle"></i> En stock</span></td>
-                            <td><span class="price">78,00 €</span></td>
-                            <td>🇩🇪 BASF</td>
-                            <td>Pharma</td>
-                            <td><button class="btn btn-primary btn-sm"><i class="fas fa-file-alt"></i> Devis</button></td>
-                        </tr>
-                        <tr>
-                            <td><strong>L1003</strong></td>
-                            <td>25 kg</td>
-                            <td><span class="badge badge-warning"><i class="fas fa-clock"></i> 2 semaines</span></td>
-                            <td><span class="price">1 850,00 €</span></td>
-                            <td>🇳🇱 Euro-Chemicals</td>
-                            <td>Standard</td>
-                            <td><button class="btn btn-primary btn-sm"><i class="fas fa-file-alt"></i> Devis</button></td>
-                        </tr>
+                        ${conditionnements.map(c => `
+                            <tr>
+                                <td><strong>${c.reference || '-'}</strong></td>
+                                <td>${c.conditionnement || '-'}</td>
+                                <td>
+                                    ${c.disponibilite === 'En stock' 
+                                        ? '<span class="badge badge-success"><i class="fas fa-check-circle"></i> En stock</span>'
+                                        : `<span class="badge badge-warning"><i class="fas fa-clock"></i> ${c.disponibilite}</span>`
+                                    }
+                                </td>
+                                <td><span class="price">${c.prix_eur ? c.prix_eur.toFixed(2) + ' €' : '-'}</span></td>
+                                <td>${c.fournisseurs?.flag_emoji || ''} ${c.fournisseurs?.nom || '-'}</td>
+                                <td>${c.grade || '-'}</td>
+                                <td><button class="btn btn-primary btn-sm"><i class="fas fa-file-alt"></i> Devis</button></td>
+                            </tr>
+                        `).join('')}
                     </tbody>
                 </table>
-
-                <div style="margin-top: 1.5rem; padding: 1rem; background: #f8f9fa; border-radius: 6px; font-size: 0.9rem; color: #666;">
-                    <i class="fas fa-info-circle"></i> <strong>Note:</strong> Prix indicatifs basés sur analyse marché janvier 2025. Pour obtenir un devis précis et personnalisé, contactez directement les fournisseurs via le bouton "Devis".
+                <div class="info-note">
+                    <i class="fas fa-info-circle"></i> <strong>Note:</strong> Prix indicatifs basés sur analyse marché janvier 2025. Pour obtenir un devis précis et personnalisé, contactez directement les fournisseurs.
                 </div>
-            </div>
-        </div>
+            `;
 
-        <!-- TAB 2: MARCHÉ -->
-        <div id="tab-marche" class="tab-content">
-            <div class="section">
-                <h2 class="section-title">
-                    <i class="fas fa-chart-line"></i> Analyse Marché
-                </h2>
+            container.innerHTML = tableHTML;
+        }
 
+        function displayMarche(marche) {
+            const container = document.getElementById('marcheContent');
+
+            if (!marche) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-chart-line"></i>
+                        <div>Données marché non disponibles</div>
+                    </div>
+                `;
+                return;
+            }
+
+            const variation = marche.variation_12mois_pct || 0;
+            const trendClass = variation >= 0 ? 'trend-up' : 'trend-down';
+            const trendIcon = variation >= 0 ? 'fa-arrow-up' : 'fa-arrow-down';
+
+            container.innerHTML = `
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-label">Prix Moyen Marché</div>
-                        <div class="stat-value">55 €/kg</div>
-                        <div class="stat-trend trend-up">
-                            <i class="fas fa-arrow-up"></i> +1.85% (12 mois)
+                        <div class="stat-value">${marche.prix_moyen_eur_kg || '-'} €/kg</div>
+                        <div class="stat-trend ${trendClass}">
+                            <i class="fas ${trendIcon}"></i> ${variation > 0 ? '+' : ''}${variation}% (12 mois)
                         </div>
                     </div>
 
                     <div class="stat-card">
                         <div class="stat-label">Production Mondiale</div>
-                        <div class="stat-value">250k</div>
+                        <div class="stat-value">${marche.production_mondiale_tonnes ? (marche.production_mondiale_tonnes / 1000).toFixed(0) + 'k' : '-'}</div>
                         <div style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">tonnes/an</div>
                     </div>
 
                     <div class="stat-card">
                         <div class="stat-label">Top Producteur</div>
-                        <div class="stat-value">🇮🇳 Inde</div>
-                        <div style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">35% part marché</div>
+                        <div class="stat-value">${marche.top_producteur_1_pays || '-'}</div>
+                        <div style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">${marche.top_producteur_1_pct || '-'}% part marché</div>
                     </div>
 
                     <div class="stat-card">
                         <div class="stat-label">Application Principale</div>
                         <div class="stat-value">Pharma</div>
-                        <div style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">65% usage total</div>
+                        <div style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">${marche.application_pharma_pct || '-'}% usage total</div>
                     </div>
                 </div>
-            </div>
 
-            <div class="section">
-                <h2 class="section-title">
-                    <i class="fas fa-chart-area"></i> Indice Prix ChemistrySpot (12 mois)
-                </h2>
-                <div class="chart-container">
-                    [Graphique Chart.js ici - Évolution prix 12 mois]
-                </div>
-            </div>
-
-            <div class="section">
-                <h2 class="section-title">
-                    <i class="fas fa-globe"></i> Répartition Production Mondiale
-                </h2>
-                <div style="display: flex; gap: 2rem; flex-wrap: wrap; margin-top: 1.5rem;">
-                    <div style="flex: 1; min-width: 200px;">
-                        <div style="font-size: 2rem;">🇮🇳</div>
-                        <div style="font-weight: 600; color: #333;">Inde</div>
-                        <div style="font-size: 1.5rem; color: #667eea; font-weight: 700;">35%</div>
-                        <div style="color: #666; font-size: 0.9rem;">87,500 tonnes/an</div>
+                ${marche.top_producteur_1_pays ? `
+                    <h3 style="margin-top: 2rem; margin-bottom: 1rem; font-size: 1.1rem;">
+                        <i class="fas fa-globe"></i> Répartition Production Mondiale
+                    </h3>
+                    <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+                        ${marche.top_producteur_1_pays ? `
+                            <div style="flex: 1; min-width: 200px;">
+                                <div style="font-size: 2rem;">🌍</div>
+                                <div style="font-weight: 600; color: #333;">${marche.top_producteur_1_pays}</div>
+                                <div style="font-size: 1.5rem; color: #667eea; font-weight: 700;">${marche.top_producteur_1_pct}%</div>
+                            </div>
+                        ` : ''}
+                        ${marche.top_producteur_2_pays ? `
+                            <div style="flex: 1; min-width: 200px;">
+                                <div style="font-size: 2rem;">🌍</div>
+                                <div style="font-weight: 600; color: #333;">${marche.top_producteur_2_pays}</div>
+                                <div style="font-size: 1.5rem; color: #667eea; font-weight: 700;">${marche.top_producteur_2_pct}%</div>
+                            </div>
+                        ` : ''}
+                        ${marche.top_producteur_3_pays ? `
+                            <div style="flex: 1; min-width: 200px;">
+                                <div style="font-size: 2rem;">🌍</div>
+                                <div style="font-weight: 600; color: #333;">${marche.top_producteur_3_pays}</div>
+                                <div style="font-size: 1.5rem; color: #667eea; font-weight: 700;">${marche.top_producteur_3_pct}%</div>
+                            </div>
+                        ` : ''}
                     </div>
-                    <div style="flex: 1; min-width: 200px;">
-                        <div style="font-size: 2rem;">🇪🇺</div>
-                        <div style="font-weight: 600; color: #333;">Union Européenne</div>
-                        <div style="font-size: 1.5rem; color: #667eea; font-weight: 700;">28%</div>
-                        <div style="color: #666; font-size: 0.9rem;">70,000 tonnes/an</div>
-                    </div>
-                    <div style="flex: 1; min-width: 200px;">
-                        <div style="font-size: 2rem;">🇨🇳</div>
-                        <div style="font-weight: 600; color: #333;">Chine</div>
-                        <div style="font-size: 1.5rem; color: #667eea; font-weight: 700;">20%</div>
-                        <div style="color: #666; font-size: 0.9rem;">50,000 tonnes/an</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                ` : ''}
+            `;
+        }
 
-        <!-- TAB 3: FOURNISSEURS -->
-        <div id="tab-fournisseurs" class="tab-content">
-            <div class="section">
-                <h2 class="section-title">
-                    <i class="fas fa-industry"></i> Fournisseurs Référencés
-                </h2>
+        function displayFournisseurs(fournisseurs) {
+            const container = document.getElementById('fournisseursContent');
 
+            if (!fournisseurs || fournisseurs.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-industry"></i>
+                        <div>Aucun fournisseur référencé</div>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = `
                 <div class="suppliers-grid">
-                    <!-- Fournisseur 1 -->
-                    <div class="supplier-card">
-                        <div class="supplier-header">
-                            <div class="supplier-flag">🇫🇷</div>
-                            <div>
-                                <div class="supplier-name">Armor Pharma</div>
-                                <div style="font-size: 0.9rem; color: #666;">France</div>
+                    ${fournisseurs.map(f => `
+                        <div class="supplier-card">
+                            <div class="supplier-header">
+                                <div class="supplier-flag">${f.flag_emoji || '🏭'}</div>
+                                <div>
+                                    <div class="supplier-name">${f.nom}</div>
+                                    <div style="font-size: 0.9rem; color: #666;">${f.pays || ''}</div>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="certifications">
-                            <span class="cert-badge"><i class="fas fa-check"></i> GMP</span>
-                            <span class="cert-badge"><i class="fas fa-check"></i> ISO 9001</span>
-                        </div>
+                            ${f.certifications && f.certifications.length > 0 ? `
+                                <div class="certifications">
+                                    ${f.certifications.map(cert => `
+                                        <span class="cert-badge"><i class="fas fa-check"></i> ${cert}</span>
+                                    `).join('')}
+                                </div>
+                            ` : ''}
 
-                        <div class="supplier-specs">
-                            <div class="spec-item">
-                                <div class="spec-label">Spécialité:</div>
-                                <div class="spec-value">Lactose pharmaceutique</div>
+                            <div class="supplier-specs">
+                                ${f.specialite ? `
+                                    <div class="spec-item">
+                                        <div class="spec-label">Spécialité:</div>
+                                        <div class="spec-value">${f.specialite}</div>
+                                    </div>
+                                ` : ''}
+                                ${f.moq_standard ? `
+                                    <div class="spec-item">
+                                        <div class="spec-label">MOQ:</div>
+                                        <div class="spec-value">${f.moq_standard}</div>
+                                    </div>
+                                ` : ''}
+                                ${f.delai_standard ? `
+                                    <div class="spec-item">
+                                        <div class="spec-label">Délai:</div>
+                                        <div class="spec-value">${f.delai_standard}</div>
+                                    </div>
+                                ` : ''}
+                                ${f.usine_location ? `
+                                    <div class="spec-item">
+                                        <div class="spec-label">Usine:</div>
+                                        <div class="spec-value">${f.usine_location}</div>
+                                    </div>
+                                ` : ''}
                             </div>
-                            <div class="spec-item">
-                                <div class="spec-label">MOQ:</div>
-                                <div class="spec-value">25 kg</div>
-                            </div>
-                            <div class="spec-item">
-                                <div class="spec-label">Délai:</div>
-                                <div class="spec-value">1-2 semaines</div>
-                            </div>
-                            <div class="spec-item">
-                                <div class="spec-label">Usine:</div>
-                                <div class="spec-value">Rennes, France</div>
-                            </div>
-                        </div>
 
-                        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
-                            <button class="btn btn-primary" style="flex: 1;"><i class="fas fa-file-alt"></i> Demander devis</button>
-                            <button class="btn btn-outline"><i class="fas fa-external-link-alt"></i></button>
-                        </div>
-                    </div>
-
-                    <!-- Fournisseur 2 -->
-                    <div class="supplier-card">
-                        <div class="supplier-header">
-                            <div class="supplier-flag">🇩🇪</div>
-                            <div>
-                                <div class="supplier-name">BASF</div>
-                                <div style="font-size: 0.9rem; color: #666;">Allemagne</div>
+                            <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                                <button class="btn btn-primary" style="flex: 1;"><i class="fas fa-file-alt"></i> Demander devis</button>
+                                ${f.site_web ? `<a href="${f.site_web}" target="_blank" class="btn btn-outline"><i class="fas fa-external-link-alt"></i></a>` : ''}
                             </div>
                         </div>
-
-                        <div class="certifications">
-                            <span class="cert-badge"><i class="fas fa-check"></i> GMP</span>
-                            <span class="cert-badge"><i class="fas fa-check"></i> ISO 9001</span>
-                            <span class="cert-badge"><i class="fas fa-check"></i> ISO 14001</span>
-                        </div>
-
-                        <div class="supplier-specs">
-                            <div class="spec-item">
-                                <div class="spec-label">Spécialité:</div>
-                                <div class="spec-value">Excipients multi-grades</div>
-                            </div>
-                            <div class="spec-item">
-                                <div class="spec-label">MOQ:</div>
-                                <div class="spec-value">100 kg</div>
-                            </div>
-                            <div class="spec-item">
-                                <div class="spec-label">Délai:</div>
-                                <div class="spec-value">2-3 semaines</div>
-                            </div>
-                            <div class="spec-item">
-                                <div class="spec-label">Usine:</div>
-                                <div class="spec-value">Ludwigshafen, Allemagne</div>
-                            </div>
-                        </div>
-
-                        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
-                            <button class="btn btn-primary" style="flex: 1;"><i class="fas fa-file-alt"></i> Demander devis</button>
-                            <button class="btn btn-outline"><i class="fas fa-external-link-alt"></i></button>
-                        </div>
-                    </div>
-
-                    <!-- Fournisseur 3 -->
-                    <div class="supplier-card">
-                        <div class="supplier-header">
-                            <div class="supplier-flag">🇳🇱</div>
-                            <div>
-                                <div class="supplier-name">Euro-Chemicals</div>
-                                <div style="font-size: 0.9rem; color: #666;">Pays-Bas</div>
-                            </div>
-                        </div>
-
-                        <div class="certifications">
-                            <span class="cert-badge"><i class="fas fa-check"></i> ISO 9001</span>
-                            <span class="cert-badge"><i class="fas fa-check"></i> GDP</span>
-                        </div>
-
-                        <div class="supplier-specs">
-                            <div class="spec-item">
-                                <div class="spec-label">Spécialité:</div>
-                                <div class="spec-value">APIs et excipients</div>
-                            </div>
-                            <div class="spec-item">
-                                <div class="spec-label">MOQ:</div>
-                                <div class="spec-value">1 tonne</div>
-                            </div>
-                            <div class="spec-item">
-                                <div class="spec-label">Délai:</div>
-                                <div class="spec-value">3-4 semaines</div>
-                            </div>
-                            <div class="spec-item">
-                                <div class="spec-label">Usine:</div>
-                                <div class="spec-value">Amsterdam, Pays-Bas</div>
-                            </div>
-                        </div>
-
-                        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
-                            <button class="btn btn-primary" style="flex: 1;"><i class="fas fa-file-alt"></i> Demander devis</button>
-                            <button class="btn btn-outline"><i class="fas fa-external-link-alt"></i></button>
-                        </div>
-                    </div>
+                    `).join('')}
                 </div>
-            </div>
-        </div>
+            `;
+        }
 
-        <!-- TAB 4: ALERTES -->
-        <div id="tab-alertes" class="tab-content">
-            <div class="section">
-                <h2 class="section-title">
-                    <i class="fas fa-bell"></i> Alertes Réglementaires Récentes
-                </h2>
+        function displayAlertes(alertes) {
+            const container = document.getElementById('alertesContent');
 
+            if (!alertes || alertes.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-bell"></i>
+                        <div>Aucune alerte réglementaire récente</div>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = `
                 <div class="alert-timeline">
-                    <div class="alert-item">
-                        <div class="alert-date">
-                            <div style="font-size: 1.5rem;">10</div>
-                            <div style="font-size: 0.85rem;">Jan 2025</div>
-                        </div>
-                        <div class="alert-content">
-                            <span class="alert-source">🇪🇺 EMA</span>
-                            <div class="alert-title">Nouveau grade lactose LH-200 approuvé</div>
-                            <div class="alert-description">
-                                L'Agence Européenne des Médicaments (EMA) a approuvé un nouveau grade de lactose pharmaceutique (LH-200) avec des spécifications améliorées pour les applications de compression directe. Ce grade offre une meilleure fluidité et une distribution granulométrique optimisée.
-                            </div>
-                            <a href="#" style="color: #667eea; text-decoration: none; font-size: 0.9rem; margin-top: 0.5rem; display: inline-block;">
-                                Lire le détail <i class="fas fa-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
+                    ${alertes.map(a => {
+                        const date = new Date(a.date_alerte);
+                        const day = date.getDate();
+                        const month = date.toLocaleDateString('fr-FR', { month: 'short' });
+                        const year = date.getFullYear();
 
-                    <div class="alert-item">
-                        <div class="alert-date">
-                            <div style="font-size: 1.5rem;">15</div>
-                            <div style="font-size: 0.85rem;">Déc 2024</div>
-                        </div>
-                        <div class="alert-content">
-                            <span class="alert-source">🇺🇸 FDA</span>
-                            <div class="alert-title">Révision des spécifications USP lactose</div>
-                            <div class="alert-description">
-                                La FDA a publié une mise à jour des spécifications USP (United States Pharmacopeia) pour le lactose monohydrate, renforçant les contrôles qualité sur les impuretés et la teneur en eau résiduelle. Les nouveaux standards entrent en vigueur le 1er mars 2025.
+                        return `
+                            <div class="alert-item">
+                                <div class="alert-date">
+                                    <div style="font-size: 1.5rem;">${day}</div>
+                                    <div style="font-size: 0.85rem;">${month} ${year}</div>
+                                </div>
+                                <div class="alert-content">
+                                    <span class="alert-source">${a.source_emoji || ''} ${a.source}</span>
+                                    <div class="alert-title">${a.titre}</div>
+                                    <div class="alert-description">${a.description || ''}</div>
+                                    ${a.url ? `
+                                        <a href="${a.url}" target="_blank" style="color: #667eea; text-decoration: none; font-size: 0.9rem; margin-top: 0.5rem; display: inline-block;">
+                                            Lire le détail <i class="fas fa-arrow-right"></i>
+                                        </a>
+                                    ` : ''}
+                                </div>
                             </div>
-                            <a href="#" style="color: #667eea; text-decoration: none; font-size: 0.9rem; margin-top: 0.5rem; display: inline-block;">
-                                Lire le détail <i class="fas fa-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="alert-item">
-                        <div class="alert-date">
-                            <div style="font-size: 1.5rem;">28</div>
-                            <div style="font-size: 0.85rem;">Nov 2024</div>
-                        </div>
-                        <div class="alert-content">
-                            <span class="alert-source">🇫🇷 ANSM</span>
-                            <div class="alert-title">Rappel de lot - Contamination détectée</div>
-                            <div class="alert-description">
-                                L'ANSM a émis un rappel pour le lot LAC-2024-1123 de lactose en raison d'une contamination par des traces de protéines laitières dépassant les limites acceptables. Aucun incident patient signalé. Les fabricants concernés ont été notifiés.
-                            </div>
-                            <a href="#" style="color: #667eea; text-decoration: none; font-size: 0.9rem; margin-top: 0.5rem; display: inline-block;">
-                                Lire le détail <i class="fas fa-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
+                        `;
+                    }).join('')}
                 </div>
+            `;
+        }
 
-                <div style="text-align: center; margin-top: 2rem;">
-                    <button class="btn btn-outline">
-                        <i class="fas fa-history"></i> Voir historique complet
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB 5: CARACTÉRISTIQUES (Existant) -->
-        <div id="tab-caracteristiques" class="tab-content">
-            <div class="section">
-                <h2 class="section-title">
-                    <i class="fas fa-flask"></i> Caractéristiques Chimiques
-                </h2>
-                <p style="color: #666;">
-                    [Contenu existant des caractéristiques chimiques, fonction principale, propriétés clés, etc.]
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <script>
+        // ============================================================
+        // NAVIGATION TABS
+        // ============================================================
         function switchTab(tabName) {
             // Désactiver tous les tabs
             document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
