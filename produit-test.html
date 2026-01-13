@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produit - ChemistrySpot</title>
+    
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* LOADING */
+        .loading {
+            text-align: center;
+            padding: 4rem;
+            color: #667eea;
+            font-size: 1.2rem;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* HEADER PRODUIT */
+        .product-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .product-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+
+        .product-meta {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* TABS */
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            border-bottom: 2px solid #e0e0e0;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+        }
+
+        .tab {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #666;
+            position: relative;
+            white-space: nowrap;
+            transition: all 0.3s;
+        }
+
+        .tab:hover {
+            color: #667eea;
+        }
+
+        .tab.active {
+            color: #667eea;
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* SECTIONS */
+        .section {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* TABLEAU CONDITIONNEMENTS */
+        .conditions-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .conditions-table thead {
+            background: #f8f9fa;
+        }
+
+        .conditions-table th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #666;
+            font-size: 0.9rem;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .conditions-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #dee2e6;
+            color: #333;
+        }
+
+        .conditions-table tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .price {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #28a745;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+
+        /* MARKET STATS */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .stat-trend {
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .trend-up {
+            color: #28a745;
+        }
+
+        .trend-down {
+            color: #dc3545;
+        }
+
+        /* SUPPLIER CARDS */
+        .suppliers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .supplier-card {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .supplier-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .supplier-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .supplier-flag {
+            font-size: 2rem;
+        }
+
+        .supplier-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .supplier-specs {
+            margin: 1rem 0;
+        }
+
+        .spec-item {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .spec-label {
+            font-weight: 600;
+            color: #666;
+            min-width: 120px;
+        }
+
+        .spec-value {
+            color: #333;
+        }
+
+        .certifications {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+
+        .cert-badge {
+            background: #28a745;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+
+        /* ALERTES */
+        .alert-timeline {
+            margin-top: 1.5rem;
+        }
+
+        .alert-item {
+            display: flex;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            background: white;
+            border-left: 4px solid #667eea;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .alert-item:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .alert-date {
+            min-width: 80px;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-source {
+            display: inline-block;
+            background: #f8f9fa;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .alert-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .alert-description {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .info-note {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #999;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .product-header {
+                padding: 2rem 1.5rem;
+            }
+
+            .product-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .conditions-table {
+                font-size: 0.9rem;
+            }
+
+            .conditions-table th,
+            .conditions-table td {
+                padding: 0.75rem 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- LOADING STATE -->
+        <div id="loadingState" class="loading">
+            <div class="spinner"></div>
+            <div>Chargement des données...</div>
+        </div>
+
+        <!-- MAIN CONTENT (caché au départ) -->
+        <div id="mainContent" style="display: none;">
+            <!-- HEADER PRODUIT -->
+            <div class="product-header" id="productHeader">
+                <!-- Rempli dynamiquement -->
+            </div>
+
+            <!-- TABS -->
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('conditionnements')">
+                    💰 Prix & Conditionnements
+                </button>
+                <button class="tab" onclick="switchTab('marche')">
+                    📊 Analyse Marché
+                </button>
+                <button class="tab" onclick="switchTab('fournisseurs')">
+                    🏭 Fournisseurs
+                </button>
+                <button class="tab" onclick="switchTab('alertes')">
+                    🔔 Alertes Réglementaires
+                </button>
+            </div>
+
+            <!-- TAB 1: CONDITIONNEMENTS -->
+            <div id="tab-conditionnements" class="tab-content active">
+                <div class="section">
+                    <h2 class="section-title">
+                        <i class="fas fa-box"></i> Conditionnements Disponibles
+                    </h2>
+                    <div id="conditionnementsContent"></div>
+                </div>
+            </div>
+
+            <!-- TAB 2: MARCHÉ -->
+            <div id="tab-marche" class="tab-content">
+                <div class="section">
+                    <h2 class="section-title">
+                        <i class="fas fa-chart-line"></i> Analyse Marché
+                    </h2>
+                    <div id="marcheContent"></div>
+                </div>
+            </div>
+
+            <!-- TAB 3: FOURNISSEURS -->
+            <div id="tab-fournisseurs" class="tab-content">
+                <div class="section">
+                    <h2 class="section-title">
+                        <i class="fas fa-industry"></i> Fournisseurs Référencés
+                    </h2>
+                    <div id="fournisseursContent"></div>
+                </div>
+            </div>
+
+            <!-- TAB 4: ALERTES -->
+            <div id="tab-alertes" class="tab-content">
+                <div class="section">
+                    <h2 class="section-title">
+                        <i class="fas fa-bell"></i> Alertes Réglementaires Récentes
+                    </h2>
+                    <div id="alertesContent"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // CONFIGURATION SUPABASE
+        // ============================================================
+        const SUPABASE_URL = 'https://jkaffpgqbyhuihvyvtld.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE2NTgzOTQsImV4cCI6MjA2NzIzNDM5NH0.OIjoz6uoPV25Nraral4YN_gz7q6COBW3dAVIYhBy1pI';
+
+        let supabase;
+        let currentExcipientId = 10; // Lactose par défaut
+
+        // ============================================================
+        // INITIALISATION
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // Init Supabase
+                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                console.log('✅ Supabase connecté');
+
+                // Récupérer ID depuis URL si présent
+                const urlParams = new URLSearchParams(window.location.search);
+                const idParam = urlParams.get('id');
+                if (idParam) {
+                    currentExcipientId = parseInt(idParam);
+                }
+
+                // Charger toutes les données
+                await loadAllData();
+
+            } catch (error) {
+                console.error('❌ Erreur initialisation:', error);
+                document.getElementById('loadingState').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div>Erreur de connexion à la base de données</div>
+                        <div style="font-size: 0.9rem; margin-top: 1rem;">${error.message}</div>
+                    </div>
+                `;
+            }
+        });
+
+        // ============================================================
+        // CHARGEMENT DONNÉES
+        // ============================================================
+        async function loadAllData() {
+            try {
+                // 1. Charger excipient
+                const excipient = await loadExcipient(currentExcipientId);
+                if (!excipient) {
+                    throw new Error('Excipient non trouvé');
+                }
+
+                // 2. Charger toutes les données en parallèle
+                const [conditionnements, marche, fournisseurs, alertes] = await Promise.all([
+                    loadConditionnements(currentExcipientId),
+                    loadMarcheData(currentExcipientId),
+                    loadFournisseurs(currentExcipientId),
+                    loadAlertes(currentExcipientId)
+                ]);
+
+                // 3. Afficher tout
+                displayProductHeader(excipient);
+                displayConditionnements(conditionnements);
+                displayMarche(marche);
+                displayFournisseurs(fournisseurs);
+                displayAlertes(alertes);
+
+                // 4. Afficher le contenu
+                document.getElementById('loadingState').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+
+                console.log('✅ Toutes les données chargées');
+
+            } catch (error) {
+                console.error('❌ Erreur chargement données:', error);
+                throw error;
+            }
+        }
+
+        // ============================================================
+        // REQUÊTES SUPABASE
+        // ============================================================
+        async function loadExcipient(id) {
+            const { data, error } = await supabase
+                .from('excipients')
+                .select('*')
+                .eq('id', id)
+                .single();
+
+            if (error) throw error;
+            return data;
+        }
+
+        async function loadConditionnements(excipientId) {
+            const { data, error } = await supabase
+                .from('conditionnements')
+                .select(`
+                    *,
+                    fournisseurs (nom, pays, flag_emoji)
+                `)
+                .eq('excipient_id', excipientId)
+                .order('prix_eur', { ascending: true });
+
+            if (error) throw error;
+            return data || [];
+        }
+
+        async function loadMarcheData(excipientId) {
+            const { data, error } = await supabase
+                .from('marche_data')
+                .select('*')
+                .eq('excipient_id', excipientId)
+                .single();
+
+            if (error && error.code !== 'PGRST116') throw error; // Ignorer "not found"
+            return data;
+        }
+
+        async function loadFournisseurs(excipientId) {
+            // Récupérer IDs fournisseurs liés à cet excipient
+            const { data: conditionnements, error: condError } = await supabase
+                .from('conditionnements')
+                .select('fournisseur_id')
+                .eq('excipient_id', excipientId);
+
+            if (condError) throw condError;
+
+            const fournisseurIds = [...new Set(conditionnements.map(c => c.fournisseur_id))];
+
+            if (fournisseurIds.length === 0) return [];
+
+            // Récupérer détails fournisseurs
+            const { data, error } = await supabase
+                .from('fournisseurs')
+                .select('*')
+                .in('id', fournisseurIds);
+
+            if (error) throw error;
+            return data || [];
+        }
+
+        async function loadAlertes(excipientId) {
+            const { data, error } = await supabase
+                .from('alertes_reglementaires')
+                .select('*')
+                .eq('excipient_id', excipientId)
+                .order('date_alerte', { ascending: false })
+                .limit(10);
+
+            if (error) throw error;
+            return data || [];
+        }
+
+        // ============================================================
+        // AFFICHAGE DONNÉES
+        // ============================================================
+        function displayProductHeader(excipient) {
+            document.getElementById('productHeader').innerHTML = `
+                <h1>${excipient.nom_commun || 'Excipient'}</h1>
+                <p class="product-subtitle">${excipient.nom_chimique || ''}</p>
+                <div class="product-meta">
+                    ${excipient.cas_number ? `<div class="meta-item"><strong>CAS:</strong> ${excipient.cas_number}</div>` : ''}
+                    ${excipient.formule ? `<div class="meta-item"><strong>Formule:</strong> ${excipient.formule}</div>` : ''}
+                    ${excipient.masse_molaire ? `<div class="meta-item"><strong>PM:</strong> ${excipient.masse_molaire} g/mol</div>` : ''}
+                    ${excipient.cid_pubchem ? `<div class="meta-item"><strong>PubChem CID:</strong> ${excipient.cid_pubchem}</div>` : ''}
+                </div>
+            `;
+        }
+
+        function displayConditionnements(conditionnements) {
+            const container = document.getElementById('conditionnementsContent');
+
+            if (!conditionnements || conditionnements.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-box-open"></i>
+                        <div>Aucun conditionnement disponible</div>
+                    </div>
+                `;
+                return;
+            }
+
+            const tableHTML = `
+                <table class="conditions-table">
+                    <thead>
+                        <tr>
+                            <th>Référence</th>
+                            <th>Conditionnement</th>
+                            <th>Disponibilité</th>
+                            <th>Prix</th>
+                            <th>Fournisseur</th>
+                            <th>Grade</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${conditionnements.map(c => `
+                            <tr>
+                                <td><strong>${c.reference || '-'}</strong></td>
+                                <td>${c.conditionnement || '-'}</td>
+                                <td>
+                                    ${c.disponibilite === 'En stock' 
+                                        ? '<span class="badge badge-success"><i class="fas fa-check-circle"></i> En stock</span>'
+                                        : `<span class="badge badge-warning"><i class="fas fa-clock"></i> ${c.disponibilite}</span>`
+                                    }
+                                </td>
+                                <td><span class="price">${c.prix_eur ? c.prix_eur.toFixed(2) + ' €' : '-'}</span></td>
+                                <td>${c.fournisseurs?.flag_emoji || ''} ${c.fournisseurs?.nom || '-'}</td>
+                                <td>${c.grade || '-'}</td>
+                                <td><button class="btn btn-primary btn-sm"><i class="fas fa-file-alt"></i> Devis</button></td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+                <div class="info-note">
+                    <i class="fas fa-info-circle"></i> <strong>Note:</strong> Prix indicatifs basés sur analyse marché janvier 2025. Pour obtenir un devis précis et personnalisé, contactez directement les fournisseurs.
+                </div>
+            `;
+
+            container.innerHTML = tableHTML;
+        }
+
+        function displayMarche(marche) {
+            const container = document.getElementById('marcheContent');
+
+            if (!marche) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-chart-line"></i>
+                        <div>Données marché non disponibles</div>
+                    </div>
+                `;
+                return;
+            }
+
+            const variation = marche.variation_12mois_pct || 0;
+            const trendClass = variation >= 0 ? 'trend-up' : 'trend-down';
+            const trendIcon = variation >= 0 ? 'fa-arrow-up' : 'fa-arrow-down';
+
+            container.innerHTML = `
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Prix Moyen Marché</div>
+                        <div class="stat-value">${marche.prix_moyen_eur_kg || '-'} €/kg</div>
+                        <div class="stat-trend ${trendClass}">
+                            <i class="fas ${trendIcon}"></i> ${variation > 0 ? '+' : ''}${variation}% (12 mois)
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-label">Production Mondiale</div>
+                        <div class="stat-value">${marche.production_mondiale_tonnes ? (marche.production_mondiale_tonnes / 1000).toFixed(0) + 'k' : '-'}</div>
+                        <div style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">tonnes/an</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-label">Top Producteur</div>
+                        <div class="stat-value">${marche.top_producteur_1_pays || '-'}</div>
+                        <div style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">${marche.top_producteur_1_pct || '-'}% part marché</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-label">Application Principale</div>
+                        <div class="stat-value">Pharma</div>
+                        <div style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">${marche.application_pharma_pct || '-'}% usage total</div>
+                    </div>
+                </div>
+
+                ${marche.top_producteur_1_pays ? `
+                    <h3 style="margin-top: 2rem; margin-bottom: 1rem; font-size: 1.1rem;">
+                        <i class="fas fa-globe"></i> Répartition Production Mondiale
+                    </h3>
+                    <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+                        ${marche.top_producteur_1_pays ? `
+                            <div style="flex: 1; min-width: 200px;">
+                                <div style="font-size: 2rem;">🌍</div>
+                                <div style="font-weight: 600; color: #333;">${marche.top_producteur_1_pays}</div>
+                                <div style="font-size: 1.5rem; color: #667eea; font-weight: 700;">${marche.top_producteur_1_pct}%</div>
+                            </div>
+                        ` : ''}
+                        ${marche.top_producteur_2_pays ? `
+                            <div style="flex: 1; min-width: 200px;">
+                                <div style="font-size: 2rem;">🌍</div>
+                                <div style="font-weight: 600; color: #333;">${marche.top_producteur_2_pays}</div>
+                                <div style="font-size: 1.5rem; color: #667eea; font-weight: 700;">${marche.top_producteur_2_pct}%</div>
+                            </div>
+                        ` : ''}
+                        ${marche.top_producteur_3_pays ? `
+                            <div style="flex: 1; min-width: 200px;">
+                                <div style="font-size: 2rem;">🌍</div>
+                                <div style="font-weight: 600; color: #333;">${marche.top_producteur_3_pays}</div>
+                                <div style="font-size: 1.5rem; color: #667eea; font-weight: 700;">${marche.top_producteur_3_pct}%</div>
+                            </div>
+                        ` : ''}
+                    </div>
+                ` : ''}
+            `;
+        }
+
+        function displayFournisseurs(fournisseurs) {
+            const container = document.getElementById('fournisseursContent');
+
+            if (!fournisseurs || fournisseurs.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-industry"></i>
+                        <div>Aucun fournisseur référencé</div>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="suppliers-grid">
+                    ${fournisseurs.map(f => `
+                        <div class="supplier-card">
+                            <div class="supplier-header">
+                                <div class="supplier-flag">${f.flag_emoji || '🏭'}</div>
+                                <div>
+                                    <div class="supplier-name">${f.nom}</div>
+                                    <div style="font-size: 0.9rem; color: #666;">${f.pays || ''}</div>
+                                </div>
+                            </div>
+
+                            ${f.certifications && f.certifications.length > 0 ? `
+                                <div class="certifications">
+                                    ${f.certifications.map(cert => `
+                                        <span class="cert-badge"><i class="fas fa-check"></i> ${cert}</span>
+                                    `).join('')}
+                                </div>
+                            ` : ''}
+
+                            <div class="supplier-specs">
+                                ${f.specialite ? `
+                                    <div class="spec-item">
+                                        <div class="spec-label">Spécialité:</div>
+                                        <div class="spec-value">${f.specialite}</div>
+                                    </div>
+                                ` : ''}
+                                ${f.moq_standard ? `
+                                    <div class="spec-item">
+                                        <div class="spec-label">MOQ:</div>
+                                        <div class="spec-value">${f.moq_standard}</div>
+                                    </div>
+                                ` : ''}
+                                ${f.delai_standard ? `
+                                    <div class="spec-item">
+                                        <div class="spec-label">Délai:</div>
+                                        <div class="spec-value">${f.delai_standard}</div>
+                                    </div>
+                                ` : ''}
+                                ${f.usine_location ? `
+                                    <div class="spec-item">
+                                        <div class="spec-label">Usine:</div>
+                                        <div class="spec-value">${f.usine_location}</div>
+                                    </div>
+                                ` : ''}
+                            </div>
+
+                            <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                                <button class="btn btn-primary" style="flex: 1;"><i class="fas fa-file-alt"></i> Demander devis</button>
+                                ${f.site_web ? `<a href="${f.site_web}" target="_blank" class="btn btn-outline"><i class="fas fa-external-link-alt"></i></a>` : ''}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function displayAlertes(alertes) {
+            const container = document.getElementById('alertesContent');
+
+            if (!alertes || alertes.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-bell"></i>
+                        <div>Aucune alerte réglementaire récente</div>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="alert-timeline">
+                    ${alertes.map(a => {
+                        const date = new Date(a.date_alerte);
+                        const day = date.getDate();
+                        const month = date.toLocaleDateString('fr-FR', { month: 'short' });
+                        const year = date.getFullYear();
+
+                        return `
+                            <div class="alert-item">
+                                <div class="alert-date">
+                                    <div style="font-size: 1.5rem;">${day}</div>
+                                    <div style="font-size: 0.85rem;">${month} ${year}</div>
+                                </div>
+                                <div class="alert-content">
+                                    <span class="alert-source">${a.source_emoji || ''} ${a.source}</span>
+                                    <div class="alert-title">${a.titre}</div>
+                                    <div class="alert-description">${a.description || ''}</div>
+                                    ${a.url ? `
+                                        <a href="${a.url}" target="_blank" style="color: #667eea; text-decoration: none; font-size: 0.9rem; margin-top: 0.5rem; display: inline-block;">
+                                            Lire le détail <i class="fas fa-arrow-right"></i>
+                                        </a>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        // ============================================================
+        // NAVIGATION TABS
+        // ============================================================
+        function switchTab(tabName) {
+            // Désactiver tous les tabs
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            // Activer le tab sélectionné
+            event.target.classList.add('active');
+            document.getElementById('tab-' + tabName).classList.add('active');
+        }
+    </script>
+</body>
+</html>
