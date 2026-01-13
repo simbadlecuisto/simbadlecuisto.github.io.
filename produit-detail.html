@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Produit - ChemistrySpot</title>
     
-    <!-- Supabase CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Supabase déjà chargé par catalogue.html - PAS DE RECHARGEMENT -->
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -525,7 +524,7 @@
         const SUPABASE_URL = 'https://jkaffpgqbyhuihvyvtld.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE2NTgzOTQsImV4cCI6MjA2NzIzNDM5NH0.OIjoz6uoPV25Nraral4YN_gz7q6COBW3dAVIYhBy1pI';
 
-        let supabase;
+        let supabaseClient;
         let currentExcipientId = 10; // Lactose par défaut
 
         // ============================================================
@@ -533,19 +532,16 @@
         // ============================================================
         document.addEventListener('DOMContentLoaded', async () => {
             try {
-                // Init Supabase
-                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                console.log('✅ Supabase connecté');
-
-                // Récupérer ID depuis URL si présent
-                const urlParams = new URLSearchParams(window.location.search);
-                const idParam = urlParams.get('id');
-                if (idParam) {
-                    currentExcipientId = parseInt(idParam);
+                // Charger Supabase si pas déjà chargé
+                if (typeof window.supabase === 'undefined') {
+                    // Charger depuis CDN si nécessaire
+                    const script = document.createElement('script');
+                    script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+                    script.onload = () => initSupabase();
+                    document.head.appendChild(script);
+                } else {
+                    initSupabase();
                 }
-
-                // Charger toutes les données
-                await loadAllData();
 
             } catch (error) {
                 console.error('❌ Erreur initialisation:', error);
@@ -558,6 +554,22 @@
                 `;
             }
         });
+
+        function initSupabase() {
+            // Init Supabase
+            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            console.log('✅ Supabase connecté');
+
+            // Récupérer ID depuis URL si présent
+            const urlParams = new URLSearchParams(window.location.search);
+            const idParam = urlParams.get('id');
+            if (idParam) {
+                currentExcipientId = parseInt(idParam);
+            }
+
+            // Charger toutes les données
+            loadAllData();
+        }
 
         // ============================================================
         // CHARGEMENT DONNÉES
@@ -593,7 +605,13 @@
 
             } catch (error) {
                 console.error('❌ Erreur chargement données:', error);
-                throw error;
+                document.getElementById('loadingState').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div>Erreur de chargement</div>
+                        <div style="font-size: 0.9rem; margin-top: 1rem;">${error.message}</div>
+                    </div>
+                `;
             }
         }
 
@@ -601,7 +619,7 @@
         // REQUÊTES SUPABASE
         // ============================================================
         async function loadExcipient(id) {
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('excipients')
                 .select('*')
                 .eq('id', id)
@@ -612,7 +630,7 @@
         }
 
         async function loadConditionnements(excipientId) {
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('conditionnements')
                 .select(`
                     *,
@@ -626,19 +644,18 @@
         }
 
         async function loadMarcheData(excipientId) {
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('marche_data')
                 .select('*')
                 .eq('excipient_id', excipientId)
                 .single();
 
-            if (error && error.code !== 'PGRST116') throw error; // Ignorer "not found"
+            if (error && error.code !== 'PGRST116') throw error;
             return data;
         }
 
         async function loadFournisseurs(excipientId) {
-            // Récupérer IDs fournisseurs liés à cet excipient
-            const { data: conditionnements, error: condError } = await supabase
+            const { data: conditionnements, error: condError } = await supabaseClient
                 .from('conditionnements')
                 .select('fournisseur_id')
                 .eq('excipient_id', excipientId);
@@ -649,8 +666,7 @@
 
             if (fournisseurIds.length === 0) return [];
 
-            // Récupérer détails fournisseurs
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('fournisseurs')
                 .select('*')
                 .in('id', fournisseurIds);
@@ -660,7 +676,7 @@
         }
 
         async function loadAlertes(excipientId) {
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('alertes_reglementaires')
                 .select('*')
                 .eq('excipient_id', excipientId)
@@ -733,7 +749,7 @@
                     </tbody>
                 </table>
                 <div class="info-note">
-                    <i class="fas fa-info-circle"></i> <strong>Note:</strong> Prix indicatifs basés sur analyse marché janvier 2025. Pour obtenir un devis précis et personnalisé, contactez directement les fournisseurs.
+                    <i class="fas fa-info-circle"></i> <strong>Note:</strong> Prix indicatifs basés sur analyse marché janvier 2025.
                 </div>
             `;
 
@@ -766,54 +782,22 @@
                             <i class="fas ${trendIcon}"></i> ${variation > 0 ? '+' : ''}${variation}% (12 mois)
                         </div>
                     </div>
-
                     <div class="stat-card">
                         <div class="stat-label">Production Mondiale</div>
                         <div class="stat-value">${marche.production_mondiale_tonnes ? (marche.production_mondiale_tonnes / 1000).toFixed(0) + 'k' : '-'}</div>
                         <div style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">tonnes/an</div>
                     </div>
-
                     <div class="stat-card">
                         <div class="stat-label">Top Producteur</div>
                         <div class="stat-value">${marche.top_producteur_1_pays || '-'}</div>
                         <div style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">${marche.top_producteur_1_pct || '-'}% part marché</div>
                     </div>
-
                     <div class="stat-card">
                         <div class="stat-label">Application Principale</div>
                         <div class="stat-value">Pharma</div>
                         <div style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">${marche.application_pharma_pct || '-'}% usage total</div>
                     </div>
                 </div>
-
-                ${marche.top_producteur_1_pays ? `
-                    <h3 style="margin-top: 2rem; margin-bottom: 1rem; font-size: 1.1rem;">
-                        <i class="fas fa-globe"></i> Répartition Production Mondiale
-                    </h3>
-                    <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
-                        ${marche.top_producteur_1_pays ? `
-                            <div style="flex: 1; min-width: 200px;">
-                                <div style="font-size: 2rem;">🌍</div>
-                                <div style="font-weight: 600; color: #333;">${marche.top_producteur_1_pays}</div>
-                                <div style="font-size: 1.5rem; color: #667eea; font-weight: 700;">${marche.top_producteur_1_pct}%</div>
-                            </div>
-                        ` : ''}
-                        ${marche.top_producteur_2_pays ? `
-                            <div style="flex: 1; min-width: 200px;">
-                                <div style="font-size: 2rem;">🌍</div>
-                                <div style="font-weight: 600; color: #333;">${marche.top_producteur_2_pays}</div>
-                                <div style="font-size: 1.5rem; color: #667eea; font-weight: 700;">${marche.top_producteur_2_pct}%</div>
-                            </div>
-                        ` : ''}
-                        ${marche.top_producteur_3_pays ? `
-                            <div style="flex: 1; min-width: 200px;">
-                                <div style="font-size: 2rem;">🌍</div>
-                                <div style="font-weight: 600; color: #333;">${marche.top_producteur_3_pays}</div>
-                                <div style="font-size: 1.5rem; color: #667eea; font-weight: 700;">${marche.top_producteur_3_pct}%</div>
-                            </div>
-                        ` : ''}
-                    </div>
-                ` : ''}
             `;
         }
 
@@ -841,7 +825,6 @@
                                     <div style="font-size: 0.9rem; color: #666;">${f.pays || ''}</div>
                                 </div>
                             </div>
-
                             ${f.certifications && f.certifications.length > 0 ? `
                                 <div class="certifications">
                                     ${f.certifications.map(cert => `
@@ -849,37 +832,13 @@
                                     `).join('')}
                                 </div>
                             ` : ''}
-
                             <div class="supplier-specs">
-                                ${f.specialite ? `
-                                    <div class="spec-item">
-                                        <div class="spec-label">Spécialité:</div>
-                                        <div class="spec-value">${f.specialite}</div>
-                                    </div>
-                                ` : ''}
-                                ${f.moq_standard ? `
-                                    <div class="spec-item">
-                                        <div class="spec-label">MOQ:</div>
-                                        <div class="spec-value">${f.moq_standard}</div>
-                                    </div>
-                                ` : ''}
-                                ${f.delai_standard ? `
-                                    <div class="spec-item">
-                                        <div class="spec-label">Délai:</div>
-                                        <div class="spec-value">${f.delai_standard}</div>
-                                    </div>
-                                ` : ''}
-                                ${f.usine_location ? `
-                                    <div class="spec-item">
-                                        <div class="spec-label">Usine:</div>
-                                        <div class="spec-value">${f.usine_location}</div>
-                                    </div>
-                                ` : ''}
+                                ${f.specialite ? `<div class="spec-item"><div class="spec-label">Spécialité:</div><div class="spec-value">${f.specialite}</div></div>` : ''}
+                                ${f.moq_standard ? `<div class="spec-item"><div class="spec-label">MOQ:</div><div class="spec-value">${f.moq_standard}</div></div>` : ''}
+                                ${f.delai_standard ? `<div class="spec-item"><div class="spec-label">Délai:</div><div class="spec-value">${f.delai_standard}</div></div>` : ''}
                             </div>
-
                             <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
                                 <button class="btn btn-primary" style="flex: 1;"><i class="fas fa-file-alt"></i> Demander devis</button>
-                                ${f.site_web ? `<a href="${f.site_web}" target="_blank" class="btn btn-outline"><i class="fas fa-external-link-alt"></i></a>` : ''}
                             </div>
                         </div>
                     `).join('')}
@@ -918,11 +877,6 @@
                                     <span class="alert-source">${a.source_emoji || ''} ${a.source}</span>
                                     <div class="alert-title">${a.titre}</div>
                                     <div class="alert-description">${a.description || ''}</div>
-                                    ${a.url ? `
-                                        <a href="${a.url}" target="_blank" style="color: #667eea; text-decoration: none; font-size: 0.9rem; margin-top: 0.5rem; display: inline-block;">
-                                            Lire le détail <i class="fas fa-arrow-right"></i>
-                                        </a>
-                                    ` : ''}
                                 </div>
                             </div>
                         `;
@@ -931,15 +885,10 @@
             `;
         }
 
-        // ============================================================
-        // NAVIGATION TABS
-        // ============================================================
         function switchTab(tabName) {
-            // Désactiver tous les tabs
             document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
             
-            // Activer le tab sélectionné
             event.target.classList.add('active');
             document.getElementById('tab-' + tabName).classList.add('active');
         }
