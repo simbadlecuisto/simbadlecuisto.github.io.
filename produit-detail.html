@@ -3,12 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Produit - ChemistrySpot</title>
+    <title>Détail Produit - ChemistrySpot</title>
     
     <!-- Supabase déjà chargé par catalogue.html - PAS DE RECHARGEMENT -->
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/responsive.css">
     
     <style>
         * {
@@ -23,7 +26,7 @@
             color: #333;
         }
 
-        .container {
+        .page-content {
             max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
@@ -475,7 +478,7 @@
 
         /* RESPONSIVE */
         @media (max-width: 768px) {
-            .container {
+            .page-content {
                 padding: 1rem;
             }
 
@@ -506,7 +509,32 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <!-- HEADER NAVIGATION (identique au catalogue) -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/chemspotV1-dt6tDoOKp1wAyi8oRMzxzufIVBfiu9.png" alt="ChemistrySpot Logo" class="logo">
+                    <span class="logo-text">ChemistrySpot</span>
+                </div>
+                
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link">Accueil</a></li>
+                    <li><a href="catalogue.html" class="nav-link">Catalogue</a></li>
+                    <li><a href="fournisseurs.html" class="nav-link">Fournisseurs</a></li>
+                    <li><a href="contact.html" class="nav-link">Contact</a></li>
+                </ul>
+                
+                <div class="header-actions">
+                    <button class="btn btn-outline btn-sm">
+                        <i class="fas fa-shopping-cart"></i> Panier (0)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-content">
         <!-- BACK BUTTON -->
         <a href="catalogue.html" class="back-btn" style="display: none;" id="backBtn">
             <i class="fas fa-arrow-left"></i> Retour au catalogue
