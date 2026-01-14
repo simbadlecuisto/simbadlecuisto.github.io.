@@ -13,6 +13,9 @@
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/responsive.css">
     
+    <!-- Chart.js pour graphiques -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    
     <style>
         * {
             margin: 0;
@@ -326,6 +329,30 @@
 
         .trend-down {
             color: #dc3545;
+        }
+
+        /* PRICE CHART */
+        .chart-container {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .chart-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
         }
 
         /* SUPPLIER CARDS */
@@ -677,17 +704,18 @@
                 }
 
                 // 2. Charger toutes les données en parallèle
-                const [conditionnements, marche, fournisseurs, alertes] = await Promise.all([
+                const [conditionnements, marche, fournisseurs, alertes, prixHistorique] = await Promise.all([
                     loadConditionnements(currentExcipientId),
                     loadMarcheData(currentExcipientId),
                     loadFournisseurs(currentExcipientId),
-                    loadAlertes(currentExcipientId)
+                    loadAlertes(currentExcipientId),
+                    loadPrixHistorique(currentExcipientId)
                 ]);
 
                 // 3. Afficher tout
                 displayProductHeader(excipient);
                 displayConditionnements(conditionnements);
-                displayMarche(marche);
+                displayMarche(marche, prixHistorique);
                 displayFournisseurs(fournisseurs);
                 displayAlertes(alertes);
 
@@ -781,6 +809,17 @@
             return data || [];
         }
 
+        async function loadPrixHistorique(excipientId) {
+            const { data, error } = await supabaseClient
+                .from('indices_prix_historique')
+                .select('*')
+                .eq('excipient_id', excipientId)
+                .order('mois', { ascending: true });
+
+            if (error) throw error;
+            return data || [];
+        }
+
         // ============================================================
         // AFFICHAGE DONNÉES
         // ============================================================
@@ -865,7 +904,7 @@
             container.innerHTML = tableHTML;
         }
 
-        function displayMarche(marche) {
+        function displayMarche(marche, prixHistorique) {
             const container = document.getElementById('marcheContent');
 
             if (!marche) {
@@ -907,7 +946,106 @@
                         <div style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;">${marche.application_pharma_pct || '-'}% usage total</div>
                     </div>
                 </div>
+
+                ${prixHistorique && prixHistorique.length > 0 ? `
+                    <div class="chart-container">
+                        <h3 class="chart-title">
+                            <i class="fas fa-chart-line"></i> Évolution Prix (12 derniers mois)
+                        </h3>
+                        <div class="chart-wrapper">
+                            <canvas id="priceChart"></canvas>
+                        </div>
+                    </div>
+                ` : ''}
             `;
+
+            // Créer le graphique si des données historiques existent
+            if (prixHistorique && prixHistorique.length > 0) {
+                createPriceChart(prixHistorique);
+            }
+        }
+
+        function createPriceChart(prixHistorique) {
+            const ctx = document.getElementById('priceChart');
+            if (!ctx) return;
+
+            // Préparer les données
+            const labels = prixHistorique.map(p => {
+                const date = new Date(p.mois);
+                return date.toLocaleDateString('fr-FR', { month: 'short', year: '2-digit' });
+            });
+
+            const prices = prixHistorique.map(p => p.prix_eur_kg);
+
+            // Créer le graphique
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Prix (€/kg)',
+                        data: prices,
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#667eea',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            padding: 12,
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
+                            borderColor: '#667eea',
+                            borderWidth: 1,
+                            callbacks: {
+                                label: function(context) {
+                                    return 'Prix: ' + context.parsed.y.toFixed(2) + ' €/kg';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toFixed(2) + ' €';
+                                },
+                                color: '#666'
+                            },
+                            grid: {
+                                color: '#e0e0e0',
+                                drawBorder: false
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#666'
+                            },
+                            grid: {
+                                display: false,
+                                drawBorder: false
+                            }
+                        }
+                    }
+                }
+            });
         }
 
         function displayFournisseurs(fournisseurs) {
