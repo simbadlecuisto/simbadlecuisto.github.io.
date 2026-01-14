@@ -7,79 +7,114 @@ let currentPage = 1;
 let itemsPerPage = 12;
 let currentFilters = {};
 
-// Données simulées
 const products = [
     {
-        id: 1,
-        name: "Paracétamol",
-        category: "api",
-        price: "15.20",
-        origin: "Inde",
-        purity: "99.8%",
-        stock: "En stock",
-        supplier: "PharmaCorp India",
-        cas: "103-90-2",
-        formula: "C8H9NO2"
-    },
-    {
-        id: 2,
-        name: "Lactose Monohydraté",
+        id: 10,
+        name: "Lactose",
         category: "excipient",
-        price: "3.45",
-        origin: "France",
+        price: "55.00",
+        origin: "Inde",
         purity: "99.5%",
         stock: "En stock",
-        supplier: "Roquette Pharma",
-        cas: "64044-51-5",
-        formula: "C12H22O11·H2O"
+        supplier: "Armor Pharma",
+        cas: "200-559-2",
+        formula: "C12H22O11"
     },
     {
-        id: 3,
-        name: "Ibuprofène",
-        category: "api",
-        price: "22.80",
-        origin: "Chine",
-        purity: "99.9%",
-        stock: "Stock limité",
-        supplier: "ChemChina Exports",
-        cas: "15687-27-1",
-        formula: "C13H18O2"
-    },
-    {
-        id: 4,
-        name: "Stéarate de Magnésium",
+        id: 11,
+        name: "Microcrystalline cellulose",
         category: "excipient",
-        price: "4.20",
-        origin: "Allemagne",
+        price: "68.00",
+        origin: "États-Unis",
         purity: "99.0%",
         stock: "En stock",
-        supplier: "BASF Pharma",
+        supplier: "BASF",
+        cas: "9004-34-6",
+        formula: "(C6H10O5)n"
+    },
+    {
+        id: 12,
+        name: "Magnesium stearate",
+        category: "excipient",
+        price: "58.00",
+        origin: "Inde",
+        purity: "98.5%",
+        stock: "En stock",
+        supplier: "Armor Pharma",
         cas: "557-04-0",
         formula: "C36H70MgO4"
     },
     {
-        id: 5,
-        name: "Aspirine",
-        category: "api",
-        price: "18.50",
-        origin: "Suisse",
-        purity: "99.7%",
+        id: 13,
+        name: "Povidone",
+        category: "excipient",
+        price: "98.00",
+        origin: "Chine",
+        purity: "99.2%",
         stock: "En stock",
-        supplier: "Novartis Ingredients",
-        cas: "50-78-2",
-        formula: "C9H8O4"
+        supplier: "BASF",
+        cas: "9003-39-8",
+        formula: "(C6H9NO)n"
     },
     {
-        id: 6,
-        name: "Colorant Rouge E124",
-        category: "colorant",
-        price: "45.60",
-        origin: "Allemagne",
-        purity: "98.5%",
+        id: 14,
+        name: "Talc",
+        category: "excipient",
+        price: "42.00",
+        origin: "Chine",
+        purity: "99.0%",
         stock: "En stock",
-        supplier: "ColorTech GmbH",
-        cas: "25956-17-6",
-        formula: "C20H11N2NaO10S3"
+        supplier: "Euro-Chemicals",
+        cas: "14807-96-6",
+        formula: "Mg3Si4O10(OH)2"
+    },
+    {
+        id: 15,
+        name: "Titanium dioxide",
+        category: "colorant",
+        price: "58.00",
+        origin: "Chine",
+        purity: "99.5%",
+        stock: "En stock",
+        supplier: "BASF",
+        cas: "13463-67-7",
+        formula: "TiO2"
+    },
+    {
+        id: 16,
+        name: "Glycerol",
+        category: "excipient",
+        price: "22.00",
+        origin: "Indonésie",
+        purity: "99.5%",
+        stock: "En stock",
+        supplier: "Armor Pharma",
+        cas: "56-81-5",
+        formula: "C3H8O3"
+    },
+    {
+        id: 17,
+        name: "Purified water",
+        category: "excipient",
+        price: "4.50",
+        origin: "Production locale",
+        purity: "99.9%",
+        stock: "En stock",
+        supplier: "BASF",
+        cas: "7732-18-5",
+        formula: "H2O"
+    },
+    {
+        id: 18,
+        name: "Ethanol",
+        category: "excipient",
+        price: "15.00",
+        origin: "Brésil",
+        purity: "99.5%",
+        stock: "En stock",
+        supplier: "Euro-Chemicals",
+        cas: "64-17-5",
+        formula: "C2H6O"
     }
 ];
 
@@ -307,9 +342,9 @@ function createProductCard(product) {
                 <button class="btn btn-primary btn-sm" style="flex: 1;" onclick="requestQuote(${product.id})">
                     <i class="fas fa-calculator"></i> Devis
                 </button>
-                <button class="btn btn-outline btn-sm" onclick="viewProductDetails(${product.id})">
-                    <i class="fas fa-info"></i>
-                </button>
+                <button class="btn btn-primary btn-sm" style="flex: 1;" onclick="window.location.href='produit-detail.html?id=${product.id}'">
+    <i class="fas fa-eye"></i> Voir détails
+</button>
             </div>
         </div>
     `;
@@ -384,10 +419,8 @@ function requestQuote(productId) {
 }
 
 function viewProductDetails(productId) {
-    const product = products.find(p => p.id === productId);
-    if (product) {
-        showProductModal(product);
-    }
+    // Rediriger vers la page produit détaillée
+    window.location.href = `produit-detail.html?id=${productId}`;
 }
 
 function contactSupplier(supplierName) {
