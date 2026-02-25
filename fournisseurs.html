@@ -551,9 +551,13 @@
         const PAGE_SIZE = 24;   // cards par page
 
         let supabaseClient;
-        let allSuppliers     = [];
+        let allSuppliers      = [];
         let filteredSuppliers = [];
-        let currentPage      = 1;
+        let suppliersPage     = 1;   // nom distinct pour éviter conflit avec main.js suppliersPage
+
+        // Stub attendu par main.js initializePage() — le vrai init se fait via Supabase
+        function setupSupplierFilters() {}
+        function renderSuppliers() {}
 
         // ============================================================
         // HELPERS — parse le champ notes
@@ -603,7 +607,7 @@
 
                 allSuppliers      = data || [];
                 filteredSuppliers = [...allSuppliers];
-                currentPage       = 1;
+                suppliersPage       = 1;
 
                 updateStats();
                 populateFilters();
@@ -626,7 +630,7 @@
         function displaySuppliers() {
             const container  = document.getElementById('suppliersContainer');
             const totalPages = Math.ceil(filteredSuppliers.length / PAGE_SIZE);
-            const start      = (currentPage - 1) * PAGE_SIZE;
+            const start      = (suppliersPage - 1) * PAGE_SIZE;
             const pageItems  = filteredSuppliers.slice(start, start + PAGE_SIZE);
 
             if (filteredSuppliers.length === 0) {
@@ -692,23 +696,23 @@
             if (totalPages <= 1) { container.innerHTML = ''; return; }
 
             let html = `
-                <button onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
+                <button onclick="goToPage(${suppliersPage - 1})" ${suppliersPage === 1 ? 'disabled' : ''}>
                     <i class="fas fa-chevron-left"></i>
                 </button>`;
 
             for (let p = 1; p <= totalPages; p++) {
                 if (
                     p === 1 || p === totalPages ||
-                    (p >= currentPage - 2 && p <= currentPage + 2)
+                    (p >= suppliersPage - 2 && p <= suppliersPage + 2)
                 ) {
-                    html += `<button onclick="goToPage(${p})" class="${p === currentPage ? 'active' : ''}">${p}</button>`;
-                } else if (p === currentPage - 3 || p === currentPage + 3) {
+                    html += `<button onclick="goToPage(${p})" class="${p === suppliersPage ? 'active' : ''}">${p}</button>`;
+                } else if (p === suppliersPage - 3 || p === suppliersPage + 3) {
                     html += `<span class="page-info">…</span>`;
                 }
             }
 
             html += `
-                <button onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
+                <button onclick="goToPage(${suppliersPage + 1})" ${suppliersPage === totalPages ? 'disabled' : ''}>
                     <i class="fas fa-chevron-right"></i>
                 </button>
                 <span class="page-info">${filteredSuppliers.length} résultat${filteredSuppliers.length > 1 ? 's' : ''}</span>`;
@@ -719,7 +723,7 @@
         function goToPage(page) {
             const totalPages = Math.ceil(filteredSuppliers.length / PAGE_SIZE);
             if (page < 1 || page > totalPages) return;
-            currentPage = page;
+            suppliersPage = page;
             displaySuppliers();
             document.getElementById('suppliersContainer').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
@@ -790,7 +794,7 @@
                 return matchCountry && matchExcipient && matchSearch;
             });
 
-            currentPage = 1;
+            suppliersPage = 1;
             displaySuppliers();
         }
 
