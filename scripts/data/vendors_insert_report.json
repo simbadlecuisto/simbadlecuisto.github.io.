@@ -1,0 +1,36 @@
+{
+  "generated_at": "2026-02-25T23:18:01.957963+00:00",
+  "total": 192,
+  "success": 192,
+  "errors": 0,
+  "batches": [
+    {
+      "batch": "1-50",
+      "count": 50,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "batch": "51-100",
+      "count": 50,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "batch": "101-150",
+      "count": 50,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "batch": "151-192",
+      "count": 42,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    }
+  ]
+}

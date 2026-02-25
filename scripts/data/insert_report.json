@@ -1,0 +1,155 @@
+{
+  "generated_at": "2026-02-25T22:46:18.647526+00:00",
+  "total": 21,
+  "success": 21,
+  "errors": 0,
+  "details": [
+    {
+      "id": 19,
+      "nom_commun": "Mannitol",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 20,
+      "nom_commun": "Sorbitol",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 21,
+      "nom_commun": "Starch",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 22,
+      "nom_commun": "Stearic acid",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 23,
+      "nom_commun": "Citric acid",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 24,
+      "nom_commun": "Sucrose",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 25,
+      "nom_commun": "Propylene glycol",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 26,
+      "nom_commun": "Benzyl alcohol",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 27,
+      "nom_commun": "Sodium lauryl sulfate",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 28,
+      "nom_commun": "Calcium stearate",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 29,
+      "nom_commun": "Dicalcium phosphate",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 30,
+      "nom_commun": "Calcium carbonate",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 31,
+      "nom_commun": "Sodium chloride",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 32,
+      "nom_commun": "Potassium chloride",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 33,
+      "nom_commun": "Zinc oxide",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 34,
+      "nom_commun": "Colloidal silicon dioxide",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 35,
+      "nom_commun": "Hydroxypropyl cellulose",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 36,
+      "nom_commun": "Hypromellose",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 37,
+      "nom_commun": "Macrogol 4000",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 38,
+      "nom_commun": "Polysorbate 80",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 39,
+      "nom_commun": "Benzalkonium chloride",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    }
+  ]
+}

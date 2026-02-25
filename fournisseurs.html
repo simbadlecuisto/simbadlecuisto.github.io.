@@ -265,6 +265,90 @@
             opacity: 0.4;
         }
 
+        /* Tags excipients */
+        .supplier-excipients {
+            margin-bottom: 1rem;
+        }
+
+        .supplier-excipients-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #9CA3AF;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.4rem;
+        }
+
+        .excipient-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.35rem;
+        }
+
+        .excipient-tag {
+            display: inline-block;
+            background: #EEF2FF;
+            color: #4338CA;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 500;
+        }
+
+        .excipient-tag-more {
+            background: #F3F4F6;
+            color: #6B7280;
+        }
+
+        .action-link.pubchem {
+            color: #0369a1;
+            border-color: #0369a1;
+        }
+
+        .action-link.pubchem:hover {
+            background: #0369a1;
+            color: white;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .pagination button {
+            padding: 0.5rem 1rem;
+            border: 2px solid #E5E7EB;
+            border-radius: 8px;
+            background: white;
+            color: #374151;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .pagination button:hover,
+        .pagination button.active {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        .pagination button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .pagination .page-info {
+            color: #6B7280;
+            font-size: 0.9rem;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .main-content {
@@ -319,29 +403,36 @@
 
         <!-- En-tête de page -->
         <div class="fournisseurs-header">
-            <h1><i class="fas fa-industry"></i> Nos Fournisseurs Certifiés</h1>
-            <p>Découvrez notre réseau de partenaires vérifiés et certifiés BPF/GMP pour vos matières premières pharmaceutiques</p>
+            <h1><i class="fas fa-industry"></i> Fournisseurs PubChem</h1>
+            <p>Fournisseurs référencés par <strong>PubChem</strong> pour nos 30 excipients pharmaceutiques — données issues de la base de données NCBI</p>
         </div>
 
         <!-- Stats -->
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="fournisseurs-stat-number" id="totalSuppliers">-</div>
-                <div class="fournisseurs-stat-label">Fournisseurs Actifs</div>
+                <div class="fournisseurs-stat-label">Fournisseurs Référencés</div>
             </div>
             <div class="stat-card">
                 <div class="fournisseurs-stat-number" id="totalCountries">-</div>
                 <div class="fournisseurs-stat-label">Pays Couverts</div>
             </div>
             <div class="stat-card">
-                <div class="fournisseurs-stat-number" id="certifiedSuppliers">-</div>
-                <div class="fournisseurs-stat-label">Certifiés ISO/GMP</div>
+                <div class="fournisseurs-stat-number" id="multiSuppliers">-</div>
+                <div class="fournisseurs-stat-label">Multi-excipients (≥ 5)</div>
             </div>
         </div>
 
         <!-- Filtres -->
         <div class="filters-section">
             <div class="filters-grid">
+                <div class="filter-group">
+                    <label class="filter-label"><i class="fas fa-flask"></i> Filtrer par excipient</label>
+                    <select id="excipientFilter" class="filter-select">
+                        <option value="">Tous les excipients</option>
+                    </select>
+                </div>
+
                 <div class="filter-group">
                     <label class="filter-label"><i class="fas fa-globe"></i> Filtrer par pays</label>
                     <select id="countryFilter" class="filter-select">
@@ -350,8 +441,8 @@
                 </div>
 
                 <div class="filter-group">
-                    <label class="filter-label"><i class="fas fa-search"></i> Rechercher</label>
-                    <input type="text" id="searchInput" class="filter-input" placeholder="Nom, spécialité, certifications...">
+                    <label class="filter-label"><i class="fas fa-search"></i> Rechercher un fournisseur</label>
+                    <input type="text" id="searchInput" class="filter-input" placeholder="Nom du fournisseur...">
                 </div>
 
                 <div class="filter-group">
@@ -370,6 +461,9 @@
 
         <!-- Grille fournisseurs -->
         <div id="suppliersContainer" class="suppliers-grid"></div>
+
+        <!-- Pagination -->
+        <div id="paginationContainer" class="pagination"></div>
     </div>
 
     <!-- Footer (design système partagé) -->
@@ -451,65 +545,46 @@
         // ============================================================
         // CONFIGURATION SUPABASE
         // ============================================================
-        const SUPABASE_URL = 'https://jkaffpgqbyhuihvyvtld.supabase.co';
+        const SUPABASE_URL      = 'https://jkaffpgqbyhuihvyvtld.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE2NTgzOTQsImV4cCI6MjA2NzIzNDM5NH0.OIjoz6uoPV25Nraral4YN_gz7q6COBW3dAVIYhBy1pI';
 
-        let supabase;
-        let allSuppliers = [];
-        let filteredSuppliers = [];
+        const PAGE_SIZE = 24;   // cards par page
 
-        // Données de fallback si la table suppliers n'existe pas
-        const FALLBACK_SUPPLIERS = [
-            {
-                name: 'Euro-Chemicals',
-                country: 'Pays-Bas',
-                speciality: 'APIs et excipients pharmaceutiques',
-                certifications: 'ISO 9001, GMP',
-                notes: 'Distributeur européen de référence pour matières premières pharmaceutiques.',
-                website: 'https://www.euro-chemicals.com',
-                contact_email: null
-            },
-            {
-                name: 'EUROAPI',
-                country: 'France',
-                speciality: 'APIs, hormones, prostaglandines, vitamine B12',
-                certifications: 'GMP, ISO 9001, ANSM',
-                notes: 'Leader européen dans la fabrication d\'ingrédients pharmaceutiques actifs.',
-                website: 'https://www.euroapi.com',
-                contact_email: null
-            },
-            {
-                name: 'PCC Group',
-                country: 'Pologne',
-                speciality: 'Matières premières et excipients',
-                certifications: 'ISO 9001, ISO 14001',
-                notes: 'Groupe chimique polonais spécialisé dans les matières premières de spécialité.',
-                website: 'https://www.products.pcc.eu',
-                contact_email: null
-            },
-            {
-                name: 'Roquette Pharma',
-                country: 'France',
-                speciality: 'Excipients végétaux, amidon, sorbitol, mannitol',
-                certifications: 'GMP, ISO 9001, FSSC 22000',
-                notes: 'Leader mondial des excipients pharmaceutiques d\'origine végétale.',
-                website: 'https://www.roquette.com',
-                contact_email: null
+        let supabaseClient;
+        let allSuppliers     = [];
+        let filteredSuppliers = [];
+        let currentPage      = 1;
+
+        // ============================================================
+        // HELPERS — parse le champ notes
+        // "Excipients: A, B, C | PubChem: https://..."
+        // ============================================================
+        function parseNotes(notes) {
+            if (!notes) return { excipients: [], pubchemUrl: null };
+            const parts      = notes.split(' | ');
+            let excipients   = [];
+            let pubchemUrl   = null;
+
+            for (const part of parts) {
+                if (part.startsWith('Excipients: ')) {
+                    excipients = part.replace('Excipients: ', '').split(', ').map(e => e.trim());
+                } else if (part.startsWith('PubChem: ')) {
+                    pubchemUrl = part.replace('PubChem: ', '').trim();
+                }
             }
-        ];
+            return { excipients, pubchemUrl };
+        }
 
         // ============================================================
         // INITIALISATION
         // ============================================================
         document.addEventListener('DOMContentLoaded', async () => {
             try {
-                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                console.log('✅ Client Supabase initialisé');
+                supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
                 await loadSuppliers();
             } catch (error) {
-                console.error('❌ Erreur d\'initialisation:', error);
-                showStatusBar('Erreur de connexion — affichage des données de démonstration', 'error');
-                loadFallback();
+                console.error('Erreur initialisation:', error);
+                showStatusBar('Erreur de connexion Supabase', 'error');
             }
         });
 
@@ -517,193 +592,221 @@
         // CHARGEMENT DEPUIS SUPABASE
         // ============================================================
         async function loadSuppliers() {
-            showStatusBar('Chargement des fournisseurs...', 'loading');
-
+            showStatusBar('Chargement des fournisseurs PubChem...', 'loading');
             try {
-                const { data: suppliers, error } = await supabase
+                const { data, error } = await supabaseClient
                     .from('suppliers')
                     .select('*')
                     .order('name', { ascending: true });
 
-                if (error) {
-                    // Table suppliers inexistante ou autre erreur Supabase
-                    console.warn('⚠️ Table suppliers non disponible, utilisation des données de démonstration:', error.message);
-                    loadFallback();
-                    return;
-                }
+                if (error) throw error;
 
-                allSuppliers = suppliers || [];
+                allSuppliers      = data || [];
                 filteredSuppliers = [...allSuppliers];
-
-                console.log(`✅ ${allSuppliers.length} fournisseurs chargés depuis Supabase`);
+                currentPage       = 1;
 
                 updateStats();
                 populateFilters();
                 displaySuppliers();
-
-                showStatusBar(`${allSuppliers.length} fournisseurs chargés`, 'success');
+                showStatusBar(`${allSuppliers.length} fournisseurs chargés depuis PubChem`, 'success');
 
             } catch (error) {
-                console.warn('⚠️ Erreur Supabase, utilisation des données de démonstration:', error.message);
-                loadFallback();
+                console.error('Erreur Supabase:', error);
+                showStatusBar('Erreur lors du chargement — réessayez', 'error');
             }
         }
 
-        // Données de fallback si Supabase échoue
-        function loadFallback() {
-            console.log('📦 Chargement des données de démonstration...');
-            allSuppliers = FALLBACK_SUPPLIERS;
-            filteredSuppliers = [...allSuppliers];
-            updateStats();
-            populateFilters();
-            displaySuppliers();
-            showStatusBar('Données de démonstration — connexion Supabase indisponible', 'error');
-        }
-
-        // Actualiser
         async function refreshSuppliers() {
             await loadSuppliers();
         }
 
         // ============================================================
-        // AFFICHAGE
+        // AFFICHAGE + PAGINATION
         // ============================================================
         function displaySuppliers() {
-            const container = document.getElementById('suppliersContainer');
+            const container  = document.getElementById('suppliersContainer');
+            const totalPages = Math.ceil(filteredSuppliers.length / PAGE_SIZE);
+            const start      = (currentPage - 1) * PAGE_SIZE;
+            const pageItems  = filteredSuppliers.slice(start, start + PAGE_SIZE);
 
             if (filteredSuppliers.length === 0) {
                 container.innerHTML = `
                     <div class="empty-suppliers">
                         <i class="fas fa-search"></i>
                         <p>Aucun fournisseur trouvé avec ces critères</p>
-                    </div>
-                `;
+                    </div>`;
+                document.getElementById('paginationContainer').innerHTML = '';
                 return;
             }
 
-            container.innerHTML = filteredSuppliers.map(supplier => `
+            container.innerHTML = pageItems.map(supplier => {
+                const { excipients, pubchemUrl } = parseNotes(supplier.notes);
+                const MAX_TAGS = 5;
+                const shownTags  = excipients.slice(0, MAX_TAGS);
+                const remaining  = excipients.length - MAX_TAGS;
+
+                const tagsHtml = excipients.length > 0 ? `
+                    <div class="supplier-excipients">
+                        <div class="supplier-excipients-label">Excipients fournis</div>
+                        <div class="excipient-tags">
+                            ${shownTags.map(e => `<span class="excipient-tag">${e}</span>`).join('')}
+                            ${remaining > 0 ? `<span class="excipient-tag excipient-tag-more">+${remaining} autres</span>` : ''}
+                        </div>
+                    </div>` : '';
+
+                const pubchemBtn = pubchemUrl ? `
+                    <a href="${pubchemUrl}" target="_blank" rel="noopener noreferrer" class="action-link pubchem">
+                        <i class="fas fa-database"></i> PubChem
+                    </a>` : '';
+
+                const websiteBtn = supplier.website ? `
+                    <a href="${supplier.website}" target="_blank" rel="noopener noreferrer" class="action-link">
+                        <i class="fas fa-globe"></i> Site web
+                    </a>` : '';
+
+                return `
                 <div class="supplier-card">
                     <div class="supplier-header">
                         <span class="supplier-icon">🏭</span>
-                        <span class="supplier-name">${supplier.name || 'Nom non disponible'}</span>
+                        <span class="supplier-name">${supplier.name || '—'}</span>
                     </div>
 
                     <div class="supplier-country-badge">
-                        <i class="fas fa-map-marker-alt"></i> ${supplier.country || 'Pays non spécifié'}
+                        <i class="fas fa-map-marker-alt"></i> ${supplier.country || 'Pays inconnu'}
                     </div>
 
-                    ${supplier.speciality ? `
-                        <div class="supplier-specialty">
-                            <i class="fas fa-tag"></i> ${supplier.speciality}
-                        </div>
-                    ` : ''}
-
-                    ${supplier.certifications ? `
-                        <div class="supplier-certif">
-                            <i class="fas fa-certificate"></i> ${supplier.certifications}
-                        </div>
-                    ` : ''}
-
-                    ${supplier.notes ? `
-                        <div class="supplier-description">${supplier.notes}</div>
-                    ` : ''}
+                    ${tagsHtml}
 
                     <div class="supplier-actions">
-                        ${supplier.contact_email ? `
-                            <a href="mailto:${supplier.contact_email}" class="action-link">
-                                <i class="fas fa-envelope"></i> Contacter
-                            </a>
-                        ` : ''}
-                        ${supplier.website ? `
-                            <a href="${supplier.website}" target="_blank" rel="noopener noreferrer" class="action-link">
-                                <i class="fas fa-globe"></i> Site web
-                            </a>
-                        ` : ''}
+                        ${websiteBtn}
+                        ${pubchemBtn}
                     </div>
-                </div>
-            `).join('');
+                </div>`;
+            }).join('');
+
+            renderPagination(totalPages);
+        }
+
+        function renderPagination(totalPages) {
+            const container = document.getElementById('paginationContainer');
+            if (totalPages <= 1) { container.innerHTML = ''; return; }
+
+            let html = `
+                <button onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
+                    <i class="fas fa-chevron-left"></i>
+                </button>`;
+
+            for (let p = 1; p <= totalPages; p++) {
+                if (
+                    p === 1 || p === totalPages ||
+                    (p >= currentPage - 2 && p <= currentPage + 2)
+                ) {
+                    html += `<button onclick="goToPage(${p})" class="${p === currentPage ? 'active' : ''}">${p}</button>`;
+                } else if (p === currentPage - 3 || p === currentPage + 3) {
+                    html += `<span class="page-info">…</span>`;
+                }
+            }
+
+            html += `
+                <button onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                <span class="page-info">${filteredSuppliers.length} résultat${filteredSuppliers.length > 1 ? 's' : ''}</span>`;
+
+            container.innerHTML = html;
+        }
+
+        function goToPage(page) {
+            const totalPages = Math.ceil(filteredSuppliers.length / PAGE_SIZE);
+            if (page < 1 || page > totalPages) return;
+            currentPage = page;
+            displaySuppliers();
+            document.getElementById('suppliersContainer').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         // ============================================================
         // STATISTIQUES
         // ============================================================
         function updateStats() {
-            const countries = [...new Set(allSuppliers.map(s => s.country).filter(Boolean))];
-            const certified = allSuppliers.filter(s =>
-                s.certifications && (
-                    s.certifications.toLowerCase().includes('iso') ||
-                    s.certifications.toLowerCase().includes('gmp') ||
-                    s.certifications.toLowerCase().includes('gdp')
-                )
-            ).length;
+            const countries    = [...new Set(allSuppliers.map(s => s.country).filter(c => c && c !== 'Unknown'))];
+            const multiCount   = allSuppliers.filter(s => {
+                const { excipients } = parseNotes(s.notes);
+                return excipients.length >= 5;
+            }).length;
 
             animateNumber('totalSuppliers', allSuppliers.length);
             animateNumber('totalCountries', countries.length);
-            animateNumber('certifiedSuppliers', certified);
+            animateNumber('multiSuppliers',  multiCount);
         }
 
-        function animateNumber(elementId, targetValue) {
-            const element = document.getElementById(elementId);
-            if (!element) return;
-            const startTime = performance.now();
-            const duration = 800;
-
-            function update(currentTime) {
-                const progress = Math.min((currentTime - startTime) / duration, 1);
-                element.textContent = Math.floor(progress * targetValue);
-                if (progress < 1) requestAnimationFrame(update);
-                else element.textContent = targetValue;
-            }
-            requestAnimationFrame(update);
+        function animateNumber(id, target) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            const start = performance.now();
+            const dur   = 800;
+            (function tick(now) {
+                const p = Math.min((now - start) / dur, 1);
+                el.textContent = Math.floor(p * target);
+                if (p < 1) requestAnimationFrame(tick);
+                else el.textContent = target;
+            })(start);
         }
 
         // ============================================================
         // FILTRES
         // ============================================================
         function populateFilters() {
-            const countryFilter = document.getElementById('countryFilter');
-            const countries = [...new Set(allSuppliers.map(s => s.country).filter(Boolean))].sort();
-
-            countryFilter.innerHTML = '<option value="">Tous les pays</option>' +
+            // Pays
+            const countries = [...new Set(allSuppliers.map(s => s.country).filter(c => c && c !== 'Unknown'))].sort();
+            const cFilter   = document.getElementById('countryFilter');
+            cFilter.innerHTML = '<option value="">Tous les pays</option>' +
                 countries.map(c => `<option value="${c}">${c}</option>`).join('');
 
-            countryFilter.addEventListener('change', filterSuppliers);
-            document.getElementById('searchInput').addEventListener('input', filterSuppliers);
+            // Excipients (extrait des notes)
+            const excipientSet = new Set();
+            allSuppliers.forEach(s => {
+                parseNotes(s.notes).excipients.forEach(e => excipientSet.add(e));
+            });
+            const excipients = [...excipientSet].sort();
+            const eFilter    = document.getElementById('excipientFilter');
+            eFilter.innerHTML = '<option value="">Tous les excipients</option>' +
+                excipients.map(e => `<option value="${e}">${e}</option>`).join('');
+
+            cFilter.addEventListener('change', applyFilters);
+            eFilter.addEventListener('change', applyFilters);
+            document.getElementById('searchInput').addEventListener('input', applyFilters);
         }
 
-        function filterSuppliers() {
-            const country = document.getElementById('countryFilter').value;
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        function applyFilters() {
+            const country    = document.getElementById('countryFilter').value;
+            const excipient  = document.getElementById('excipientFilter').value;
+            const search     = document.getElementById('searchInput').value.toLowerCase().trim();
 
-            filteredSuppliers = allSuppliers.filter(supplier => {
-                const matchesCountry = !country || supplier.country === country;
-                const matchesSearch = !searchTerm ||
-                    (supplier.name && supplier.name.toLowerCase().includes(searchTerm)) ||
-                    (supplier.speciality && supplier.speciality.toLowerCase().includes(searchTerm)) ||
-                    (supplier.certifications && supplier.certifications.toLowerCase().includes(searchTerm)) ||
-                    (supplier.notes && supplier.notes.toLowerCase().includes(searchTerm));
-                return matchesCountry && matchesSearch;
+            filteredSuppliers = allSuppliers.filter(s => {
+                const { excipients } = parseNotes(s.notes);
+                const matchCountry   = !country   || s.country === country;
+                const matchExcipient = !excipient || excipients.includes(excipient);
+                const matchSearch    = !search    || s.name.toLowerCase().includes(search);
+                return matchCountry && matchExcipient && matchSearch;
             });
 
+            currentPage = 1;
             displaySuppliers();
         }
 
         // ============================================================
-        // STATUT
+        // BARRE DE STATUT
         // ============================================================
         function showStatusBar(message, type) {
-            const bar = document.getElementById('statusBar');
+            const bar   = document.getElementById('statusBar');
             const icons = {
                 loading: '<i class="fas fa-spinner fa-spin"></i>',
                 success: '<i class="fas fa-check-circle"></i>',
-                error: '<i class="fas fa-exclamation-triangle"></i>'
+                error:   '<i class="fas fa-exclamation-triangle"></i>'
             };
-            bar.innerHTML = `${icons[type] || ''} ${message}`;
-            bar.className = `status-bar ${type}`;
-
-            if (type === 'success') {
-                setTimeout(() => { bar.style.display = 'none'; }, 3000);
-            }
+            bar.innerHTML   = `${icons[type] || ''} ${message}`;
+            bar.className   = `status-bar ${type}`;
+            if (type === 'success') setTimeout(() => { bar.style.display = 'none'; }, 3000);
         }
     </script>
 </body>

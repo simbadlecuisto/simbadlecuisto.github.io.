@@ -1,0 +1,9 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+chemspot_env/
+
+# Scripts avec clés Supabase (service_role)
+scripts/insert_supabase.py
+scripts/insert_vendors_supabase.py

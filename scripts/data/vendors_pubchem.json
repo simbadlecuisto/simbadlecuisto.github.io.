@@ -1,0 +1,2760 @@
+[
+  {
+    "name": "ABI Chem",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/ABI%20Chem",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide",
+      "Polysorbate 80",
+      "Benzalkonium chloride"
+    ]
+  },
+  {
+    "name": "NovoSeek",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/NovoSeek",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide",
+      "Polysorbate 80",
+      "Benzalkonium chloride"
+    ]
+  },
+  {
+    "name": "10X CHEM",
+    "website": "https://www.10xchem.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/10X%20CHEM",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide",
+      "Polysorbate 80"
+    ]
+  },
+  {
+    "name": "AppChem",
+    "website": "https://www.appchemical.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/AppChem",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide",
+      "Polysorbate 80"
+    ]
+  },
+  {
+    "name": "BenchChem",
+    "website": "https://www.benchchem.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/BenchChem",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Calcium stearate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "A2B Chem",
+    "website": "https://www.a2bchem.com",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/A2B%20Chem",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "AKos Consulting & Solutions",
+    "website": "http://www.akosgmbh.de/AKosSamples/index.html",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/AKos%20Consulting%20&%20Solutions",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Chembase.cn",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Chembase.cn",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "ChemoSapiens",
+    "website": "https://chemosapiens.com",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/ChemoSapiens",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Colloidal silicon dioxide",
+      "Polysorbate 80"
+    ]
+  },
+  {
+    "name": "ChemTik",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/ChemTik",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide",
+      "Benzalkonium chloride"
+    ]
+  },
+  {
+    "name": "AA BLOCKS",
+    "website": "https://www.aablocks.com",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/AA%20BLOCKS",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "AbaChemScene",
+    "website": "https://www.chemscene.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/AbaChemScene",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "abcr GmbH",
+    "website": "http://www.abcr.com/de_en",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/abcr%20GmbH",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "AK Scientific, Inc. (AKSCI)",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/AK%20Scientific,%20Inc.%20(AKSCI)",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Aladdin Scientific",
+    "website": "https://www.aladdinsci.com",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Aladdin%20Scientific",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Alfa Chemistry",
+    "website": "https://www.alfa-chemistry.com",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Alfa%20Chemistry",
+    "country": "USA",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Angene Chemical",
+    "website": "https://www.angenechemical.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Angene%20Chemical",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Biosynth",
+    "website": "https://www.biosynth.com",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Biosynth",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "ChemMol",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/ChemMol",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Combi-Blocks",
+    "website": "http://www.combi-blocks.com",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Combi-Blocks",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "CymitQuimica",
+    "website": "https://cymitquimica.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/CymitQuimica",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Fisher Chemical",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Fisher%20Chemical",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Molport",
+    "website": "https://www.molport.com",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Molport",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Zinc oxide",
+      "Colloidal silicon dioxide",
+      "Polysorbate 80"
+    ]
+  },
+  {
+    "name": "MuseChem",
+    "website": "https://www.musechem.com",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/MuseChem",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Oakwood Products",
+    "website": "http://www.oakwoodchemical.com",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Oakwood%20Products",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Parchem",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Parchem",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Santa Cruz Biotechnology, Inc.",
+    "website": "https://www.scbt.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Santa%20Cruz%20Biotechnology,%20Inc.",
+    "country": "USA",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Sigma-Aldrich",
+    "website": "http://www.sigmaaldrich.com",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Sigma-Aldrich",
+    "country": "USA",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "THE BioTek",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/THE%20BioTek",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "3WAY PHARM INC",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/3WAY%20PHARM%20INC",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Aaron Chemicals LLC",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Aaron%20Chemicals%20LLC",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Accel Scientific",
+    "website": "https://www.accelsci.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Accel%20Scientific",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Biorbyt",
+    "website": "https://www.biorbyt.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Biorbyt",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "BLD Pharm",
+    "website": "https://www.bldpharm.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/BLD%20Pharm",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride"
+    ]
+  },
+  {
+    "name": "BOC Sciences",
+    "website": "https://www.bocsci.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/BOC%20Sciences",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Chemieliva Pharmaceutical Co., Ltd",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Chemieliva%20Pharmaceutical%20Co.,%20Ltd",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Calcium stearate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Clearsynth",
+    "website": "https://www.clearsynth.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Clearsynth",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "eMolecules",
+    "website": "https://www.emolecules.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/eMolecules",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Potassium chloride",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Finetech Industry Limited",
+    "website": "https://www.finetechnology-ind.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Finetech%20Industry%20Limited",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Stearic acid",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Hairui Chemical",
+    "website": "https://www.hairuichem.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Hairui%20Chemical",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Stearic acid",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "ISpharm",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/ISpharm",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "LGC Standards",
+    "website": "https://www.lgcstandards.com/US/en/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/LGC%20Standards",
+    "country": "United Kingdom",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "RR Scientific",
+    "website": "http://www.rrscientific.com",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/RR%20Scientific",
+    "country": "USA",
+    "excipients": [
+      "Mannitol",
+      "Stearic acid",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Smolecule",
+    "website": "https://www.smolecule.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Smolecule",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Thermo Fisher Scientific",
+    "website": "https://www.thermofisher.com/us/en/home.html",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Thermo%20Fisher%20Scientific",
+    "country": "USA",
+    "excipients": [
+      "Mannitol",
+      "Stearic acid",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "VladaChem",
+    "website": "https://www.vladachem.com",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/VladaChem",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "VWR, Part of Avantor",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/VWR,%20Part%20of%20Avantor",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Win-Win Chemical",
+    "website": "https://www.win-winchemical.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Win-Win%20Chemical",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Yick-Vic Chemicals & Pharmaceuticals (HK) Ltd.",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Yick-Vic%20Chemicals%20&%20Pharmaceuticals%20(HK)%20Ltd.",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "001Chemical",
+    "website": "https://www.001chemical.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/001Chemical",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Potassium chloride",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Amadis Chemical",
+    "website": "https://www.amadischem.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Amadis%20Chemical",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Aurora Fine Chemicals LLC",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Aurora%20Fine%20Chemicals%20LLC",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide"
+    ]
+  },
+  {
+    "name": "CATO Research Chemicals Inc.",
+    "website": "https://en.cato-chem.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/CATO%20Research%20Chemicals%20Inc.",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Chem-Impex",
+    "website": "http://www.chemimpex.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Chem-Impex",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Stearic acid",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Fluorochem",
+    "website": "https://fluorochem.co.uk",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Fluorochem",
+    "country": "United Kingdom",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "J&H Chemical Co.,ltd",
+    "website": "http://www.jhechem.com",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/J&H%20Chemical%20Co.,ltd",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "King Scientific",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/King%20Scientific",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "MolCore",
+    "website": "https://www.001chemical.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/MolCore",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Stearic acid",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Calcium stearate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Potassium chloride",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "MP Biomedicals",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/MP%20Biomedicals",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Stearic acid",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Protheragen",
+    "website": "https://www.protheragen.ai/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Protheragen",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride"
+    ]
+  },
+  {
+    "name": "TCI (Tokyo Chemical Industry)",
+    "website": "http://www.tcichemicals.com/en/us/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/TCI%20(Tokyo%20Chemical%20Industry)",
+    "country": "Japan",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "CD Formulation",
+    "website": "https://www.formulationbio.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/CD%20Formulation",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Cooke Chemical Co., Ltd",
+    "website": "http://www.cookechem.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Cooke%20Chemical%20Co.,%20Ltd",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "iChemical Technology USA Inc",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/iChemical%20Technology%20USA%20Inc",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "InvivoChem",
+    "website": "https://www.invivochem.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/InvivoChem",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Sucrose",
+      "Propylene glycol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "MedChemexpress MCE",
+    "website": "https://www.medchemexpress.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/MedChemexpress%20MCE",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Molecule Market",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Molecule%20Market",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sucrose",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Starshine Chemical",
+    "website": "https://www.starshinechemical.com",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Starshine%20Chemical",
+    "country": "Unknown",
+    "excipients": [
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride"
+    ]
+  },
+  {
+    "name": "Tractus",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Tractus",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride"
+    ]
+  },
+  {
+    "name": "Wubei-Biochem",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Wubei-Biochem",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride"
+    ]
+  },
+  {
+    "name": "AN PharmaTech",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/AN%20PharmaTech",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Stearic acid",
+      "Propylene glycol",
+      "Sodium lauryl sulfate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Bic Biotech",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Bic%20Biotech",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride"
+    ]
+  },
+  {
+    "name": "Chem-Space.com Database",
+    "website": "https://chem-space.com",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Chem-Space.com%20Database",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Calcium carbonate"
+    ]
+  },
+  {
+    "name": "eNovation Chemicals",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/eNovation%20Chemicals",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Glentham Life Sciences Ltd.",
+    "website": "https://www.glentham.com/en/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Glentham%20Life%20Sciences%20Ltd.",
+    "country": "United Kingdom",
+    "excipients": [
+      "Mannitol",
+      "Stearic acid",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "LEAPCHEM",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/LEAPCHEM",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Stearic acid",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Calcium carbonate",
+      "Zinc oxide",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Mcule",
+    "website": "https://mcule.com",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Mcule",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Molepedia",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Molepedia",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Wutech",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Wutech",
+    "country": "Unknown",
+    "excipients": [
+      "Stearic acid",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "AbMole Bioscience",
+    "website": "http://www.abmole.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/AbMole%20Bioscience",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Potassium chloride"
+    ]
+  },
+  {
+    "name": "Acadechem",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Acadechem",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate"
+    ]
+  },
+  {
+    "name": "Achemica",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Achemica",
+    "country": "Unknown",
+    "excipients": [
+      "Stearic acid",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride"
+    ]
+  },
+  {
+    "name": "AHH Chemical co.,ltd",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/AHH%20Chemical%20co.,ltd",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "AstaTech, Inc.",
+    "website": "https://www.astatechinc.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/AstaTech,%20Inc.",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Changzhou Highassay Chemical Co., Ltd",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Changzhou%20Highassay%20Chemical%20Co.,%20Ltd",
+    "country": "Unknown",
+    "excipients": [
+      "Sucrose",
+      "Propylene glycol",
+      "Sodium lauryl sulfate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "ChemExper Chemical Directory",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/ChemExper%20Chemical%20Directory",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Calcium carbonate"
+    ]
+  },
+  {
+    "name": "China MainChem Co., Ltd",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/China%20MainChem%20Co.,%20Ltd",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Dicalcium phosphate",
+      "Potassium chloride",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Enamine",
+    "website": "https://enaminestore.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Enamine",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate"
+    ]
+  },
+  {
+    "name": "Key Organics/BIONET",
+    "website": "https://www.keyorganics.net/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Key%20Organics/BIONET",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Sodium chloride",
+      "Potassium chloride"
+    ]
+  },
+  {
+    "name": "labseeker",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/labseeker",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Phion Ltd",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Phion%20Ltd",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sucrose",
+      "Propylene glycol",
+      "Sodium lauryl sulfate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride"
+    ]
+  },
+  {
+    "name": "Quality Control Solutions (QCS Standards)",
+    "website": "https://qcsrm.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Quality%20Control%20Solutions%20(QCS%20Standards)",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate"
+    ]
+  },
+  {
+    "name": "Sinfoo Biotech",
+    "website": "http://sinfoobiotech.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Sinfoo%20Biotech",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate"
+    ]
+  },
+  {
+    "name": "Thoreauchem",
+    "website": "http://www.thoreauchem.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Thoreauchem",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride"
+    ]
+  },
+  {
+    "name": "Yuhao Chemical",
+    "website": "http://www.chemyuhao.com",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Yuhao%20Chemical",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate"
+    ]
+  },
+  {
+    "name": "Achemtek",
+    "website": "http://achemtek.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Achemtek",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate"
+    ]
+  },
+  {
+    "name": "CSNpharm",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/CSNpharm",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Potassium chloride"
+    ]
+  },
+  {
+    "name": "Debye Scientific Co., Ltd",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Debye%20Scientific%20Co.,%20Ltd",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Dicalcium phosphate",
+      "Calcium carbonate"
+    ]
+  },
+  {
+    "name": "LabNetwork, a WuXi AppTec Company",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/LabNetwork,%20a%20WuXi%20AppTec%20Company",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol"
+    ]
+  },
+  {
+    "name": "Strem Chemicals, Inc.",
+    "website": "https://www.strem.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Strem%20Chemicals,%20Inc.",
+    "country": "Unknown",
+    "excipients": [
+      "Sodium lauryl sulfate",
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Zinc oxide",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "TargetMol",
+    "website": "https://www.targetmol.com/contact-us",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/TargetMol",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Acmec Biochemical",
+    "website": "http://www.acmec.com.cn/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Acmec%20Biochemical",
+    "country": "China",
+    "excipients": [
+      "Sorbitol",
+      "Benzyl alcohol",
+      "Dicalcium phosphate",
+      "Calcium carbonate",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Alichem",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Alichem",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Dicalcium phosphate"
+    ]
+  },
+  {
+    "name": "Ambeed",
+    "website": "https://www.ambeed.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Ambeed",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate"
+    ]
+  },
+  {
+    "name": "Anward",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Anward",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Propylene glycol",
+      "Sodium lauryl sulfate"
+    ]
+  },
+  {
+    "name": "ChemFaces",
+    "website": "http://www.chemfaces.com",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/ChemFaces",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Benzyl alcohol"
+    ]
+  },
+  {
+    "name": "DC Chemicals",
+    "website": "http://www.dcchemicals.com",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/DC%20Chemicals",
+    "country": "Unknown",
+    "excipients": [
+      "Stearic acid",
+      "Sucrose",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate",
+      "Calcium carbonate"
+    ]
+  },
+  {
+    "name": "EvitaChem",
+    "website": "https://www.evitachem.com",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/EvitaChem",
+    "country": "Unknown",
+    "excipients": [
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Calcium carbonate",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Selleck Chemicals",
+    "website": "http://www.selleckchem.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Selleck%20Chemicals",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Propylene glycol",
+      "Benzyl alcohol"
+    ]
+  },
+  {
+    "name": "SynHet - Synthetic Heterocycles",
+    "website": "https://www.synhet.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/SynHet%20-%20Synthetic%20Heterocycles",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate"
+    ]
+  },
+  {
+    "name": "TimTec",
+    "website": "http://www.timtec.net",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/TimTec",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Stearic acid",
+      "Sucrose",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate"
+    ]
+  },
+  {
+    "name": "ABBLIS Chemicals",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/ABBLIS%20Chemicals",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Calcium carbonate",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "AEZ Kimya",
+    "website": "https://aez.com.tr",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/AEZ%20Kimya",
+    "country": "Unknown",
+    "excipients": [
+      "Calcium carbonate",
+      "Sodium chloride",
+      "Potassium chloride",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "AiFChem, an XtalPi Company",
+    "website": "https://store.aifchem.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/AiFChem,%20an%20XtalPi%20Company",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Sodium lauryl sulfate",
+      "Calcium carbonate"
+    ]
+  },
+  {
+    "name": "ApexBio Technology",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/ApexBio%20Technology",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Sucrose",
+      "Sodium chloride",
+      "Potassium chloride"
+    ]
+  },
+  {
+    "name": "Biocore",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Biocore",
+    "country": "Unknown",
+    "excipients": [
+      "Stearic acid",
+      "Propylene glycol",
+      "Sodium lauryl sulfate",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "CAPOT",
+    "website": "https://www.capotchem.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/CAPOT",
+    "country": "Unknown",
+    "excipients": [
+      "Stearic acid",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Dicalcium phosphate"
+    ]
+  },
+  {
+    "name": "Chemenu Inc.",
+    "website": "https://www.chemenu.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Chemenu%20Inc.",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Benzyl alcohol"
+    ]
+  },
+  {
+    "name": "Life Chemicals",
+    "website": "http://www.lifechemicals.com",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Life%20Chemicals",
+    "country": "Unknown",
+    "excipients": [
+      "Stearic acid",
+      "Propylene glycol",
+      "Benzyl alcohol",
+      "Sodium lauryl sulfate"
+    ]
+  },
+  {
+    "name": "Matrix Scientific",
+    "website": "https://www.matrixscientific.com/097524",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Matrix%20Scientific",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Propylene glycol",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Tocris Bioscience",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Tocris%20Bioscience",
+    "country": "Unknown",
+    "excipients": [
+      "Sucrose",
+      "Sodium lauryl sulfate",
+      "Sodium chloride",
+      "Potassium chloride"
+    ]
+  },
+  {
+    "name": "Veeprho",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Veeprho",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Propylene glycol",
+      "Benzyl alcohol"
+    ]
+  },
+  {
+    "name": "Vitas-M Laboratory",
+    "website": "http://www.vitasmlab.biz",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Vitas-M%20Laboratory",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Stearic acid",
+      "Propylene glycol",
+      "Benzyl alcohol"
+    ]
+  },
+  {
+    "name": "ZINC",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/ZINC",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose",
+      "Benzyl alcohol"
+    ]
+  },
+  {
+    "name": "AAA Chemistry",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/AAA%20Chemistry",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sorbitol",
+      "Stearic acid"
+    ]
+  },
+  {
+    "name": "Amerigo Scientific",
+    "website": "https://www.amerigoscientific.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Amerigo%20Scientific",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sodium chloride",
+      "Potassium chloride"
+    ]
+  },
+  {
+    "name": "Aribo Reagent",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Aribo%20Reagent",
+    "country": "Unknown",
+    "excipients": [
+      "Sucrose",
+      "Sodium chloride",
+      "Potassium chloride"
+    ]
+  },
+  {
+    "name": "Ark Pharm, Inc.",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Ark%20Pharm,%20Inc.",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Propylene glycol",
+      "Benzyl alcohol"
+    ]
+  },
+  {
+    "name": "Aurum Pharmatech LLC",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Aurum%20Pharmatech%20LLC",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Stearic acid",
+      "Sodium lauryl sulfate"
+    ]
+  },
+  {
+    "name": "BePharm Ltd.",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/BePharm%20Ltd.",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose"
+    ]
+  },
+  {
+    "name": "BroadPharm",
+    "website": "https://www.broadpharm.com",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/BroadPharm",
+    "country": "Unknown",
+    "excipients": [
+      "Stearic acid",
+      "Propylene glycol",
+      "Benzyl alcohol"
+    ]
+  },
+  {
+    "name": "INTERBIOSCREEN",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/INTERBIOSCREEN",
+    "country": "Unknown",
+    "excipients": [
+      "Stearic acid",
+      "Propylene glycol",
+      "Benzyl alcohol"
+    ]
+  },
+  {
+    "name": "OXCHEM CORPORATION",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/OXCHEM%20CORPORATION",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose"
+    ]
+  },
+  {
+    "name": "SMID",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/SMID",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Sucrose"
+    ]
+  },
+  {
+    "name": "Syntree",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Syntree",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid",
+      "Benzyl alcohol"
+    ]
+  },
+  {
+    "name": "Zjartschem",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Zjartschem",
+    "country": "Unknown",
+    "excipients": [
+      "Stearic acid",
+      "Propylene glycol",
+      "Sodium lauryl sulfate"
+    ]
+  },
+  {
+    "name": "1st Scientific",
+    "website": "https://www.1stsci.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/1st%20Scientific",
+    "country": "Unknown",
+    "excipients": [
+      "Propylene glycol",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "A&J Pharmtech CO., LTD.",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/A&J%20Pharmtech%20CO.,%20LTD.",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Benzyl alcohol"
+    ]
+  },
+  {
+    "name": "AEchem Scientific Corp., USA",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/AEchem%20Scientific%20Corp.,%20USA",
+    "country": "Unknown",
+    "excipients": [
+      "Benzyl alcohol",
+      "Dicalcium phosphate"
+    ]
+  },
+  {
+    "name": "Ambinter",
+    "website": "http://www.ambinter.com",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Ambinter",
+    "country": "Unknown",
+    "excipients": [
+      "Sodium chloride",
+      "Potassium chloride"
+    ]
+  },
+  {
+    "name": "Angel Pharmatech Ltd.",
+    "website": "https://www.angelpharmatech.com",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Angel%20Pharmatech%20Ltd.",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Benzyl alcohol"
+    ]
+  },
+  {
+    "name": "Apexmol",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Apexmol",
+    "country": "Unknown",
+    "excipients": [
+      "Potassium chloride",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "BioChemPartner",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/BioChemPartner",
+    "country": "Unknown",
+    "excipients": [
+      "Propylene glycol",
+      "Sodium lauryl sulfate"
+    ]
+  },
+  {
+    "name": "BioCrick",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/BioCrick",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Stearic acid"
+    ]
+  },
+  {
+    "name": "Boerchem",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Boerchem",
+    "country": "Unknown",
+    "excipients": [
+      "Stearic acid",
+      "Benzyl alcohol"
+    ]
+  },
+  {
+    "name": "Cangzhou Enke Pharma Tech Co.,Ltd.",
+    "website": "http://www.enkepharma.com/indexe.php",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Cangzhou%20Enke%20Pharma%20Tech%20Co.,Ltd.",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Benzyl alcohol"
+    ]
+  },
+  {
+    "name": "ChemFish Tokyo Co., Ltd.",
+    "website": "http://en.chemfish.co.jp/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/ChemFish%20Tokyo%20Co.,%20Ltd.",
+    "country": "Japan",
+    "excipients": [
+      "Sucrose",
+      "Benzyl alcohol"
+    ]
+  },
+  {
+    "name": "Founder Pharma",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Founder%20Pharma",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Benzyl alcohol"
+    ]
+  },
+  {
+    "name": "Hunan Chemfish Pharmaceutical Co., Ltd.",
+    "website": "http://en.chemfish.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Hunan%20Chemfish%20Pharmaceutical%20Co.,%20Ltd.",
+    "country": "Unknown",
+    "excipients": [
+      "Sucrose",
+      "Benzyl alcohol"
+    ]
+  },
+  {
+    "name": "Hunan Huateng Pharmaceutical Co., Ltd.",
+    "website": "https://us.huatengsci.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Hunan%20Huateng%20Pharmaceutical%20Co.,%20Ltd.",
+    "country": "Unknown",
+    "excipients": [
+      "Propylene glycol",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Innovapharm",
+    "website": "http://innovapharm.com.ua/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Innovapharm",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Stearic acid"
+    ]
+  },
+  {
+    "name": "Lan Pharmatech",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Lan%20Pharmatech",
+    "country": "Unknown",
+    "excipients": [
+      "Propylene glycol",
+      "Benzyl alcohol"
+    ]
+  },
+  {
+    "name": "OtavaChemicals",
+    "website": "https://otavachemicals.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/OtavaChemicals",
+    "country": "Unknown",
+    "excipients": [
+      "Stearic acid",
+      "Benzyl alcohol"
+    ]
+  },
+  {
+    "name": "Pi Chemicals",
+    "website": "http://www.pipharm.com",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Pi%20Chemicals",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Sodium lauryl sulfate"
+    ]
+  },
+  {
+    "name": "Rare Chemicals GmbH, Germany",
+    "website": "https://www.rarechem.de/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Rare%20Chemicals%20GmbH,%20Germany",
+    "country": "Germany",
+    "excipients": [
+      "Stearic acid",
+      "Benzyl alcohol"
+    ]
+  },
+  {
+    "name": "Sinofi Ingredients",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Sinofi%20Ingredients",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol",
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Synblock Inc",
+    "website": "https://www.synblock.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Synblock%20Inc",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Propylene glycol"
+    ]
+  },
+  {
+    "name": "Toref Standards",
+    "website": "https://toref-standards.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Toref%20Standards",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol",
+      "Propylene glycol"
+    ]
+  },
+  {
+    "name": "Accela ChemBio Inc.",
+    "website": "http://www.accelachem.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Accela%20ChemBio%20Inc.",
+    "country": "Unknown",
+    "excipients": [
+      "Sucrose"
+    ]
+  },
+  {
+    "name": "Aceschem Inc",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Aceschem%20Inc",
+    "country": "Unknown",
+    "excipients": [
+      "Benzyl alcohol"
+    ]
+  },
+  {
+    "name": "Active Biopharma",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Active%20Biopharma",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol"
+    ]
+  },
+  {
+    "name": "Adooq BioScience",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Adooq%20BioScience",
+    "country": "Unknown",
+    "excipients": [
+      "Benzyl alcohol"
+    ]
+  },
+  {
+    "name": "AgroIntelBioScan.com",
+    "website": "https://agrointelbioscan.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/AgroIntelBioScan.com",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol"
+    ]
+  },
+  {
+    "name": "Alinda Chemical Trade Company Ltd",
+    "website": "https://alindachemical.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Alinda%20Chemical%20Trade%20Company%20Ltd",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol"
+    ]
+  },
+  {
+    "name": "AmicBase - Antimicrobial Activities",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/AmicBase%20-%20Antimicrobial%20Activities",
+    "country": "Unknown",
+    "excipients": [
+      "Benzalkonium chloride"
+    ]
+  },
+  {
+    "name": "Aromalake Chemical",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Aromalake%20Chemical",
+    "country": "Unknown",
+    "excipients": [
+      "Benzyl alcohol"
+    ]
+  },
+  {
+    "name": "Aromsyn catalogue",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Aromsyn%20catalogue",
+    "country": "Unknown",
+    "excipients": [
+      "Benzyl alcohol"
+    ]
+  },
+  {
+    "name": "Aronis",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Aronis",
+    "country": "Unknown",
+    "excipients": [
+      "Sodium lauryl sulfate"
+    ]
+  },
+  {
+    "name": "Avantor Inc",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Avantor%20Inc",
+    "country": "Unknown",
+    "excipients": [
+      "Sodium lauryl sulfate"
+    ]
+  },
+  {
+    "name": "Boronpharm",
+    "website": "https://www.boronpharm.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Boronpharm",
+    "country": "Unknown",
+    "excipients": [
+      "Calcium carbonate"
+    ]
+  },
+  {
+    "name": "Calbiochem",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Calbiochem",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol"
+    ]
+  },
+  {
+    "name": "Career Henan Chemical Co",
+    "website": "http://www.coreychem.com",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Career%20Henan%20Chemical%20Co",
+    "country": "Unknown",
+    "excipients": [
+      "Calcium carbonate"
+    ]
+  },
+  {
+    "name": "Chemchart",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Chemchart",
+    "country": "Unknown",
+    "excipients": [
+      "Benzyl alcohol"
+    ]
+  },
+  {
+    "name": "DempoChem",
+    "website": "https://www.dempochem.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/DempoChem",
+    "country": "Unknown",
+    "excipients": [
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "EDASA Scientific",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/EDASA%20Scientific",
+    "country": "Unknown",
+    "excipients": [
+      "Stearic acid"
+    ]
+  },
+  {
+    "name": "Elsa Biotechnology",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Elsa%20Biotechnology",
+    "country": "Unknown",
+    "excipients": [
+      "Benzyl alcohol"
+    ]
+  },
+  {
+    "name": "EMD Biosciences",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/EMD%20Biosciences",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol"
+    ]
+  },
+  {
+    "name": "EMD Millipore",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/EMD%20Millipore",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol"
+    ]
+  },
+  {
+    "name": "GFS Chemicals",
+    "website": "https://www.gfschemicals.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/GFS%20Chemicals",
+    "country": "Unknown",
+    "excipients": [
+      "Potassium chloride"
+    ]
+  },
+  {
+    "name": "Hangzhou APIChem Technology",
+    "website": "http://www.apichemistry.com",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Hangzhou%20APIChem%20Technology",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol"
+    ]
+  },
+  {
+    "name": "Jamson Pharmachem Technology",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Jamson%20Pharmachem%20Technology",
+    "country": "Unknown",
+    "excipients": [
+      "Benzyl alcohol"
+    ]
+  },
+  {
+    "name": "Kingston Chemistry",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Kingston%20Chemistry",
+    "country": "Unknown",
+    "excipients": [
+      "Stearic acid"
+    ]
+  },
+  {
+    "name": "Kyfora Bio",
+    "website": "https://kyforabio.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Kyfora%20Bio",
+    "country": "Unknown",
+    "excipients": [
+      "Stearic acid"
+    ]
+  },
+  {
+    "name": "Lorad Chemical Corporation",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Lorad%20Chemical%20Corporation",
+    "country": "Unknown",
+    "excipients": [
+      "Colloidal silicon dioxide"
+    ]
+  },
+  {
+    "name": "Midas Pharma GmbH",
+    "website": "https://www.midas-pharma.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Midas%20Pharma%20GmbH",
+    "country": "Unknown",
+    "excipients": [
+      "Propylene glycol"
+    ]
+  },
+  {
+    "name": "Moldb",
+    "website": "https://www.moldb.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Moldb",
+    "country": "Unknown",
+    "excipients": [
+      "Propylene glycol"
+    ]
+  },
+  {
+    "name": "Nature Science Technologies Ltd",
+    "website": "https://nstchemicals.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Nature%20Science%20Technologies%20Ltd",
+    "country": "Unknown",
+    "excipients": [
+      "Sorbitol"
+    ]
+  },
+  {
+    "name": "OChem",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/OChem",
+    "country": "Unknown",
+    "excipients": [
+      "Benzyl alcohol"
+    ]
+  },
+  {
+    "name": "Pfanstiehl Inc",
+    "website": "https://pfanstiehl.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Pfanstiehl%20Inc",
+    "country": "Unknown",
+    "excipients": [
+      "Sucrose"
+    ]
+  },
+  {
+    "name": "Race Chemical",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Race%20Chemical",
+    "country": "Unknown",
+    "excipients": [
+      "Mannitol"
+    ]
+  },
+  {
+    "name": "SynQuest Laboratories",
+    "website": "https://www.synquestlabs.com/",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/SynQuest%20Laboratories",
+    "country": "Unknown",
+    "excipients": [
+      "Benzyl alcohol"
+    ]
+  },
+  {
+    "name": "Wilshire Technologies",
+    "website": "",
+    "pubchem_detail": "https://pubchem.ncbi.nlm.nih.gov/source/Wilshire%20Technologies",
+    "country": "Unknown",
+    "excipients": [
+      "Sucrose"
+    ]
+  }
+]
