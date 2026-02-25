@@ -128,7 +128,12 @@ function setupSearchInput(input, suggestionsId) {
         if (e.key === 'Enter') {
             e.preventDefault();
             hideSuggestions(suggestionsId);
-            performSearch(this.value);
+            // Soumettre le formulaire parent pour déclencher onsubmit (évite le conflit
+            // entre la version de performSearch dans search.js et celle d'index.html)
+            const form = this.closest('form');
+            if (form) {
+                form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+            }
         }
     });
 }
@@ -248,6 +253,49 @@ function performSearch(query = null) {
     
     // Recherche dans l'index
     const results = searchInIndex(searchTerm);
-    
-    // Affichage des résultats
-    setTimeout(() =>
+
+    // Redirection vers le catalogue avec le terme de recherche
+    setTimeout(() => {
+        window.location.href = `catalogue.html?search=${encodeURIComponent(searchTerm)}`;
+    }, 300);
+}
+
+// Recherche dans l'index local
+function searchInIndex(query) {
+    const normalizedQuery = query.toLowerCase().trim();
+    return searchIndex.filter(item => item.keywords.includes(normalizedQuery));
+}
+
+// Récupérer le terme de recherche actif
+function getCurrentSearchTerm() {
+    const mainInput = document.getElementById('searchInput');
+    const catalogInput = document.getElementById('catalogSearchInput');
+    return (mainInput && mainInput.value.trim()) ||
+           (catalogInput && catalogInput.value.trim()) || '';
+}
+
+// Historique de recherche
+function addToSearchHistory(term) {
+    if (!term || searchHistory.includes(term)) return;
+    searchHistory.unshift(term);
+    if (searchHistory.length > 10) searchHistory.pop();
+    try { localStorage.setItem('chemspot_search_history', JSON.stringify(searchHistory)); } catch (e) {}
+}
+
+function loadSearchHistory() {
+    try {
+        const saved = localStorage.getItem('chemspot_search_history');
+        if (saved) searchHistory = JSON.parse(saved);
+    } catch (e) {}
+}
+
+// Configuration des onglets de recherche (page d'accueil)
+function setupSearchTabs() {
+    const tabs = document.querySelectorAll('.search-tab');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            tabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+}

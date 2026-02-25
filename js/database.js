@@ -56,8 +56,7 @@ async function loadAllData() {
 // On demande juste l'essentiel au début !
 const { data: products, error: productsError } = await supabase
     .from('products')
-    .select('id, name'); // Comme demander juste 2 Lego au lieu de 10 D'abord on demande juste les produits
-    
+    .select('id, name')
     .order('name');
         
         if (productsError) throw productsError;
@@ -470,9 +469,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Exporter les fonctions principales pour les autres scripts
+// NOTE : Ce fichier est un module legacy non chargé par les pages actuelles.
+// L'export est renommé ChemSpotDBLegacy pour éviter d'écraser window.ChemSpotDB
+// défini dans supabase-config.js (qui est le module actif).
 if (typeof window !== 'undefined') {
-    window.ChemSpotDB = {
+    window.ChemSpotDBLegacy = {
         initializeDatabase,
         searchInDatabase,
         filterSuppliers,
@@ -485,14 +486,4 @@ if (typeof window !== 'undefined') {
         getAllProducts: () => allProducts,
         getAllSuppliers: () => allSuppliers
     };
-    
-    // Rendre les fonctions disponibles globalement
-    window.filterSuppliers = filterSuppliers;
-    window.resetFilters = resetFilters;
-    window.contactSupplier = contactSupplier;
-    window.visitWebsite = visitWebsite;
-    window.viewSupplierProducts = viewSupplierProducts;
-    window.displaySuppliers = displaySuppliers;
-    window.allSuppliers = allSuppliers;
-    window.allProducts = allProducts;
 }

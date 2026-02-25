@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Détail Produit - ChemistrySpot</title>
     
-    <!-- Supabase déjà chargé par catalogue.html - PAS DE RECHARGEMENT -->
-    
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/main.css">
@@ -582,16 +583,16 @@
 
             <!-- TABS -->
             <div class="tabs">
-                <button class="tab active" onclick="switchTab('conditionnements')">
+                <button class="tab active" onclick="switchTab(event, 'conditionnements')">
                     💰 Prix & Conditionnements
                 </button>
-                <button class="tab" onclick="switchTab('marche')">
+                <button class="tab" onclick="switchTab(event, 'marche')">
                     📊 Analyse Marché
                 </button>
-                <button class="tab" onclick="switchTab('fournisseurs')">
+                <button class="tab" onclick="switchTab(event, 'fournisseurs')">
                     🏭 Fournisseurs
                 </button>
-                <button class="tab" onclick="switchTab('alertes')">
+                <button class="tab" onclick="switchTab(event, 'alertes')">
                     🔔 Alertes Réglementaires
                 </button>
             </div>
@@ -651,19 +652,9 @@
         // ============================================================
         // INITIALISATION
         // ============================================================
-        document.addEventListener('DOMContentLoaded', async () => {
+        document.addEventListener('DOMContentLoaded', () => {
             try {
-                // Charger Supabase si pas déjà chargé
-                if (typeof window.supabase === 'undefined') {
-                    // Charger depuis CDN si nécessaire
-                    const script = document.createElement('script');
-                    script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
-                    script.onload = () => initSupabase();
-                    document.head.appendChild(script);
-                } else {
-                    initSupabase();
-                }
-
+                initSupabase();
             } catch (error) {
                 console.error('❌ Erreur initialisation:', error);
                 document.getElementById('loadingState').innerHTML = `
@@ -1132,11 +1123,11 @@
             `;
         }
 
-        function switchTab(tabName) {
+        function switchTab(event, tabName) {
             document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            
-            event.target.classList.add('active');
+
+            event.currentTarget.classList.add('active');
             document.getElementById('tab-' + tabName).classList.add('active');
         }
     </script>

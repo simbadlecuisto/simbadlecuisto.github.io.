@@ -5,106 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nos Fournisseurs Certifiés - ChemistrySpot</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/components.css">
+    <link rel="stylesheet" href="./css/responsive.css">
+
     <!-- Supabase CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #333;
-            line-height: 1.6;
-        }
-
-        /* Header Navigation */
-        .navbar {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 2rem;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #4F46E5;
-            text-decoration: none;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: #374151;
-            font-weight: 500;
-            transition: color 0.3s;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-        }
-
-        .nav-links a:hover,
-        .nav-links a.active {
-            color: #4F46E5;
-            background: rgba(79, 70, 229, 0.1);
-        }
-
-        /* Main Content */
+        /* Contenu principal */
         .main-content {
             max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
         }
 
-        .page-header {
+        /* En-tête de page */
+        .fournisseurs-header {
             text-align: center;
             margin-bottom: 3rem;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
+            background: white;
             padding: 3rem 2rem;
             border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.07);
         }
 
-        .page-title {
-            font-size: 3rem;
+        .fournisseurs-header h1 {
+            font-size: 2.5rem;
             font-weight: 700;
             color: #1F2937;
             margin-bottom: 1rem;
         }
 
-        .page-subtitle {
-            font-size: 1.25rem;
+        .fournisseurs-header p {
+            font-size: 1.1rem;
             color: #6B7280;
             max-width: 600px;
             margin: 0 auto;
         }
 
-        /* Stats Section */
+        /* Stats */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -113,39 +54,39 @@
         }
 
         .stat-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
+            background: white;
             padding: 2rem;
             border-radius: 16px;
             text-align: center;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.07);
             transition: transform 0.3s;
+            border-left: 4px solid #667eea;
         }
 
         .stat-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-4px);
         }
 
-        .stat-number {
+        .fournisseurs-stat-number {
             font-size: 2.5rem;
             font-weight: 700;
-            color: #4F46E5;
+            color: #667eea;
             margin-bottom: 0.5rem;
         }
 
-        .stat-label {
+        .fournisseurs-stat-label {
             color: #6B7280;
             font-weight: 500;
+            font-size: 0.95rem;
         }
 
-        /* Filters Section */
+        /* Filtres */
         .filters-section {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
+            background: white;
             padding: 2rem;
             border-radius: 16px;
             margin-bottom: 2rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.07);
         }
 
         .filters-grid {
@@ -164,87 +105,73 @@
             font-weight: 600;
             color: #374151;
             margin-bottom: 0.5rem;
+            font-size: 0.9rem;
         }
 
         .filter-input,
         .filter-select {
             padding: 0.75rem 1rem;
             border: 2px solid #E5E7EB;
-            border-radius: 12px;
+            border-radius: 10px;
             font-size: 1rem;
             transition: all 0.3s;
             background: white;
+            font-family: 'Inter', sans-serif;
         }
 
         .filter-input:focus,
         .filter-select:focus {
             outline: none;
-            border-color: #4F46E5;
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
-        .btn {
-            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 1rem;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.3);
-        }
-
-        /* Status Messages */
-        .status {
+        /* Statut */
+        .status-bar {
             text-align: center;
-            padding: 1rem 2rem;
-            border-radius: 12px;
+            padding: 0.875rem 1.5rem;
+            border-radius: 10px;
             margin: 1rem 0;
             font-weight: 600;
+            font-size: 0.95rem;
         }
 
-        .status.loading {
-            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
-            color: white;
+        .status-bar.loading {
+            background: #FEF3C7;
+            color: #92400E;
         }
 
-        .status.success {
-            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
-            color: white;
+        .status-bar.success {
+            background: #D1FAE5;
+            color: #065F46;
         }
 
-        .status.error {
-            background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
-            color: white;
+        .status-bar.error {
+            background: #FEE2E2;
+            color: #991B1B;
         }
 
-        /* Suppliers Grid */
+        /* Grille fournisseurs */
         .suppliers-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
             gap: 1.5rem;
             margin-top: 2rem;
         }
 
         .supplier-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
+            background: white;
             border-radius: 16px;
             padding: 2rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.07);
             transition: all 0.3s;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid #f0f0f0;
         }
 
         .supplier-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+            transform: translateY(-6px);
+            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.15);
+            border-color: #667eea;
         }
 
         .supplier-header {
@@ -259,35 +186,35 @@
         }
 
         .supplier-name {
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             font-weight: 700;
             color: #1F2937;
         }
 
-        .supplier-country {
-            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+        .supplier-country-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 0.25rem 0.75rem;
             border-radius: 20px;
-            font-size: 0.875rem;
+            font-size: 0.85rem;
             font-weight: 500;
-            display: inline-block;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
         }
 
         .supplier-specialty {
             color: #6B7280;
             font-style: italic;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
             font-size: 0.95rem;
         }
 
-        .supplier-certifications {
-            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
-            color: white;
+        .supplier-certif {
+            background: #D1FAE5;
+            color: #065F46;
             padding: 0.5rem 1rem;
             border-radius: 8px;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
             font-weight: 500;
             font-size: 0.9rem;
         }
@@ -296,6 +223,7 @@
             color: #6B7280;
             margin-bottom: 1.5rem;
             line-height: 1.6;
+            font-size: 0.95rem;
         }
 
         .supplier-actions {
@@ -309,39 +237,42 @@
             align-items: center;
             gap: 0.5rem;
             text-decoration: none;
-            color: #4F46E5;
+            color: #667eea;
             font-weight: 600;
             padding: 0.5rem 1rem;
-            border: 2px solid #4F46E5;
+            border: 2px solid #667eea;
             border-radius: 8px;
             transition: all 0.3s;
             font-size: 0.9rem;
         }
 
         .action-link:hover {
-            background: #4F46E5;
+            background: #667eea;
             color: white;
             transform: translateY(-2px);
         }
 
+        .empty-suppliers {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #6B7280;
+        }
+
+        .empty-suppliers i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.4;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
-            .nav-container {
-                flex-direction: column;
-                gap: 1rem;
-                padding: 0 1rem;
-            }
-
-            .nav-links {
-                gap: 1rem;
-            }
-
             .main-content {
                 padding: 1rem;
             }
 
-            .page-title {
-                font-size: 2rem;
+            .fournisseurs-header h1 {
+                font-size: 1.8rem;
             }
 
             .suppliers-grid {
@@ -355,86 +286,221 @@
     </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="/" class="logo">
-                🧪 ChemistrySpot
-            </a>
-            <ul class="nav-links">
-                <li><a href="/">Accueil</a></li>
-                <li><a href="/catalogue.html">Catalogue</a></li>
-                <li><a href="/fournisseurs.html" class="active">Fournisseurs</a></li>
-                <li><a href="/contact.html">Contact</a></li>
-            </ul>
+    <!-- Header (design système partagé) -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/chemspotV1-dt6tDoOKp1wAyi8oRMzxzufIVBfiu9.png" alt="ChemistrySpot Logo" class="logo">
+                    <span class="logo-text">ChemistrySpot</span>
+                </div>
+
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link">Accueil</a></li>
+                    <li><a href="catalogue.html" class="nav-link">Catalogue</a></li>
+                    <li><a href="fournisseurs.html" class="nav-link active">Fournisseurs</a></li>
+                    <li><a href="contact.html" class="nav-link">Contact</a></li>
+                </ul>
+
+                <div class="header-actions">
+                    <button class="btn btn-outline btn-sm" onclick="openModal('loginModal')">
+                        <i class="fas fa-sign-in-alt"></i> Connexion
+                    </button>
+                    <button class="btn btn-primary btn-sm" onclick="openModal('registerModal')">
+                        <i class="fas fa-user-plus"></i> Inscription
+                    </button>
+                </div>
+            </div>
         </div>
-    </nav>
+    </header>
 
-    <!-- Main Content -->
+    <!-- Contenu principal -->
     <div class="main-content">
-        <!-- Page Header -->
-        <header class="page-header">
-            <h1 class="page-title">🏭 Nos Fournisseurs Certifiés</h1>
-            <p class="page-subtitle">
-                Découvrez notre réseau de partenaires vérifiés et certifiés BPF/GMP pour vos matières premières pharmaceutiques
-            </p>
-        </header>
 
-        <!-- Stats Section -->
+        <!-- En-tête de page -->
+        <div class="fournisseurs-header">
+            <h1><i class="fas fa-industry"></i> Nos Fournisseurs Certifiés</h1>
+            <p>Découvrez notre réseau de partenaires vérifiés et certifiés BPF/GMP pour vos matières premières pharmaceutiques</p>
+        </div>
+
+        <!-- Stats -->
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-number" id="totalSuppliers">-</div>
-                <div class="stat-label">Fournisseurs Actifs</div>
+                <div class="fournisseurs-stat-number" id="totalSuppliers">-</div>
+                <div class="fournisseurs-stat-label">Fournisseurs Actifs</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number" id="totalCountries">-</div>
-                <div class="stat-label">Pays Couverts</div>
+                <div class="fournisseurs-stat-number" id="totalCountries">-</div>
+                <div class="fournisseurs-stat-label">Pays Couverts</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number" id="certifiedSuppliers">-</div>
-                <div class="stat-label">Certifiés ISO/GMP</div>
+                <div class="fournisseurs-stat-number" id="certifiedSuppliers">-</div>
+                <div class="fournisseurs-stat-label">Certifiés ISO/GMP</div>
             </div>
         </div>
 
-        <!-- Filters Section -->
+        <!-- Filtres -->
         <div class="filters-section">
             <div class="filters-grid">
                 <div class="filter-group">
-                    <label class="filter-label">Filtrer par pays</label>
+                    <label class="filter-label"><i class="fas fa-globe"></i> Filtrer par pays</label>
                     <select id="countryFilter" class="filter-select">
                         <option value="">Tous les pays</option>
                     </select>
                 </div>
-                
+
                 <div class="filter-group">
-                    <label class="filter-label">Rechercher</label>
+                    <label class="filter-label"><i class="fas fa-search"></i> Rechercher</label>
                     <input type="text" id="searchInput" class="filter-input" placeholder="Nom, spécialité, certifications...">
                 </div>
-                
+
                 <div class="filter-group">
-                    <button class="btn" onclick="refreshSuppliers()">🔄 Actualiser</button>
+                    <label class="filter-label">&nbsp;</label>
+                    <button class="btn btn-primary" onclick="refreshSuppliers()">
+                        <i class="fas fa-sync-alt"></i> Actualiser
+                    </button>
                 </div>
             </div>
         </div>
 
-        <!-- Status -->
-        <div id="status" class="status loading">🔄 Chargement des fournisseurs...</div>
+        <!-- Barre de statut -->
+        <div id="statusBar" class="status-bar loading">
+            <i class="fas fa-spinner fa-spin"></i> Chargement des fournisseurs...
+        </div>
 
-        <!-- Suppliers Grid -->
+        <!-- Grille fournisseurs -->
         <div id="suppliersContainer" class="suppliers-grid"></div>
     </div>
 
+    <!-- Footer (design système partagé) -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>ChemistrySpot</h3>
+                    <p>La marketplace B2B de référence pour les matières premières pharmaceutiques.</p>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Produits</h3>
+                    <ul>
+                        <li><a href="catalogue.html">Excipients</a></li>
+                        <li><a href="catalogue.html">Principes Actifs</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Contact</h3>
+                    <p><i class="fas fa-phone"></i> +33 3 81 25 40 60</p>
+                    <p><i class="fas fa-envelope"></i> contact@chemistryspot.com</p>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 ChemistrySpot. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modals partagés -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            <h2><i class="fas fa-sign-in-alt"></i> Connexion</h2>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Mot de passe</label>
+                    <input type="password" class="form-input" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Se connecter</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('registerModal')">&times;</span>
+            <h2><i class="fas fa-user-plus"></i> Inscription</h2>
+            <form onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label class="form-label">Entreprise</label>
+                    <input type="text" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Mot de passe</label>
+                    <input type="password" class="form-input" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Créer mon compte</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="./js/main.js"></script>
+    <script src="./js/auth.js"></script>
+
     <script>
-        // Configuration Supabase
+        // ============================================================
+        // CONFIGURATION SUPABASE
+        // ============================================================
         const SUPABASE_URL = 'https://jkaffpgqbyhuihvyvtld.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE2NTgzOTQsImV4cCI6MjA2NzIzNDM5NH0.OIjoz6uoPV25Nraral4YN_gz7q6COBW3dAVIYhBy1pI';
 
-        // Variables globales
         let supabase;
         let allSuppliers = [];
         let filteredSuppliers = [];
 
-        // Initialisation
+        // Données de fallback si la table suppliers n'existe pas
+        const FALLBACK_SUPPLIERS = [
+            {
+                name: 'Euro-Chemicals',
+                country: 'Pays-Bas',
+                speciality: 'APIs et excipients pharmaceutiques',
+                certifications: 'ISO 9001, GMP',
+                notes: 'Distributeur européen de référence pour matières premières pharmaceutiques.',
+                website: 'https://www.euro-chemicals.com',
+                contact_email: null
+            },
+            {
+                name: 'EUROAPI',
+                country: 'France',
+                speciality: 'APIs, hormones, prostaglandines, vitamine B12',
+                certifications: 'GMP, ISO 9001, ANSM',
+                notes: 'Leader européen dans la fabrication d\'ingrédients pharmaceutiques actifs.',
+                website: 'https://www.euroapi.com',
+                contact_email: null
+            },
+            {
+                name: 'PCC Group',
+                country: 'Pologne',
+                speciality: 'Matières premières et excipients',
+                certifications: 'ISO 9001, ISO 14001',
+                notes: 'Groupe chimique polonais spécialisé dans les matières premières de spécialité.',
+                website: 'https://www.products.pcc.eu',
+                contact_email: null
+            },
+            {
+                name: 'Roquette Pharma',
+                country: 'France',
+                speciality: 'Excipients végétaux, amidon, sorbitol, mannitol',
+                certifications: 'GMP, ISO 9001, FSSC 22000',
+                notes: 'Leader mondial des excipients pharmaceutiques d\'origine végétale.',
+                website: 'https://www.roquette.com',
+                contact_email: null
+            }
+        ];
+
+        // ============================================================
+        // INITIALISATION
+        // ============================================================
         document.addEventListener('DOMContentLoaded', async () => {
             try {
                 supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -442,80 +508,115 @@
                 await loadSuppliers();
             } catch (error) {
                 console.error('❌ Erreur d\'initialisation:', error);
-                showError('Erreur de connexion à la base de données');
+                showStatusBar('Erreur de connexion — affichage des données de démonstration', 'error');
+                loadFallback();
             }
         });
 
-        // Charger les fournisseurs depuis Supabase
+        // ============================================================
+        // CHARGEMENT DEPUIS SUPABASE
+        // ============================================================
         async function loadSuppliers() {
+            showStatusBar('Chargement des fournisseurs...', 'loading');
+
             try {
-                showStatus('🔄 Chargement des fournisseurs...', 'loading');
-                
                 const { data: suppliers, error } = await supabase
                     .from('suppliers')
                     .select('*')
                     .order('name', { ascending: true });
 
-                if (error) throw error;
+                if (error) {
+                    // Table suppliers inexistante ou autre erreur Supabase
+                    console.warn('⚠️ Table suppliers non disponible, utilisation des données de démonstration:', error.message);
+                    loadFallback();
+                    return;
+                }
 
                 allSuppliers = suppliers || [];
                 filteredSuppliers = [...allSuppliers];
-                
-                console.log('✅ Fournisseurs chargés:', allSuppliers.length);
-                
+
+                console.log(`✅ ${allSuppliers.length} fournisseurs chargés depuis Supabase`);
+
                 updateStats();
                 populateFilters();
                 displaySuppliers();
-                
-                showStatus(`✅ ${allSuppliers.length} fournisseurs chargés avec succès`, 'success');
-                
+
+                showStatusBar(`${allSuppliers.length} fournisseurs chargés`, 'success');
+
             } catch (error) {
-                console.error('❌ Erreur lors du chargement:', error);
-                showError(`Erreur: ${error.message}`);
+                console.warn('⚠️ Erreur Supabase, utilisation des données de démonstration:', error.message);
+                loadFallback();
             }
         }
 
-        // Afficher les fournisseurs
+        // Données de fallback si Supabase échoue
+        function loadFallback() {
+            console.log('📦 Chargement des données de démonstration...');
+            allSuppliers = FALLBACK_SUPPLIERS;
+            filteredSuppliers = [...allSuppliers];
+            updateStats();
+            populateFilters();
+            displaySuppliers();
+            showStatusBar('Données de démonstration — connexion Supabase indisponible', 'error');
+        }
+
+        // Actualiser
+        async function refreshSuppliers() {
+            await loadSuppliers();
+        }
+
+        // ============================================================
+        // AFFICHAGE
+        // ============================================================
         function displaySuppliers() {
             const container = document.getElementById('suppliersContainer');
-            
+
             if (filteredSuppliers.length === 0) {
                 container.innerHTML = `
-                    <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: #6B7280; font-size: 1.1rem;">
-                        🔍 Aucun fournisseur trouvé avec ces critères
+                    <div class="empty-suppliers">
+                        <i class="fas fa-search"></i>
+                        <p>Aucun fournisseur trouvé avec ces critères</p>
                     </div>
                 `;
                 return;
             }
-            
+
             container.innerHTML = filteredSuppliers.map(supplier => `
                 <div class="supplier-card">
                     <div class="supplier-header">
                         <span class="supplier-icon">🏭</span>
                         <span class="supplier-name">${supplier.name || 'Nom non disponible'}</span>
                     </div>
-                    
-                    <div class="supplier-country">${supplier.country || 'Pays non spécifié'}</div>
-                    
-                    <div class="supplier-specialty">${supplier.speciality || 'Spécialité non renseignée'}</div>
-                    
-                    <div class="supplier-certifications">
-                        📜 ${supplier.certifications || 'Certifications non renseignées'}
+
+                    <div class="supplier-country-badge">
+                        <i class="fas fa-map-marker-alt"></i> ${supplier.country || 'Pays non spécifié'}
                     </div>
-                    
-                    <div class="supplier-description">
-                        ${supplier.notes || 'Aucune description disponible'}
-                    </div>
-                    
+
+                    ${supplier.speciality ? `
+                        <div class="supplier-specialty">
+                            <i class="fas fa-tag"></i> ${supplier.speciality}
+                        </div>
+                    ` : ''}
+
+                    ${supplier.certifications ? `
+                        <div class="supplier-certif">
+                            <i class="fas fa-certificate"></i> ${supplier.certifications}
+                        </div>
+                    ` : ''}
+
+                    ${supplier.notes ? `
+                        <div class="supplier-description">${supplier.notes}</div>
+                    ` : ''}
+
                     <div class="supplier-actions">
                         ${supplier.contact_email ? `
                             <a href="mailto:${supplier.contact_email}" class="action-link">
-                                📧 Contacter
+                                <i class="fas fa-envelope"></i> Contacter
                             </a>
                         ` : ''}
                         ${supplier.website ? `
-                            <a href="${supplier.website}" target="_blank" class="action-link">
-                                🌐 Site web
+                            <a href="${supplier.website}" target="_blank" rel="noopener noreferrer" class="action-link">
+                                <i class="fas fa-globe"></i> Site web
                             </a>
                         ` : ''}
                     </div>
@@ -523,96 +624,86 @@
             `).join('');
         }
 
-        // Mettre à jour les statistiques
+        // ============================================================
+        // STATISTIQUES
+        // ============================================================
         function updateStats() {
-            const totalSuppliers = allSuppliers.length;
-            const countries = [...new Set(allSuppliers.map(s => s.country).filter(c => c))];
-            const certified = allSuppliers.filter(s => s.certifications && 
-                (s.certifications.toLowerCase().includes('iso') || 
-                 s.certifications.toLowerCase().includes('gmp') ||
-                 s.certifications.toLowerCase().includes('gdp'))).length;
-            
-            // Animation des chiffres
-            animateNumber('totalSuppliers', totalSuppliers);
+            const countries = [...new Set(allSuppliers.map(s => s.country).filter(Boolean))];
+            const certified = allSuppliers.filter(s =>
+                s.certifications && (
+                    s.certifications.toLowerCase().includes('iso') ||
+                    s.certifications.toLowerCase().includes('gmp') ||
+                    s.certifications.toLowerCase().includes('gdp')
+                )
+            ).length;
+
+            animateNumber('totalSuppliers', allSuppliers.length);
             animateNumber('totalCountries', countries.length);
             animateNumber('certifiedSuppliers', certified);
         }
 
-        // Animation des chiffres
         function animateNumber(elementId, targetValue) {
             const element = document.getElementById(elementId);
-            const startValue = 0;
-            const duration = 1000;
+            if (!element) return;
             const startTime = performance.now();
-            
-            function updateNumber(currentTime) {
-                const elapsed = currentTime - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-                const current = Math.floor(startValue + (targetValue - startValue) * progress);
-                
-                element.textContent = current;
-                
-                if (progress < 1) {
-                    requestAnimationFrame(updateNumber);
-                }
+            const duration = 800;
+
+            function update(currentTime) {
+                const progress = Math.min((currentTime - startTime) / duration, 1);
+                element.textContent = Math.floor(progress * targetValue);
+                if (progress < 1) requestAnimationFrame(update);
+                else element.textContent = targetValue;
             }
-            
-            requestAnimationFrame(updateNumber);
+            requestAnimationFrame(update);
         }
 
-        // Remplir les filtres
+        // ============================================================
+        // FILTRES
+        // ============================================================
         function populateFilters() {
             const countryFilter = document.getElementById('countryFilter');
-            const countries = [...new Set(allSuppliers.map(s => s.country).filter(c => c))].sort();
-            
-            countryFilter.innerHTML = '<option value="">Tous les pays</option>' + 
-                countries.map(country => `<option value="${country}">${country}</option>`).join('');
-            
+            const countries = [...new Set(allSuppliers.map(s => s.country).filter(Boolean))].sort();
+
+            countryFilter.innerHTML = '<option value="">Tous les pays</option>' +
+                countries.map(c => `<option value="${c}">${c}</option>`).join('');
+
             countryFilter.addEventListener('change', filterSuppliers);
             document.getElementById('searchInput').addEventListener('input', filterSuppliers);
         }
 
-        // Filtrer les fournisseurs
         function filterSuppliers() {
-            const countryFilter = document.getElementById('countryFilter').value;
+            const country = document.getElementById('countryFilter').value;
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            
+
             filteredSuppliers = allSuppliers.filter(supplier => {
-                const matchesCountry = !countryFilter || supplier.country === countryFilter;
-                const matchesSearch = !searchTerm || 
+                const matchesCountry = !country || supplier.country === country;
+                const matchesSearch = !searchTerm ||
                     (supplier.name && supplier.name.toLowerCase().includes(searchTerm)) ||
                     (supplier.speciality && supplier.speciality.toLowerCase().includes(searchTerm)) ||
                     (supplier.certifications && supplier.certifications.toLowerCase().includes(searchTerm)) ||
                     (supplier.notes && supplier.notes.toLowerCase().includes(searchTerm));
-                
                 return matchesCountry && matchesSearch;
             });
-            
+
             displaySuppliers();
         }
 
-        // Actualiser les données
-        async function refreshSuppliers() {
-            await loadSuppliers();
-        }
+        // ============================================================
+        // STATUT
+        // ============================================================
+        function showStatusBar(message, type) {
+            const bar = document.getElementById('statusBar');
+            const icons = {
+                loading: '<i class="fas fa-spinner fa-spin"></i>',
+                success: '<i class="fas fa-check-circle"></i>',
+                error: '<i class="fas fa-exclamation-triangle"></i>'
+            };
+            bar.innerHTML = `${icons[type] || ''} ${message}`;
+            bar.className = `status-bar ${type}`;
 
-        // Afficher le statut
-        function showStatus(message, type) {
-            const statusDiv = document.getElementById('status');
-            statusDiv.textContent = message;
-            statusDiv.className = `status ${type}`;
-            
             if (type === 'success') {
-                setTimeout(() => {
-                    statusDiv.style.opacity = '0';
-                    setTimeout(() => statusDiv.style.display = 'none', 300);
-                }, 3000);
+                setTimeout(() => { bar.style.display = 'none'; }, 3000);
             }
-        }
-
-        // Afficher une erreur
-        function showError(message) {
-            showStatus(`❌ ${message}`, 'error');
         }
     </script>
 </body>
