@@ -1,0 +1,148 @@
+{
+  "generated_at": "2026-03-04T01:02:06.417604+00:00",
+  "total": 20,
+  "success": 20,
+  "errors": 0,
+  "details": [
+    {
+      "id": 40,
+      "nom_commun": "Croscarmellose sodium",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 41,
+      "nom_commun": "Crospovidone",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 42,
+      "nom_commun": "Sodium starch glycolate",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 43,
+      "nom_commun": "Gelatin",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 44,
+      "nom_commun": "Acacia",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 45,
+      "nom_commun": "Xanthan gum",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 46,
+      "nom_commun": "Carboxymethylcellulose sodium",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 47,
+      "nom_commun": "Ethyl cellulose",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 48,
+      "nom_commun": "Shellac",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 49,
+      "nom_commun": "Carbomer",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 50,
+      "nom_commun": "Sodium bicarbonate",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 51,
+      "nom_commun": "Ascorbic acid",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 52,
+      "nom_commun": "Alpha-tocopherol",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 53,
+      "nom_commun": "Butylated hydroxytoluene",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 54,
+      "nom_commun": "Methylparaben",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 55,
+      "nom_commun": "Propylparaben",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 56,
+      "nom_commun": "Sorbic acid",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 57,
+      "nom_commun": "Potassium sorbate",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 58,
+      "nom_commun": "Cetyl alcohol",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "id": 59,
+      "nom_commun": "Mineral oil",
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    }
+  ]
+}
