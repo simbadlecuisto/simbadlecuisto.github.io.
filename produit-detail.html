@@ -3,880 +3,434 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Détail Produit - ChemistrySpot</title>
-
-    <!-- Supabase CDN -->
+    <title>Détail Produit — ChemistrySpot</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/components.css">
-    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/design-system.css">
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #f8f9fa;
-            color: #333;
-        }
-
-        .page-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        /* BACK BUTTON */
-        .back-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            background: white;
-            border: 2px solid #667eea;
-            border-radius: 8px;
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            transition: all 0.3s;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .back-btn:hover {
-            background: #667eea;
-            color: white;
-            transform: translateX(-5px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-        }
-
-        /* LOADING */
-        .loading {
-            text-align: center;
-            padding: 4rem;
-            color: #667eea;
-            font-size: 1.2rem;
-        }
-
-        .spinner {
-            display: inline-block;
-            width: 40px;
-            height: 40px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 1rem;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* HEADER PRODUIT */
-        .product-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 3rem;
-            border-radius: 12px;
-            margin-bottom: 2rem;
-            display: flex;
-            gap: 2rem;
-            align-items: flex-start;
-        }
-
-        .product-info {
-            flex: 1;
-        }
-
-        .product-structure {
-            background: white;
-            padding: 1rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            min-width: 250px;
-        }
-
-        .product-structure img {
-            width: 100%;
-            height: auto;
-            display: block;
-            border-radius: 4px;
-        }
-
-        .structure-label {
-            text-align: center;
-            color: #667eea;
-            font-weight: 600;
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
-        }
-
-        .product-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .product-subtitle {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            margin-bottom: 1rem;
-        }
-
-        .product-meta {
-            display: flex;
-            gap: 2rem;
-            flex-wrap: wrap;
-            margin-top: 1.5rem;
-        }
-
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        /* TABS */
-        .tabs {
-            display: flex;
-            gap: 0.5rem;
-            border-bottom: 2px solid #e0e0e0;
-            margin-bottom: 2rem;
-            overflow-x: auto;
-        }
-
-        .tab {
-            padding: 1rem 1.5rem;
-            cursor: pointer;
-            border: none;
-            background: none;
-            font-size: 1rem;
-            font-weight: 500;
-            color: #666;
-            position: relative;
-            white-space: nowrap;
-            transition: all 0.3s;
-        }
-
-        .tab:hover { color: #667eea; }
-
-        .tab.active { color: #667eea; }
-
-        .tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: #667eea;
-        }
-
-        .tab-content { display: none; }
-
-        .tab-content.active {
-            display: block;
-            animation: fadeIn 0.3s;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-
-        /* SECTIONS */
-        .section {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            margin-bottom: 2rem;
-        }
-
-        .section-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        /* ─── TAB 1 : TABLEAU COMPARATIF PRIX ─── */
-        .price-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9rem;
-        }
-
-        .price-table thead {
-            background: #f8f9fa;
-            position: sticky;
-            top: 0;
-        }
-
-        .price-table th {
-            padding: 0.85rem 1rem;
-            text-align: left;
-            font-weight: 600;
-            color: #555;
-            border-bottom: 2px solid #dee2e6;
-            white-space: nowrap;
-        }
-
-        .price-table td {
-            padding: 0.85rem 1rem;
-            border-bottom: 1px solid #f0f0f0;
-            vertical-align: middle;
-        }
-
-        .price-table tbody tr:hover { background: #fafafa; }
-
-        .price-green {
-            font-weight: 700;
-            color: #1a7a1a;
-        }
-
-        .supplier-link {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .supplier-link:hover { text-decoration: underline; }
-
-        /* badges stock */
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.3rem;
-            padding: 0.2rem 0.65rem;
-            border-radius: 10px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            white-space: nowrap;
-        }
-
-        .badge-stock-ok  { background: #d4edda; color: #155724; }
-        .badge-stock-no  { background: #e9ecef; color: #6c757d; }
-
-        /* badges certif */
-        .cert-list { display: flex; gap: 0.3rem; flex-wrap: wrap; }
-
-        .cert-badge {
-            padding: 0.15rem 0.5rem;
-            border-radius: 8px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        .cert-gmp      { background: #cce5ff; color: #004085; }
-        .cert-iso      { background: #d4edda; color: #155724; }
-        .cert-usp      { background: #d1ecf1; color: #0c5460; }
-        .cert-pheur    { background: #e2d9f3; color: #4a235a; }
-        .cert-dmf      { background: #fff3cd; color: #856404; }
-        .cert-halal    { background: #fce8d6; color: #7a3000; }
-        .cert-kosher   { background: #f3e8d6; color: #5a3000; }
-        .cert-fda      { background: #d6e8f3; color: #003366; }
-        .cert-default  { background: #f0f0f0; color: #555; }
-
-        .btn-devis {
-            padding: 0.35rem 0.9rem;
-            background: #667eea;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: 500;
-            transition: background 0.2s;
-            white-space: nowrap;
-        }
-
-        .btn-devis:hover { background: #5568d3; }
-
-        .info-note {
-            margin-top: 1.5rem;
-            padding: 0.85rem 1rem;
-            background: #f8f9fa;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            color: #666;
-        }
-
-        /* ─── TAB 3 : CARTES FOURNISSEURS ─── */
-        .suppliers-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.25rem;
-            margin-top: 1rem;
-        }
-
-        .supplier-card {
-            border: 1px solid #e0e0e0;
-            border-radius: 10px;
-            padding: 1.25rem;
-            transition: box-shadow 0.2s, transform 0.2s;
-            background: white;
-        }
-
-        .supplier-card:hover {
-            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
-            transform: translateY(-2px);
-        }
-
-        .supplier-card-header {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .supplier-flag { font-size: 1.8rem; }
-
-        .supplier-name {
-            font-size: 1rem;
-            font-weight: 700;
-            color: #222;
-        }
-
-        .supplier-country {
-            font-size: 0.85rem;
-            color: #777;
-        }
-
-        .supplier-specs {
-            font-size: 0.85rem;
-            color: #444;
-            margin-bottom: 0.75rem;
-        }
-
-        .spec-row {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 0.3rem;
-        }
-
-        .spec-label { font-weight: 600; color: #666; min-width: 90px; }
-
-        .supplier-card .cert-list { margin: 0.5rem 0 0.75rem; }
-
-        .supplier-card-footer {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 0.75rem;
-        }
-
-        .btn-website {
-            flex: 1;
-            padding: 0.4rem 0.75rem;
-            background: white;
-            color: #667eea;
-            border: 1.5px solid #667eea;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.82rem;
-            font-weight: 600;
-            text-decoration: none;
-            text-align: center;
-            transition: all 0.2s;
-        }
-
-        .btn-website:hover { background: #667eea; color: white; }
-
-        /* ─── EMPTY STATES ─── */
-        .empty-state {
-            text-align: center;
-            padding: 3rem;
-            color: #aaa;
-        }
-
-        .empty-state i {
-            font-size: 2.5rem;
-            margin-bottom: 0.75rem;
-            opacity: 0.4;
-        }
-
-        .empty-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #666;
-            margin-bottom: 0.4rem;
-        }
-
-        .empty-sub {
-            font-size: 0.9rem;
-            color: #999;
-        }
-
-        /* phase2 badge */
-        .phase2-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea20, #764ba220);
-            border: 1px solid #667eea40;
-            color: #667eea;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-top: 0.75rem;
-        }
-
-        /* RESPONSIVE */
-        @media (max-width: 768px) {
-            .page-content { padding: 1rem; }
-
-            .product-header {
-                padding: 2rem 1.5rem;
-                flex-direction: column;
-            }
-
-            .product-header h1 { font-size: 1.8rem; }
-
-            .product-structure {
-                width: 100%;
-                max-width: 300px;
-                margin: 0 auto;
-            }
-
-            .price-table { font-size: 0.8rem; }
-
-            .price-table th,
-            .price-table td { padding: 0.65rem 0.5rem; }
-        }
+    /* ── Page-specific overrides ── */
+    .price-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .price-table thead { background: var(--bg-surface); position: sticky; top: 0; }
+    .price-table th {
+        padding: 0.75rem 1rem; text-align: left; font-size: 0.75rem; font-weight: 600;
+        color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;
+        border-bottom: 1px solid var(--border); white-space: nowrap;
+    }
+    .price-table td { padding: 0.8rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); color: var(--text); vertical-align: middle; }
+    .price-table tbody tr:hover td { background: var(--bg-hover); }
+    .price-green { font-weight: 700; color: var(--primary); font-family: var(--mono); }
+    .supplier-link { color: var(--primary); text-decoration: none; font-weight: 600; }
+    .supplier-link:hover { text-decoration: underline; }
+
+    .badge-stock-ok  { background: rgba(0,212,170,0.12); color: var(--primary); }
+    .badge-stock-no  { background: rgba(136,146,164,0.12); color: var(--text-muted); }
+
+    .cert-badge { padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.72rem; font-weight: 600; }
+    .cert-gmp   { background: rgba(0,212,170,0.15); color: #00d4aa; }
+    .cert-iso   { background: rgba(79,195,247,0.15); color: #4fc3f7; }
+    .cert-usp   { background: rgba(240,180,41,0.15); color: #f0b429; }
+    .cert-pheur { background: rgba(153,102,255,0.15); color: #9966ff; }
+    .cert-dmf   { background: rgba(255,177,0,0.15); color: #ffb100; }
+    .cert-halal { background: rgba(34,197,94,0.15); color: #22c55e; }
+    .cert-kosher { background: rgba(251,146,60,0.15); color: #fb923c; }
+    .cert-fda   { background: rgba(59,130,246,0.15); color: #3b82f6; }
+    .cert-default { background: var(--bg-surface); color: var(--text-muted); }
+    .cert-list { display: flex; gap: 0.3rem; flex-wrap: wrap; }
+
+    .btn-devis {
+        padding: 0.35rem 0.9rem; background: var(--primary); color: #0a0e1a;
+        border: none; border-radius: var(--radius); cursor: pointer;
+        font-size: 0.82rem; font-weight: 600; transition: var(--transition); white-space: nowrap;
+    }
+    .btn-devis:hover { background: var(--primary-dark); }
+
+    .info-note {
+        margin-top: 1.25rem; padding: 0.75rem 1rem;
+        background: var(--bg-surface); border-radius: var(--radius);
+        font-size: 0.82rem; color: var(--text-muted); border-left: 3px solid var(--primary);
+    }
+
+    .supplier-card-detail {
+        background: var(--bg-card); border: 1px solid var(--border);
+        border-radius: var(--radius-lg); padding: 1.25rem;
+        transition: var(--transition);
+    }
+    .supplier-card-detail:hover { border-color: rgba(0,212,170,0.3); transform: translateY(-2px); box-shadow: var(--shadow); }
+    .supplier-card-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
+    .supplier-flag { font-size: 1.8rem; line-height: 1; }
+    .supplier-specs { font-size: 0.83rem; color: var(--text-muted); margin-bottom: 0.75rem; }
+    .spec-row { display: flex; gap: 0.5rem; margin-bottom: 0.3rem; align-items: center; }
+    .spec-label { font-weight: 600; color: var(--text-dim); min-width: 90px; font-size: 0.78rem; }
+    .supplier-card-footer { display: flex; gap: 0.5rem; margin-top: 0.75rem; }
+    .btn-website {
+        flex: 1; padding: 0.4rem 0.75rem; background: transparent;
+        color: var(--primary); border: 1px solid var(--primary);
+        border-radius: var(--radius); cursor: pointer; font-size: 0.82rem;
+        font-weight: 600; text-decoration: none; text-align: center; transition: var(--transition);
+    }
+    .btn-website:hover { background: var(--primary); color: #0a0e1a; }
+
+    .phase2-badge {
+        display: inline-block; background: rgba(0,212,170,0.08);
+        border: 1px solid rgba(0,212,170,0.25); color: var(--primary);
+        padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.78rem; font-weight: 600; margin-top: 0.75rem;
+    }
+
+    @media (max-width: 768px) {
+        .price-table th:nth-child(n+6), .price-table td:nth-child(n+6) { display: none; }
+    }
     </style>
 </head>
 <body>
-    <!-- HEADER NAVIGATION -->
-    <header>
+
+<!-- ══ SITE HEADER ══ -->
+<header class="site-header">
+    <div class="header-top">
         <div class="container">
-            <div class="header-content">
-                <div class="logo-section">
-                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/chemspotV1-dt6tDoOKp1wAyi8oRMzxzufIVBfiu9.png" alt="ChemistrySpot Logo" class="logo">
-                    <span class="logo-text">ChemistrySpot</span>
-                </div>
-
-                <ul class="nav-menu">
-                    <li><a href="index.html" class="nav-link">Accueil</a></li>
-                    <li><a href="catalogue.html" class="nav-link">Catalogue</a></li>
-                    <li><a href="fournisseurs.html" class="nav-link">Fournisseurs</a></li>
-                    <li><a href="contact.html" class="nav-link">Contact</a></li>
-                </ul>
-
-                <div class="header-actions">
-                    <button class="btn btn-outline btn-sm">
-                        <i class="fas fa-shopping-cart"></i> Panier (0)
-                    </button>
-                </div>
+            <a href="index.html" class="site-logo"><span class="logo-hex">⬡</span>ChemistrySpot</a>
+            <div class="header-search">
+                <input type="text" placeholder="Rechercher un excipient, N° CAS..." id="globalSearch">
+                <button onclick="goSearch()"><i class="fas fa-search"></i></button>
             </div>
-        </div>
-    </header>
-
-    <div class="page-content">
-        <!-- BACK BUTTON -->
-        <a href="catalogue.html" class="back-btn" style="display:none;" id="backBtn">
-            <i class="fas fa-arrow-left"></i> Retour au catalogue
-        </a>
-
-        <!-- LOADING STATE -->
-        <div id="loadingState" class="loading">
-            <div class="spinner"></div>
-            <div>Chargement des données...</div>
-        </div>
-
-        <!-- MAIN CONTENT -->
-        <div id="mainContent" style="display:none;">
-            <!-- HEADER PRODUIT -->
-            <div class="product-header" id="productHeader"></div>
-
-            <!-- TABS -->
-            <div class="tabs">
-                <button class="tab active" onclick="switchTab(event,'prix')">
-                    💰 Prix &amp; Fournisseurs
-                </button>
-                <button class="tab" onclick="switchTab(event,'marche')">
-                    📊 Analyse Marché
-                </button>
-                <button class="tab" onclick="switchTab(event,'fournisseurs')">
-                    🏭 Fournisseurs
-                </button>
-                <button class="tab" onclick="switchTab(event,'alertes')">
-                    🔔 Alertes Réglementaires
-                </button>
-            </div>
-
-            <!-- TAB 1: PRIX & FOURNISSEURS -->
-            <div id="tab-prix" class="tab-content active">
-                <div class="section">
-                    <h2 class="section-title">
-                        <i class="fas fa-table"></i> Comparatif Prix Fournisseurs
-                    </h2>
-                    <div id="prixContent"></div>
-                </div>
-            </div>
-
-            <!-- TAB 2: MARCHÉ -->
-            <div id="tab-marche" class="tab-content">
-                <div class="section">
-                    <h2 class="section-title">
-                        <i class="fas fa-chart-line"></i> Analyse Marché
-                    </h2>
-                    <div class="empty-state">
-                        <i class="fas fa-chart-bar"></i>
-                        <div class="empty-title">Données marché en cours de déploiement</div>
-                        <div class="empty-sub">Indices de prix, volumes et tendances — Phase 2</div>
-                        <div class="phase2-badge">Phase 2 — Q2 2026</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- TAB 3: FOURNISSEURS -->
-            <div id="tab-fournisseurs" class="tab-content">
-                <div class="section">
-                    <h2 class="section-title">
-                        <i class="fas fa-industry"></i> Fournisseurs Référencés
-                    </h2>
-                    <div id="fournisseursContent"></div>
-                </div>
-            </div>
-
-            <!-- TAB 4: ALERTES -->
-            <div id="tab-alertes" class="tab-content">
-                <div class="section">
-                    <h2 class="section-title">
-                        <i class="fas fa-bell"></i> Alertes Réglementaires
-                    </h2>
-                    <div class="empty-state">
-                        <i class="fas fa-shield-alt"></i>
-                        <div class="empty-title">Veille réglementaire en cours de déploiement</div>
-                        <div class="empty-sub">Alertes EMA, FDA, ICH et pharmacopées — Phase 2</div>
-                        <div class="phase2-badge">Phase 2 — Q2 2026</div>
-                    </div>
-                </div>
+            <div class="header-actions">
+                <button class="btn btn-ghost btn-sm"><i class="fas fa-sign-in-alt"></i> Connexion</button>
+                <button class="btn btn-primary btn-sm"><i class="fas fa-user-plus"></i> Inscription</button>
             </div>
         </div>
     </div>
+    <nav class="header-nav">
+        <div class="container">
+            <a href="index.html" class="nav-link">Terminal</a>
+            <a href="catalogue.html" class="nav-link active">Catalogue</a>
+            <a href="fournisseurs.html" class="nav-link">Fournisseurs</a>
+            <a href="contact.html" class="nav-link">Contact</a>
+        </div>
+    </nav>
+</header>
 
-    <script>
-        // ============================================================
-        // CONFIGURATION SUPABASE
-        // ============================================================
-        const SUPABASE_URL      = 'https://jkaffpgqbyhuihvyvtld.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE2NTgzOTQsImV4cCI6MjA2NzIzNDM5NH0.OIjoz6uoPV25Nraral4YN_gz7q6COBW3dAVIYhBy1pI';
+<!-- ══ PAGE BAND (populated dynamically) ══ -->
+<div class="page-band" id="productBand" style="display:none;">
+    <div class="container">
+        <nav class="breadcrumb">
+            <a href="index.html">Accueil</a>
+            <span class="sep">›</span>
+            <a href="catalogue.html">Catalogue</a>
+            <span class="sep">›</span>
+            <span class="current" id="breadcrumbName">Produit</span>
+        </nav>
+        <div class="product-hero-grid">
+            <div id="productInfo"></div>
+            <div id="productStructure"></div>
+        </div>
+    </div>
+</div>
 
-        let supabaseClient;
-        let currentExcipientId = 10;
+<!-- ══ LOADING STATE ══ -->
+<div id="loadingState" class="container" style="padding-top:3rem;">
+    <div class="loading-state">
+        <div class="spin-lg"></div>
+        <p>Chargement des données produit...</p>
+    </div>
+</div>
 
-        // ============================================================
-        // INIT
-        // ============================================================
-        document.addEventListener('DOMContentLoaded', () => {
-            try {
-                supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+<!-- ══ MAIN CONTENT ══ -->
+<main id="mainContent" style="display:none;" class="section">
+    <div class="container">
 
-                const params = new URLSearchParams(window.location.search);
-                if (params.get('id')) currentExcipientId = parseInt(params.get('id'));
+        <!-- Back button -->
+        <a href="catalogue.html" class="btn btn-ghost btn-sm mb-2" style="display:inline-flex; align-items:center; gap:.5rem;">
+            <i class="fas fa-arrow-left"></i> Retour au catalogue
+        </a>
 
-                loadAllData();
-            } catch (err) {
-                showError(err.message);
-            }
-        });
+        <!-- Tabs -->
+        <div class="tabs-header">
+            <button class="tab-btn active" onclick="switchTab(event,'prix')">
+                <i class="fas fa-tag"></i> Prix &amp; Fournisseurs
+            </button>
+            <button class="tab-btn" onclick="switchTab(event,'marche')">
+                <i class="fas fa-chart-line"></i> Analyse Marché
+            </button>
+            <button class="tab-btn" onclick="switchTab(event,'fournisseurs')">
+                <i class="fas fa-industry"></i> Fournisseurs
+            </button>
+            <button class="tab-btn" onclick="switchTab(event,'alertes')">
+                <i class="fas fa-bell"></i> Alertes Réglementaires
+            </button>
+        </div>
 
-        function showError(msg) {
-            document.getElementById('loadingState').innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <div class="empty-title">Erreur de chargement</div>
-                    <div class="empty-sub">${msg}</div>
-                </div>`;
-        }
+        <!-- Tab: Prix -->
+        <div id="tab-prix" class="tab-panel active">
+            <div class="section-title"><i class="fas fa-table"></i> Comparatif Prix Fournisseurs</div>
+            <div id="prixContent"></div>
+        </div>
 
-        // ============================================================
-        // CHARGEMENT
-        // ============================================================
-        async function loadAllData() {
-            try {
-                const excipient = await loadExcipient(currentExcipientId);
-                if (!excipient) throw new Error('Excipient non trouvé (id=' + currentExcipientId + ')');
+        <!-- Tab: Marché -->
+        <div id="tab-marche" class="tab-panel">
+            <div class="empty-state">
+                <i class="fas fa-chart-bar"></i>
+                <p style="font-weight:600; color:var(--text);">Données marché en cours de déploiement</p>
+                <p>Indices de prix, volumes et tendances — Phase 2</p>
+                <span class="phase2-badge">Phase 2 — Q2 2026</span>
+            </div>
+        </div>
 
-                const suppliers = await loadExcipientSuppliers(currentExcipientId);
+        <!-- Tab: Fournisseurs -->
+        <div id="tab-fournisseurs" class="tab-panel">
+            <div class="section-title"><i class="fas fa-industry"></i> Fournisseurs Référencés</div>
+            <div id="fournisseursContent"></div>
+        </div>
 
-                displayProductHeader(excipient);
-                displayPrixComparatif(suppliers);
-                displayFournisseurs(suppliers);
+        <!-- Tab: Alertes -->
+        <div id="tab-alertes" class="tab-panel">
+            <div class="empty-state">
+                <i class="fas fa-shield-alt"></i>
+                <p style="font-weight:600; color:var(--text);">Veille réglementaire en cours de déploiement</p>
+                <p>Alertes EMA, FDA, ICH et pharmacopées — Phase 2</p>
+                <span class="phase2-badge">Phase 2 — Q2 2026</span>
+            </div>
+        </div>
 
-                document.getElementById('loadingState').style.display = 'none';
-                document.getElementById('mainContent').style.display  = 'block';
-            } catch (err) {
-                console.error(err);
-                showError(err.message);
-            }
-        }
+    </div>
+</main>
 
-        async function loadExcipient(id) {
-            const { data, error } = await supabaseClient
-                .from('excipients')
-                .select('*')
-                .eq('id', id)
-                .single();
-            if (error) throw error;
-            return data;
-        }
-
-        async function loadExcipientSuppliers(excipientId) {
-            const { data, error } = await supabaseClient
-                .from('excipient_suppliers')
-                .select('*, suppliers(id, name, country, website)')
-                .eq('excipient_id', excipientId)
-                .order('prix_min', { ascending: true });
-            if (error) throw error;
-            return data || [];
-        }
-
-        // ============================================================
-        // AFFICHAGE HEADER
-        // ============================================================
-        function displayProductHeader(exc) {
-            const img = exc.cid_pubchem
-                ? `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/${exc.cid_pubchem}/PNG?image_size=300x300`
-                : null;
-
-            document.getElementById('productHeader').innerHTML = `
-                <div class="product-info">
-                    <h1>${exc.nom_commun || 'Excipient'}</h1>
-                    <p class="product-subtitle">${exc.nom_chimique || ''}</p>
-                    <div class="product-meta">
-                        ${exc.cas_number    ? `<div class="meta-item"><strong>CAS :</strong>&nbsp;${exc.cas_number}</div>` : ''}
-                        ${exc.formule       ? `<div class="meta-item"><strong>Formule :</strong>&nbsp;${exc.formule}</div>` : ''}
-                        ${exc.masse_molaire ? `<div class="meta-item"><strong>PM :</strong>&nbsp;${exc.masse_molaire} g/mol</div>` : ''}
-                        ${exc.cid_pubchem   ? `<div class="meta-item"><strong>PubChem CID :</strong>&nbsp;${exc.cid_pubchem}</div>` : ''}
-                    </div>
+<!-- ══ SITE FOOTER ══ -->
+<footer class="site-footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <div class="footer-logo">⬡ ChemistrySpot</div>
+                <p class="footer-desc">Terminal B2B pour les excipients pharmaceutiques. Données indicatives à visée comparative.</p>
+                <div class="footer-certs">
+                    <span class="footer-cert">GMP</span>
+                    <span class="footer-cert">ISO 9001</span>
+                    <span class="footer-cert">ANSM</span>
                 </div>
-                ${img ? `
-                    <div class="product-structure">
-                        <img src="${img}" alt="Structure chimique" onerror="this.parentElement.style.display='none'">
-                        <div class="structure-label">Structure 2D</div>
-                    </div>` : ''}
-            `;
-            document.getElementById('backBtn').style.display = 'inline-flex';
-        }
-
-        // ============================================================
-        // HELPERS
-        // ============================================================
-        const COUNTRY_FLAGS = {
-            'USA': '🇺🇸', 'United States': '🇺🇸', 'US': '🇺🇸',
-            'UK': '🇬🇧', 'United Kingdom': '🇬🇧', 'England': '🇬🇧',
-            'Germany': '🇩🇪', 'Deutschland': '🇩🇪',
-            'France': '🇫🇷',
-            'Japan': '🇯🇵',
-            'China': '🇨🇳',
-            'India': '🇮🇳',
-            'Switzerland': '🇨🇭',
-            'Netherlands': '🇳🇱',
-            'Belgium': '🇧🇪',
-            'Italy': '🇮🇹',
-            'Spain': '🇪🇸',
-            'Canada': '🇨🇦',
-            'South Korea': '🇰🇷', 'Korea': '🇰🇷',
-            'Australia': '🇦🇺',
-            'Brazil': '🇧🇷',
-            'Russia': '🇷🇺',
-        };
-
-        function countryFlag(country) {
-            if (!country || country === 'Unknown') return '🌍';
-            return COUNTRY_FLAGS[country] || '🌍';
-        }
-
-        const CERT_CLASSES = {
-            'GMP':      'cert-gmp',
-            'ISO 9001': 'cert-iso',
-            'USP/NF':   'cert-usp',
-            'Ph.Eur.':  'cert-pheur',
-            'DMF':      'cert-dmf',
-            'Halal':    'cert-halal',
-            'Kosher':   'cert-kosher',
-            'FDA IND':  'cert-fda',
-        };
-
-        function certBadge(cert) {
-            const cls = CERT_CLASSES[cert] || 'cert-default';
-            return `<span class="cert-badge ${cls}">${cert}</span>`;
-        }
-
-        function certsHtml(certs) {
-            if (!certs || certs.length === 0) return '<span style="color:#bbb;font-size:0.8rem;">—</span>';
-            return `<div class="cert-list">${certs.map(certBadge).join('')}</div>`;
-        }
-
-        function formatPrice(val) {
-            if (val == null) return '—';
-            return parseFloat(val).toFixed(2) + ' €';
-        }
-
-        // ============================================================
-        // TAB 1 — TABLEAU COMPARATIF
-        // ============================================================
-        function displayPrixComparatif(rows) {
-            const container = document.getElementById('prixContent');
-
-            if (!rows || rows.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-box-open"></i>
-                        <div class="empty-title">Aucun fournisseur référencé</div>
-                        <div class="empty-sub">Les données de prix seront disponibles prochainement.</div>
-                    </div>`;
-                return;
-            }
-
-            const tbody = rows.map(r => {
-                const sup = r.suppliers || {};
-                const name = sup.name || '—';
-                const country = sup.country || 'Unknown';
-                const website = sup.website || '';
-                const flag = countryFlag(country);
-
-                const nameCell = website
-                    ? `<a href="${website}" target="_blank" rel="noopener" class="supplier-link">${flag} ${name}</a>`
-                    : `${flag} ${name}`;
-
-                const stockBadge = r.stock_disponible
-                    ? `<span class="badge badge-stock-ok"><i class="fas fa-check-circle"></i> En stock</span>`
-                    : `<span class="badge badge-stock-no"><i class="fas fa-clock"></i> Sur commande</span>`;
-
-                return `
-                    <tr>
-                        <td>${nameCell}</td>
-                        <td>${country !== 'Unknown' ? country : '—'}</td>
-                        <td class="price-green">${formatPrice(r.prix_min)}/kg</td>
-                        <td>${formatPrice(r.prix_max)}/kg</td>
-                        <td>${r.devise || 'EUR'}</td>
-                        <td>${r.delai_livraison || '—'}</td>
-                        <td>${stockBadge}</td>
-                        <td>${certsHtml(r.certifications)}</td>
-                        <td><button class="btn-devis"><i class="fas fa-file-alt"></i> Devis</button></td>
-                    </tr>`;
-            }).join('');
-
-            container.innerHTML = `
-                <div style="overflow-x:auto;">
-                    <table class="price-table">
-                        <thead>
-                            <tr>
-                                <th>Fournisseur</th>
-                                <th>Pays</th>
-                                <th>Prix min</th>
-                                <th>Prix max</th>
-                                <th>Devise</th>
-                                <th>Délai</th>
-                                <th>Stock</th>
-                                <th>Certifications</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>${tbody}</tbody>
-                    </table>
+            </div>
+            <div class="footer-col">
+                <h4>Navigation</h4>
+                <ul>
+                    <li><a href="catalogue.html">Catalogue (50 excipients)</a></li>
+                    <li><a href="fournisseurs.html">Fournisseurs (192)</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <p><i class="fas fa-envelope"></i> contact@chemistryspot.com</p>
+                <p><i class="fas fa-map-marker-alt"></i> Paris, France</p>
+                <div class="footer-social">
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
                 </div>
-                <div class="info-note">
-                    <i class="fas fa-info-circle"></i>
-                    <strong>Note :</strong> Prix indicatifs en €/kg basés sur données marché.
-                    Trié par prix min croissant. ${rows.length} fournisseur${rows.length > 1 ? 's' : ''} référencé${rows.length > 1 ? 's' : ''}.
-                </div>`;
-        }
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 ChemistrySpot — Données à titre indicatif. Pas de conseil en investissement.</p>
+        </div>
+    </div>
+</footer>
 
-        // ============================================================
-        // TAB 3 — CARTES FOURNISSEURS
-        // ============================================================
-        function displayFournisseurs(rows) {
-            const container = document.getElementById('fournisseursContent');
+<script>
+function goSearch() {
+    const q = document.getElementById('globalSearch').value.trim();
+    if (q) window.location.href = `catalogue.html?q=${encodeURIComponent(q)}`;
+}
+document.getElementById('globalSearch').addEventListener('keydown', e => { if (e.key === 'Enter') goSearch(); });
 
-            if (!rows || rows.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-industry"></i>
-                        <div class="empty-title">Aucun fournisseur référencé</div>
-                    </div>`;
-                return;
-            }
+// ── SUPABASE ──
+const SUPABASE_URL      = 'https://jkaffpgqbyhuihvyvtld.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE2NTgzOTQsImV4cCI6MjA2NzIzNDM5NH0.OIjoz6uoPV25Nraral4YN_gz7q6COBW3dAVIYhBy1pI';
+let supabaseClient;
+let currentExcipientId = 10;
 
-            const cards = rows.map(r => {
-                const sup = r.suppliers || {};
-                const name = sup.name || '—';
-                const country = sup.country || 'Unknown';
-                const website = sup.website || '';
-                const flag = countryFlag(country);
+document.addEventListener('DOMContentLoaded', () => {
+    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('id')) currentExcipientId = parseInt(params.get('id'));
+    loadAllData();
+});
 
-                const stockBadge = r.stock_disponible
-                    ? `<span class="badge badge-stock-ok"><i class="fas fa-check-circle"></i> En stock</span>`
-                    : `<span class="badge badge-stock-no"><i class="fas fa-clock"></i> Sur commande</span>`;
+async function loadAllData() {
+    try {
+        const excipient = await loadExcipient(currentExcipientId);
+        if (!excipient) throw new Error('Excipient non trouvé (id=' + currentExcipientId + ')');
+        const suppliers = await loadExcipientSuppliers(currentExcipientId);
 
-                const websiteBtn = website
-                    ? `<a href="${website}" target="_blank" rel="noopener" class="btn-website">
-                           <i class="fas fa-external-link-alt"></i> Site web
-                       </a>`
-                    : '';
+        displayProductBand(excipient);
+        displayPrixComparatif(suppliers);
+        displayFournisseurs(suppliers);
 
-                return `
-                    <div class="supplier-card">
-                        <div class="supplier-card-header">
-                            <div class="supplier-flag">${flag}</div>
-                            <div>
-                                <div class="supplier-name">${name}</div>
-                                <div class="supplier-country">${country !== 'Unknown' ? country : 'Pays non renseigné'}</div>
-                            </div>
-                        </div>
-                        <div class="cert-list">${(r.certifications || []).map(certBadge).join('')}</div>
-                        <div class="supplier-specs">
-                            <div class="spec-row">
-                                <span class="spec-label">Prix min :</span>
-                                <span class="price-green">${formatPrice(r.prix_min)}/kg</span>
-                            </div>
-                            <div class="spec-row">
-                                <span class="spec-label">Prix max :</span>
-                                <span>${formatPrice(r.prix_max)}/kg</span>
-                            </div>
-                            <div class="spec-row">
-                                <span class="spec-label">Délai :</span>
-                                <span>${r.delai_livraison || '—'}</span>
-                            </div>
-                            <div class="spec-row">
-                                <span class="spec-label">Stock :</span>
-                                <span>${stockBadge}</span>
-                            </div>
-                        </div>
-                        <div class="supplier-card-footer">
-                            ${websiteBtn}
-                            <button class="btn-devis" style="flex:1;">
-                                <i class="fas fa-file-alt"></i> Demander devis
-                            </button>
-                        </div>
-                    </div>`;
-            }).join('');
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('mainContent').style.display  = 'block';
+    } catch (err) {
+        console.error(err);
+        document.getElementById('loadingState').innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-exclamation-triangle" style="color:var(--danger);"></i>
+                <p>${err.message}</p>
+            </div>`;
+    }
+}
 
-            container.innerHTML = `<div class="suppliers-grid">${cards}</div>`;
-        }
+async function loadExcipient(id) {
+    const { data, error } = await supabaseClient.from('excipients').select('*').eq('id', id).single();
+    if (error) throw error;
+    return data;
+}
 
-        // ============================================================
-        // NAVIGATION TABS
-        // ============================================================
-        function switchTab(event, tabName) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-            document.getElementById('tab-' + tabName).classList.add('active');
-        }
-    </script>
+async function loadExcipientSuppliers(excipientId) {
+    const { data, error } = await supabaseClient
+        .from('excipient_suppliers')
+        .select('*, suppliers(id, name, country, website)')
+        .eq('excipient_id', excipientId)
+        .order('prix_min', { ascending: true });
+    if (error) throw error;
+    return data || [];
+}
+
+function displayProductBand(exc) {
+    document.getElementById('breadcrumbName').textContent = exc.nom_commun || 'Produit';
+    document.title = `${exc.nom_commun} — ChemistrySpot`;
+
+    document.getElementById('productInfo').innerHTML = `
+        <h1 style="font-size:2rem; font-weight:700; color:var(--text); margin-bottom:.3rem;">${exc.nom_commun || 'Excipient'}</h1>
+        <p style="color:var(--text-muted); margin-bottom:1.25rem;">${exc.nom_chimique || ''}</p>
+        <div style="display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:1.25rem;">
+            <span class="badge badge-primary">Excipient pharmaceutique</span>
+            ${exc.fonction_principale ? `<span class="badge badge-neutral">${exc.fonction_principale}</span>` : ''}
+        </div>
+        <div class="product-meta-row">
+            ${exc.cas_number    ? `<div class="product-meta-item"><span class="product-meta-label">N° CAS</span><span class="product-meta-value">${exc.cas_number}</span></div>` : ''}
+            ${exc.formule       ? `<div class="product-meta-item"><span class="product-meta-label">Formule</span><span class="product-meta-value">${exc.formule}</span></div>` : ''}
+            ${exc.masse_molaire ? `<div class="product-meta-item"><span class="product-meta-label">Masse molaire</span><span class="product-meta-value">${exc.masse_molaire} g/mol</span></div>` : ''}
+            ${exc.cid_pubchem   ? `<div class="product-meta-item"><span class="product-meta-label">PubChem CID</span><span class="product-meta-value">${exc.cid_pubchem}</span></div>` : ''}
+        </div>`;
+
+    if (exc.cid_pubchem) {
+        const imgUrl = `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/${exc.cid_pubchem}/PNG?image_size=300x300`;
+        document.getElementById('productStructure').innerHTML = `
+            <div class="structure-box">
+                <img src="${imgUrl}" alt="Structure chimique" onerror="this.parentElement.style.display='none'" style="max-width:100%; border-radius:var(--radius);">
+                <div class="structure-label">Structure 2D — PubChem</div>
+            </div>`;
+    }
+
+    document.getElementById('productBand').style.display = 'block';
+}
+
+// ── HELPERS ──
+const COUNTRY_FLAGS = {
+    'USA':'🇺🇸','United States':'🇺🇸','US':'🇺🇸','UK':'🇬🇧','United Kingdom':'🇬🇧',
+    'Germany':'🇩🇪','France':'🇫🇷','Japan':'🇯🇵','China':'🇨🇳','India':'🇮🇳',
+    'Switzerland':'🇨🇭','Netherlands':'🇳🇱','Belgium':'🇧🇪','Italy':'🇮🇹',
+    'Spain':'🇪🇸','Canada':'🇨🇦','South Korea':'🇰🇷','Korea':'🇰🇷','Australia':'🇦🇺',
+};
+function countryFlag(c) { return !c || c === 'Unknown' ? '🌍' : (COUNTRY_FLAGS[c] || '🌍'); }
+
+const CERT_CLASSES = {'GMP':'cert-gmp','ISO 9001':'cert-iso','USP/NF':'cert-usp','Ph.Eur.':'cert-pheur','DMF':'cert-dmf','Halal':'cert-halal','Kosher':'cert-kosher','FDA IND':'cert-fda'};
+function certBadge(cert) { return `<span class="cert-badge ${CERT_CLASSES[cert]||'cert-default'}">${cert}</span>`; }
+function certsHtml(certs) {
+    if (!certs || !certs.length) return '<span style="color:var(--text-dim);font-size:.8rem;">—</span>';
+    return `<div class="cert-list">${certs.map(certBadge).join('')}</div>`;
+}
+function fmt(val) { return val == null ? '—' : parseFloat(val).toFixed(2) + ' €'; }
+
+// ── TAB 1: PRIX COMPARATIF ──
+function displayPrixComparatif(rows) {
+    const container = document.getElementById('prixContent');
+    if (!rows || rows.length === 0) {
+        container.innerHTML = `<div class="empty-state"><i class="fas fa-box-open"></i><p>Aucun fournisseur référencé pour cet excipient.</p></div>`;
+        return;
+    }
+    const tbody = rows.map(r => {
+        const sup = r.suppliers || {};
+        const flag = countryFlag(sup.country);
+        const nameCell = sup.website
+            ? `<a href="${sup.website}" target="_blank" rel="noopener" class="supplier-link">${flag} ${sup.name||'—'}</a>`
+            : `${flag} ${sup.name||'—'}`;
+        const stockBadge = r.stock_disponible
+            ? `<span class="badge badge-stock-ok"><i class="fas fa-check-circle"></i> En stock</span>`
+            : `<span class="badge badge-stock-no"><i class="fas fa-clock"></i> Sur commande</span>`;
+        return `<tr>
+            <td>${nameCell}</td>
+            <td style="color:var(--text-muted);font-size:.82rem;">${sup.country && sup.country !== 'Unknown' ? sup.country : '—'}</td>
+            <td class="price-green">${fmt(r.prix_min)}/kg</td>
+            <td style="font-family:var(--mono);font-size:.85rem;">${fmt(r.prix_max)}/kg</td>
+            <td style="font-size:.8rem;color:var(--text-muted);">${r.devise||'EUR'}</td>
+            <td style="font-size:.82rem;color:var(--text-muted);">${r.delai_livraison||'—'}</td>
+            <td>${stockBadge}</td>
+            <td>${certsHtml(r.certifications)}</td>
+            <td><button class="btn-devis"><i class="fas fa-file-alt"></i> Devis</button></td>
+        </tr>`;
+    }).join('');
+
+    container.innerHTML = `
+        <div class="table-wrap">
+            <table class="price-table">
+                <thead><tr>
+                    <th>Fournisseur</th><th>Pays</th><th>Prix min</th><th>Prix max</th>
+                    <th>Devise</th><th>Délai</th><th>Stock</th><th>Certifications</th><th>Action</th>
+                </tr></thead>
+                <tbody>${tbody}</tbody>
+            </table>
+        </div>
+        <div class="info-note">
+            <i class="fas fa-info-circle"></i>
+            Prix indicatifs en €/kg. Trié par prix min croissant. ${rows.length} fournisseur${rows.length>1?'s':''} référencé${rows.length>1?'s':''}.
+        </div>`;
+}
+
+// ── TAB 3: CARTES FOURNISSEURS ──
+function displayFournisseurs(rows) {
+    const container = document.getElementById('fournisseursContent');
+    if (!rows || rows.length === 0) {
+        container.innerHTML = `<div class="empty-state"><i class="fas fa-industry"></i><p>Aucun fournisseur référencé.</p></div>`;
+        return;
+    }
+    const cards = rows.map(r => {
+        const sup = r.suppliers || {};
+        const flag = countryFlag(sup.country);
+        const stockBadge = r.stock_disponible
+            ? `<span class="badge badge-stock-ok"><i class="fas fa-check-circle"></i> En stock</span>`
+            : `<span class="badge badge-stock-no"><i class="fas fa-clock"></i> Sur commande</span>`;
+        const websiteBtn = sup.website
+            ? `<a href="${sup.website}" target="_blank" rel="noopener" class="btn-website"><i class="fas fa-external-link-alt"></i> Site web</a>` : '';
+        return `
+        <div class="supplier-card-detail">
+            <div class="supplier-card-header">
+                <div class="supplier-flag">${flag}</div>
+                <div>
+                    <div class="supplier-name">${sup.name||'—'}</div>
+                    <div class="supplier-country" style="font-size:.82rem;color:var(--text-muted);">${sup.country && sup.country!=='Unknown' ? sup.country : 'Pays non renseigné'}</div>
+                </div>
+            </div>
+            <div class="cert-list mb-1">${(r.certifications||[]).map(certBadge).join('')}</div>
+            <div class="supplier-specs">
+                <div class="spec-row"><span class="spec-label">Prix min :</span><span class="price-green">${fmt(r.prix_min)}/kg</span></div>
+                <div class="spec-row"><span class="spec-label">Prix max :</span><span style="font-family:var(--mono);font-size:.85rem;">${fmt(r.prix_max)}/kg</span></div>
+                <div class="spec-row"><span class="spec-label">Délai :</span><span style="font-size:.82rem;color:var(--text-muted);">${r.delai_livraison||'—'}</span></div>
+                <div class="spec-row"><span class="spec-label">Stock :</span>${stockBadge}</div>
+            </div>
+            <div class="supplier-card-footer">
+                ${websiteBtn}
+                <button class="btn-devis" style="flex:1;"><i class="fas fa-file-alt"></i> Demander devis</button>
+            </div>
+        </div>`;
+    }).join('');
+
+    container.innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.25rem;">${cards}</div>`;
+}
+
+// ── TABS ──
+function switchTab(event, tabName) {
+    document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(c => c.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+    document.getElementById('tab-' + tabName).classList.add('active');
+}
+</script>
 </body>
 </html>

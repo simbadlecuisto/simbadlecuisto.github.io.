@@ -3,815 +3,394 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nos Fournisseurs Certifiés - ChemistrySpot</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Fournisseurs — ChemistrySpot</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="./css/main.css">
-    <link rel="stylesheet" href="./css/components.css">
-    <link rel="stylesheet" href="./css/responsive.css">
-
-    <!-- Supabase CDN -->
+    <link rel="stylesheet" href="./css/design-system.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <style>
-        /* Contenu principal */
-        .main-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        /* En-tête de page */
-        .fournisseurs-header {
-            text-align: center;
-            margin-bottom: 3rem;
-            background: white;
-            padding: 3rem 2rem;
-            border-radius: 20px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.07);
-        }
-
-        .fournisseurs-header h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #1F2937;
-            margin-bottom: 1rem;
-        }
-
-        .fournisseurs-header p {
-            font-size: 1.1rem;
-            color: #6B7280;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        /* Stats */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin: 2rem 0;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 16px;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.07);
-            transition: transform 0.3s;
-            border-left: 4px solid #667eea;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-4px);
-        }
-
-        .fournisseurs-stat-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #667eea;
-            margin-bottom: 0.5rem;
-        }
-
-        .fournisseurs-stat-label {
-            color: #6B7280;
-            font-weight: 500;
-            font-size: 0.95rem;
-        }
-
-        /* Filtres */
-        .filters-section {
-            background: white;
-            padding: 2rem;
-            border-radius: 16px;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.07);
-        }
-
-        .filters-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            align-items: end;
-        }
-
-        .filter-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .filter-label {
-            font-weight: 600;
-            color: #374151;
-            margin-bottom: 0.5rem;
-            font-size: 0.9rem;
-        }
-
-        .filter-input,
-        .filter-select {
-            padding: 0.75rem 1rem;
-            border: 2px solid #E5E7EB;
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: all 0.3s;
-            background: white;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .filter-input:focus,
-        .filter-select:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        /* Statut */
-        .status-bar {
-            text-align: center;
-            padding: 0.875rem 1.5rem;
-            border-radius: 10px;
-            margin: 1rem 0;
-            font-weight: 600;
-            font-size: 0.95rem;
-        }
-
-        .status-bar.loading {
-            background: #FEF3C7;
-            color: #92400E;
-        }
-
-        .status-bar.success {
-            background: #D1FAE5;
-            color: #065F46;
-        }
-
-        .status-bar.error {
-            background: #FEE2E2;
-            color: #991B1B;
-        }
-
-        /* Grille fournisseurs */
-        .suppliers-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-
-        .supplier-card {
-            background: white;
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.07);
-            transition: all 0.3s;
-            border: 1px solid #f0f0f0;
-        }
-
-        .supplier-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.15);
-            border-color: #667eea;
-        }
-
-        .supplier-header {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 1rem;
-        }
-
-        .supplier-icon {
-            font-size: 1.5rem;
-        }
-
-        .supplier-name {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #1F2937;
-        }
-
-        .supplier-country-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            margin-bottom: 0.75rem;
-        }
-
-        .supplier-specialty {
-            color: #6B7280;
-            font-style: italic;
-            margin-bottom: 0.75rem;
-            font-size: 0.95rem;
-        }
-
-        .supplier-certif {
-            background: #D1FAE5;
-            color: #065F46;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            margin-bottom: 0.75rem;
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-
-        .supplier-description {
-            color: #6B7280;
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-            font-size: 0.95rem;
-        }
-
-        .supplier-actions {
-            display: flex;
-            gap: 0.75rem;
-            flex-wrap: wrap;
-        }
-
-        .action-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            text-decoration: none;
-            color: #667eea;
-            font-weight: 600;
-            padding: 0.5rem 1rem;
-            border: 2px solid #667eea;
-            border-radius: 8px;
-            transition: all 0.3s;
-            font-size: 0.9rem;
-        }
-
-        .action-link:hover {
-            background: #667eea;
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        .empty-suppliers {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 4rem 2rem;
-            color: #6B7280;
-        }
-
-        .empty-suppliers i {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            opacity: 0.4;
-        }
-
-        /* Tags excipients */
-        .supplier-excipients {
-            margin-bottom: 1rem;
-        }
-
-        .supplier-excipients-label {
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: #9CA3AF;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 0.4rem;
-        }
-
-        .excipient-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.35rem;
-        }
-
-        .excipient-tag {
-            display: inline-block;
-            background: #EEF2FF;
-            color: #4338CA;
-            padding: 0.2rem 0.6rem;
-            border-radius: 20px;
-            font-size: 0.78rem;
-            font-weight: 500;
-        }
-
-        .excipient-tag-more {
-            background: #F3F4F6;
-            color: #6B7280;
-        }
-
-        .action-link.pubchem {
-            color: #0369a1;
-            border-color: #0369a1;
-        }
-
-        .action-link.pubchem:hover {
-            background: #0369a1;
-            color: white;
-        }
-
-        /* Pagination */
-        .pagination {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 0.5rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .pagination button {
-            padding: 0.5rem 1rem;
-            border: 2px solid #E5E7EB;
-            border-radius: 8px;
-            background: white;
-            color: #374151;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .pagination button:hover,
-        .pagination button.active {
-            border-color: #667eea;
-            background: #667eea;
-            color: white;
-        }
-
-        .pagination button:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-
-        .pagination .page-info {
-            color: #6B7280;
-            font-size: 0.9rem;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .main-content {
-                padding: 1rem;
-            }
-
-            .fournisseurs-header h1 {
-                font-size: 1.8rem;
-            }
-
-            .suppliers-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .filters-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
 </head>
 <body>
-    <!-- Header (design système partagé) -->
-    <header>
+
+<!-- ══ SITE HEADER ══ -->
+<header class="site-header">
+    <div class="header-top">
         <div class="container">
-            <div class="header-content">
-                <div class="logo-section">
-                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/chemspotV1-dt6tDoOKp1wAyi8oRMzxzufIVBfiu9.png" alt="ChemistrySpot Logo" class="logo">
-                    <span class="logo-text">ChemistrySpot</span>
-                </div>
-
-                <ul class="nav-menu">
-                    <li><a href="index.html" class="nav-link">Accueil</a></li>
-                    <li><a href="catalogue.html" class="nav-link">Catalogue</a></li>
-                    <li><a href="fournisseurs.html" class="nav-link active">Fournisseurs</a></li>
-                    <li><a href="contact.html" class="nav-link">Contact</a></li>
-                </ul>
-
-                <div class="header-actions">
-                    <button class="btn btn-outline btn-sm" onclick="openModal('loginModal')">
-                        <i class="fas fa-sign-in-alt"></i> Connexion
-                    </button>
-                    <button class="btn btn-primary btn-sm" onclick="openModal('registerModal')">
-                        <i class="fas fa-user-plus"></i> Inscription
-                    </button>
-                </div>
+            <a href="index.html" class="site-logo"><span class="logo-hex">⬡</span>ChemistrySpot</a>
+            <div class="header-search">
+                <input type="text" placeholder="Rechercher un excipient, N° CAS..." id="globalSearch">
+                <button onclick="goSearch()"><i class="fas fa-search"></i></button>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-ghost btn-sm" onclick="openModal('loginModal')"><i class="fas fa-sign-in-alt"></i> Connexion</button>
+                <button class="btn btn-primary btn-sm" onclick="openModal('registerModal')"><i class="fas fa-user-plus"></i> Inscription</button>
             </div>
         </div>
-    </header>
-
-    <!-- Contenu principal -->
-    <div class="main-content">
-
-        <!-- En-tête de page -->
-        <div class="fournisseurs-header">
-            <h1><i class="fas fa-industry"></i> Fournisseurs PubChem</h1>
-            <p>Fournisseurs référencés par <strong>PubChem</strong> pour nos 30 excipients pharmaceutiques — données issues de la base de données NCBI</p>
+    </div>
+    <nav class="header-nav">
+        <div class="container">
+            <a href="index.html" class="nav-link">Terminal</a>
+            <a href="catalogue.html" class="nav-link">Catalogue</a>
+            <a href="fournisseurs.html" class="nav-link active">Fournisseurs</a>
+            <a href="contact.html" class="nav-link">Contact</a>
         </div>
+    </nav>
+</header>
+
+<!-- ══ PAGE BAND ══ -->
+<div class="page-band">
+    <div class="container">
+        <nav class="breadcrumb">
+            <a href="index.html">Accueil</a>
+            <span class="sep">›</span>
+            <span class="current">Fournisseurs</span>
+        </nav>
+        <h1><i class="fas fa-industry text-primary"></i> Fournisseurs PubChem</h1>
+        <p>Fournisseurs référencés pour les 50 excipients pharmaceutiques — données NCBI PubChem</p>
+    </div>
+</div>
+
+<!-- ══ MAIN CONTENT ══ -->
+<main class="section">
+    <div class="container">
 
         <!-- Stats -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="fournisseurs-stat-number" id="totalSuppliers">-</div>
-                <div class="fournisseurs-stat-label">Fournisseurs Référencés</div>
+        <div class="stats-row">
+            <div class="stat-item">
+                <span class="stat-num" id="totalSuppliers">—</span>
+                <span class="stat-label">Fournisseurs</span>
             </div>
-            <div class="stat-card">
-                <div class="fournisseurs-stat-number" id="totalCountries">-</div>
-                <div class="fournisseurs-stat-label">Pays Couverts</div>
+            <div class="stat-item">
+                <span class="stat-num" id="totalCountries">—</span>
+                <span class="stat-label">Pays couverts</span>
             </div>
-            <div class="stat-card">
-                <div class="fournisseurs-stat-number" id="multiSuppliers">-</div>
-                <div class="fournisseurs-stat-label">Multi-excipients (≥ 5)</div>
+            <div class="stat-item">
+                <span class="stat-num" id="multiSuppliers">—</span>
+                <span class="stat-label">Multi-excipients (≥5)</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-num">1 737</span>
+                <span class="stat-label">Liaisons excipient-fournisseur</span>
             </div>
         </div>
 
         <!-- Filtres -->
-        <div class="filters-section">
-            <div class="filters-grid">
-                <div class="filter-group">
-                    <label class="filter-label"><i class="fas fa-flask"></i> Filtrer par excipient</label>
-                    <select id="excipientFilter" class="filter-select">
-                        <option value="">Tous les excipients</option>
-                    </select>
-                </div>
-
-                <div class="filter-group">
-                    <label class="filter-label"><i class="fas fa-globe"></i> Filtrer par pays</label>
-                    <select id="countryFilter" class="filter-select">
-                        <option value="">Tous les pays</option>
-                    </select>
-                </div>
-
-                <div class="filter-group">
-                    <label class="filter-label"><i class="fas fa-search"></i> Rechercher un fournisseur</label>
-                    <input type="text" id="searchInput" class="filter-input" placeholder="Nom du fournisseur...">
-                </div>
-
-                <div class="filter-group">
-                    <label class="filter-label">&nbsp;</label>
-                    <button class="btn btn-primary" onclick="refreshSuppliers()">
-                        <i class="fas fa-sync-alt"></i> Actualiser
-                    </button>
-                </div>
+        <div class="filters-bar">
+            <div class="filter-group" style="flex:2; min-width:200px;">
+                <label class="filter-label"><i class="fas fa-search"></i> Rechercher</label>
+                <input type="text" id="searchInput" class="form-input" placeholder="Nom du fournisseur...">
+            </div>
+            <div class="filter-group">
+                <label class="filter-label"><i class="fas fa-globe"></i> Pays</label>
+                <select id="countryFilter" class="form-input form-select">
+                    <option value="">Tous les pays</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label class="filter-label"><i class="fas fa-flask"></i> Excipient</label>
+                <select id="excipientFilter" class="form-input form-select">
+                    <option value="">Tous les excipients</option>
+                </select>
+            </div>
+            <div class="filter-group" style="flex:0; min-width:auto; align-self:flex-end;">
+                <button class="btn btn-primary btn-sm" onclick="refreshSuppliers()"><i class="fas fa-sync-alt"></i> Actualiser</button>
             </div>
         </div>
 
-        <!-- Barre de statut -->
-        <div id="statusBar" class="status-bar loading">
-            <i class="fas fa-spinner fa-spin"></i> Chargement des fournisseurs...
+        <!-- Status -->
+        <div id="statusBar" class="status-bar status-loading">
+            <i class="fas fa-circle-notch spinner-icon"></i> Chargement des fournisseurs...
         </div>
 
-        <!-- Grille fournisseurs -->
+        <!-- Suppliers grid -->
         <div id="suppliersContainer" class="suppliers-grid"></div>
 
         <!-- Pagination -->
         <div id="paginationContainer" class="pagination"></div>
+
     </div>
+</main>
 
-    <!-- Footer (design système partagé) -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h3>ChemistrySpot</h3>
-                    <p>La marketplace B2B de référence pour les matières premières pharmaceutiques.</p>
-                </div>
-
-                <div class="footer-column">
-                    <h3>Produits</h3>
-                    <ul>
-                        <li><a href="catalogue.html">Excipients</a></li>
-                        <li><a href="catalogue.html">Principes Actifs</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-column">
-                    <h3>Contact</h3>
-                    <p><i class="fas fa-phone"></i> +33 3 81 25 40 60</p>
-                    <p><i class="fas fa-envelope"></i> contact@chemistryspot.com</p>
+<!-- ══ SITE FOOTER ══ -->
+<footer class="site-footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <div class="footer-logo">⬡ ChemistrySpot</div>
+                <p class="footer-desc">Terminal B2B pour les excipients pharmaceutiques. Données indicatives à visée comparative.</p>
+                <div class="footer-certs">
+                    <span class="footer-cert">GMP</span>
+                    <span class="footer-cert">ISO 9001</span>
+                    <span class="footer-cert">ANSM</span>
                 </div>
             </div>
-
-            <div class="footer-bottom">
-                <p>&copy; 2025 ChemistrySpot. Tous droits réservés.</p>
+            <div class="footer-col">
+                <h4>Navigation</h4>
+                <ul>
+                    <li><a href="catalogue.html">Catalogue (50 excipients)</a></li>
+                    <li><a href="fournisseurs.html">Fournisseurs (192)</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <p><i class="fas fa-envelope"></i> contact@chemistryspot.com</p>
+                <p><i class="fas fa-map-marker-alt"></i> Paris, France</p>
+                <div class="footer-social">
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
             </div>
         </div>
-    </footer>
-
-    <!-- Modals partagés -->
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('loginModal')">&times;</span>
-            <h2><i class="fas fa-sign-in-alt"></i> Connexion</h2>
-            <form onsubmit="handleLogin(event)">
-                <div class="form-group">
-                    <label class="form-label">Email</label>
-                    <input type="email" class="form-input" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Mot de passe</label>
-                    <input type="password" class="form-input" required>
-                </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%;">Se connecter</button>
-            </form>
+        <div class="footer-bottom">
+            <p>&copy; 2026 ChemistrySpot — Données à titre indicatif. Pas de conseil en investissement.</p>
         </div>
     </div>
+</footer>
 
-    <div id="registerModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('registerModal')">&times;</span>
-            <h2><i class="fas fa-user-plus"></i> Inscription</h2>
-            <form onsubmit="handleRegister(event)">
-                <div class="form-group">
-                    <label class="form-label">Entreprise</label>
-                    <input type="text" class="form-input" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Email</label>
-                    <input type="email" class="form-input" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Mot de passe</label>
-                    <input type="password" class="form-input" required>
-                </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%;">Créer mon compte</button>
-            </form>
-        </div>
+<!-- ══ MODALS ══ -->
+<div id="loginModal" class="modal">
+    <div class="modal-box">
+        <button class="modal-close" onclick="closeModal('loginModal')">&times;</button>
+        <div class="modal-title"><i class="fas fa-sign-in-alt"></i> Connexion</div>
+        <form onsubmit="handleLogin(event)">
+            <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" required></div>
+            <div class="form-group"><label class="form-label">Mot de passe</label><input type="password" class="form-input" required></div>
+            <button type="submit" class="btn btn-primary w-full">Se connecter</button>
+        </form>
     </div>
+</div>
+<div id="registerModal" class="modal">
+    <div class="modal-box">
+        <button class="modal-close" onclick="closeModal('registerModal')">&times;</button>
+        <div class="modal-title"><i class="fas fa-user-plus"></i> Inscription</div>
+        <form onsubmit="handleRegister(event)">
+            <div class="form-group"><label class="form-label">Entreprise</label><input type="text" class="form-input" required></div>
+            <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" required></div>
+            <div class="form-group"><label class="form-label">Mot de passe</label><input type="password" class="form-input" required></div>
+            <button type="submit" class="btn btn-primary w-full">Créer mon compte</button>
+        </form>
+    </div>
+</div>
 
-    <!-- Scripts -->
-    <script src="./js/main.js"></script>
-    <script src="./js/auth.js"></script>
+<!-- ══ SCRIPTS ══ -->
+<script>
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal').forEach(m => m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); }));
 
-    <script>
-        // ============================================================
-        // CONFIGURATION SUPABASE
-        // ============================================================
-        const SUPABASE_URL      = 'https://jkaffpgqbyhuihvyvtld.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE2NTgzOTQsImV4cCI6MjA2NzIzNDM5NH0.OIjoz6uoPV25Nraral4YN_gz7q6COBW3dAVIYhBy1pI';
+function goSearch() {
+    const q = document.getElementById('globalSearch').value.trim();
+    if (q) window.location.href = `catalogue.html?q=${encodeURIComponent(q)}`;
+}
+document.getElementById('globalSearch').addEventListener('keydown', e => { if (e.key === 'Enter') goSearch(); });
 
-        const PAGE_SIZE = 24;   // cards par page
+// ── SUPABASE ──
+const SUPABASE_URL      = 'https://jkaffpgqbyhuihvyvtld.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE2NTgzOTQsImV4cCI6MjA2NzIzNDM5NH0.OIjoz6uoPV25Nraral4YN_gz7q6COBW3dAVIYhBy1pI';
 
-        let supabaseClient;
-        let allSuppliers      = [];
-        let filteredSuppliers = [];
-        let suppliersPage     = 1;   // nom distinct pour éviter conflit avec main.js suppliersPage
+const PAGE_SIZE = 24;
+let supabaseClient;
+let allSuppliers      = [];
+let filteredSuppliers = [];
+let suppliersPage     = 1;
 
-        // Stub attendu par main.js initializePage() — le vrai init se fait via Supabase
-        function setupSupplierFilters() {}
-        function renderSuppliers() {}
+const COUNTRY_FLAGS = {
+    'USA':'🇺🇸','United States':'🇺🇸','US':'🇺🇸','UK':'🇬🇧','United Kingdom':'🇬🇧',
+    'Germany':'🇩🇪','France':'🇫🇷','Japan':'🇯🇵','China':'🇨🇳','India':'🇮🇳',
+    'Switzerland':'🇨🇭','Netherlands':'🇳🇱','Belgium':'🇧🇪','Italy':'🇮🇹',
+    'Spain':'🇪🇸','Canada':'🇨🇦','South Korea':'🇰🇷','Korea':'🇰🇷','Australia':'🇦🇺',
+    'Brazil':'🇧🇷','Russia':'🇷🇺','Austria':'🇦🇹','Denmark':'🇩🇰','Ireland':'🇮🇪',
+    'Sweden':'🇸🇪','Finland':'🇫🇮','Norway':'🇳🇴','Israel':'🇮🇱','Singapore':'🇸🇬',
+};
+function countryFlag(c) { return !c || c === 'Unknown' ? '🌍' : (COUNTRY_FLAGS[c] || '🌍'); }
 
-        // ============================================================
-        // HELPERS — parse le champ notes
-        // "Excipients: A, B, C | PubChem: https://..."
-        // ============================================================
-        function parseNotes(notes) {
-            if (!notes) return { excipients: [], pubchemUrl: null };
-            const parts      = notes.split(' | ');
-            let excipients   = [];
-            let pubchemUrl   = null;
+function parseNotes(notes) {
+    if (!notes) return { excipients: [], pubchemUrl: null };
+    const parts = notes.split(' | ');
+    let excipients = [], pubchemUrl = null;
+    for (const part of parts) {
+        if (part.startsWith('Excipients: '))    excipients = part.replace('Excipients: ', '').split(', ').map(e => e.trim());
+        else if (part.startsWith('PubChem: '))  pubchemUrl = part.replace('PubChem: ', '').trim();
+    }
+    return { excipients, pubchemUrl };
+}
 
-            for (const part of parts) {
-                if (part.startsWith('Excipients: ')) {
-                    excipients = part.replace('Excipients: ', '').split(', ').map(e => e.trim());
-                } else if (part.startsWith('PubChem: ')) {
-                    pubchemUrl = part.replace('PubChem: ', '').trim();
-                }
-            }
-            return { excipients, pubchemUrl };
+document.addEventListener('DOMContentLoaded', async () => {
+    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    await loadSuppliers();
+});
+
+async function loadSuppliers() {
+    showStatus('Chargement des fournisseurs PubChem...', 'loading');
+    try {
+        const { data, error } = await supabaseClient
+            .from('suppliers').select('*').order('name', { ascending: true });
+        if (error) throw error;
+        allSuppliers      = data || [];
+        filteredSuppliers = [...allSuppliers];
+        suppliersPage     = 1;
+        updateStats();
+        populateFilters();
+        displaySuppliers();
+        showStatus(`${allSuppliers.length} fournisseurs chargés`, 'success');
+    } catch (err) {
+        console.error(err);
+        showStatus('Erreur lors du chargement — réessayez', 'error');
+    }
+}
+
+async function refreshSuppliers() { await loadSuppliers(); }
+
+function displaySuppliers() {
+    const container  = document.getElementById('suppliersContainer');
+    const totalPages = Math.ceil(filteredSuppliers.length / PAGE_SIZE);
+    const start      = (suppliersPage - 1) * PAGE_SIZE;
+    const pageItems  = filteredSuppliers.slice(start, start + PAGE_SIZE);
+
+    if (filteredSuppliers.length === 0) {
+        container.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><i class="fas fa-search"></i><p>Aucun fournisseur trouvé avec ces critères.</p></div>`;
+        document.getElementById('paginationContainer').innerHTML = '';
+        return;
+    }
+
+    container.innerHTML = pageItems.map(supplier => {
+        const { excipients, pubchemUrl } = parseNotes(supplier.notes);
+        const MAX_TAGS  = 5;
+        const shownTags = excipients.slice(0, MAX_TAGS);
+        const remaining = excipients.length - MAX_TAGS;
+        const flag      = countryFlag(supplier.country);
+        const country   = supplier.country && supplier.country !== 'Unknown' ? supplier.country : 'Pays non renseigné';
+
+        const tagsHtml = excipients.length > 0 ? `
+            <div class="mb-1">
+                <div class="filter-label mb-1">Excipients fournis</div>
+                <div class="excipient-tags">
+                    ${shownTags.map(e => `<span class="excipient-tag">${e}</span>`).join('')}
+                    ${remaining > 0 ? `<span class="excipient-tag excipient-tag-more">+${remaining} autres</span>` : ''}
+                </div>
+            </div>` : '';
+
+        const pubchemBtn = pubchemUrl ? `
+            <a href="${pubchemUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">
+                <i class="fas fa-database"></i> PubChem
+            </a>` : '';
+
+        const websiteBtn = supplier.website ? `
+            <a href="${supplier.website}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm">
+                <i class="fas fa-globe"></i> Site web
+            </a>` : '';
+
+        const excipientCount = excipients.length;
+
+        return `
+        <div class="supplier-card">
+            <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:.5rem; margin-bottom:.75rem;">
+                <div>
+                    <div class="supplier-name">${supplier.name || '—'}</div>
+                    <div class="supplier-country"><span>${flag}</span> ${country}</div>
+                </div>
+                ${excipientCount > 0 ? `<span class="badge badge-primary">${excipientCount} excipient${excipientCount>1?'s':''}</span>` : ''}
+            </div>
+            ${tagsHtml}
+            <div style="display:flex; gap:.4rem; flex-wrap:wrap; margin-top:.75rem;">
+                ${websiteBtn}
+                ${pubchemBtn}
+            </div>
+        </div>`;
+    }).join('');
+
+    renderPagination(totalPages);
+}
+
+function renderPagination(totalPages) {
+    const container = document.getElementById('paginationContainer');
+    if (totalPages <= 1) { container.innerHTML = ''; return; }
+
+    let html = `<button onclick="goToPage(${suppliersPage-1})" ${suppliersPage===1?'disabled':''}><i class="fas fa-chevron-left"></i></button>`;
+    for (let p = 1; p <= totalPages; p++) {
+        if (p === 1 || p === totalPages || (p >= suppliersPage-2 && p <= suppliersPage+2)) {
+            html += `<button onclick="goToPage(${p})" class="${p===suppliersPage?'active':''}">${p}</button>`;
+        } else if (p === suppliersPage-3 || p === suppliersPage+3) {
+            html += `<span class="page-info">…</span>`;
         }
+    }
+    html += `<button onclick="goToPage(${suppliersPage+1})" ${suppliersPage===totalPages?'disabled':''}><i class="fas fa-chevron-right"></i></button>
+             <span class="page-info">${filteredSuppliers.length} résultat${filteredSuppliers.length>1?'s':''}</span>`;
+    container.innerHTML = html;
+}
 
-        // ============================================================
-        // INITIALISATION
-        // ============================================================
-        document.addEventListener('DOMContentLoaded', async () => {
-            try {
-                supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                await loadSuppliers();
-            } catch (error) {
-                console.error('Erreur initialisation:', error);
-                showStatusBar('Erreur de connexion Supabase', 'error');
-            }
-        });
+function goToPage(page) {
+    const totalPages = Math.ceil(filteredSuppliers.length / PAGE_SIZE);
+    if (page < 1 || page > totalPages) return;
+    suppliersPage = page;
+    displaySuppliers();
+    document.getElementById('suppliersContainer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
 
-        // ============================================================
-        // CHARGEMENT DEPUIS SUPABASE
-        // ============================================================
-        async function loadSuppliers() {
-            showStatusBar('Chargement des fournisseurs PubChem...', 'loading');
-            try {
-                const { data, error } = await supabaseClient
-                    .from('suppliers')
-                    .select('*')
-                    .order('name', { ascending: true });
+function updateStats() {
+    const countries  = [...new Set(allSuppliers.map(s => s.country).filter(c => c && c !== 'Unknown'))];
+    const multiCount = allSuppliers.filter(s => parseNotes(s.notes).excipients.length >= 5).length;
+    animNum('totalSuppliers', allSuppliers.length);
+    animNum('totalCountries', countries.length);
+    animNum('multiSuppliers', multiCount);
+}
 
-                if (error) throw error;
+function animNum(id, target) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const start = performance.now(), dur = 800;
+    (function tick(now) {
+        const p = Math.min((now-start)/dur, 1);
+        el.textContent = Math.floor(p*target);
+        if (p < 1) requestAnimationFrame(tick);
+        else el.textContent = target;
+    })(start);
+}
 
-                allSuppliers      = data || [];
-                filteredSuppliers = [...allSuppliers];
-                suppliersPage       = 1;
+function populateFilters() {
+    const countries = [...new Set(allSuppliers.map(s => s.country).filter(c => c && c !== 'Unknown'))].sort();
+    const cFilter   = document.getElementById('countryFilter');
+    cFilter.innerHTML = '<option value="">Tous les pays</option>' +
+        countries.map(c => `<option value="${c}">${countryFlag(c)} ${c}</option>`).join('');
 
-                updateStats();
-                populateFilters();
-                displaySuppliers();
-                showStatusBar(`${allSuppliers.length} fournisseurs chargés depuis PubChem`, 'success');
+    const excSet = new Set();
+    allSuppliers.forEach(s => parseNotes(s.notes).excipients.forEach(e => excSet.add(e)));
+    const eFilter = document.getElementById('excipientFilter');
+    eFilter.innerHTML = '<option value="">Tous les excipients</option>' +
+        [...excSet].sort().map(e => `<option value="${e}">${e}</option>`).join('');
 
-            } catch (error) {
-                console.error('Erreur Supabase:', error);
-                showStatusBar('Erreur lors du chargement — réessayez', 'error');
-            }
-        }
+    cFilter.addEventListener('change', applyFilters);
+    eFilter.addEventListener('change', applyFilters);
+    document.getElementById('searchInput').addEventListener('input', applyFilters);
+}
 
-        async function refreshSuppliers() {
-            await loadSuppliers();
-        }
+function applyFilters() {
+    const country   = document.getElementById('countryFilter').value;
+    const excipient = document.getElementById('excipientFilter').value;
+    const search    = document.getElementById('searchInput').value.toLowerCase().trim();
 
-        // ============================================================
-        // AFFICHAGE + PAGINATION
-        // ============================================================
-        function displaySuppliers() {
-            const container  = document.getElementById('suppliersContainer');
-            const totalPages = Math.ceil(filteredSuppliers.length / PAGE_SIZE);
-            const start      = (suppliersPage - 1) * PAGE_SIZE;
-            const pageItems  = filteredSuppliers.slice(start, start + PAGE_SIZE);
+    filteredSuppliers = allSuppliers.filter(s => {
+        const { excipients } = parseNotes(s.notes);
+        return (!country   || s.country === country) &&
+               (!excipient || excipients.includes(excipient)) &&
+               (!search    || s.name.toLowerCase().includes(search));
+    });
+    suppliersPage = 1;
+    displaySuppliers();
+}
 
-            if (filteredSuppliers.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-suppliers">
-                        <i class="fas fa-search"></i>
-                        <p>Aucun fournisseur trouvé avec ces critères</p>
-                    </div>`;
-                document.getElementById('paginationContainer').innerHTML = '';
-                return;
-            }
+function showStatus(message, type) {
+    const bar = document.getElementById('statusBar');
+    const icons = { loading: '<i class="fas fa-circle-notch spinner-icon"></i>', success: '<i class="fas fa-check-circle"></i>', error: '<i class="fas fa-exclamation-triangle"></i>' };
+    bar.innerHTML  = `${icons[type]||''} ${message}`;
+    bar.className  = `status-bar status-${type}`;
+    if (type === 'success') setTimeout(() => { bar.style.display = 'none'; }, 3000);
+    else bar.style.display = 'flex';
+}
 
-            container.innerHTML = pageItems.map(supplier => {
-                const { excipients, pubchemUrl } = parseNotes(supplier.notes);
-                const MAX_TAGS = 5;
-                const shownTags  = excipients.slice(0, MAX_TAGS);
-                const remaining  = excipients.length - MAX_TAGS;
-
-                const tagsHtml = excipients.length > 0 ? `
-                    <div class="supplier-excipients">
-                        <div class="supplier-excipients-label">Excipients fournis</div>
-                        <div class="excipient-tags">
-                            ${shownTags.map(e => `<span class="excipient-tag">${e}</span>`).join('')}
-                            ${remaining > 0 ? `<span class="excipient-tag excipient-tag-more">+${remaining} autres</span>` : ''}
-                        </div>
-                    </div>` : '';
-
-                const pubchemBtn = pubchemUrl ? `
-                    <a href="${pubchemUrl}" target="_blank" rel="noopener noreferrer" class="action-link pubchem">
-                        <i class="fas fa-database"></i> PubChem
-                    </a>` : '';
-
-                const websiteBtn = supplier.website ? `
-                    <a href="${supplier.website}" target="_blank" rel="noopener noreferrer" class="action-link">
-                        <i class="fas fa-globe"></i> Site web
-                    </a>` : '';
-
-                return `
-                <div class="supplier-card">
-                    <div class="supplier-header">
-                        <span class="supplier-icon">🏭</span>
-                        <span class="supplier-name">${supplier.name || '—'}</span>
-                    </div>
-
-                    <div class="supplier-country-badge">
-                        <i class="fas fa-map-marker-alt"></i> ${supplier.country || 'Pays inconnu'}
-                    </div>
-
-                    ${tagsHtml}
-
-                    <div class="supplier-actions">
-                        ${websiteBtn}
-                        ${pubchemBtn}
-                    </div>
-                </div>`;
-            }).join('');
-
-            renderPagination(totalPages);
-        }
-
-        function renderPagination(totalPages) {
-            const container = document.getElementById('paginationContainer');
-            if (totalPages <= 1) { container.innerHTML = ''; return; }
-
-            let html = `
-                <button onclick="goToPage(${suppliersPage - 1})" ${suppliersPage === 1 ? 'disabled' : ''}>
-                    <i class="fas fa-chevron-left"></i>
-                </button>`;
-
-            for (let p = 1; p <= totalPages; p++) {
-                if (
-                    p === 1 || p === totalPages ||
-                    (p >= suppliersPage - 2 && p <= suppliersPage + 2)
-                ) {
-                    html += `<button onclick="goToPage(${p})" class="${p === suppliersPage ? 'active' : ''}">${p}</button>`;
-                } else if (p === suppliersPage - 3 || p === suppliersPage + 3) {
-                    html += `<span class="page-info">…</span>`;
-                }
-            }
-
-            html += `
-                <button onclick="goToPage(${suppliersPage + 1})" ${suppliersPage === totalPages ? 'disabled' : ''}>
-                    <i class="fas fa-chevron-right"></i>
-                </button>
-                <span class="page-info">${filteredSuppliers.length} résultat${filteredSuppliers.length > 1 ? 's' : ''}</span>`;
-
-            container.innerHTML = html;
-        }
-
-        function goToPage(page) {
-            const totalPages = Math.ceil(filteredSuppliers.length / PAGE_SIZE);
-            if (page < 1 || page > totalPages) return;
-            suppliersPage = page;
-            displaySuppliers();
-            document.getElementById('suppliersContainer').scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-
-        // ============================================================
-        // STATISTIQUES
-        // ============================================================
-        function updateStats() {
-            const countries    = [...new Set(allSuppliers.map(s => s.country).filter(c => c && c !== 'Unknown'))];
-            const multiCount   = allSuppliers.filter(s => {
-                const { excipients } = parseNotes(s.notes);
-                return excipients.length >= 5;
-            }).length;
-
-            animateNumber('totalSuppliers', allSuppliers.length);
-            animateNumber('totalCountries', countries.length);
-            animateNumber('multiSuppliers',  multiCount);
-        }
-
-        function animateNumber(id, target) {
-            const el = document.getElementById(id);
-            if (!el) return;
-            const start = performance.now();
-            const dur   = 800;
-            (function tick(now) {
-                const p = Math.min((now - start) / dur, 1);
-                el.textContent = Math.floor(p * target);
-                if (p < 1) requestAnimationFrame(tick);
-                else el.textContent = target;
-            })(start);
-        }
-
-        // ============================================================
-        // FILTRES
-        // ============================================================
-        function populateFilters() {
-            // Pays
-            const countries = [...new Set(allSuppliers.map(s => s.country).filter(c => c && c !== 'Unknown'))].sort();
-            const cFilter   = document.getElementById('countryFilter');
-            cFilter.innerHTML = '<option value="">Tous les pays</option>' +
-                countries.map(c => `<option value="${c}">${c}</option>`).join('');
-
-            // Excipients (extrait des notes)
-            const excipientSet = new Set();
-            allSuppliers.forEach(s => {
-                parseNotes(s.notes).excipients.forEach(e => excipientSet.add(e));
-            });
-            const excipients = [...excipientSet].sort();
-            const eFilter    = document.getElementById('excipientFilter');
-            eFilter.innerHTML = '<option value="">Tous les excipients</option>' +
-                excipients.map(e => `<option value="${e}">${e}</option>`).join('');
-
-            cFilter.addEventListener('change', applyFilters);
-            eFilter.addEventListener('change', applyFilters);
-            document.getElementById('searchInput').addEventListener('input', applyFilters);
-        }
-
-        function applyFilters() {
-            const country    = document.getElementById('countryFilter').value;
-            const excipient  = document.getElementById('excipientFilter').value;
-            const search     = document.getElementById('searchInput').value.toLowerCase().trim();
-
-            filteredSuppliers = allSuppliers.filter(s => {
-                const { excipients } = parseNotes(s.notes);
-                const matchCountry   = !country   || s.country === country;
-                const matchExcipient = !excipient || excipients.includes(excipient);
-                const matchSearch    = !search    || s.name.toLowerCase().includes(search);
-                return matchCountry && matchExcipient && matchSearch;
-            });
-
-            suppliersPage = 1;
-            displaySuppliers();
-        }
-
-        // ============================================================
-        // BARRE DE STATUT
-        // ============================================================
-        function showStatusBar(message, type) {
-            const bar   = document.getElementById('statusBar');
-            const icons = {
-                loading: '<i class="fas fa-spinner fa-spin"></i>',
-                success: '<i class="fas fa-check-circle"></i>',
-                error:   '<i class="fas fa-exclamation-triangle"></i>'
-            };
-            bar.innerHTML   = `${icons[type] || ''} ${message}`;
-            bar.className   = `status-bar ${type}`;
-            if (type === 'success') setTimeout(() => { bar.style.display = 'none'; }, 3000);
-        }
-    </script>
+function handleLogin(e) { e.preventDefault(); closeModal('loginModal'); }
+function handleRegister(e) { e.preventDefault(); closeModal('registerModal'); }
+</script>
 </body>
 </html>

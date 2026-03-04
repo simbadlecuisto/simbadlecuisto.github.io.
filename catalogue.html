@@ -3,235 +3,335 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catalogue - ChemistrySpot</title>
+    <title>Catalogue Excipients — ChemistrySpot</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="./css/main.css">
-    <link rel="stylesheet" href="./css/components.css">
-    <link rel="stylesheet" href="./css/responsive.css">
+    <link rel="stylesheet" href="./css/design-system.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-    <!-- Header -->
-    <header>
+
+<!-- ══ SITE HEADER ══ -->
+<header class="site-header">
+    <div class="header-top">
         <div class="container">
-            <div class="header-content">
-                <div class="logo-section">
-                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/chemspotV1-dt6tDoOKp1wAyi8oRMzxzufIVBfiu9.png" alt="ChemistrySpot Logo" class="logo">
-                    <span class="logo-text">ChemistrySpot</span>
+            <a href="index.html" class="site-logo"><span class="logo-hex">⬡</span>ChemistrySpot</a>
+            <div class="header-search">
+                <input type="text" placeholder="Rechercher un excipient, N° CAS..." id="globalSearch">
+                <button onclick="goSearch()"><i class="fas fa-search"></i></button>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-ghost btn-sm" onclick="openModal('loginModal')"><i class="fas fa-sign-in-alt"></i> Connexion</button>
+                <button class="btn btn-primary btn-sm" onclick="openModal('registerModal')"><i class="fas fa-user-plus"></i> Inscription</button>
+            </div>
+        </div>
+    </div>
+    <nav class="header-nav">
+        <div class="container">
+            <a href="index.html" class="nav-link">Terminal</a>
+            <a href="catalogue.html" class="nav-link active">Catalogue</a>
+            <a href="fournisseurs.html" class="nav-link">Fournisseurs</a>
+            <a href="contact.html" class="nav-link">Contact</a>
+        </div>
+    </nav>
+</header>
+
+<!-- ══ PAGE BAND ══ -->
+<div class="page-band">
+    <div class="container">
+        <nav class="breadcrumb">
+            <a href="index.html">Accueil</a>
+            <span class="sep">›</span>
+            <span class="current">Catalogue</span>
+        </nav>
+        <h1><i class="fas fa-flask text-primary"></i> Catalogue Excipients</h1>
+        <p>50 excipients pharmaceutiques référencés — données PubChem NCBI</p>
+    </div>
+</div>
+
+<!-- ══ MAIN CONTENT ══ -->
+<main class="section">
+    <div class="container">
+
+        <!-- Stats -->
+        <div class="stats-row">
+            <div class="stat-item">
+                <span class="stat-num" id="displayedProducts">0</span>
+                <span class="stat-label">Excipients affichés</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-num">50</span>
+                <span class="stat-label">Total indexés</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-num">192</span>
+                <span class="stat-label">Fournisseurs</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-num">1 737</span>
+                <span class="stat-label">Liaisons excipient-fournisseur</span>
+            </div>
+        </div>
+
+        <!-- Filtres -->
+        <div class="filters-bar">
+            <div class="filter-group" style="flex:2; min-width:240px;">
+                <label class="filter-label"><i class="fas fa-search"></i> Rechercher</label>
+                <div style="display:flex; gap:0; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden;">
+                    <input type="text" id="catalogSearchInput" class="form-input" placeholder="Nom, CAS, formule..." style="border:none; background:transparent; flex:1;">
+                    <button class="btn btn-primary btn-sm" style="border-radius:0;" onclick="handleSearch()"><i class="fas fa-search"></i></button>
                 </div>
-                
-                <ul class="nav-menu">
-                    <li><a href="index.html" class="nav-link">Accueil</a></li>
-                    <li><a href="catalogue.html" class="nav-link active">Catalogue</a></li>
-                    <li><a href="fournisseurs.html" class="nav-link">Fournisseurs</a></li>
-                    <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </div>
+            <div class="filter-group">
+                <label class="filter-label"><i class="fas fa-tag"></i> Catégorie</label>
+                <select id="categoryFilter" class="form-input form-select" onchange="applyFilters()">
+                    <option value="">Toutes les catégories</option>
+                    <option value="liant">Liant</option>
+                    <option value="désintégrant">Désintégrant</option>
+                    <option value="lubrifiant">Lubrifiant</option>
+                    <option value="diluant">Diluant</option>
+                    <option value="conservateur">Conservateur</option>
+                </select>
+            </div>
+            <div class="filter-group" style="flex:0; min-width:auto; justify-content:flex-end; align-self:flex-end;">
+                <button class="btn btn-ghost btn-sm" onclick="resetFilters()"><i class="fas fa-redo"></i> Réinitialiser</button>
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <div id="catalogLoading" class="loading-state">
+            <div class="spin-lg"></div>
+            <p>Chargement des excipients depuis Supabase...</p>
+        </div>
+
+        <!-- Résultats -->
+        <div id="catalogResults" style="display:none;">
+            <div class="products-grid" id="productsGrid"></div>
+        </div>
+
+        <!-- No results -->
+        <div id="noResults" class="empty-state" style="display:none;">
+            <i class="fas fa-search"></i>
+            <p>Aucun excipient trouvé pour cette recherche.</p>
+            <button class="btn btn-outline btn-sm" onclick="resetFilters()">Réinitialiser les filtres</button>
+        </div>
+
+    </div>
+</main>
+
+<!-- ══ SITE FOOTER ══ -->
+<footer class="site-footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <div class="footer-logo">⬡ ChemistrySpot</div>
+                <p class="footer-desc">Terminal B2B pour les excipients pharmaceutiques. Données indicatives à visée comparative.</p>
+                <div class="footer-certs">
+                    <span class="footer-cert">GMP</span>
+                    <span class="footer-cert">ISO 9001</span>
+                    <span class="footer-cert">ANSM</span>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Navigation</h4>
+                <ul>
+                    <li><a href="catalogue.html">Catalogue (50 excipients)</a></li>
+                    <li><a href="fournisseurs.html">Fournisseurs (192)</a></li>
+                    <li><a href="contact.html">Contact</a></li>
                 </ul>
-                
-                <div class="header-actions">
-                    <button class="btn btn-outline btn-sm">
-                        <i class="fas fa-shopping-cart"></i> Panier (0)
-                    </button>
+            </div>
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <p><i class="fas fa-envelope"></i> contact@chemistryspot.com</p>
+                <p><i class="fas fa-map-marker-alt"></i> Paris, France</p>
+                <div class="footer-social">
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
                 </div>
             </div>
         </div>
-    </header>
-
-    <!-- Page Header -->
-    <section class="page-header">
-        <div class="container">
-            <div class="page-header-content">
-                <h1>📦 Catalogue Excipients</h1>
-                <p>Explorez notre gamme complète d'excipients pharmaceutiques</p>
-                
-                <!-- Barre de recherche -->
-                <div class="search-container" style="max-width: 700px; margin: 2rem auto 0;">
-                    <form class="search-form" onsubmit="handleSearch(event)">
-                        <div class="search-input-container">
-                            <i class="fas fa-search search-icon"></i>
-                            <input type="text" id="catalogSearchInput" placeholder="Rechercher par nom, CAS, formule..." autocomplete="off">
-                        </div>
-                        <button type="submit">
-                            <i class="fas fa-search"></i> Rechercher
-                        </button>
-                    </form>
-                </div>
-            </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 ChemistrySpot — Données à titre indicatif. Pas de conseil en investissement.</p>
         </div>
-    </section>
+    </div>
+</footer>
 
-    <!-- Section Catalogue -->
-    <section class="section section-white">
-        <div class="container">
-            <!-- Stats rapides -->
-            <div class="hero-stats" style="margin-bottom: 2rem;">
-                <div class="stat-item">
-                    <span class="stat-number" id="displayedProducts">0</span>
-                    <span class="stat-label">Excipients disponibles</span>
-                </div>
-            </div>
+<!-- ══ MODALS ══ -->
+<div id="loginModal" class="modal">
+    <div class="modal-box">
+        <button class="modal-close" onclick="closeModal('loginModal')">&times;</button>
+        <div class="modal-title"><i class="fas fa-sign-in-alt"></i> Connexion</div>
+        <form onsubmit="handleLogin(event)">
+            <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" required></div>
+            <div class="form-group"><label class="form-label">Mot de passe</label><input type="password" class="form-input" required></div>
+            <button type="submit" class="btn btn-primary w-full">Se connecter</button>
+        </form>
+    </div>
+</div>
+<div id="registerModal" class="modal">
+    <div class="modal-box">
+        <button class="modal-close" onclick="closeModal('registerModal')">&times;</button>
+        <div class="modal-title"><i class="fas fa-user-plus"></i> Inscription</div>
+        <form onsubmit="handleRegister(event)">
+            <div class="form-group"><label class="form-label">Entreprise</label><input type="text" class="form-input" required></div>
+            <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" required></div>
+            <div class="form-group"><label class="form-label">Mot de passe</label><input type="password" class="form-input" required></div>
+            <button type="submit" class="btn btn-primary w-full">Créer mon compte</button>
+        </form>
+    </div>
+</div>
 
-            <!-- Loading -->
-            <div id="catalogLoading" style="text-align: center; padding: 4rem 2rem;">
-                <i class="fas fa-spinner fa-spin" style="font-size: 3rem; color: var(--primary);"></i>
-                <p style="margin-top: 1rem; color: var(--text-light);">Chargement des excipients...</p>
-            </div>
+<!-- ══ SCRIPTS ══ -->
+<script src="./js/supabase-config.js"></script>
 
-            <!-- Résultats -->
-            <div id="catalogResults" style="display: none;">
-                <div class="products-grid" id="productsGrid"></div>
-            </div>
+<script>
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal').forEach(m => m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); }));
 
-            <!-- Message si aucun résultat -->
-            <div id="noResults" style="display: none; text-align: center; padding: 4rem 2rem;">
-                <i class="fas fa-search" style="font-size: 4rem; color: var(--text-light); margin-bottom: 1rem;"></i>
-                <h3 style="color: var(--text-light);">Aucun excipient trouvé</h3>
-                <p style="color: var(--text-light);">Essayez une autre recherche</p>
-            </div>
-        </div>
-    </section>
+function goSearch() {
+    const q = document.getElementById('globalSearch').value.trim();
+    if (q) { document.getElementById('catalogSearchInput').value = q; handleSearch(); }
+}
+document.getElementById('globalSearch').addEventListener('keydown', e => { if (e.key === 'Enter') goSearch(); });
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h3>ChemistrySpot</h3>
-                    <p>La marketplace B2B de référence pour les matières premières pharmaceutiques.</p>
-                </div>
-                
-                <div class="footer-column">
-                    <h3>Contact</h3>
-                    <p>Email: contact@chemistryspot.com</p>
-                </div>
-            </div>
-            
-            <div class="footer-bottom">
-                <p>&copy; 2025 ChemistrySpot. Tous droits réservés.</p>
-            </div>
-        </div>
-    </footer>
+let allExcipients = [];
+let filteredExcipients = [];
 
-    <!-- Scripts -->
-    <script src="./js/supabase-config.js"></script>
-    <script>
-        let allExcipients = [];
-        let filteredExcipients = [];
+document.addEventListener('DOMContentLoaded', async () => {
+    let attempts = 0;
+    while (!window.ChemSpotDB && attempts < 20) {
+        await new Promise(resolve => setTimeout(resolve, 500));
+        attempts++;
+    }
+    if (!window.ChemSpotDB) { showError(); return; }
 
-        // Initialisation
-        document.addEventListener('DOMContentLoaded', async () => {
-            console.log('📦 Chargement du catalogue...');
-            
-            // Attendre ChemSpotDB
-            let attempts = 0;
-            while (!window.ChemSpotDB && attempts < 20) {
-                await new Promise(resolve => setTimeout(resolve, 500));
-                attempts++;
-            }
-            
-            if (!window.ChemSpotDB) {
-                console.error('❌ ChemSpotDB non disponible');
-                showError();
-                return;
-            }
-            
-            try {
-                // Charger excipients
-                allExcipients = await window.ChemSpotDB.getAllExcipients();
-                filteredExcipients = [...allExcipients];
-                
-                console.log(`✅ ${allExcipients.length} excipients chargés`);
-                
-                // Afficher
-                displayExcipients();
-                
-            } catch (error) {
-                console.error('❌ Erreur:', error);
-                showError();
-            }
-        });
+    // Handle URL query param
+    const urlQ = new URLSearchParams(window.location.search).get('q');
+    if (urlQ) document.getElementById('catalogSearchInput').value = urlQ;
 
-        // Afficher les excipients
-        function displayExcipients() {
-            const loading = document.getElementById('catalogLoading');
-            const results = document.getElementById('catalogResults');
-            const noResults = document.getElementById('noResults');
-            const grid = document.getElementById('productsGrid');
-            
-            loading.style.display = 'none';
-            
-            if (filteredExcipients.length === 0) {
-                results.style.display = 'none';
-                noResults.style.display = 'block';
-                return;
-            }
-            
-            results.style.display = 'block';
-            noResults.style.display = 'none';
-            
-            grid.innerHTML = filteredExcipients.map(exc => `
-                <div class="product-card fade-in">
-                    <div style="margin-bottom: 1rem;">
-                        <h3 style="font-size: 1.3rem; color: var(--primary); margin-bottom: 0.5rem;">
-                            ${exc.nom_commun}
-                        </h3>
-                        <span class="product-badge" style="background: var(--success); color: white; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.85rem;">
-                            Excipient
-                        </span>
-                    </div>
-                    
-                    <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
-                        <div style="display: grid; gap: 0.5rem; font-size: 0.9rem; color: #000;">
-                            <div><strong>Nom chimique:</strong> ${exc.nom_chimique || 'N/A'}</div>
-                            <div><strong>CAS:</strong> ${exc.cas_number || 'N/A'}</div>
-                            <div><strong>Formule:</strong> ${exc.formule || 'N/A'}</div>
-                        </div>
-                    </div>
-                    
-                    <div style="font-size: 0.9rem; color: #000 ; margin-bottom: 1rem; line-height: 1.5;">
-                        <strong>Fonction:</strong> ${exc.fonction_principale || 'Non spécifiée'}
-                    </div>
-                    
-                    <button class="btn btn-primary" onclick="viewExcipient(${exc.id})" style="width: 100%;">
-                        <i class="fas fa-eye"></i> Voir détails
-                    </button>
-                </div>
-            `).join('');
-            
-            // Mettre à jour stats
-            document.getElementById('displayedProducts').textContent = filteredExcipients.length;
-        }
+    try {
+        allExcipients = await window.ChemSpotDB.getAllExcipients();
+        filteredExcipients = [...allExcipients];
+        applyFilters();
+    } catch (err) {
+        console.error(err);
+        showError();
+    }
+});
 
-        // Recherche
-        function handleSearch(event) {
-            event.preventDefault();
-            const query = document.getElementById('catalogSearchInput').value.toLowerCase().trim();
-            
-            if (!query) {
-                filteredExcipients = [...allExcipients];
-            } else {
-                filteredExcipients = allExcipients.filter(exc => 
-                    exc.nom_commun?.toLowerCase().includes(query) ||
-                    exc.nom_chimique?.toLowerCase().includes(query) ||
-                    exc.cas_number?.toLowerCase().includes(query) ||
-                    exc.formule?.toLowerCase().includes(query)
-                );
-            }
-            
-            displayExcipients();
-        }
+function handleSearch() { applyFilters(); }
 
-     // NOUVEAU
-function viewExcipient(id) {
-    window.location.href = `produit-detail.html?id=${id}`;
+function applyFilters() {
+    const query    = document.getElementById('catalogSearchInput').value.toLowerCase().trim();
+    const category = document.getElementById('categoryFilter').value.toLowerCase();
+
+    filteredExcipients = allExcipients.filter(exc => {
+        const matchQuery = !query ||
+            exc.nom_commun?.toLowerCase().includes(query) ||
+            exc.nom_chimique?.toLowerCase().includes(query) ||
+            exc.cas_number?.toLowerCase().includes(query) ||
+            exc.formule?.toLowerCase().includes(query);
+        const matchCategory = !category ||
+            exc.fonction_principale?.toLowerCase().includes(category);
+        return matchQuery && matchCategory;
+    });
+    displayExcipients();
 }
 
-        // Afficher erreur
-        function showError() {
-            document.getElementById('catalogLoading').innerHTML = `
-                <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #ef4444;"></i>
-                <p style="margin-top: 1rem; color: #ef4444;">Erreur de chargement</p>
-            `;
-        }
-    </script>
+function resetFilters() {
+    document.getElementById('catalogSearchInput').value = '';
+    document.getElementById('categoryFilter').value = '';
+    filteredExcipients = [...allExcipients];
+    displayExcipients();
+}
+
+/* Grade heuristic */
+function guessGrade(exc) {
+    const name = (exc.nom_commun || '').toLowerCase();
+    if (name.includes('ph eur') || name.includes('pheur')) return 'Ph. Eur.';
+    if (name.includes('usp') || name.includes('bp')) return 'USP/BP';
+    return 'Pharm. Grade';
+}
+
+/* Price range hint (fallback static) */
+const PRICE_HINTS = {
+    'lactose': '0,80–1,20', 'cellulose': '1,50–2,80', 'mannitol': '3,00–5,00',
+    'sorbitol': '0,80–1,40', 'talc': '0,30–0,80', 'stéarate': '2,50–4,00',
+    'povidone': '8,00–15,00', 'polyvinyle': '8,00–15,00', 'hypromellose': '15,00–30,00',
+    'hyprox': '12,00–22,00', 'glycérol': '0,90–1,50', 'polysorbate': '6,00–10,00',
+};
+function getPriceHint(exc) {
+    const name = (exc.nom_commun || '').toLowerCase();
+    for (const [key, range] of Object.entries(PRICE_HINTS)) {
+        if (name.includes(key)) return `${range} €/kg`;
+    }
+    return null;
+}
+
+function displayExcipients() {
+    const loading  = document.getElementById('catalogLoading');
+    const results  = document.getElementById('catalogResults');
+    const noRes    = document.getElementById('noResults');
+    const grid     = document.getElementById('productsGrid');
+    const statEl   = document.getElementById('displayedProducts');
+
+    loading.style.display = 'none';
+
+    if (filteredExcipients.length === 0) {
+        results.style.display = 'none';
+        noRes.style.display = 'flex';
+        if (statEl) statEl.textContent = '0';
+        return;
+    }
+
+    noRes.style.display = 'none';
+    results.style.display = 'block';
+    if (statEl) statEl.textContent = filteredExcipients.length;
+
+    grid.innerHTML = filteredExcipients.map(exc => {
+        const grade     = guessGrade(exc);
+        const priceHint = getPriceHint(exc);
+        const gradeClass = grade.startsWith('Ph') ? 'badge-ph-eur' : 'badge-usp';
+
+        return `
+        <div class="product-card fade-in">
+            <div class="product-card-cas">${exc.cas_number ? 'CAS ' + exc.cas_number : 'CAS N/A'}</div>
+            <div class="product-card-name">${exc.nom_commun || '—'}</div>
+            <div class="mb-1">
+                <span class="badge ${gradeClass} badge-grade">${grade}</span>
+                ${exc.fonction_principale ? `<span class="badge badge-neutral" style="margin-left:4px;">${exc.fonction_principale}</span>` : ''}
+            </div>
+            <div class="product-card-meta"><strong>Nom chimique :</strong> ${exc.nom_chimique || 'N/A'}</div>
+            ${exc.formule ? `<div class="product-card-meta"><strong>Formule :</strong> ${exc.formule}</div>` : ''}
+            ${priceHint ? `<div class="product-card-price"><i class="fas fa-tag"></i> ${priceHint}</div>` : '<div class="product-card-price" style="color:var(--text-dim);">Prix sur demande</div>'}
+            <div class="product-card-footer">
+                <button class="btn btn-primary btn-sm" onclick="viewExcipient(${exc.id})" style="flex:1;">
+                    <i class="fas fa-eye"></i> Voir détails
+                </button>
+                <a href="fournisseurs.html" class="btn btn-outline btn-sm" title="Voir fournisseurs">
+                    <i class="fas fa-industry"></i>
+                </a>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function viewExcipient(id) { window.location.href = `produit-detail.html?id=${id}`; }
+
+function showError() {
+    document.getElementById('catalogLoading').innerHTML = `
+        <div class="empty-state">
+            <i class="fas fa-exclamation-triangle" style="color:var(--danger);"></i>
+            <p>Erreur de chargement des données Supabase.</p>
+        </div>`;
+}
+
+function handleLogin(e) { e.preventDefault(); closeModal('loginModal'); }
+function handleRegister(e) { e.preventDefault(); closeModal('registerModal'); }
+
+document.getElementById('catalogSearchInput').addEventListener('keydown', e => { if (e.key === 'Enter') handleSearch(); });
+</script>
 </body>
 </html>
