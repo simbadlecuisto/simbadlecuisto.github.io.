@@ -1,0 +1,256 @@
+{
+  "generated_at": "2026-03-04T05:56:59.677771+00:00",
+  "total_rows": 1737,
+  "real_rows": 1222,
+  "synthetic_rows": 515,
+  "excipients_covered": 50,
+  "success": 1737,
+  "errors": 0,
+  "batches": [
+    {
+      "batch": "1-50",
+      "count": 50,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "batch": "51-100",
+      "count": 50,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "batch": "101-150",
+      "count": 50,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "batch": "151-200",
+      "count": 50,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "batch": "201-250",
+      "count": 50,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "batch": "251-300",
+      "count": 50,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "batch": "301-350",
+      "count": 50,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "batch": "351-400",
+      "count": 50,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "batch": "401-450",
+      "count": 50,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "batch": "451-500",
+      "count": 50,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "batch": "501-550",
+      "count": 50,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "batch": "551-600",
+      "count": 50,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "batch": "601-650",
+      "count": 50,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "batch": "651-700",
+      "count": 50,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "batch": "701-750",
+      "count": 50,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "batch": "751-800",
+      "count": 50,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "batch": "801-850",
+      "count": 50,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "batch": "851-900",
+      "count": 50,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "batch": "901-950",
+      "count": 50,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "batch": "951-1000",
+      "count": 50,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "batch": "1001-1050",
+      "count": 50,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "batch": "1051-1100",
+      "count": 50,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "batch": "1101-1150",
+      "count": 50,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "batch": "1151-1200",
+      "count": 50,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "batch": "1201-1250",
+      "count": 50,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "batch": "1251-1300",
+      "count": 50,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "batch": "1301-1350",
+      "count": 50,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "batch": "1351-1400",
+      "count": 50,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "batch": "1401-1450",
+      "count": 50,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "batch": "1451-1500",
+      "count": 50,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "batch": "1501-1550",
+      "count": 50,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "batch": "1551-1600",
+      "count": 50,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "batch": "1601-1650",
+      "count": 50,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "batch": "1651-1700",
+      "count": 50,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    },
+    {
+      "batch": "1701-1737",
+      "count": 37,
+      "ok": true,
+      "http_status": 201,
+      "error": null
+    }
+  ]
+}

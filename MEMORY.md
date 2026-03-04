@@ -18,7 +18,7 @@
 |---|---|---|
 | `excipients` | **50** ✅ | IDs 10–59 |
 | `suppliers` | **192** | Extraits via PubChem PUG View |
-| `excipient_suppliers` | **inexistante** | À créer — priorité suivante |
+| `excipient_suppliers` | **À peupler** | SQL créé, script Python prêt, table à créer via SQL Editor |
 | `prices` | **inexistante** | À créer (scraping futur) |
 
 ### Excipients en base
@@ -71,7 +71,7 @@ Potassium sorbate, Cetyl alcohol, Mineral oil
 |---|---|---|
 | Accueil | `index.html` | ✅ Bloomberg terminal (refait en session 2) |
 | Catalogue | `catalogue.html` | Fonctionnel, Supabase live |
-| Détail excipient | `produit-detail.html` | Fonctionnel, section fournisseurs vide |
+| Détail excipient | `produit-detail.html` | Réécrit — Tab 1 tableau prix, Tab 3 cartes fournisseurs (attend excipient_suppliers) |
 | Fournisseurs | `fournisseurs.html` | 192 fournisseurs, sans lien excipient ni prix |
 | Contact | `contact.html` | Fonctionnel |
 
@@ -97,10 +97,17 @@ Architecture de la page :
 
 ## Priorités restantes Phase 1
 
-1. **[DB]** Créer table `excipient_suppliers` (schema : `excipient_id INT, supplier_id INT`) + peupler depuis `vendors_pubchem.json`
-2. **[FRONT]** `produit-detail.html` → section fournisseurs dynamique (Supabase join)
-3. **[DATA]** Scraping prix (Sigma-Aldrich, TCI Chemicals) → table `prices`
+1. **[DB]** ⏳ Exécuter `scripts/create_excipient_suppliers_table.sql` dans Supabase SQL Editor
+2. **[DB]** ⏳ Lancer `python3 scripts/populate_excipient_suppliers.py` pour peupler la table
+3. **[DATA]** Scraping prix réels (Sigma-Aldrich, TCI Chemicals) → table `prices`
 4. **[QUALITE]** Améliorer détection pays fournisseurs (180/192 Unknown)
+
+### Nouveaux scripts (session 2026-03-04)
+
+| Script | Rôle |
+|---|---|
+| `scripts/create_excipient_suppliers_table.sql` | DDL table M2M + RLS |
+| `scripts/populate_excipient_suppliers.py` | Peuple excipient_suppliers (réel + synthétique) |
 
 ---
 
