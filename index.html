@@ -683,12 +683,11 @@ const PRICE_TOP10 = [
 ];
 
 // ── RSS FEEDS ─────────────────────────────────────────────
-const RSS_API = 'https://api.rss2json.com/v1/api.json?count=5&rss_url=';
-
+// URLs directes rss2json (format exact demandé, sans double-encodage)
 const FEEDS = [
     {
         id: 'feed-ema',
-        url: 'https://www.ema.europa.eu/en/rss.xml',
+        apiUrl: 'https://api.rss2json.com/v1/api.json?rss_url=https://www.ema.europa.eu/en/rss.xml',
         fallback: [
             { title:'EMA: Updated guideline on excipients in medicinal products',                 date:'2026-02-28', link:'https://www.ema.europa.eu' },
             { title:'EMA: New Ph. Eur. monographs for cellulose derivatives Q2 2026',            date:'2026-02-15', link:'https://www.ema.europa.eu' },
@@ -699,7 +698,7 @@ const FEEDS = [
     },
     {
         id: 'feed-pharma',
-        url: 'https://pharmaphorum.com/rssfeed',
+        apiUrl: 'https://api.rss2json.com/v1/api.json?rss_url=https://pharmaphorum.com/rssfeed',
         fallback: [
             { title:'Pharmaceutical excipient market to reach €8.2B by 2028, CAGR 5.3%',       date:'2026-03-01', link:'https://pharmaphorum.com' },
             { title:'Supply chain pressures ease for European pharma manufacturers in H1',       date:'2026-02-20', link:'https://pharmaphorum.com' },
@@ -710,7 +709,8 @@ const FEEDS = [
     },
     {
         id: 'feed-pubmed',
-        url: 'https://pubmed.ncbi.nlm.nih.gov/rss/search/?term=pharmaceutical+excipients&format=rss',
+        // PubMed URL encodée car elle contient ? & + (obligatoire dans query string)
+        apiUrl: 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent('https://pubmed.ncbi.nlm.nih.gov/rss/search/?term=pharmaceutical+excipients&format=rss'),
         fallback: [
             { title:'Biopharmaceutical classification of novel excipients for ODT formulations', date:'2026-02-28', link:'https://pubmed.ncbi.nlm.nih.gov' },
             { title:'HPMC concentration impact on sustained-release kinetics: systematic review', date:'2026-02-18', link:'https://pubmed.ncbi.nlm.nih.gov' },
@@ -825,14 +825,16 @@ async function loadFeed(feed) {
     const el = document.getElementById(feed.id);
     if (!el) return;
     try {
-        const r = await fetch(`${RSS_API}${encodeURIComponent(feed.url)}`);
+        const r = await fetch(feed.apiUrl);
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
         const d = await r.json();
         if (d.status === 'ok' && d.items?.length) {
             renderArticles(el, d.items);
         } else {
-            throw new Error('empty');
+            throw new Error(d.message || 'empty feed');
         }
-    } catch {
+    } catch (err) {
+        console.warn(`[ChemSpot] Feed ${feed.id} — ${err.message} — fallback affiché`);
         renderArticles(el, feed.fallback);
     }
 }
