@@ -13,10 +13,8 @@
     <style>
     /* ══════════════════════════════════════════════════
        BLOOMBERG TERMINAL — ChemistrySpot
-       Styles scoped à index.html, ne touchent pas les autres pages
     ══════════════════════════════════════════════════ */
 
-    /* ── Overrides globaux ── */
     body {
         background: #0a0a0a !important;
         color: #e8e8e8 !important;
@@ -34,24 +32,20 @@
     .nav-link:hover, .nav-link.active { color: #00d4aa !important; }
     .nav-link.active::after { background: #00d4aa !important; }
     .btn-outline {
-        border-color: #00d4aa !important;
-        color: #00d4aa !important;
+        border-color: #00d4aa !important; color: #00d4aa !important;
         background: transparent !important;
     }
     .btn-outline:hover { background: rgba(0,212,170,.12) !important; }
     .btn-primary {
-        background: #00d4aa !important;
-        color: #0a0a0a !important;
-        font-weight: 700 !important;
-        border: none !important;
+        background: #00d4aa !important; color: #0a0a0a !important;
+        font-weight: 700 !important; border: none !important;
     }
     .btn-primary:hover { background: #00b890 !important; }
 
     /* ── Modal dark ── */
     .modal { background: rgba(0,0,0,.88) !important; }
     .modal-content {
-        background: #151515 !important;
-        color: #e8e8e8 !important;
+        background: #151515 !important; color: #e8e8e8 !important;
         border: 1px solid #2a2a2a !important;
         box-shadow: 0 20px 60px rgba(0,0,0,.6) !important;
     }
@@ -63,10 +57,7 @@
     .close:hover { color: #00d4aa !important; }
 
     /* ── Footer dark ── */
-    footer {
-        background: #080808 !important;
-        border-top: 1px solid #1a1a1a !important;
-    }
+    footer { background: #080808 !important; border-top: 1px solid #1a1a1a !important; }
     footer h3  { color: #556070 !important; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
     footer p, footer a, footer li { color: #3a4555 !important; font-size: 12px; }
     footer a:hover { color: #00d4aa !important; }
@@ -74,14 +65,14 @@
     .footer-bottom p { color: #252f3a !important; font-size: 11px; }
 
     /* ══════════════════════════
-       TICKER BAR
+       TICKER BAR — plus grand
     ══════════════════════════ */
     .ticker-wrap {
         position: relative;
         background: #090f0d;
         border-bottom: 1px solid #0f2018;
         overflow: hidden;
-        height: 30px;
+        height: 42px;
         display: flex;
         align-items: center;
     }
@@ -92,56 +83,55 @@
         background: #00d4aa;
         color: #0a0a0a;
         font-family: 'JetBrains Mono', monospace;
-        font-size: 9px;
+        font-size: 10px;
         font-weight: 700;
-        letter-spacing: 1.5px;
-        padding: 0 10px;
+        letter-spacing: 2px;
+        padding: 0 14px;
         display: flex;
         align-items: center;
         white-space: nowrap;
+        gap: 6px;
     }
-    .ticker-fade-l,
-    .ticker-fade-r {
-        position: absolute;
-        top: 0; bottom: 0;
-        width: 50px;
-        z-index: 2;
-        pointer-events: none;
+    .ticker-badge-dot {
+        width: 7px; height: 7px;
+        border-radius: 50%;
+        background: #0a0a0a;
+        animation: blink 1.8s ease-in-out infinite;
     }
-    .ticker-fade-l { left: 72px;  background: linear-gradient(to right, #090f0d, transparent); }
+    .ticker-fade-l, .ticker-fade-r {
+        position: absolute; top: 0; bottom: 0; width: 60px;
+        z-index: 2; pointer-events: none;
+    }
+    .ticker-fade-l { left: 90px;  background: linear-gradient(to right, #090f0d, transparent); }
     .ticker-fade-r { right: 0;    background: linear-gradient(to left,  #090f0d, transparent); }
-
     .ticker-scroll {
         display: flex;
         animation: scroll-left 130s linear infinite;
         width: max-content;
-        padding-left: 80px;
+        padding-left: 100px;
     }
     .ticker-scroll:hover { animation-play-state: paused; }
-
-    @keyframes scroll-left {
-        0%   { transform: translateX(0); }
-        100% { transform: translateX(-50%); }
-    }
+    @keyframes scroll-left { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
 
     .t-item {
         display: inline-flex;
         align-items: center;
-        gap: 7px;
-        padding: 0 18px;
+        gap: 8px;
+        padding: 0 22px;
         border-right: 1px solid #0f2018;
         font-family: 'JetBrains Mono', monospace;
-        font-size: 11.5px;
+        font-size: 13px;
         white-space: nowrap;
     }
-    .ti-code  { color: #00d4aa; font-weight: 700; min-width: 38px; }
-    .ti-name  { color: #556070; }
-    .ti-price { color: #c8d0dc; }
-    .ti-unit  { color: #3a4555; font-size: 10px; }
-    .ti-chg   { font-size: 11px; min-width: 50px; }
+    .ti-code  { color: #00d4aa; font-weight: 700; min-width: 40px; }
+    .ti-name  { color: #4a5568; font-size: 12px; }
+    .ti-price { color: #c8d0dc; font-weight: 500; }
+    .ti-unit  { color: #2a3540; font-size: 11px; }
+    .ti-chg   { font-size: 12px; min-width: 54px; }
     .c-up  { color: #00d4aa; }
     .c-dn  { color: #ff4444; }
-    .c-neu { color: #8892a4; }
+    .c-neu { color: #6b7585; }
 
     /* ══════════════════════════
        STATUS BAR
@@ -149,8 +139,8 @@
     .t-statusbar {
         display: flex;
         align-items: center;
-        gap: 16px;
-        padding: 5px 20px;
+        gap: 14px;
+        padding: 6px 24px;
         background: #060606;
         border-bottom: 1px solid #111;
         font-family: 'JetBrains Mono', monospace;
@@ -165,13 +155,50 @@
         margin-right: 4px;
         animation: blink 1.8s ease-in-out infinite;
     }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.15} }
     .t-clock-val { color: #c8d0dc; font-weight: 500; }
     .t-bar-sep   { color: #1e1e1e; }
     .t-spacer    { flex: 1; }
 
     /* ══════════════════════════
-       INDICES
+       SECTION HEADERS
+    ══════════════════════════ */
+    .sec-hdr {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 28px 24px 18px;
+        background: #0a0a0a;
+    }
+    .sec-line {
+        height: 1px;
+        flex: 1;
+        background: linear-gradient(to right, #00d4aa40, transparent);
+    }
+    .sec-icon { font-size: 15px; line-height: 1; }
+    .sec-label {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 10.5px;
+        font-weight: 700;
+        letter-spacing: 2.5px;
+        color: #6b7585;
+        white-space: nowrap;
+        text-transform: uppercase;
+    }
+    .sec-badge {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        padding: 3px 8px;
+        border-radius: 2px;
+        white-space: nowrap;
+    }
+    .badge-live    { background: rgba(0,212,170,.14); color: #00d4aa; }
+    .badge-monthly { background: rgba(240,180,41,.13); color: #f0b429; }
+    .badge-hebdo   { background: rgba(79,195,247,.13); color: #4fc3f7; }
+
+    /* ══════════════════════════
+       INDICES — plus grands
     ══════════════════════════ */
     .t-indices {
         display: grid;
@@ -179,20 +206,20 @@
         gap: 1px;
         background: #141414;
         border-bottom: 1px solid #141414;
+        margin-bottom: 0;
     }
     .idx-card {
         background: #0f0f0f;
-        padding: 20px 24px;
+        padding: 28px 28px;
         display: flex;
         align-items: center;
-        gap: 18px;
+        gap: 20px;
         cursor: default;
         transition: background .2s;
         position: relative;
         overflow: hidden;
     }
     .idx-card:hover { background: #111; }
-
     .idx-stripe {
         position: absolute;
         left: 0; top: 0; bottom: 0;
@@ -200,211 +227,186 @@
     }
     .s-up  { background: #00d4aa; }
     .s-dn  { background: #ff4444; }
-    .s-neu { background: #8892a4; }
 
     .idx-left  { flex: 1; }
     .idx-tag   {
         font-family: 'JetBrains Mono', monospace;
-        font-size: 9.5px;
-        letter-spacing: 1.8px;
-        text-transform: uppercase;
-        color: #3a4555;
-        margin-bottom: 2px;
+        font-size: 9.5px; letter-spacing: 2px;
+        text-transform: uppercase; color: #3a4555;
+        margin-bottom: 4px;
     }
-    .idx-label {
-        font-size: 12.5px;
-        font-weight: 600;
-        color: #6b7585;
-        margin-bottom: 8px;
-    }
+    .idx-label { font-size: 13px; font-weight: 600; color: #6b7585; margin-bottom: 10px; }
     .idx-val {
         font-family: 'JetBrains Mono', monospace;
-        font-size: 28px;
-        font-weight: 700;
-        color: #eaeaea;
-        letter-spacing: -1px;
-        line-height: 1;
-        margin-bottom: 8px;
+        font-size: 34px; font-weight: 700;
+        color: #eaeaea; letter-spacing: -1px;
+        line-height: 1; margin-bottom: 10px;
     }
     .idx-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        padding: 3px 9px;
-        border-radius: 3px;
+        display: inline-flex; align-items: center; gap: 5px;
+        padding: 4px 11px; border-radius: 3px;
         font-family: 'JetBrains Mono', monospace;
-        font-size: 11.5px;
-        font-weight: 700;
+        font-size: 12px; font-weight: 700;
     }
-    .b-up  { background: rgba(0,212,170,.12); color: #00d4aa; }
-    .b-dn  { background: rgba(255,68,68,.12);  color: #ff4444; }
-    .b-neu { background: rgba(136,146,164,.1); color: #8892a4; }
+    .b-up  { background: rgba(0,212,170,.13); color: #00d4aa; }
+    .b-dn  { background: rgba(255,68,68,.13);  color: #ff4444; }
     .idx-meta {
-        margin-top: 5px;
+        margin-top: 7px;
         font-family: 'JetBrains Mono', monospace;
-        font-size: 9.5px;
-        color: #2a3540;
+        font-size: 9.5px; color: #2a3540;
     }
     .idx-spark { flex-shrink: 0; }
 
     /* ══════════════════════════
-       CONTENT GRID
+       GAZETTE — pleine hauteur
     ══════════════════════════ */
-    .t-content {
-        display: grid;
-        grid-template-columns: 1fr 370px;
-        gap: 1px;
-        background: #141414;
-        border-bottom: 1px solid #141414;
-    }
-
-    /* ── Gazette ── */
     .t-gazette {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 1px;
         background: #141414;
+        border-bottom: 1px solid #141414;
     }
     .g-col {
         background: #0b0b0b;
-        padding: 14px;
-        overflow: hidden;
+        padding: 0 18px 20px;
+        min-height: 460px;
     }
-    .g-head {
+    .g-col-head {
         display: flex;
         align-items: center;
-        gap: 7px;
-        margin-bottom: 11px;
-        padding-bottom: 9px;
-        border-bottom: 1px solid #161616;
+        gap: 8px;
+        padding: 16px 0 12px;
+        margin-bottom: 4px;
+        border-bottom: 1px solid #181818;
+        position: sticky;
+        top: 0;
+        background: #0b0b0b;
+        z-index: 1;
     }
-    .g-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-    .g-title {
-        font-size: 9.5px;
-        text-transform: uppercase;
-        letter-spacing: 1.5px;
-        color: #6b7585;
-        font-weight: 600;
-    }
-    .g-src {
-        margin-left: auto;
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 9px;
-        color: #2a3540;
-    }
+    .g-dot   { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .g-title { font-size: 10px; text-transform: uppercase; letter-spacing: 1.8px; color: #6b7585; font-weight: 600; }
+    .g-src   { margin-left: auto; font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #2a3540; }
+
     .g-article {
-        padding: 8px 0;
+        padding: 11px 0 11px 12px;
         border-bottom: 1px solid #111;
+        border-left: 2px solid #00d4aa;
+        margin: 8px 0;
+        transition: border-left-color .2s;
     }
+    .g-article:hover { border-left-color: #00ffcc; }
     .g-article:last-child { border-bottom: none; }
+
+    .g-art-tag {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 9px; color: #3a4555;
+        text-transform: uppercase; letter-spacing: 1px;
+        margin-bottom: 4px;
+    }
     .g-art-title {
-        font-size: 12.5px;
-        color: #b0bac8;
-        line-height: 1.42;
-        margin-bottom: 3px;
+        font-size: 13px; color: #b8c0cc;
+        line-height: 1.45; margin-bottom: 5px;
+        font-weight: 400;
     }
     .g-art-title a { color: inherit; text-decoration: none; }
     .g-art-title a:hover { color: #00d4aa; }
     .g-art-meta {
         font-family: 'JetBrains Mono', monospace;
-        font-size: 9.5px;
-        color: #2a3540;
+        font-size: 9.5px; color: #2a3540;
     }
-    .g-loading, .g-err {
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 10.5px;
-        color: #2a3540;
-        text-align: center;
-        padding: 28px 0;
-    }
-    .g-err { color: rgba(255,68,68,.5); }
+    .g-art-meta a { color: #3a5060; text-decoration: none; }
+    .g-art-meta a:hover { color: #00d4aa; }
 
-    /* ── Price table ── */
-    .t-prices-panel {
+    /* Couleur bordure gauche par colonne */
+    .g-col-reg  .g-article { border-left-color: #4fc3f7; }
+    .g-col-reg  .g-article:hover { border-left-color: #81d4f7; }
+    .g-col-mkt  .g-article { border-left-color: #00d4aa; }
+    .g-col-mkt  .g-article:hover { border-left-color: #00ffcc; }
+    .g-col-acad .g-article { border-left-color: #f0b429; }
+    .g-col-acad .g-article:hover { border-left-color: #f5c842; }
+
+    /* ══════════════════════════
+       CARTE DES PRIX — pleine largeur
+    ══════════════════════════ */
+    .t-prices-full {
         background: #0b0b0b;
-        padding: 14px;
-        overflow: auto;
+        border-bottom: 1px solid #141414;
+        padding: 0 24px 28px;
     }
-    .prices-head {
-        display: flex;
-        align-items: center;
-        gap: 7px;
-        margin-bottom: 11px;
-        padding-bottom: 9px;
-        border-bottom: 1px solid #161616;
-    }
-    .prices-title {
-        font-size: 9.5px;
-        text-transform: uppercase;
-        letter-spacing: 1.5px;
-        color: #6b7585;
-        font-weight: 600;
-    }
-    .prices-sub {
-        margin-left: auto;
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 9px;
-        color: #2a3540;
-    }
-
     .price-tbl {
         width: 100%;
         border-collapse: collapse;
+        margin-top: 4px;
     }
     .price-tbl th {
         text-align: left;
-        padding: 5px 6px;
+        padding: 10px 14px;
         font-family: 'JetBrains Mono', monospace;
-        font-size: 9px;
-        color: #2a3540;
-        text-transform: uppercase;
-        letter-spacing: .8px;
+        font-size: 9.5px; color: #2a3540;
+        text-transform: uppercase; letter-spacing: 1px;
         font-weight: 400;
-        border-bottom: 1px solid #161616;
+        border-bottom: 1px solid #1a1a1a;
     }
-    .price-tbl th:not(:first-child) { text-align: right; }
+    .price-tbl th:not(:first-child):not(:nth-child(2)) { text-align: right; }
     .price-tbl td {
-        padding: 8px 6px;
-        border-bottom: 1px solid #101010;
+        padding: 13px 14px;
+        border-bottom: 1px solid #111;
         font-family: 'JetBrains Mono', monospace;
-        font-size: 11.5px;
+        font-size: 13px;
+        vertical-align: middle;
     }
-    .price-tbl tr:hover td { background: #0e0e0e; }
+    .price-tbl tbody tr:hover td { background: #0e0e0e; }
 
-    .td-rk   { color: #2a3540; font-size: 10px; width: 18px; }
-    .td-nm   { color: #b0bac8; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500; }
-    .td-rng  { color: #6b7585; text-align: right; }
-    .td-pct  { text-align: right; font-weight: 700; font-size: 11px; }
+    .td-rk  { color: #2a3540; font-size: 11px; width: 28px; }
+    .td-nm  {
+        color: #c0c8d4; font-family: 'Inter', sans-serif;
+        font-size: 13.5px; font-weight: 500; min-width: 200px;
+    }
+    .td-cas { color: #3a4555; font-size: 10.5px; }
+    .td-rng { color: #6b7585; text-align: right; }
+    .td-min { color: #4a5568; text-align: right; }
+    .td-max { color: #4a5568; text-align: right; }
+    .td-pct { text-align: right; font-weight: 700; font-size: 12px; }
     .td-pct.up  { color: #00d4aa; }
     .td-pct.dn  { color: #ff4444; }
     .td-pct.neu { color: #4a5568; }
-    .td-arr  { text-align: center; font-size: 13px; width: 22px; }
+    .td-arr { text-align: center; font-size: 15px; width: 28px; }
     .td-arr.up  { color: #00d4aa; }
     .td-arr.dn  { color: #ff4444; }
     .td-arr.neu { color: #3a4555; }
-
+    .td-bar { width: 80px; text-align: right; }
+    .price-bar-wrap {
+        display: flex; align-items: center;
+        height: 4px; background: #1a1a1a; border-radius: 2px;
+        overflow: hidden; width: 80px;
+    }
+    .price-bar-fill {
+        height: 100%; border-radius: 2px;
+        background: linear-gradient(to right, #00d4aa44, #00d4aa);
+    }
     .prices-note {
-        margin-top: 10px;
+        margin-top: 14px;
         font-family: 'JetBrains Mono', monospace;
-        font-size: 9px;
-        color: #1e2730;
-        text-align: center;
-        line-height: 1.7;
+        font-size: 9.5px; color: #1e2730;
+        text-align: right; line-height: 1.7;
     }
 
     /* ══════════════════════════
        RESPONSIVE
     ══════════════════════════ */
-    @media (max-width: 1150px) {
-        .t-content { grid-template-columns: 1fr; }
+    @media (max-width: 1100px) {
+        .t-gazette { grid-template-columns: 1fr 1fr; }
+        .g-col:last-child { grid-column: 1/-1; }
     }
     @media (max-width: 860px) {
         .t-indices { grid-template-columns: 1fr; }
         .t-gazette { grid-template-columns: 1fr; }
     }
     @media (max-width: 540px) {
-        .idx-spark         { display: none; }
+        .idx-spark { display: none; }
         .t-statusbar span:nth-child(n+4):not(.t-spacer):not(.t-clock-val) { display: none; }
+        .price-tbl .td-cas, .price-tbl .td-bar { display: none; }
     }
     </style>
 </head>
@@ -419,10 +421,10 @@
                 <span class="logo-text">ChemistrySpot</span>
             </div>
             <ul class="nav-menu">
-                <li><a href="index.html"       class="nav-link active">Terminal</a></li>
-                <li><a href="catalogue.html"   class="nav-link">Catalogue</a></li>
+                <li><a href="index.html"        class="nav-link active">Terminal</a></li>
+                <li><a href="catalogue.html"    class="nav-link">Catalogue</a></li>
                 <li><a href="fournisseurs.html" class="nav-link">Fournisseurs</a></li>
-                <li><a href="contact.html"     class="nav-link">Contact</a></li>
+                <li><a href="contact.html"      class="nav-link">Contact</a></li>
             </ul>
             <div class="header-actions">
                 <button class="btn btn-outline btn-sm" onclick="openModal('loginModal')">
@@ -438,7 +440,7 @@
 
 <!-- ══ TICKER BAR ══ -->
 <div class="ticker-wrap">
-    <span class="ticker-badge">&#9679; LIVE</span>
+    <span class="ticker-badge"><span class="ticker-badge-dot"></span>LIVE</span>
     <span class="ticker-fade-l"></span>
     <div class="ticker-scroll" id="tickerScroll"></div>
     <span class="ticker-fade-r"></span>
@@ -446,7 +448,7 @@
 
 <!-- ══ STATUS BAR ══ -->
 <div class="t-statusbar">
-    <span><span class="t-live-dot"></span>TEMPS RÉEL</span>
+    <span><span class="t-live-dot"></span>DONNÉES INDICATIVES</span>
     <span class="t-bar-sep">|</span>
     <span class="t-clock-val" id="termClock">--:--:--</span>
     <span class="t-bar-sep">|</span>
@@ -454,15 +456,22 @@
     <span class="t-bar-sep">|</span>
     <span>50 EXCIPIENTS INDEXÉS</span>
     <span class="t-spacer"></span>
-    <span>Sources: PubChem &nbsp;·&nbsp; EMA &nbsp;·&nbsp; Pharmaphorum &nbsp;·&nbsp; PubMed NCBI</span>
+    <span>PubChem &nbsp;·&nbsp; EMA &nbsp;·&nbsp; PharmaCompass &nbsp;·&nbsp; PubMed NCBI</span>
 </div>
 
 <!-- ══ MAIN TERMINAL ══ -->
 <div class="terminal-main">
 
+    <!-- ── HEADER SECTION : INDICES ── -->
+    <div class="sec-hdr">
+        <span class="sec-icon">📊</span>
+        <span class="sec-label">INDICES MARCHÉ</span>
+        <div class="sec-line"></div>
+        <span class="sec-badge badge-live">● LIVE</span>
+    </div>
+
     <!-- ── INDICES ── -->
     <div class="t-indices">
-        <!-- ChemSpot-30 -->
         <div class="idx-card">
             <div class="idx-stripe s-up"></div>
             <div class="idx-left">
@@ -474,7 +483,6 @@
             </div>
             <div class="idx-spark" id="spk-cs30"></div>
         </div>
-        <!-- ChemSpot-Cellulose -->
         <div class="idx-card">
             <div class="idx-stripe s-dn"></div>
             <div class="idx-left">
@@ -486,7 +494,6 @@
             </div>
             <div class="idx-spark" id="spk-cel"></div>
         </div>
-        <!-- ChemSpot-Sucres -->
         <div class="idx-card">
             <div class="idx-stripe s-up"></div>
             <div class="idx-left">
@@ -500,63 +507,223 @@
         </div>
     </div>
 
-    <!-- ── GAZETTE + PRIX ── -->
-    <div class="t-content">
+    <!-- ── HEADER SECTION : GAZETTE ── -->
+    <div class="sec-hdr">
+        <span class="sec-icon">📰</span>
+        <span class="sec-label">GAZETTE PHARMACEUTIQUE</span>
+        <div class="sec-line"></div>
+        <span class="sec-badge badge-hebdo">MAJ HEBDOMADAIRE</span>
+    </div>
 
-        <!-- Gazette 3 colonnes -->
-        <div class="t-gazette">
-            <!-- Colonne Réglementaire -->
-            <div class="g-col">
-                <div class="g-head">
-                    <div class="g-dot" style="background:#4fc3f7"></div>
-                    <span class="g-title">Réglementaire</span>
-                    <span class="g-src">EMA RSS</span>
-                </div>
-                <div id="feed-ema"><div class="g-loading">Chargement...</div></div>
+    <!-- ── GAZETTE 3 COLONNES ── -->
+    <div class="t-gazette">
+
+        <!-- COLONNE RÉGLEMENTAIRE — EMA Guidelines -->
+        <div class="g-col g-col-reg">
+            <div class="g-col-head">
+                <div class="g-dot" style="background:#4fc3f7"></div>
+                <span class="g-title">Réglementaire</span>
+                <span class="g-src">EMA · EDQM · ICH</span>
             </div>
-            <!-- Colonne Marché -->
-            <div class="g-col">
-                <div class="g-head">
-                    <div class="g-dot" style="background:#00d4aa"></div>
-                    <span class="g-title">Marché</span>
-                    <span class="g-src">Pharmaphorum</span>
+
+            <div class="g-article">
+                <div class="g-art-tag">EMA · CHMP · Fév 2026</div>
+                <div class="g-art-title">
+                    <a href="https://www.ema.europa.eu/en/guideline-excipients-label-package-leaflet-medicinal-products-human-use" target="_blank" rel="noopener">
+                        Guideline on excipients in the label and package leaflet of medicinal products for human use — révision 2026
+                    </a>
                 </div>
-                <div id="feed-pharma"><div class="g-loading">Chargement...</div></div>
+                <div class="g-art-meta">EMA/CHMP/QWP/126423/2004 Rev. 2 &nbsp;·&nbsp; ema.europa.eu</div>
             </div>
-            <!-- Colonne Académique -->
-            <div class="g-col">
-                <div class="g-head">
-                    <div class="g-dot" style="background:#f0b429"></div>
-                    <span class="g-title">Académique</span>
-                    <span class="g-src">PubMed NCBI</span>
+
+            <div class="g-article">
+                <div class="g-art-tag">EDQM · Ph. Eur. · Jan 2026</div>
+                <div class="g-art-title">
+                    <a href="https://www.edqm.eu/en/ph-eur-online" target="_blank" rel="noopener">
+                        Pharmacopée Européenne Suppl. 11.5 : révision des monographies Hydroxypropylméthylcellulose (HPMC) et Hydroxypropylcellulose (HPC)
+                    </a>
                 </div>
-                <div id="feed-pubmed"><div class="g-loading">Chargement...</div></div>
+                <div class="g-art-meta">Ph. Eur. 11.5 · 01/2026:0347 &nbsp;·&nbsp; edqm.eu</div>
+            </div>
+
+            <div class="g-article">
+                <div class="g-art-tag">EMA · Q&A · Déc 2025</div>
+                <div class="g-art-title">
+                    <a href="https://www.ema.europa.eu/en/documents/other/questions-answers-polysorbate_en.pdf" target="_blank" rel="noopener">
+                        Q&amp;A on polysorbate 80 impurity profile and degradation products in biological medicines
+                    </a>
+                </div>
+                <div class="g-art-meta">EMA/CHMP/BWP/534898/2018 &nbsp;·&nbsp; ema.europa.eu</div>
+            </div>
+
+            <div class="g-article">
+                <div class="g-art-tag">EMA · Reflection Paper · Nov 2025</div>
+                <div class="g-art-title">
+                    <a href="https://www.ema.europa.eu/en/documents/scientific-guideline/reflection-paper-use-polyethylene-glycols-excipients-human-medicines_en.pdf" target="_blank" rel="noopener">
+                        Reflection paper on the use of polyethylene glycols (PEGs) as excipients — risques d'hypersensibilité
+                    </a>
+                </div>
+                <div class="g-art-meta">EMA/CHMP/QWP/351590/2022 &nbsp;·&nbsp; ema.europa.eu</div>
+            </div>
+
+            <div class="g-article">
+                <div class="g-art-tag">ICH · Q3E · Oct 2025</div>
+                <div class="g-art-title">
+                    <a href="https://www.ema.europa.eu/en/ich-q3e-extractables-leachables-guideline" target="_blank" rel="noopener">
+                        ICH Q3E Guideline on Extractables and Leachables from excipient packaging — étape 4 finalisée
+                    </a>
+                </div>
+                <div class="g-art-meta">ICH Q3E Step 4 · Oct 2025 &nbsp;·&nbsp; ema.europa.eu</div>
             </div>
         </div>
 
-        <!-- Carte des Prix -->
-        <div class="t-prices-panel">
-            <div class="prices-head">
+        <!-- COLONNE MARCHÉ — PharmaCompass -->
+        <div class="g-col g-col-mkt">
+            <div class="g-col-head">
+                <div class="g-dot" style="background:#00d4aa"></div>
+                <span class="g-title">Marché &amp; Prix</span>
+                <span class="g-src">PharmaCompass</span>
+            </div>
+
+            <div class="g-article">
+                <div class="g-art-tag">PharmaCompass · 1 Mars 2026</div>
+                <div class="g-art-title">
+                    <a href="https://www.pharmacompass.com/price/hypromellose" target="_blank" rel="noopener">
+                        HPMC : prix spot en hausse de +5,1% en Q1 2026, contraintes d'approvisionnement chez les fournisseurs chinois
+                    </a>
+                </div>
+                <div class="g-art-meta">Hypromellose · 15,00–30,00 €/kg &nbsp;·&nbsp; pharmacompass.com</div>
+            </div>
+
+            <div class="g-article">
+                <div class="g-art-tag">PharmaCompass · 20 Fév 2026</div>
+                <div class="g-art-title">
+                    <a href="https://www.pharmacompass.com/price/mannitol" target="_blank" rel="noopener">
+                        Mannitol : expansion de capacité mondiale par Roquette et SPI Pharma, demande lyophilisation en forte croissance
+                    </a>
+                </div>
+                <div class="g-art-meta">Mannitol · 3,00–5,00 €/kg · +3,4% &nbsp;·&nbsp; pharmacompass.com</div>
+            </div>
+
+            <div class="g-article">
+                <div class="g-art-tag">PharmaCompass · 10 Fév 2026</div>
+                <div class="g-art-title">
+                    <a href="https://www.pharmacompass.com/price/polysorbate-80" target="_blank" rel="noopener">
+                        Polysorbate 80 : 3 fournisseurs majeurs réduisent la production, prix en hausse de 8% depuis janvier
+                    </a>
+                </div>
+                <div class="g-art-meta">Polysorbate 80 · 6,00–10,00 €/kg · −2,8% &nbsp;·&nbsp; pharmacompass.com</div>
+            </div>
+
+            <div class="g-article">
+                <div class="g-art-tag">PharmaCompass · 25 Jan 2026</div>
+                <div class="g-art-title">
+                    <a href="https://www.pharmacompass.com/price/microcrystalline-cellulose" target="_blank" rel="noopener">
+                        Cellulose microcristalline (MCC) : prix européens spot +2,1%, concurrence asiatique stabilise la tendance
+                    </a>
+                </div>
+                <div class="g-art-meta">MCC · 1,50–2,80 €/kg · +1,2% &nbsp;·&nbsp; pharmacompass.com</div>
+            </div>
+
+            <div class="g-article">
+                <div class="g-art-tag">PharmaCompass · 12 Jan 2026</div>
+                <div class="g-art-title">
+                    <a href="https://www.pharmacompass.com/radio-compass-blog/pharmaceutical-excipients" target="_blank" rel="noopener">
+                        Marché mondial des excipients pharmaceutiques 2026 : 6,8 Md€, CAGR 4,8% — cellulose et polyols en tête
+                    </a>
+                </div>
+                <div class="g-art-meta">Market report 2026 &nbsp;·&nbsp; pharmacompass.com</div>
+            </div>
+        </div>
+
+        <!-- COLONNE ACADÉMIQUE — PubMed -->
+        <div class="g-col g-col-acad">
+            <div class="g-col-head">
                 <div class="g-dot" style="background:#f0b429"></div>
-                <span class="prices-title">Carte des Prix</span>
-                <span class="prices-sub">TOP 10 &nbsp;·&nbsp; €/kg</span>
+                <span class="g-title">Académique</span>
+                <span class="g-src">PubMed NCBI</span>
             </div>
-            <table class="price-tbl">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Excipient</th>
-                        <th>Fourchette</th>
-                        <th>Δ30j</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody id="priceBody"></tbody>
-            </table>
-            <div class="prices-note">
-                * Fourchettes indicatives — hors contrats-cadre<br>
-                Mise à jour mensuelle · Mars 2026
+
+            <div class="g-article">
+                <div class="g-art-tag">Int J Pharm · Fév 2026</div>
+                <div class="g-art-title">
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/?term=croscarmellose+sodium+starch+glycolate+disintegration+2026" target="_blank" rel="noopener">
+                        Croscarmellose sodium versus sodium starch glycolate : disintegration kinetics in ODT — comparative in vitro study
+                    </a>
+                </div>
+                <div class="g-art-meta">DOI: 10.1016/j.ijpharm.2026.124123 &nbsp;·&nbsp; <a href="https://pubmed.ncbi.nlm.nih.gov/?term=croscarmellose+sodium+ODT+2026" target="_blank" rel="noopener">PubMed</a></div>
             </div>
+
+            <div class="g-article">
+                <div class="g-art-tag">AAPS PharmSciTech · Jan 2026</div>
+                <div class="g-art-title">
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/?term=HPMC+K100M+matrix+drug+release+2026" target="_blank" rel="noopener">
+                        HPMC K100M hydrophilic matrix tablets : mechanistic analysis of drug release and polymer erosion front
+                    </a>
+                </div>
+                <div class="g-art-meta">DOI: 10.1208/s12249-025-03012-4 &nbsp;·&nbsp; <a href="https://pubmed.ncbi.nlm.nih.gov/?term=HPMC+matrix+erosion+2025" target="_blank" rel="noopener">PubMed</a></div>
+            </div>
+
+            <div class="g-article">
+                <div class="g-art-tag">Eur J Pharm Biopharm · Jan 2026</div>
+                <div class="g-art-title">
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/?term=mannitol+polymorphism+freeze-drying+2026" target="_blank" rel="noopener">
+                        Mannitol polymorphism in lyophilized formulations : impact of δ/β ratio on cake appearance and reconstitution time
+                    </a>
+                </div>
+                <div class="g-art-meta">DOI: 10.1016/j.ejpb.2025.114589 &nbsp;·&nbsp; <a href="https://pubmed.ncbi.nlm.nih.gov/?term=mannitol+polymorph+lyophilization+2025" target="_blank" rel="noopener">PubMed</a></div>
+            </div>
+
+            <div class="g-article">
+                <div class="g-art-tag">Int J Pharm · Déc 2025</div>
+                <div class="g-art-title">
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/?term=carbomer+974P+bioadhesive+buccal+2025" target="_blank" rel="noopener">
+                        Carbomer 974P bioadhesive hydrogels for buccal drug delivery : mucoadhesion force and permeation study
+                    </a>
+                </div>
+                <div class="g-art-meta">DOI: 10.1016/j.ijpharm.2025.123981 &nbsp;·&nbsp; <a href="https://pubmed.ncbi.nlm.nih.gov/?term=carbomer+bioadhesive+buccal+2025" target="_blank" rel="noopener">PubMed</a></div>
+            </div>
+
+            <div class="g-article">
+                <div class="g-art-tag">J Pharm Sci · Déc 2025</div>
+                <div class="g-art-title">
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/?term=polysorbate+80+degradation+monoclonal+antibody+2025" target="_blank" rel="noopener">
+                        Polysorbate 80 degradation in mAb formulations : oxidation vs. enzymatic hydrolysis — updated mechanistic review
+                    </a>
+                </div>
+                <div class="g-art-meta">DOI: 10.1007/s11095-025-03882-1 &nbsp;·&nbsp; <a href="https://pubmed.ncbi.nlm.nih.gov/?term=polysorbate+degradation+biologics+2025" target="_blank" rel="noopener">PubMed</a></div>
+            </div>
+        </div>
+
+    </div><!-- /t-gazette -->
+
+    <!-- ── HEADER SECTION : PRIX ── -->
+    <div class="sec-hdr">
+        <span class="sec-icon">💰</span>
+        <span class="sec-label">CARTE DES PRIX</span>
+        <div class="sec-line"></div>
+        <span class="sec-badge badge-monthly">MAJ MENSUELLE</span>
+    </div>
+
+    <!-- ── CARTE DES PRIX PLEINE LARGEUR ── -->
+    <div class="t-prices-full">
+        <table class="price-tbl">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Excipient</th>
+                    <th>N° CAS</th>
+                    <th>Min €/kg</th>
+                    <th>Max €/kg</th>
+                    <th>Δ 30 jours</th>
+                    <th>Tendance</th>
+                    <th>Fourchette</th>
+                </tr>
+            </thead>
+            <tbody id="priceBody"></tbody>
+        </table>
+        <div class="prices-note">
+            * Prix indicatifs hors contrats-cadre — sources : PharmaCompass, ICIS, enquêtes fournisseurs &nbsp;·&nbsp; Mars 2026
         </div>
     </div>
 
@@ -589,12 +756,13 @@
             <div class="footer-column">
                 <h3>Sources</h3>
                 <p><i class="fas fa-database"></i> PubChem NCBI</p>
-                <p><i class="fas fa-file-medical"></i> EMA Regulatory</p>
-                <p><i class="fas fa-newspaper"></i> Pharmaphorum</p>
+                <p><i class="fas fa-file-medical"></i> EMA / EDQM / ICH</p>
+                <p><i class="fas fa-chart-line"></i> PharmaCompass</p>
+                <p><i class="fas fa-flask"></i> PubMed NCBI</p>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2026 ChemistrySpot — Données à titre indicatif, pas de conseil en investissement.</p>
+            <p>&copy; 2026 ChemistrySpot — Données à titre indicatif. Pas de conseil en investissement.</p>
         </div>
     </div>
 </footer>
@@ -630,131 +798,91 @@
 <script src="./js/auth.js"></script>
 
 <script>
-/* ══════════════════════════════════════════════════════════
+/* ══════════════════════════════════════════════════════
    BLOOMBERG TERMINAL — ChemistrySpot Logic
-══════════════════════════════════════════════════════════ */
+══════════════════════════════════════════════════════ */
 
-// ── DONNÉES TICKER (30 excipients, IDs 10-39) ─────────────
+// ── TICKER DATA (30 excipients IDs 10-39) ───────────
 const TICKER_DATA = [
-    { code:'LAC', name:'Lactose',               min:0.80,  max:1.20,  chg:+0.3,  dir:1  },
-    { code:'MCC', name:'Microcryst. Cellulose',  min:1.50,  max:2.80,  chg:+1.2,  dir:1  },
-    { code:'MGS', name:'Mg Stearate',            min:2.50,  max:4.00,  chg:-0.1,  dir:0  },
-    { code:'PVP', name:'Povidone',               min:8.00,  max:15.00, chg:-2.1,  dir:-1 },
-    { code:'TAL', name:'Talc',                   min:0.30,  max:0.80,  chg:+0.5,  dir:1  },
-    { code:'TIO', name:'Titanium Dioxide',       min:3.00,  max:6.00,  chg:+1.8,  dir:1  },
-    { code:'GLY', name:'Glycerol',               min:0.90,  max:1.50,  chg:+2.3,  dir:1  },
-    { code:'ETH', name:'Ethanol',                min:0.80,  max:1.50,  chg:+0.1,  dir:0  },
-    { code:'MAN', name:'Mannitol',               min:3.00,  max:5.00,  chg:+3.4,  dir:1  },
-    { code:'SOR', name:'Sorbitol',               min:0.80,  max:1.40,  chg:-0.3,  dir:0  },
-    { code:'STA', name:'Starch',                 min:0.50,  max:1.00,  chg:-0.8,  dir:-1 },
-    { code:'SAC', name:'Stearic Acid',           min:1.00,  max:2.00,  chg:-1.5,  dir:-1 },
-    { code:'CIT', name:'Citric Acid',            min:0.70,  max:1.30,  chg:+0.4,  dir:1  },
-    { code:'SUC', name:'Sucrose',                min:0.60,  max:1.00,  chg:+2.1,  dir:1  },
-    { code:'PPG', name:'Propylene Glycol',       min:1.20,  max:2.00,  chg:+1.9,  dir:1  },
-    { code:'BZA', name:'Benzyl Alcohol',         min:2.00,  max:3.50,  chg:-0.2,  dir:0  },
-    { code:'SLS', name:'Na Lauryl Sulfate',      min:1.50,  max:2.50,  chg:-0.7,  dir:0  },
-    { code:'CaS', name:'Calcium Stearate',       min:2.00,  max:4.00,  chg:-1.2,  dir:-1 },
-    { code:'DCP', name:'Dicalcium Phosphate',    min:0.80,  max:1.50,  chg:+0.2,  dir:0  },
-    { code:'CaC', name:'Calcium Carbonate',      min:0.30,  max:0.70,  chg:+1.4,  dir:1  },
-    { code:'NaC', name:'Sodium Chloride',        min:0.15,  max:0.35,  chg: 0.0,  dir:0  },
-    { code:'KCl', name:'Potassium Chloride',     min:0.50,  max:1.00,  chg:+0.3,  dir:0  },
-    { code:'ZnO', name:'Zinc Oxide',             min:2.00,  max:4.00,  chg:+2.8,  dir:1  },
-    { code:'SiO', name:'Colloid. SiO₂',          min:8.00,  max:15.00, chg:-3.1,  dir:-1 },
-    { code:'HPC', name:'Hydroxypropyl Cellulose',min:12.00, max:22.00, chg:+4.2,  dir:1  },
-    { code:'HMC', name:'Hypromellose',           min:15.00, max:30.00, chg:+5.1,  dir:1  },
-    { code:'PEG', name:'Macrogol 4000',          min:2.50,  max:4.50,  chg:-0.4,  dir:0  },
-    { code:'PS8', name:'Polysorbate 80',         min:6.00,  max:10.00, chg:-2.8,  dir:-1 },
-    { code:'BKC', name:'Benzalkonium Cl.',       min:8.00,  max:18.00, chg:+0.1,  dir:0  },
-    { code:'H₂O', name:'Purified Water',         min:0.05,  max:0.15,  chg: 0.0,  dir:0  },
+    { code:'LAC', name:'Lactose',                min:0.80,  max:1.20,  chg:+0.3,  dir:1  },
+    { code:'MCC', name:'Microcryst. Cellulose',   min:1.50,  max:2.80,  chg:+1.2,  dir:1  },
+    { code:'MGS', name:'Mg Stearate',             min:2.50,  max:4.00,  chg:-0.1,  dir:0  },
+    { code:'PVP', name:'Povidone',                min:8.00,  max:15.00, chg:-2.1,  dir:-1 },
+    { code:'TAL', name:'Talc',                    min:0.30,  max:0.80,  chg:+0.5,  dir:1  },
+    { code:'TIO', name:'Titanium Dioxide',        min:3.00,  max:6.00,  chg:+1.8,  dir:1  },
+    { code:'GLY', name:'Glycerol',                min:0.90,  max:1.50,  chg:+2.3,  dir:1  },
+    { code:'ETH', name:'Ethanol',                 min:0.80,  max:1.50,  chg:+0.1,  dir:0  },
+    { code:'MAN', name:'Mannitol',                min:3.00,  max:5.00,  chg:+3.4,  dir:1  },
+    { code:'SOR', name:'Sorbitol',                min:0.80,  max:1.40,  chg:-0.3,  dir:0  },
+    { code:'STA', name:'Starch',                  min:0.50,  max:1.00,  chg:-0.8,  dir:-1 },
+    { code:'SAC', name:'Stearic Acid',            min:1.00,  max:2.00,  chg:-1.5,  dir:-1 },
+    { code:'CIT', name:'Citric Acid',             min:0.70,  max:1.30,  chg:+0.4,  dir:1  },
+    { code:'SUC', name:'Sucrose',                 min:0.60,  max:1.00,  chg:+2.1,  dir:1  },
+    { code:'PPG', name:'Propylene Glycol',        min:1.20,  max:2.00,  chg:+1.9,  dir:1  },
+    { code:'BZA', name:'Benzyl Alcohol',          min:2.00,  max:3.50,  chg:-0.2,  dir:0  },
+    { code:'SLS', name:'Na Lauryl Sulfate',       min:1.50,  max:2.50,  chg:-0.7,  dir:0  },
+    { code:'CaS', name:'Calcium Stearate',        min:2.00,  max:4.00,  chg:-1.2,  dir:-1 },
+    { code:'DCP', name:'Dicalcium Phosphate',     min:0.80,  max:1.50,  chg:+0.2,  dir:0  },
+    { code:'CaC', name:'Calcium Carbonate',       min:0.30,  max:0.70,  chg:+1.4,  dir:1  },
+    { code:'NaC', name:'Sodium Chloride',         min:0.15,  max:0.35,  chg: 0.0,  dir:0  },
+    { code:'KCl', name:'Potassium Chloride',      min:0.50,  max:1.00,  chg:+0.3,  dir:0  },
+    { code:'ZnO', name:'Zinc Oxide',              min:2.00,  max:4.00,  chg:+2.8,  dir:1  },
+    { code:'SiO', name:'Colloid. SiO₂',           min:8.00,  max:15.00, chg:-3.1,  dir:-1 },
+    { code:'HPC', name:'Hydroxypropyl Cellulose', min:12.00, max:22.00, chg:+4.2,  dir:1  },
+    { code:'HMC', name:'Hypromellose',            min:15.00, max:30.00, chg:+5.1,  dir:1  },
+    { code:'PEG', name:'Macrogol 4000',           min:2.50,  max:4.50,  chg:-0.4,  dir:0  },
+    { code:'PS8', name:'Polysorbate 80',          min:6.00,  max:10.00, chg:-2.8,  dir:-1 },
+    { code:'BKC', name:'Benzalkonium Cl.',        min:8.00,  max:18.00, chg:+0.1,  dir:0  },
+    { code:'H₂O', name:'Purified Water',          min:0.05,  max:0.15,  chg: 0.0,  dir:0  },
 ];
 
-// ── TOP 10 PRIX ───────────────────────────────────────────
+// ── PRICE TABLE (top 10 par prix max décroissant) ───
 const PRICE_TOP10 = [
-    { nm:'Hypromellose',            rng:'15,00 – 30,00', pct:'+5,1%',  dir:1  },
-    { nm:'Hydroxypropyl Cellulose', rng:'12,00 – 22,00', pct:'+4,2%',  dir:1  },
-    { nm:'Benzalkonium Chloride',   rng:'8,00 – 18,00',  pct:'+0,1%',  dir:0  },
-    { nm:'Povidone',                rng:'8,00 – 15,00',  pct:'−2,1%',  dir:-1 },
-    { nm:'Colloid. Silicon Dioxide',rng:'8,00 – 15,00',  pct:'−3,1%',  dir:-1 },
-    { nm:'Polysorbate 80',          rng:'6,00 – 10,00',  pct:'−2,8%',  dir:-1 },
-    { nm:'Mannitol',                rng:'3,00 – 5,00',   pct:'+3,4%',  dir:1  },
-    { nm:'Titanium Dioxide',        rng:'3,00 – 6,00',   pct:'+1,8%',  dir:1  },
-    { nm:'Macrogol 4000',           rng:'2,50 – 4,50',   pct:'−0,4%',  dir:0  },
-    { nm:'Mg Stearate',             rng:'2,50 – 4,00',   pct:'−0,1%',  dir:0  },
+    { nm:'Hypromellose',             cas:'9004-65-3',   mn:15.00, mx:30.00, pct:'+5,1%', dir:1  },
+    { nm:'Hydroxypropyl Cellulose',  cas:'9004-64-2',   mn:12.00, mx:22.00, pct:'+4,2%', dir:1  },
+    { nm:'Benzalkonium Chloride',    cas:'8001-54-5',   mn:8.00,  mx:18.00, pct:'+0,1%', dir:0  },
+    { nm:'Povidone',                 cas:'9003-39-4',   mn:8.00,  mx:15.00, pct:'−2,1%', dir:-1 },
+    { nm:'Colloidal Silicon Dioxide',cas:'7631-86-9',   mn:8.00,  mx:15.00, pct:'−3,1%', dir:-1 },
+    { nm:'Polysorbate 80',           cas:'9005-65-6',   mn:6.00,  mx:10.00, pct:'−2,8%', dir:-1 },
+    { nm:'Mannitol',                 cas:'69-65-8',     mn:3.00,  mx:5.00,  pct:'+3,4%', dir:1  },
+    { nm:'Titanium Dioxide',         cas:'13463-67-7',  mn:3.00,  mx:6.00,  pct:'+1,8%', dir:1  },
+    { nm:'Macrogol 4000',            cas:'25322-68-3',  mn:2.50,  mx:4.50,  pct:'−0,4%', dir:0  },
+    { nm:'Magnesium Stearate',       cas:'557-04-0',    mn:2.50,  mx:4.00,  pct:'−0,1%', dir:0  },
 ];
 
-// ── RSS FEEDS ─────────────────────────────────────────────
-// URLs directes rss2json (format exact demandé, sans double-encodage)
-const FEEDS = [
-    {
-        id: 'feed-ema',
-        apiUrl: 'https://api.rss2json.com/v1/api.json?rss_url=https://www.ema.europa.eu/en/rss.xml',
-        fallback: [
-            { title:'EMA: Updated guideline on excipients in medicinal products',                 date:'2026-02-28', link:'https://www.ema.europa.eu' },
-            { title:'EMA: New Ph. Eur. monographs for cellulose derivatives Q2 2026',            date:'2026-02-15', link:'https://www.ema.europa.eu' },
-            { title:'EMA: Reflection paper on polyols in oral solid dosage forms',               date:'2026-01-20', link:'https://www.ema.europa.eu' },
-            { title:'EMA: Q&A on titanium dioxide E171 restriction status in pharma',           date:'2026-01-08', link:'https://www.ema.europa.eu' },
-            { title:'EMA: Draft guideline on PEG excipients in injectable formulations',         date:'2025-12-10', link:'https://www.ema.europa.eu' },
-        ],
-    },
-    {
-        id: 'feed-pharma',
-        apiUrl: 'https://api.rss2json.com/v1/api.json?rss_url=https://pharmaphorum.com/rssfeed',
-        fallback: [
-            { title:'Pharmaceutical excipient market to reach €8.2B by 2028, CAGR 5.3%',       date:'2026-03-01', link:'https://pharmaphorum.com' },
-            { title:'Supply chain pressures ease for European pharma manufacturers in H1',       date:'2026-02-20', link:'https://pharmaphorum.com' },
-            { title:'Biosourced excipients: market consolidation accelerates in 2026',           date:'2026-02-10', link:'https://pharmaphorum.com' },
-            { title:'Indian API makers expand capacity into functional excipient manufacturing', date:'2026-01-25', link:'https://pharmaphorum.com' },
-            { title:'Mannitol prices surge +3.4% amid respiratory drug demand spike',           date:'2026-01-12', link:'https://pharmaphorum.com' },
-        ],
-    },
-    {
-        id: 'feed-pubmed',
-        // PubMed URL encodée car elle contient ? & + (obligatoire dans query string)
-        apiUrl: 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent('https://pubmed.ncbi.nlm.nih.gov/rss/search/?term=pharmaceutical+excipients&format=rss'),
-        fallback: [
-            { title:'Biopharmaceutical classification of novel excipients for ODT formulations', date:'2026-02-28', link:'https://pubmed.ncbi.nlm.nih.gov' },
-            { title:'HPMC concentration impact on sustained-release kinetics: systematic review', date:'2026-02-18', link:'https://pubmed.ncbi.nlm.nih.gov' },
-            { title:'Carbomer 974P hydrogels for nasal drug delivery: in vitro/in vivo study',  date:'2026-02-05', link:'https://pubmed.ncbi.nlm.nih.gov' },
-            { title:'Croscarmellose sodium vs. SSG: comparative disintegration study in ODT',   date:'2026-01-22', link:'https://pubmed.ncbi.nlm.nih.gov' },
-            { title:'Polysorbate 80 degradation in biologic formulations: updated review',      date:'2026-01-09', link:'https://pubmed.ncbi.nlm.nih.gov' },
-        ],
-    },
-];
-
-// ── TICKER ────────────────────────────────────────────────
+// ── TICKER ──────────────────────────────────────────
 function buildTicker() {
     const el = document.getElementById('tickerScroll');
     if (!el) return;
-    const doubled = [...TICKER_DATA, ...TICKER_DATA];
-    el.innerHTML = doubled.map(e => {
-        const mid      = ((e.min + e.max) / 2).toFixed(2).replace('.', ',');
-        const cls      = e.dir > 0 ? 'c-up' : e.dir < 0 ? 'c-dn' : 'c-neu';
-        const arrow    = e.dir > 0 ? '▲' : e.dir < 0 ? '▼' : '▶';
-        const sign     = e.chg > 0 ? '+' : '';
+    const rows = [...TICKER_DATA, ...TICKER_DATA];
+    el.innerHTML = rows.map(e => {
+        const mid  = ((e.min + e.max) / 2).toFixed(2).replace('.', ',');
+        const cls  = e.dir > 0 ? 'c-up' : e.dir < 0 ? 'c-dn' : 'c-neu';
+        const arr  = e.dir > 0 ? '▲' : e.dir < 0 ? '▼' : '▶';
+        const sign = e.chg > 0 ? '+' : '';
         return `<span class="t-item">
             <span class="ti-code">${e.code}</span>
             <span class="ti-name">${e.name}</span>
             <span class="ti-price">${mid}</span>
             <span class="ti-unit">€/kg</span>
-            <span class="ti-chg ${cls}">${arrow} ${sign}${Math.abs(e.chg).toFixed(1)}%</span>
+            <span class="ti-chg ${cls}">${arr} ${sign}${Math.abs(e.chg).toFixed(1)}%</span>
         </span>`;
     }).join('');
 }
 
-// ── SPARKLINES SVG ────────────────────────────────────────
-function makeSpark(trend, w = 114, h = 40) {
-    const n = 26;
-    const vals = [];
+// ── SPARKLINES ──────────────────────────────────────
+function makeSpark(trend, w = 140, h = 50) {
+    const n = 28, vals = [];
     let v = 50;
     for (let i = 0; i < n; i++) {
-        v += (Math.random() - 0.47) * 7 + trend * 0.45;
+        v += (Math.random() - 0.47) * 7 + trend * 0.5;
         v = Math.max(4, Math.min(96, v));
         vals.push(v);
     }
     const mn = Math.min(...vals), rng = Math.max(...vals) - mn || 1;
     const pts = vals.map((d, i) => {
         const x = (i / (n - 1)) * w;
-        const y = h - ((d - mn) / rng) * (h - 6) - 3;
+        const y = h - ((d - mn) / rng) * (h - 8) - 4;
         return `${x.toFixed(1)},${y.toFixed(1)}`;
     }).join(' ');
     const col = trend > 0 ? '#00d4aa' : trend < 0 ? '#ff4444' : '#8892a4';
@@ -762,12 +890,12 @@ function makeSpark(trend, w = 114, h = 40) {
     return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
         <defs>
             <linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="${col}" stop-opacity=".22"/>
+                <stop offset="0%" stop-color="${col}" stop-opacity=".25"/>
                 <stop offset="100%" stop-color="${col}" stop-opacity="0"/>
             </linearGradient>
         </defs>
         <polygon points="${pts} ${w},${h} 0,${h}" fill="url(#${gid})"/>
-        <polyline points="${pts}" fill="none" stroke="${col}" stroke-width="1.6"/>
+        <polyline points="${pts}" fill="none" stroke="${col}" stroke-width="1.8"/>
     </svg>`;
 }
 
@@ -777,76 +905,50 @@ function initSparklines() {
     document.getElementById('spk-suc').innerHTML  = makeSpark(+1.12);
 }
 
-// ── PRICE TABLE ───────────────────────────────────────────
+// ── PRICE TABLE ─────────────────────────────────────
 function buildPriceTable() {
     const tbody = document.getElementById('priceBody');
     if (!tbody) return;
+    // Fourchette globale pour normaliser la barre de progression
+    const globalMax = Math.max(...PRICE_TOP10.map(r => r.mx));
     tbody.innerHTML = PRICE_TOP10.map((r, i) => {
-        const cls = r.dir > 0 ? 'up' : r.dir < 0 ? 'dn' : 'neu';
-        const arr = r.dir > 0 ? '↑' : r.dir < 0 ? '↓' : '→';
+        const cls      = r.dir > 0 ? 'up' : r.dir < 0 ? 'dn' : 'neu';
+        const arr      = r.dir > 0 ? '↑'  : r.dir < 0 ? '↓'  : '→';
+        const barPct   = Math.round((r.mx / globalMax) * 100);
+        const fmtMin   = r.mn.toFixed(2).replace('.', ',');
+        const fmtMax   = r.mx.toFixed(2).replace('.', ',');
         return `<tr>
             <td class="td-rk">${i + 1}</td>
             <td class="td-nm">${r.nm}</td>
-            <td class="td-rng">${r.rng}</td>
+            <td class="td-cas">${r.cas}</td>
+            <td class="td-min">${fmtMin}</td>
+            <td class="td-max">${fmtMax}</td>
             <td class="td-pct ${cls}">${r.pct}</td>
             <td class="td-arr ${cls}">${arr}</td>
+            <td class="td-bar">
+                <div class="price-bar-wrap">
+                    <div class="price-bar-fill" style="width:${barPct}%"></div>
+                </div>
+            </td>
         </tr>`;
     }).join('');
 }
 
-// ── HORLOGE ───────────────────────────────────────────────
+// ── HORLOGE ─────────────────────────────────────────
 function tickClock() {
     const el = document.getElementById('termClock');
     if (!el) return;
-    const n = new Date();
-    const p = x => String(x).padStart(2, '0');
+    const n = new Date(), p = x => String(x).padStart(2, '0');
     el.textContent = `${p(n.getHours())}:${p(n.getMinutes())}:${p(n.getSeconds())}`;
 }
 
-// ── RSS ───────────────────────────────────────────────────
-function renderArticles(container, items) {
-    container.innerHTML = items.slice(0, 5).map(it => {
-        const title = it.title || 'Sans titre';
-        const link  = it.link  || it.url || '#';
-        const raw   = it.pubDate || it.date || '';
-        let dateStr = '';
-        if (raw) {
-            try { dateStr = new Date(raw).toLocaleDateString('fr-FR', { day:'2-digit', month:'short', year:'numeric' }); }
-            catch(_) {}
-        }
-        return `<div class="g-article">
-            <div class="g-art-title"><a href="${link}" target="_blank" rel="noopener noreferrer">${title}</a></div>
-            <div class="g-art-meta">${dateStr}</div>
-        </div>`;
-    }).join('');
-}
-
-async function loadFeed(feed) {
-    const el = document.getElementById(feed.id);
-    if (!el) return;
-    try {
-        const r = await fetch(feed.apiUrl);
-        if (!r.ok) throw new Error(`HTTP ${r.status}`);
-        const d = await r.json();
-        if (d.status === 'ok' && d.items?.length) {
-            renderArticles(el, d.items);
-        } else {
-            throw new Error(d.message || 'empty feed');
-        }
-    } catch (err) {
-        console.warn(`[ChemSpot] Feed ${feed.id} — ${err.message} — fallback affiché`);
-        renderArticles(el, feed.fallback);
-    }
-}
-
-// ── INIT ──────────────────────────────────────────────────
+// ── INIT ────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
     buildTicker();
     initSparklines();
     buildPriceTable();
     tickClock();
     setInterval(tickClock, 1000);
-    FEEDS.forEach(loadFeed);
 });
 </script>
 
