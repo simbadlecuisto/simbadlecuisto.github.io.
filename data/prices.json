@@ -1,0 +1,452 @@
+[
+  {
+    "excipient_id": 10,
+    "nom_commun": "Lactose",
+    "prix_min": 0.8,
+    "prix_max": 1.2,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 11,
+    "nom_commun": "Microcrystalline cellulose",
+    "prix_min": 1.5,
+    "prix_max": 2.8,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 12,
+    "nom_commun": "Magnesium stearate",
+    "prix_min": 2.5,
+    "prix_max": 4.0,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 13,
+    "nom_commun": "Povidone",
+    "prix_min": 8.0,
+    "prix_max": 15.0,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 14,
+    "nom_commun": "Talc",
+    "prix_min": 0.3,
+    "prix_max": 0.8,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 15,
+    "nom_commun": "Titanium dioxide",
+    "prix_min": 3.0,
+    "prix_max": 6.0,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 16,
+    "nom_commun": "Glycerol",
+    "prix_min": 0.9,
+    "prix_max": 1.5,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 17,
+    "nom_commun": "Purified water",
+    "prix_min": 2.0,
+    "prix_max": 8.0,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 18,
+    "nom_commun": "Ethanol",
+    "prix_min": 0.8,
+    "prix_max": 1.5,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 19,
+    "nom_commun": "Mannitol",
+    "prix_min": 3.0,
+    "prix_max": 5.0,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 20,
+    "nom_commun": "Sorbitol",
+    "prix_min": 0.8,
+    "prix_max": 1.4,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 21,
+    "nom_commun": "Starch",
+    "prix_min": 0.5,
+    "prix_max": 1.0,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 22,
+    "nom_commun": "Stearic acid",
+    "prix_min": 2.0,
+    "prix_max": 8.0,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 23,
+    "nom_commun": "Citric acid",
+    "prix_min": 0.7,
+    "prix_max": 1.3,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 24,
+    "nom_commun": "Sucrose",
+    "prix_min": 0.92,
+    "prix_max": 0.92,
+    "devise": "EUR",
+    "source": "Pharmacompass",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 25,
+    "nom_commun": "Propylene glycol",
+    "prix_min": 1.2,
+    "prix_max": 2.0,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 26,
+    "nom_commun": "Benzyl alcohol",
+    "prix_min": 2.0,
+    "prix_max": 3.5,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 27,
+    "nom_commun": "Sodium lauryl sulfate",
+    "prix_min": 1.5,
+    "prix_max": 2.5,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 28,
+    "nom_commun": "Calcium stearate",
+    "prix_min": 2.5,
+    "prix_max": 4.0,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 29,
+    "nom_commun": "Dicalcium phosphate",
+    "prix_min": 0.3,
+    "prix_max": 0.7,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 30,
+    "nom_commun": "Calcium carbonate",
+    "prix_min": 0.3,
+    "prix_max": 0.7,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 31,
+    "nom_commun": "Sodium chloride",
+    "prix_min": 0.15,
+    "prix_max": 0.35,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 32,
+    "nom_commun": "Potassium chloride",
+    "prix_min": 2.0,
+    "prix_max": 8.0,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 33,
+    "nom_commun": "Zinc oxide",
+    "prix_min": 2.0,
+    "prix_max": 4.0,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 34,
+    "nom_commun": "Colloidal silicon dioxide",
+    "prix_min": 2.0,
+    "prix_max": 8.0,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 35,
+    "nom_commun": "Hydroxypropyl cellulose",
+    "prix_min": 1.5,
+    "prix_max": 2.8,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 36,
+    "nom_commun": "Hypromellose",
+    "prix_min": 2.0,
+    "prix_max": 8.0,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 37,
+    "nom_commun": "Macrogol 4000",
+    "prix_min": 2.5,
+    "prix_max": 4.5,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 38,
+    "nom_commun": "Polysorbate 80",
+    "prix_min": 6.0,
+    "prix_max": 10.0,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 39,
+    "nom_commun": "Benzalkonium chloride",
+    "prix_min": 8.0,
+    "prix_max": 18.0,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 40,
+    "nom_commun": "Croscarmellose sodium",
+    "prix_min": 2.0,
+    "prix_max": 8.0,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 41,
+    "nom_commun": "Crospovidone",
+    "prix_min": 8.0,
+    "prix_max": 15.0,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 42,
+    "nom_commun": "Sodium starch glycolate",
+    "prix_min": 68.14,
+    "prix_max": 68.14,
+    "devise": "EUR",
+    "source": "Pharmacompass",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 43,
+    "nom_commun": "Gelatin",
+    "prix_min": 2.0,
+    "prix_max": 8.0,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 44,
+    "nom_commun": "Acacia",
+    "prix_min": 2.0,
+    "prix_max": 8.0,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 45,
+    "nom_commun": "Xanthan gum",
+    "prix_min": 2.0,
+    "prix_max": 8.0,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 46,
+    "nom_commun": "Carboxymethylcellulose sodium",
+    "prix_min": 1.5,
+    "prix_max": 2.8,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 47,
+    "nom_commun": "Ethyl cellulose",
+    "prix_min": 1.5,
+    "prix_max": 2.8,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 48,
+    "nom_commun": "Shellac",
+    "prix_min": 2.0,
+    "prix_max": 8.0,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 49,
+    "nom_commun": "Carbomer",
+    "prix_min": 2.0,
+    "prix_max": 8.0,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 50,
+    "nom_commun": "Sodium bicarbonate",
+    "prix_min": 2.0,
+    "prix_max": 8.0,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 51,
+    "nom_commun": "Ascorbic acid",
+    "prix_min": 2.0,
+    "prix_max": 8.0,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 52,
+    "nom_commun": "Alpha-tocopherol",
+    "prix_min": 2.0,
+    "prix_max": 8.0,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 53,
+    "nom_commun": "Butylated hydroxytoluene",
+    "prix_min": 2.0,
+    "prix_max": 8.0,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 54,
+    "nom_commun": "Methylparaben",
+    "prix_min": 2.0,
+    "prix_max": 8.0,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 55,
+    "nom_commun": "Propylparaben",
+    "prix_min": 2.0,
+    "prix_max": 8.0,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 56,
+    "nom_commun": "Sorbic acid",
+    "prix_min": 2.0,
+    "prix_max": 8.0,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 57,
+    "nom_commun": "Potassium sorbate",
+    "prix_min": 2.0,
+    "prix_max": 8.0,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 58,
+    "nom_commun": "Cetyl alcohol",
+    "prix_min": 2.0,
+    "prix_max": 8.0,
+    "devise": "EUR",
+    "source": "Estimate",
+    "grade": "Pharmaceutical Grade"
+  },
+  {
+    "excipient_id": 59,
+    "nom_commun": "Mineral oil",
+    "prix_min": 68.14,
+    "prix_max": 68.14,
+    "devise": "EUR",
+    "source": "Pharmacompass",
+    "grade": "Pharmaceutical Grade"
+  }
+]
