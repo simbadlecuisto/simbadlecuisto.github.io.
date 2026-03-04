@@ -1,9 +1,9 @@
-# ChemistrySpot — État des lieux (maj : 2026-03-04, pipeline batch 3 terminé)
+# ChemistrySpot — État des lieux (maj : 2026-03-04, session Bloomberg terminal)
 
 ## Objectif Phase 1
-- 50 excipients en base (actuellement : 30)
-- Page prix / fournisseurs par excipient
-- Site déployé sur GitHub Pages
+- ~~50 excipients en base~~ ✅ **ATTEINT** (50/50, IDs 10–59)
+- Page prix / fournisseurs par excipient ⏳
+- Site déployé sur GitHub Pages ✅
 
 ---
 
@@ -16,12 +16,12 @@
 
 | Table | Lignes | Notes |
 |---|---|---|
-| `excipients` | **50** ✅ | IDs 10–59 — Objectif Phase 1 atteint |
+| `excipients` | **50** ✅ | IDs 10–59 |
 | `suppliers` | **192** | Extraits via PubChem PUG View |
-| `excipient_suppliers` | **inexistante** | À créer (liaison M2M) |
+| `excipient_suppliers` | **inexistante** | À créer — priorité suivante |
 | `prices` | **inexistante** | À créer (scraping futur) |
 
-### Excipients en base (IDs 10–39)
+### Excipients en base
 
 **Batch 1 (IDs 10–18) — insérés manuellement :**
 Lactose, Microcrystalline cellulose, Magnesium stearate, Povidone, Talc,
@@ -41,13 +41,10 @@ Shellac, Carbomer, Sodium bicarbonate, Ascorbic acid, Alpha-tocopherol,
 Butylated hydroxytoluene, Methylparaben, Propylparaben, Sorbic acid,
 Potassium sorbate, Cetyl alcohol, Mineral oil
 
-**✅ 50/50 — Objectif Phase 1 excipients atteint**
-
 ### Fournisseurs (192)
 - Source : API PubChem PUG View (XML vendors) — 19 CIDs traités
-- Couvrent 16/19 excipients du batch 2
-- **Problème qualité : 180/192 ont `country = "Unknown"** (détection TLD lacunaire)
-- Pas de prix, pas de lien direct avec la table `excipients`
+- **Problème qualité : 180/192 ont `country = "Unknown"`** (détection TLD lacunaire)
+- Pas de prix, pas de lien direct avec `excipients` (table `excipient_suppliers` manquante)
 
 ---
 
@@ -55,13 +52,16 @@ Potassium sorbate, Cetyl alcohol, Mineral oil
 
 | Script | Rôle | Entrée → Sortie |
 |---|---|---|
-| `fetch_pubchem.py` | Récupère props chimiques via API PubChem | CID list → `data/excipients_pubchem.json` |
-| `enrich_manual.py` | Enrichit avec infos pharma manuelles | pubchem.json → `data/excipients_complets.json` |
-| `insert_supabase.py` | Upsert dans table `excipients` | excipients_complets.json → Supabase |
-| `fetch_vendors_pubchem.py` | Récupère vendors via PUG View XML | CID list → `data/vendors_pubchem.json` |
-| `insert_vendors_supabase.py` | Upsert dans table `suppliers` | vendors_pubchem.json → Supabase |
+| `fetch_pubchem.py` | Props chimiques via PubChem REST | CID list → `data/excipients_pubchem.json` |
+| `enrich_manual.py` | Enrichissement pharma manuel | pubchem.json → `data/excipients_complets.json` |
+| `insert_supabase.py` | Upsert table `excipients` | excipients_complets.json → Supabase |
+| `fetch_pubchem_b3.py` | Idem batch 3 (IDs 40–59) | CID list → `data/excipients_pubchem_b3.json` |
+| `enrich_manual_b3.py` | Enrichissement batch 3 | pubchem_b3.json → `data/excipients_complets_b3.json` |
+| `insert_supabase_b3.py` | Upsert batch 3 | excipients_complets_b3.json → Supabase |
+| `fetch_vendors_pubchem.py` | Vendors via PUG View XML | CID list → `data/vendors_pubchem.json` |
+| `insert_vendors_supabase.py` | Upsert table `suppliers` | vendors_pubchem.json → Supabase |
 
-**Env :** Python 3.12, venv `chemspot_env/` (`source chemspot_env/bin/activate`)
+**Env :** Python 3.12 système (pas de venv actif — `chemspot_env/` n'existe pas)
 
 ---
 
@@ -69,29 +69,55 @@ Potassium sorbate, Cetyl alcohol, Mineral oil
 
 | Page | Fichier | État |
 |---|---|---|
-| Accueil | `index.html` | Fonctionnel |
+| Accueil | `index.html` | ✅ Bloomberg terminal (refait en session 2) |
 | Catalogue | `catalogue.html` | Fonctionnel, Supabase live |
 | Détail excipient | `produit-detail.html` | Fonctionnel, section fournisseurs vide |
-| Fournisseurs | `fournisseurs.html` | Affiche les 192 fournisseurs, sans lien excipient ni prix |
+| Fournisseurs | `fournisseurs.html` | 192 fournisseurs, sans lien excipient ni prix |
 | Contact | `contact.html` | Fonctionnel |
 
 **CSS :** `css/main.css`, `css/components.css`, `css/responsive.css`
-**JS global :** `js/main.js` (attention aux conflits avec les scripts inline des pages)
+**JS global :** `js/main.js` (attention aux conflits avec les scripts inline)
+
+### index.html — Bloomberg Terminal (commit 3620306)
+
+Architecture de la page :
+- **Ticker bar** (42px, 13px, JetBrains Mono) : 30 excipients avec prix fictifs, animation CSS `scroll-left` sur tableau doublé
+- **Indices** : CS-30 / CS-CEL / CS-SUC avec sparklines SVG 140×50, gradient fill
+- **Gazette statique** 3 colonnes (plus de RSS/rss2json) :
+  - Réglementaire (bordure bleue `#4fc3f7`) : 5 liens EMA/EDQM/ICH réels
+  - Marché (bordure verte `#00d4aa`) : 5 articles PharmaCompass price trends
+  - Académique (bordure jaune `#f0b429`) : 5 liens PubMed avec DOI
+- **Table prix top 10** : pleine largeur, CAS, min/max, Δ30j, barre de progression
+- **Section headers** : `── LABEL ──────` + ligne gradient + badge LIVE/SOURCE
+- Styles scoped dans `<style>` bloc avec `!important` — autres pages non affectées
+
+**Pourquoi RSS abandonné :** rss2json.com retourne HTTP 422 pour EMA, Pharmaphorum et PubMed. Remplacé par contenu statique curé.
 
 ---
 
-## Priorités pour atteindre Phase 1
+## Priorités restantes Phase 1
 
-1. ~~**[DATA]** Définir et insérer les 20 excipients manquants (IDs 40–59)~~ ✅ **DONE**
-2. **[DB]** Créer table `excipient_suppliers` dans Supabase (schema : `excipient_id INT, supplier_id INT`) + peupler à partir de `vendors_pubchem.json`
-3. **[FRONT]** `produit-detail.html` → section fournisseurs dynamique (requête Supabase join)
-4. **[DATA]** Scraping prix (Sigma-Aldrich, TCI Chemicals, etc.) → table `prices`
-5. **[QUALITE]** Améliorer détection pays fournisseurs (180/192 Unknown)
+1. **[DB]** Créer table `excipient_suppliers` (schema : `excipient_id INT, supplier_id INT`) + peupler depuis `vendors_pubchem.json`
+2. **[FRONT]** `produit-detail.html` → section fournisseurs dynamique (Supabase join)
+3. **[DATA]** Scraping prix (Sigma-Aldrich, TCI Chemicals) → table `prices`
+4. **[QUALITE]** Améliorer détection pays fournisseurs (180/192 Unknown)
 
 ---
 
 ## Problèmes connus
 
 - Clés Supabase hardcodées dans les scripts (pas de .env)
-- `STATUS.md` à la racine est outdaté (affiche encore 9 excipients)
-- Conflits JS potentiels entre `main.js` et scripts inline des pages HTML
+- `STATUS.md` à la racine : partiellement mis à jour, à vérifier
+- Conflits JS potentiels entre `main.js` et scripts inline
+- `chemspot_env/` mentionné dans l'ancienne mémoire mais n'existe pas sur disque
+
+---
+
+## Historique commits clés
+
+| Commit | Description |
+|---|---|
+| `19b923c` | Batch 3 : 20 excipients (IDs 40–59) insérés — 50/50 ✅ |
+| `cd75e37` | index.html : Bloomberg terminal v1 (RSS dynamique) |
+| `bb826ae` | Fix RSS URLs (rss2json proxy, hardcodées) |
+| `3620306` | index.html : gazette statique + layout overhaul final |
