@@ -152,6 +152,19 @@
     .pharma-gmp   { background: rgba(0,212,170,.15);   color: #00d4aa; border: 1px solid rgba(0,212,170,.3); }
     .pharma-default { background: var(--bg-surface); color: var(--text-muted); border: 1px solid var(--border); }
 
+    .acad-categorie-header {
+        display: flex; align-items: center; gap: .75rem; margin-bottom: 1.5rem;
+        padding: .9rem 1.25rem;
+        background: rgba(0,212,170,.06); border: 1px solid rgba(0,212,170,.18);
+        border-radius: var(--radius);
+    }
+    .acad-categorie-label { font-size: .75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: .06em; }
+    .acad-categorie-badge {
+        font-size: .88rem; font-weight: 700; color: var(--primary);
+        background: rgba(0,212,170,.12); border: 1px solid rgba(0,212,170,.3);
+        padding: .25rem .75rem; border-radius: 20px;
+    }
+
     .pui-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     @media (max-width: 768px) { .pui-grid { grid-template-columns: 1fr; } }
     .pui-card {
@@ -287,6 +300,7 @@
         <!-- Tab: Académique -->
         <div id="tab-academique" class="tab-panel">
             <div class="section-title"><i class="fas fa-graduation-cap"></i> Ressources Académiques</div>
+            <div id="acadCategorieHeader"></div>
 
             <!-- Section 1: Rôle Fonctionnel -->
             <div class="acad-section">
@@ -843,6 +857,17 @@ function pharmaBadge(p) {
 }
 
 function displayAcademiqueTab(exc) {
+    // Bandeau catégorie en haut
+    const ch = document.getElementById('acadCategorieHeader');
+    const cat = exc.categorie || exc.fonction_principale?.split(',')[0].trim();
+    if (cat) {
+        ch.innerHTML = `
+        <div class="acad-categorie-header">
+            <span class="acad-categorie-label">Catégorie</span>
+            <span class="acad-categorie-badge">${cat}</span>
+        </div>`;
+    }
+
     // Section 1 — Rôle Fonctionnel
     const c1 = document.getElementById('acadFonctionnel');
     const hasFunc = exc.fonction_principale || exc.description_fr || exc.mecanisme || exc.concentrations_typiques;
