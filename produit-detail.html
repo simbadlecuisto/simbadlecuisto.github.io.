@@ -613,39 +613,40 @@ function injectJsonLd(exc, mp, suppliers) {
     const existing = document.getElementById('jsonld-product');
     if (existing) existing.remove();
 
-    const offers = mp ? [{
-        "@type": "Offer",
+    // AggregateOffer (fourchette multi-fournisseurs) — requis par Google pour une plage de prix
+    const offers = mp ? {
+        "@type": "AggregateOffer",
+        "lowPrice": parseFloat(mp.prix_min).toFixed(2),
+        "highPrice": parseFloat(mp.prix_max).toFixed(2),
         "priceCurrency": mp.devise || "EUR",
-        "price": parseFloat(mp.prix_min).toFixed(2),
-        "priceSpecification": {
-            "@type": "PriceSpecification",
-            "minPrice": parseFloat(mp.prix_min).toFixed(2),
-            "maxPrice": parseFloat(mp.prix_max).toFixed(2),
-            "priceCurrency": mp.devise || "EUR",
-            "unitText": "kg"
-        },
-        "availability": "https://schema.org/InStock",
-        "seller": { "@type": "Organization", "name": "ChemistrySpot" }
-    }] : undefined;
+        "offerCount": suppliers.length || 1,
+        "availability": "https://schema.org/InStock"
+    } : undefined;
 
-    const manufacturers = suppliers.slice(0, 3).map(s => ({
-        "@type": "Organization",
-        "name": s.suppliers?.name || "Unknown",
-        "url": s.suppliers?.website || undefined
-    }));
+    const manufacturers = suppliers.slice(0, 3)
+        .filter(s => s.suppliers?.name && s.suppliers.name !== 'Unknown')
+        .map(s => {
+            const org = { "@type": "Organization", "name": s.suppliers.name };
+            if (s.suppliers.website) org.url = s.suppliers.website;
+            return org;
+        });
+
+    // Image URL — structure PubChem si CID disponible, sinon placeholder OG
+    const imageUrl = exc.pubchem_cid
+        ? `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/${exc.pubchem_cid}/PNG`
+        : `https://chemistryspot.com/og-image.png`;
+
+    const additionalProps = [];
+    if (exc.formule_chimique) additionalProps.push({ "@type": "PropertyValue", "name": "Chemical Formula", "value": exc.formule_chimique });
+    if (exc.cas_number)       additionalProps.push({ "@type": "PropertyValue", "name": "CAS Number",       "value": exc.cas_number });
 
     const jsonLd = {
         "@context": "https://schema.org",
         "@type": "Product",
         "name": exc.nom_commun || "Excipient Pharmaceutique",
-        "description": exc.description_fr || exc.synonyms || `Excipient pharmaceutique — CAS ${exc.cas_number}`,
-        "identifier": exc.cas_number ? `CAS:${exc.cas_number}` : undefined,
-        "additionalProperty": exc.formule_chimique ? [{
-            "@type": "PropertyValue",
-            "name": "Chemical Formula",
-            "value": exc.formule_chimique
-        }] : undefined,
-        "brand": { "@type": "Brand", "name": "ChemistrySpot" },
+        "description": exc.description_fr || `Excipient pharmaceutique — CAS ${exc.cas_number || 'N/A'}`,
+        "image": imageUrl,
+        "additionalProperty": additionalProps.length ? additionalProps : undefined,
         "offers": offers,
         "manufacturer": manufacturers.length ? manufacturers : undefined
     };
