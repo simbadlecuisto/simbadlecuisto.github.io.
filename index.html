@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ChemistrySpot Terminal — Marché des Excipients Pharmaceutiques</title>
+    <meta name="description" content="Terminal B2B en temps réel pour les excipients pharmaceutiques. Prix indicatifs, fournisseurs référencés, données PubChem.">
+    <meta property="og:title" content="ChemistrySpot — Terminal Excipients Pharmaceutiques">
+    <meta property="og:description" content="50 excipients, 192 fournisseurs, prix indicatifs marché. La référence B2B pour les achats d'excipients pharma.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://simbadlecuisto.github.io/">
+    <meta property="og:image" content="https://simbadlecuisto.github.io/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="https://simbadlecuisto.github.io/">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -545,18 +553,7 @@ const TICKER_DATA = [
     { code:'H₂O', name:'Purified Water',         min:0.05,  max:0.15,  chg: 0.0,  dir:0  },
 ];
 
-const PRICE_TOP10 = [
-    { nm:'Hypromellose',             cas:'9004-65-3',  mn:15.00, mx:30.00, pct:'+5,1%', dir:1  },
-    { nm:'Hydroxypropyl Cellulose',  cas:'9004-64-2',  mn:12.00, mx:22.00, pct:'+4,2%', dir:1  },
-    { nm:'Benzalkonium Chloride',    cas:'8001-54-5',  mn:8.00,  mx:18.00, pct:'+0,1%', dir:0  },
-    { nm:'Povidone',                 cas:'9003-39-4',  mn:8.00,  mx:15.00, pct:'−2,1%', dir:-1 },
-    { nm:'Colloidal Silicon Dioxide',cas:'7631-86-9',  mn:8.00,  mx:15.00, pct:'−3,1%', dir:-1 },
-    { nm:'Polysorbate 80',           cas:'9005-65-6',  mn:6.00,  mx:10.00, pct:'−2,8%', dir:-1 },
-    { nm:'Mannitol',                 cas:'69-65-8',    mn:3.00,  mx:5.00,  pct:'+3,4%', dir:1  },
-    { nm:'Titanium Dioxide',         cas:'13463-67-7', mn:3.00,  mx:6.00,  pct:'+1,8%', dir:1  },
-    { nm:'Macrogol 4000',            cas:'25322-68-3', mn:2.50,  mx:4.50,  pct:'−0,4%', dir:0  },
-    { nm:'Magnesium Stearate',       cas:'557-04-0',   mn:2.50,  mx:4.00,  pct:'−0,1%', dir:0  },
-];
+// Price table loaded from Supabase — see buildPriceTable()
 
 function buildTicker() {
     const el = document.getElementById('tickerScroll');
@@ -599,25 +596,44 @@ function makeSpark(trend, w = 140, h = 50) {
     </svg>`;
 }
 
-function buildPriceTable() {
+async function buildPriceTable() {
     const tbody = document.getElementById('priceBody');
     if (!tbody) return;
-    const globalMax = Math.max(...PRICE_TOP10.map(r => r.mx));
-    tbody.innerHTML = PRICE_TOP10.map((r, i) => {
-        const cls    = r.dir > 0 ? 'up' : r.dir < 0 ? 'dn' : 'neu';
-        const arr    = r.dir > 0 ? '↑'  : r.dir < 0 ? '↓'  : '→';
-        const barPct = Math.round((r.mx / globalMax) * 100);
-        return `<tr>
-            <td class="td-rk">${i+1}</td>
-            <td class="td-nm">${r.nm}</td>
-            <td class="td-cas">${r.cas}</td>
-            <td class="td-min">${r.mn.toFixed(2).replace('.',',')}</td>
-            <td class="td-max">${r.mx.toFixed(2).replace('.',',')}</td>
-            <td class="td-pct ${cls}">${r.pct}</td>
-            <td class="td-arr ${cls}">${arr}</td>
-            <td class="td-bar"><div class="price-bar-wrap"><div class="price-bar-fill" style="width:${barPct}%"></div></div></td>
-        </tr>`;
-    }).join('');
+
+    try {
+        const SUPABASE_URL = 'https://jkaffpgqbyhuihvyvtld.supabase.co';
+        const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE2NTgzOTQsImV4cCI6MjA2NzIzNDM5NH0.OIjoz6uoPV25Nraral4YN_gz7q6COBW3dAVIYhBy1pI';
+        const [pricesRes, excRes] = await Promise.all([
+            fetch(`${SUPABASE_URL}/rest/v1/prices?select=excipient_id,prix_min,prix_max&order=prix_min.desc&limit=10`, {
+                headers: { 'apikey': ANON_KEY, 'Authorization': `Bearer ${ANON_KEY}` }
+            }),
+            fetch(`${SUPABASE_URL}/rest/v1/excipients?select=id,nom_commun,cas_number`, {
+                headers: { 'apikey': ANON_KEY, 'Authorization': `Bearer ${ANON_KEY}` }
+            })
+        ]);
+        const prices = await pricesRes.json();
+        const excipients = await excRes.json();
+        const excMap = {};
+        excipients.forEach(e => excMap[e.id] = e);
+
+        const globalMax = Math.max(...prices.map(r => r.prix_max));
+        tbody.innerHTML = prices.map((r, i) => {
+            const exc    = excMap[r.excipient_id] || {};
+            const barPct = Math.round((r.prix_max / globalMax) * 100);
+            return `<tr>
+                <td class="td-rk">${i+1}</td>
+                <td class="td-nm"><a href="produit-detail.html?id=${r.excipient_id}" style="color:inherit;text-decoration:none;">${exc.nom_commun || '—'}</a></td>
+                <td class="td-cas">${exc.cas_number || '—'}</td>
+                <td class="td-min">${parseFloat(r.prix_min).toFixed(2).replace('.',',')}</td>
+                <td class="td-max">${parseFloat(r.prix_max).toFixed(2).replace('.',',')}</td>
+                <td class="td-pct neu">—</td>
+                <td class="td-arr neu">→</td>
+                <td class="td-bar"><div class="price-bar-wrap"><div class="price-bar-fill" style="width:${barPct}%"></div></div></td>
+            </tr>`;
+        }).join('');
+    } catch (e) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--text-dim);padding:1rem;">Données indisponibles</td></tr>';
+    }
 }
 
 function tickClock() {

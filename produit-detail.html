@@ -3,8 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Détail Produit — ChemistrySpot</title>
+    <title>Fiche Excipient — ChemistrySpot</title>
+    <meta name="description" content="Fiche technique complète : prix indicatif marché, fournisseurs référencés, structure chimique PubChem, analyse marché comparative.">
+    <meta property="og:title" content="Fiche Excipient — ChemistrySpot">
+    <meta property="og:description" content="Prix indicatif, classement marché, fournisseurs et analyse comparative pour cet excipient pharmaceutique.">
+    <meta property="og:type" content="product">
+    <meta property="og:url" content="https://simbadlecuisto.github.io/produit-detail.html">
+    <meta property="og:image" content="https://simbadlecuisto.github.io/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="https://simbadlecuisto.github.io/produit-detail.html">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -185,11 +194,8 @@
 
         <!-- Tab: Marché -->
         <div id="tab-marche" class="tab-panel">
-            <div class="empty-state">
-                <i class="fas fa-chart-bar"></i>
-                <p style="font-weight:600; color:var(--text);">Données marché en cours de déploiement</p>
-                <p>Indices de prix, volumes et tendances — Phase 2</p>
-                <span class="phase2-badge">Phase 2 — Q2 2026</span>
+            <div id="marcheContent">
+                <div class="loading-state"><div class="spin-lg"></div><p>Chargement des données marché…</p></div>
             </div>
         </div>
 
@@ -561,6 +567,199 @@ function switchTab(event, tabName) {
     document.querySelectorAll('.tab-panel').forEach(c => c.classList.remove('active'));
     event.currentTarget.classList.add('active');
     document.getElementById('tab-' + tabName).classList.add('active');
+    if (tabName === 'marche' && !marcheLoaded) loadMarcheTab();
+}
+
+// ── TAB 2: ANALYSE MARCHÉ ──
+let marcheLoaded = false;
+const CAT_COLORS = {
+    'Liant':'#00d4aa','Diluant':'#4fc3f7','Lubrifiant':'#f0b429',
+    'Désintégrant':'#9966ff','Agent délitant':'#9966ff','Enrobant':'#fb923c',
+    'Conservateur':'#ef4444','Surfactant':'#22c55e','Émulsifiant':'#22c55e',
+    'Antioxydant':'#f59e0b','Plastifiant':'#a78bfa','Solubilisant':'#34d399',
+    'Édulcorant':'#fcd34d','Solvant':'#60a5fa','Autre':'#8892a4'
+};
+function catColor(c) { return CAT_COLORS[c] || '#8892a4'; }
+
+async function loadMarcheTab() {
+    const container = document.getElementById('marcheContent');
+    try {
+        const [pricesRes, excRes, supRes] = await Promise.all([
+            supabaseClient.from('prices').select('excipient_id, prix_min, prix_max, source'),
+            supabaseClient.from('excipients').select('id, nom_commun, fonction_principale'),
+            supabaseClient.from('excipient_suppliers').select('supplier_id').eq('excipient_id', currentExcipientId)
+        ]);
+        const excMap = {};
+        (excRes.data || []).forEach(e => excMap[e.id] = e);
+        const supCount = (supRes.data || []).length;
+
+        const enriched = (pricesRes.data || []).map(p => ({
+            ...p,
+            nom: excMap[p.excipient_id]?.nom_commun || '—',
+            cat: excMap[p.excipient_id]?.fonction_principale || 'Autre',
+            isCurrent: p.excipient_id === currentExcipientId
+        })).sort((a, b) => a.prix_min - b.prix_min);
+
+        const allMins  = enriched.map(e => e.prix_min);
+        const avgMin   = allMins.reduce((s, v) => s + v, 0) / allMins.length;
+        const rank     = enriched.findIndex(e => e.isCurrent) + 1;
+        const cur      = enriched.find(e => e.isCurrent) || {};
+        const marketMin = Math.min(...allMins), marketMax = Math.max(...allMins);
+        const pct = marketMax > marketMin ? ((cur.prix_min - marketMin) / (marketMax - marketMin)) * 100 : 50;
+
+        const catCounts = {}, catSums = {}, catN = {};
+        enriched.forEach(e => {
+            catCounts[e.cat] = (catCounts[e.cat] || 0) + 1;
+            catSums[e.cat]   = (catSums[e.cat]   || 0) + e.prix_min;
+            catN[e.cat]      = catCounts[e.cat];
+        });
+
+        const fc = v => parseFloat(v).toFixed(2).replace('.', ',');
+
+        // ── STAT CARDS ──
+        const statCards = `
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:1.5rem;">
+            <div class="card" style="text-align:center;padding:1rem;">
+                <div style="font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.3rem;">Prix indicatif</div>
+                <div style="font-size:1.6rem;font-weight:800;font-family:var(--mono);color:var(--primary);">${fc(cur.prix_min||0)}<span style="font-size:.9rem;font-weight:400;"> €/kg</span></div>
+                <div style="font-size:.75rem;color:var(--text-dim);margin-top:.2rem;">min estimé</div>
+            </div>
+            <div class="card" style="text-align:center;padding:1rem;">
+                <div style="font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.3rem;">Classement marché</div>
+                <div style="font-size:1.6rem;font-weight:800;font-family:var(--mono);color:var(--text);">#${rank}<span style="font-size:.9rem;font-weight:400;color:var(--text-muted);"> / ${enriched.length}</span></div>
+                <div style="font-size:.75rem;color:var(--text-dim);margin-top:.2rem;">${rank<=10?'parmi les moins chers':rank>=40?'parmi les plus chers':'prix médian'}</div>
+            </div>
+            <div class="card" style="text-align:center;padding:1rem;">
+                <div style="font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.3rem;">Fournisseurs</div>
+                <div style="font-size:1.6rem;font-weight:800;font-family:var(--mono);color:var(--text);">${supCount}</div>
+                <div style="font-size:.75rem;color:var(--text-dim);margin-top:.2rem;">référencés PubChem</div>
+            </div>
+            <div class="card" style="text-align:center;padding:1rem;">
+                <div style="font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.3rem;">Moy. marché</div>
+                <div style="font-size:1.6rem;font-weight:800;font-family:var(--mono);color:var(--text-muted);">${fc(avgMin)}<span style="font-size:.9rem;font-weight:400;"> €/kg</span></div>
+                <div style="font-size:.75rem;color:var(--text-dim);margin-top:.2rem;">sur ${enriched.length} excipients</div>
+            </div>
+        </div>`;
+
+        // ── POSITIONNEMENT VISUEL ──
+        const posBand = `
+        <div class="card" style="padding:1.1rem 1.4rem;margin-bottom:1.5rem;">
+            <div style="font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.75rem;">
+                <i class="fas fa-map-marker-alt" style="color:var(--primary);"></i> Positionnement prix vs marché
+            </div>
+            <div style="position:relative;height:28px;background:linear-gradient(90deg,rgba(0,212,170,.15),rgba(240,180,41,.15),rgba(239,68,68,.15));border-radius:14px;overflow:visible;">
+                <div style="position:absolute;left:0;top:50%;transform:translateY(-50%);font-size:.7rem;color:var(--text-dim);padding-left:8px;">${fc(marketMin)} €</div>
+                <div style="position:absolute;right:0;top:50%;transform:translateY(-50%);font-size:.7rem;color:var(--text-dim);padding-right:8px;">${fc(marketMax)} €</div>
+                <div style="position:absolute;left:${pct.toFixed(1)}%;top:50%;transform:translate(-50%,-50%);width:18px;height:18px;background:var(--primary);border-radius:50%;border:3px solid var(--bg);box-shadow:0 0 0 2px var(--primary);"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:.72rem;color:var(--text-dim);margin-top:.4rem;">
+                <span>🟢 Moins cher</span><span>🟡 Médian</span><span>🔴 Plus cher</span>
+            </div>
+        </div>`;
+
+        // ── CHARTS ──
+        const chartsGrid = `
+        <div style="display:grid;grid-template-columns:2fr 1fr;gap:1.25rem;margin-bottom:1.5rem;">
+            <div class="card" style="padding:1.1rem;">
+                <div class="section-title" style="margin-bottom:.75rem;"><i class="fas fa-chart-bar"></i> Prix min par excipient (€/kg)</div>
+                <div style="overflow-y:auto;max-height:420px;">
+                    <canvas id="barChart" style="width:100%;"></canvas>
+                </div>
+            </div>
+            <div class="card" style="padding:1.1rem;">
+                <div class="section-title" style="margin-bottom:.75rem;"><i class="fas fa-chart-pie"></i> Par catégorie</div>
+                <canvas id="donutChart" style="max-height:260px;"></canvas>
+                <div id="donutLegend" style="margin-top:.75rem;font-size:.78rem;"></div>
+            </div>
+        </div>`;
+
+        // ── TABLE COMPLÈTE ──
+        const tableRows = enriched.map((e, i) => `
+            <tr ${e.isCurrent ? 'style="background:rgba(0,212,170,.07);font-weight:700;"' : ''}>
+                <td style="color:var(--text-dim);font-size:.8rem;">${i+1}</td>
+                <td>${e.isCurrent ? `<span style="color:var(--primary);">⬡ ${e.nom}</span>` : e.nom}</td>
+                <td style="font-size:.78rem;color:var(--text-muted);">${e.cat}</td>
+                <td style="font-family:var(--mono);color:var(--primary);">${fc(e.prix_min)}</td>
+                <td style="font-family:var(--mono);color:var(--text-muted);">${fc(e.prix_max)}</td>
+            </tr>`).join('');
+
+        const tableSection = `
+        <div class="card" style="padding:1.1rem;">
+            <div class="section-title" style="margin-bottom:.75rem;"><i class="fas fa-list"></i> Classement complet — ${enriched.length} excipients</div>
+            <div style="overflow-x:auto;">
+                <table style="width:100%;border-collapse:collapse;font-size:.84rem;">
+                    <thead><tr style="background:var(--bg-surface);">
+                        <th style="padding:.5rem .75rem;text-align:left;color:var(--text-muted);font-size:.72rem;text-transform:uppercase;">#</th>
+                        <th style="padding:.5rem .75rem;text-align:left;color:var(--text-muted);font-size:.72rem;text-transform:uppercase;">Excipient</th>
+                        <th style="padding:.5rem .75rem;text-align:left;color:var(--text-muted);font-size:.72rem;text-transform:uppercase;">Catégorie</th>
+                        <th style="padding:.5rem .75rem;text-align:left;color:var(--primary);font-size:.72rem;text-transform:uppercase;">Prix min €/kg</th>
+                        <th style="padding:.5rem .75rem;text-align:left;color:var(--text-muted);font-size:.72rem;text-transform:uppercase;">Prix max €/kg</th>
+                    </tr></thead>
+                    <tbody>${tableRows}</tbody>
+                </table>
+            </div>
+            <div class="info-note" style="margin-top:1rem;"><i class="fas fa-info-circle"></i> Prix indicatifs (estimations marché). Source : données agrégées ChemistrySpot.</div>
+        </div>`;
+
+        container.innerHTML = statCards + posBand + chartsGrid + tableSection;
+        marcheLoaded = true;
+
+        // ── RENDER CHARTS ──
+        Chart.defaults.color = '#8892a4';
+        Chart.defaults.borderColor = 'rgba(255,255,255,0.06)';
+
+        // Bar chart
+        const bCtx = document.getElementById('barChart');
+        bCtx.height = enriched.length * 22;
+        new Chart(bCtx, {
+            type: 'bar',
+            data: {
+                labels: enriched.map(e => e.nom.length > 28 ? e.nom.slice(0, 26) + '…' : e.nom),
+                datasets: [{
+                    label: 'Prix min €/kg',
+                    data: enriched.map(e => e.prix_min),
+                    backgroundColor: enriched.map(e => e.isCurrent ? '#00d4aa' : 'rgba(0,212,170,0.25)'),
+                    borderColor:     enriched.map(e => e.isCurrent ? '#00d4aa' : 'rgba(0,212,170,0.5)'),
+                    borderWidth: 1, borderRadius: 3
+                }]
+            },
+            options: {
+                indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { display: false }, tooltip: {
+                    callbacks: { label: ctx => ` ${ctx.parsed.x.toFixed(2).replace('.', ',')} €/kg` }
+                }},
+                scales: {
+                    x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { callback: v => v.toFixed(0) + ' €' } },
+                    y: { grid: { display: false }, ticks: { font: { size: 11 } } }
+                }
+            }
+        });
+
+        // Donut chart
+        const cats = Object.keys(catCounts);
+        new Chart(document.getElementById('donutChart'), {
+            type: 'doughnut',
+            data: {
+                labels: cats,
+                datasets: [{ data: cats.map(c => catCounts[c]), backgroundColor: cats.map(catColor), borderWidth: 2, borderColor: '#111827' }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: true,
+                plugins: { legend: { display: false }, tooltip: {
+                    callbacks: { label: ctx => ` ${ctx.label} : ${ctx.parsed} excipient${ctx.parsed > 1 ? 's' : ''}` }
+                }}
+            }
+        });
+        document.getElementById('donutLegend').innerHTML = cats.map(c =>
+            `<div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.25rem;">
+                <span style="width:10px;height:10px;border-radius:50%;background:${catColor(c)};flex-shrink:0;"></span>
+                <span>${c}</span><span style="margin-left:auto;font-family:var(--mono);color:var(--text-muted);">${catCounts[c]}</span>
+            </div>`
+        ).join('');
+
+    } catch (err) {
+        container.innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle" style="color:var(--danger);"></i><p>${err.message}</p></div>`;
+    }
 }
 </script>
 

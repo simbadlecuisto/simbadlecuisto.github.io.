@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://simbadlecuisto.github.io/sitemap.xml
