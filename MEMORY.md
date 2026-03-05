@@ -16,6 +16,14 @@
 - `catalogue.html` : prix lus depuis table `prices` (dynamique)
 - `produit-detail.html` : bandeau "Prix indicatif marché" en Tab 1 depuis `prices`
 
+### Phase 2 — Système devis ✅ COMPLETE (2026-03-05)
+- Tous les boutons "Demander devis" supprimés sur les 3 pages
+- Remplacés par modal "Prix exact" 3 champs : email pro / quantité kg / entreprise
+- Confirmation : "Vous recevrez le prix exact sous 24h" — POST vers `contact_requests`
+- `produit-detail.html` : fourchette prix en grand dans le hero + bouton CTA
+- `catalogue.html` : bouton "Prix exact" sur chaque card + icône œil → fiche produit
+- `fournisseurs.html` : prix par excipient par fournisseur (max 3 lignes) + bouton "Prix exact"
+
 ---
 
 ## Base de données Supabase
@@ -70,9 +78,9 @@ RLS : INSERT public, pas de SELECT public
 | Page | État |
 |---|---|
 | `index.html` | ✅ Bloomberg terminal, dark theme |
-| `catalogue.html` | ✅ Prix dynamiques depuis table `prices`, cards Sigma-Aldrich |
-| `produit-detail.html` | ✅ Bandeau prix marché (prices table) + tableau fournisseurs (excipient_suppliers) |
-| `fournisseurs.html` | ✅ 192 fournisseurs, filtres pays/excipient/recherche, tags excipients, pays corrigés |
+| `catalogue.html` | ✅ Prix dynamiques depuis `prices`, bouton "Prix exact" → modal 3 champs |
+| `produit-detail.html` | ✅ Fourchette prix en grand dans hero + CTA + modal "Prix exact" sur Tab 1 & Tab 3 |
+| `fournisseurs.html` | ✅ 192 fournisseurs, prix par excipient, bouton "Prix exact" par fournisseur |
 | `contact.html` | ✅ Formulaire → Supabase contact_requests (INSERT via anon key) |
 
 **CSS :** `css/design-system.css` (unique, remplace main.css/components.css/responsive.css)
@@ -93,6 +101,7 @@ RLS : INSERT public, pas de SELECT public
 
 | Commit | Description |
 |---|---|
+| `446189e` | Système "Prix exact" : modal 3 champs sur produit-detail, catalogue, fournisseurs ✅ |
 | `9fb7062` | Fix 3 priorités : prix dynamiques, formulaire contact, pays fournisseurs ✅ |
 | `4c8d192` | Phase 2 complete : redesign global + scripts prix/pays committed |
 | `3495599` | excipient_suppliers : DDL + populate (1 737 rows) + produit-detail.html live |
