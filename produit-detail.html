@@ -8,10 +8,16 @@
     <meta property="og:title" content="Fiche Excipient — ChemistrySpot">
     <meta property="og:description" content="Prix indicatif, classement marché, fournisseurs et analyse comparative pour cet excipient pharmaceutique.">
     <meta property="og:type" content="product">
-    <meta property="og:url" content="https://simbadlecuisto.github.io/produit-detail.html">
-    <meta property="og:image" content="https://simbadlecuisto.github.io/og-image.png">
+    <meta property="og:url" content="https://chemistryspot.com/produit-detail.html">
+    <meta property="og:image" content="https://chemistryspot.com/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     <meta name="twitter:card" content="summary_large_image">
-    <link rel="canonical" href="https://simbadlecuisto.github.io/produit-detail.html">
+    <meta name="twitter:site" content="@chemistryspot">
+    <meta name="twitter:title" content="Fiche Excipient — ChemistrySpot">
+    <meta name="twitter:description" content="Prix indicatif, classement marché, fournisseurs et analyse comparative pour cet excipient pharmaceutique.">
+    <meta name="twitter:image" content="https://chemistryspot.com/og-image.png">
+    <link rel="canonical" href="https://chemistryspot.com/produit-detail.html">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -349,6 +355,8 @@ async function loadAllData() {
         displayProductBand(excipient);
         displayPrixComparatif(suppliers, marketPrice);
         displayFournisseurs(suppliers);
+        updatePageMeta(excipient, marketPrice, suppliers.length);
+        injectJsonLd(excipient, marketPrice, suppliers);
 
         document.getElementById('loadingState').style.display = 'none';
         document.getElementById('mainContent').style.display  = 'block';
@@ -580,6 +588,76 @@ const CAT_COLORS = {
     'Édulcorant':'#fcd34d','Solvant':'#60a5fa','Autre':'#8892a4'
 };
 function catColor(c) { return CAT_COLORS[c] || '#8892a4'; }
+
+function updatePageMeta(exc, mp, supCount) {
+    const name = exc.nom_commun || 'Excipient';
+    const cas  = exc.cas_number ? ` (CAS ${exc.cas_number})` : '';
+    const priceStr = mp ? ` · ${parseFloat(mp.prix_min).toFixed(0)}–${parseFloat(mp.prix_max).toFixed(0)} EUR/kg` : '';
+    const desc = `${name}${cas} — ${supCount} fournisseurs référencés${priceStr}. Fiche technique, prix marché, comparatif.`.slice(0, 155);
+    const url  = `https://chemistryspot.com/produit-detail.html?id=${exc.id}`;
+
+    const setMeta = (sel, val) => { const el = document.querySelector(sel); if (el) el.setAttribute('content', val); };
+    const setLink = (sel, val) => { const el = document.querySelector(sel); if (el) el.setAttribute('href', val); };
+
+    document.title = `${name} — Excipient Pharmaceutique — ChemistrySpot`;
+    setMeta('meta[name="description"]', desc);
+    setMeta('meta[property="og:title"]', `${name} — ChemistrySpot`);
+    setMeta('meta[property="og:description"]', desc);
+    setMeta('meta[property="og:url"]', url);
+    setMeta('meta[name="twitter:title"]', `${name} — ChemistrySpot`);
+    setMeta('meta[name="twitter:description"]', desc);
+    setLink('link[rel="canonical"]', url);
+}
+
+function injectJsonLd(exc, mp, suppliers) {
+    const existing = document.getElementById('jsonld-product');
+    if (existing) existing.remove();
+
+    const offers = mp ? [{
+        "@type": "Offer",
+        "priceCurrency": mp.devise || "EUR",
+        "price": parseFloat(mp.prix_min).toFixed(2),
+        "priceSpecification": {
+            "@type": "PriceSpecification",
+            "minPrice": parseFloat(mp.prix_min).toFixed(2),
+            "maxPrice": parseFloat(mp.prix_max).toFixed(2),
+            "priceCurrency": mp.devise || "EUR",
+            "unitText": "kg"
+        },
+        "availability": "https://schema.org/InStock",
+        "seller": { "@type": "Organization", "name": "ChemistrySpot" }
+    }] : undefined;
+
+    const manufacturers = suppliers.slice(0, 3).map(s => ({
+        "@type": "Organization",
+        "name": s.suppliers?.name || "Unknown",
+        "url": s.suppliers?.website || undefined
+    }));
+
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": exc.nom_commun || "Excipient Pharmaceutique",
+        "description": exc.description_fr || exc.synonyms || `Excipient pharmaceutique — CAS ${exc.cas_number}`,
+        "identifier": exc.cas_number ? `CAS:${exc.cas_number}` : undefined,
+        "additionalProperty": exc.formule_chimique ? [{
+            "@type": "PropertyValue",
+            "name": "Chemical Formula",
+            "value": exc.formule_chimique
+        }] : undefined,
+        "brand": { "@type": "Brand", "name": "ChemistrySpot" },
+        "offers": offers,
+        "manufacturer": manufacturers.length ? manufacturers : undefined
+    };
+
+    // Remove undefined keys
+    const clean = JSON.parse(JSON.stringify(jsonLd));
+    const script = document.createElement('script');
+    script.id   = 'jsonld-product';
+    script.type = 'application/ld+json';
+    script.text = JSON.stringify(clean, null, 2);
+    document.head.appendChild(script);
+}
 
 async function loadMarcheTab() {
     const container = document.getElementById('marcheContent');
