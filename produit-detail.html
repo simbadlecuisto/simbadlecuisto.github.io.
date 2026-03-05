@@ -113,6 +113,76 @@
     @media (max-width: 768px) {
         .price-table th:nth-child(n+6), .price-table td:nth-child(n+6) { display: none; }
     }
+
+    /* ── Tab Académique ── */
+    .acad-section { margin-bottom: 2rem; }
+    .acad-section:last-child { margin-bottom: 0; }
+    .acad-card {
+        background: var(--bg-card); border: 1px solid var(--border);
+        border-radius: var(--radius-lg); padding: 1.5rem;
+    }
+    .acad-field { margin-bottom: 1.25rem; }
+    .acad-field:last-child { margin-bottom: 0; }
+    .acad-label {
+        font-size: .72rem; text-transform: uppercase; letter-spacing: .08em;
+        color: var(--text-muted); margin-bottom: .4rem; font-weight: 600;
+    }
+    .acad-value { color: var(--text); font-size: .92rem; line-height: 1.65; }
+    .acad-conc  { font-family: var(--mono); font-size: .88rem; color: var(--primary); }
+
+    .forms-grid { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: .25rem; }
+    .form-badge {
+        display: inline-flex; align-items: center; gap: .4rem;
+        padding: .4rem .9rem; border-radius: 20px; font-size: .82rem; font-weight: 600;
+        background: var(--bg-surface); border: 1px solid var(--border); color: var(--text);
+        transition: var(--transition);
+    }
+    .form-badge:hover { border-color: rgba(0,212,170,.4); color: var(--primary); }
+    .form-badge i { color: var(--primary); font-size: .78rem; }
+
+    .pharma-grid { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: .25rem; }
+    .pharma-badge {
+        padding: .35rem .85rem; border-radius: 6px;
+        font-size: .82rem; font-weight: 700; letter-spacing: .04em;
+    }
+    .pharma-pheur { background: rgba(153,102,255,.15); color: #9966ff; border: 1px solid rgba(153,102,255,.3); }
+    .pharma-usp   { background: rgba(240,180,41,.15);  color: #f0b429; border: 1px solid rgba(240,180,41,.3); }
+    .pharma-jp    { background: rgba(239,68,68,.15);   color: #ef4444; border: 1px solid rgba(239,68,68,.3); }
+    .pharma-bp    { background: rgba(79,195,247,.15);  color: #4fc3f7; border: 1px solid rgba(79,195,247,.3); }
+    .pharma-gmp   { background: rgba(0,212,170,.15);   color: #00d4aa; border: 1px solid rgba(0,212,170,.3); }
+    .pharma-default { background: var(--bg-surface); color: var(--text-muted); border: 1px solid var(--border); }
+
+    .pui-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 768px) { .pui-grid { grid-template-columns: 1fr; } }
+    .pui-card {
+        background: var(--bg-surface); border: 1px solid var(--border);
+        border-radius: var(--radius); padding: 1.1rem 1.25rem;
+    }
+    .pui-card-label {
+        font-size: .72rem; text-transform: uppercase; letter-spacing: .08em;
+        color: var(--text-muted); margin-bottom: .5rem; font-weight: 600;
+        display: flex; align-items: center; gap: .4rem;
+    }
+    .pui-card-label i { color: var(--primary); }
+    .pui-card-text { font-size: .88rem; color: var(--text); line-height: 1.65; }
+
+    .resource-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: .9rem; }
+    .resource-link {
+        display: flex; align-items: center; gap: .85rem; padding: 1rem 1.1rem;
+        background: var(--bg-card); border: 1px solid var(--border);
+        border-radius: var(--radius-lg); text-decoration: none; color: var(--text);
+        transition: var(--transition);
+    }
+    .resource-link:hover { border-color: rgba(0,212,170,.4); transform: translateY(-2px); box-shadow: var(--shadow); color: var(--primary); }
+    .resource-icon {
+        width: 38px; height: 38px; border-radius: 8px; flex-shrink: 0;
+        display: flex; align-items: center; justify-content: center; font-size: 1.05rem;
+    }
+    .resource-icon.pubchem { background: rgba(79,195,247,.12);  color: #4fc3f7; }
+    .resource-icon.pheur   { background: rgba(153,102,255,.12); color: #9966ff; }
+    .resource-icon.pubmed  { background: rgba(34,197,94,.12);   color: #22c55e; }
+    .resource-title { font-size: .88rem; font-weight: 600; line-height: 1.3; }
+    .resource-desc  { font-size: .74rem; color: var(--text-muted); margin-top: .15rem; }
     </style>
 </head>
 <body>
@@ -190,6 +260,9 @@
             <button class="tab-btn" onclick="switchTab(event,'alertes')">
                 <i class="fas fa-bell"></i> Alertes Réglementaires
             </button>
+            <button class="tab-btn" onclick="switchTab(event,'academique')">
+                <i class="fas fa-graduation-cap"></i> Académique
+            </button>
         </div>
 
         <!-- Tab: Prix -->
@@ -209,6 +282,51 @@
         <div id="tab-fournisseurs" class="tab-panel">
             <div class="section-title"><i class="fas fa-industry"></i> Fournisseurs Référencés</div>
             <div id="fournisseursContent"></div>
+        </div>
+
+        <!-- Tab: Académique -->
+        <div id="tab-academique" class="tab-panel">
+            <div class="section-title"><i class="fas fa-graduation-cap"></i> Ressources Académiques</div>
+
+            <!-- Section 1: Rôle Fonctionnel -->
+            <div class="acad-section">
+                <div class="section-subtitle" style="font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.75rem;font-weight:600;">
+                    <i class="fas fa-flask" style="color:var(--primary);margin-right:.4rem;"></i>1 — Rôle Fonctionnel
+                </div>
+                <div id="acadFonctionnel"></div>
+            </div>
+
+            <!-- Section 2: Formes Pharmaceutiques -->
+            <div class="acad-section">
+                <div class="section-subtitle" style="font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.75rem;font-weight:600;">
+                    <i class="fas fa-pills" style="color:var(--primary);margin-right:.4rem;"></i>2 — Formes Pharmaceutiques
+                </div>
+                <div id="acadFormes"></div>
+            </div>
+
+            <!-- Section 3: Réglementation & Qualité -->
+            <div class="acad-section">
+                <div class="section-subtitle" style="font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.75rem;font-weight:600;">
+                    <i class="fas fa-shield-alt" style="color:var(--primary);margin-right:.4rem;"></i>3 — Réglementation &amp; Qualité
+                </div>
+                <div id="acadReglementation"></div>
+            </div>
+
+            <!-- Section 4: Contexte PUI & Industrie -->
+            <div class="acad-section">
+                <div class="section-subtitle" style="font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.75rem;font-weight:600;">
+                    <i class="fas fa-hospital" style="color:var(--primary);margin-right:.4rem;"></i>4 — Contexte PUI &amp; Industrie
+                </div>
+                <div id="acadPUI"></div>
+            </div>
+
+            <!-- Section 5: Pour Aller Plus Loin -->
+            <div class="acad-section">
+                <div class="section-subtitle" style="font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.75rem;font-weight:600;">
+                    <i class="fas fa-external-link-alt" style="color:var(--primary);margin-right:.4rem;"></i>5 — Pour Aller Plus Loin
+                </div>
+                <div id="acadLinks"></div>
+            </div>
         </div>
 
         <!-- Tab: Alertes -->
@@ -360,6 +478,9 @@ async function loadAllData() {
 
         document.getElementById('loadingState').style.display = 'none';
         document.getElementById('mainContent').style.display  = 'block';
+
+        // Après affichage du DOM — erreur isolée pour ne pas bloquer le reste
+        try { displayAcademiqueTab(excipient); } catch (e) { console.error('Academic tab error:', e); }
     } catch (err) {
         console.error(err);
         document.getElementById('loadingState').innerHTML = `
@@ -567,6 +688,270 @@ function displayFournisseurs(rows) {
             openPrixExact(currentExcipientName + (sup ? ' — ' + sup : ''));
         });
     });
+}
+
+// ── TAB 4: ACADÉMIQUE ──
+// Clés : sous-chaîne du nom normalisé (lowercase, sans accents)
+const PUI_CONTEXT = {
+    'cellulose microcristalline': {
+        pui: 'Diluant-liant de référence en PUI pour comprimés et gélules préparés à la demande. Permet la compression directe sans granulation préalable.',
+        industrie: 'Avicel® PH-102 (FMC BioPolymer) — standard des lignes de compression directe industrielles, présent dans >60 % des comprimés génériques.'
+    },
+    'lactose': {
+        pui: 'Diluant de choix pour gélules en petites séries et préparations magistrales pédiatriques. Solubilité élevée, goût neutre, bonne compressibilité.',
+        industrie: 'Pharmatose® 200M (DFE Pharma) — véhicule lactose micronisé dans les inhalateurs à poudre sèche (DPI) pour administration pulmonaire.'
+    },
+    'stearate de magnesium': {
+        pui: 'Lubrifiant incontournable à 0,5 % en PUI dans toute compression ou remplissage de gélules. Une sur-lubrification (>2 min de mélange) dégrade la dureté.',
+        industrie: 'Présent dans quasiment toutes les lignes industrielles de comprimés. Le temps de mélange est un paramètre critique validé en QC.'
+    },
+    'povidone': {
+        pui: 'Liant hydrosoluble utilisé en solution dans la granulation humide en PUI pour homogénéiser les poudres et améliorer la coulabilité des granulés.',
+        industrie: 'Kollidon® 30 (BASF) — grade de référence pour les formes à libération immédiate ; K90 réservé aux matrices à libération prolongée.'
+    },
+    'croscarmellose': {
+        pui: 'Désintégrant intra- et extragranulaire pour comprimés en PUI. Assure une désintégration rapide en milieu aqueux dès 2–5 % de concentration.',
+        industrie: 'Ac-Di-Sol® (IFF) — associé à la MCC dans plus de 70 % des comprimés à désintégration rapide du marché générique mondial.'
+    },
+    'crospovidone': {
+        pui: 'Super-désintégrant pour comprimés ODT en PUI (désintégration <30 s). Insoluble dans l\'eau, action mécanique pure par absorption capillaire.',
+        industrie: 'Kollidon® CL (BASF) — standard industriel des comprimés orodispersibles (ODT) et des formulations à absorption rapide.'
+    },
+    'talc': {
+        pui: 'Anti-adhérent et lubrifiant secondaire en PUI pour pelliculage de gélules et enrobage à petite échelle. Toujours associé à un grade amiante-free.',
+        industrie: 'Luzenac Pharma (Imerys) — grade contrôlé Ph.Eur. 2.4.28 ; utilisé dans les enrobages HPMC comme agent anti-collage.'
+    },
+    'hpmc': {
+        pui: 'Polymère multifonctionnel en PUI : liant, épaississant pour collyres, et base d\'enrobage pelliculaire aqueux économique et reproductible.',
+        industrie: 'Methocel™ E5 (Dow) — grade d\'enrobage aqueux standard ; K100M pour matrices à libération prolongée (HPMC-matrix 12-24 h).'
+    },
+    'hydroxypropylmethylcellulose': {
+        pui: 'Polymère multifonctionnel en PUI : liant, épaississant pour collyres, et base d\'enrobage pelliculaire aqueux économique et reproductible.',
+        industrie: 'Methocel™ E5 (Dow) — grade d\'enrobage aqueux standard ; K100M pour matrices à libération prolongée (HPMC-matrix 12-24 h).'
+    },
+    'mannitol': {
+        pui: 'Diluant de référence pour lyophilisats injectables en PUI (cryo-protecteur) et pour comprimés ODT (goût sucré, absence d\'hygroscopicité).',
+        industrie: 'Pearlitol® 200SD (Roquette) — co-traité amidon/mannitol pour compression directe ; Mannogem® EZ pour ODT haute performance.'
+    },
+    'sorbitol': {
+        pui: 'Édulcorant et humectant pour sirops et solutions orales pédiatriques en PUI. Précaution : effet laxatif osmotique au-delà de 20 g/j chez l\'adulte.',
+        industrie: 'NEOSORB® P 60W (Roquette) — spray-dried pour compression directe dans comprimés à mâcher et chewing-gums médicamenteux.'
+    },
+    'amidon': {
+        pui: 'Désintégrant et diluant classique en PUI pour granulation humide ou sèche. Économique, bien toléré, adapté aux préparations magistrales courantes.',
+        industrie: 'Starch 1500® (Colorcon) — partiellement prégélatinisé pour compression directe ; améliore fluidité et compressibilité sans étape de granulation.'
+    },
+    'glycolate': {
+        pui: 'Super-désintégrant à 2–8 % en PUI, particulièrement efficace dans les matrices cellulosiques et amylacées. Gonflement ×3 en milieu aqueux.',
+        industrie: 'Explotab® (JRS Pharma) — désintégrant standard des génériques solides ; désintégration garantie en <5 min selon Ph.Eur. 2.9.1.'
+    },
+    'polyethylene glycol': {
+        pui: 'Plastifiant et véhicule hydrosoluble en PUI pour enrobages, suppositoires et formes semi-solides. Le PEG 400 est utilisé comme co-solvant injectable.',
+        industrie: 'PEG 6000 (BASF) — plastifiant standard des enrobages éthylcellulose ; PEG 400 dans les injectables à solvant mixte (solubilité accrue).'
+    },
+    'dioxyde de silicium': {
+        pui: 'Anti-agglomérant (0,1–0,5 %) en PUI pour améliorer la coulabilité des poudres hygroscopiques ou de faible densité tassée.',
+        industrie: 'Aerosil® 200 (Evonik) — référence industrielle colloïdale ; Syloid® 244FP pour adsorbant amorphe dans les formulations à libération modifiée.'
+    },
+    'laurylsulfate': {
+        pui: 'Tensioactif anionique mouillant à 0,1–1 % en PUI pour améliorer la dissolution de PA hydrophobes. Irritant potentiel à forte concentration.',
+        industrie: 'Présent dans les formulations d\'ARV génériques (antirétroviraux) pour améliorer la biodisponibilité orale des molécules de classe II BCS.'
+    },
+    'polysorbate': {
+        pui: 'Tensioactif non ionique pour émulsions et solubilisats en PUI. Indispensable dans la nutrition parentérale et les injectables de principes actifs lipophiles.',
+        industrie: 'Tween® 80 (Croda) — stabilisant d\'émulsion dans vaccins et biologiques ; concentration ≤ 0,4 % pour administration IV.'
+    },
+    'propylene glycol': {
+        pui: 'Co-solvant hydrosoluble en PUI pour formes orales et topiques à PA faiblement solubles. Dose IV limitée à 50 mg/kg/j (toxicité rénale).',
+        industrie: 'Co-solvant clé des formes injectables à solvant mixte (phénobarbital IV, diazépam IV) et des préparations transdermiques à base d\'eau.'
+    },
+    'glycerol': {
+        pui: 'Humectant, co-solvant et doux conservateur en PUI pour sirops, suppositoires glycérinés et collyres lubrifiants à base aqueuse.',
+        industrie: 'Glycérine végétale USP (Oleon) — présente dans quasi toutes les formes liquides orales industrielles comme humectant et édulcorant d\'appoint.'
+    },
+    'acide citrique': {
+        pui: 'Acidifiant tampon et antioxydant synergique en PUI pour ajustement du pH des solutions orales et injectables (pH cible 3,5–6,5).',
+        industrie: 'Associé au bicarbonate de sodium (1:3) dans les comprimés effervescents ; produit industriellement par fermentation via Aspergillus niger.'
+    },
+    'gelatine': {
+        pui: 'Matrice des gélules dures et molles en PUI ; utilisée aussi comme liant en granulation humide pour comprimés à désintégration rapide.',
+        industrie: 'Capsugel® (Lonza) — leader mondial des gélules gélatine ; la pression croissante vers les alternatives végétales (HPMC, amidon) redistribue le marché.'
+    },
+    'carbonate de calcium': {
+        pui: 'Diluant alcalinisant et antiacide en PUI pour comprimés à mâcher et préparations magistrales de supplémentation calcique à faible coût.',
+        industrie: 'Socal® P2 (Solvay) — grade précipité pour comprimés de supplémentation ; Omya® Calcipur pour antiacides et nutraceutiques.'
+    },
+    'chlorure de sodium': {
+        pui: 'Base isotonique universelle en PUI pour toutes les solutions injectables, irrigations et préparations ophtalmiques. Contrôle osmolalité strict.',
+        industrie: 'NaCl 0,9 % — soluté le plus produit dans l\'industrie pharmaceutique ; la qualité WFI (Water for Injection) est critique pour éviter l\'endotoxémie.'
+    },
+    'carboxymethylcellulose': {
+        pui: 'Épaississant et stabilisant en PUI pour suspensions orales, collyres viscoélastiques et gels topiques aqueux à viscosité ajustable.',
+        industrie: 'CMC sodique 7H4F (Dow) — utilisée dans les suspensions injectables dépôt et les collyres lubrifiants longue durée (viscosité 1500–3000 cP).'
+    },
+    'ethylcellulose': {
+        pui: 'Polymère d\'enrobage hydrophobe en PUI pour masquage de goût et microparticules à libération prolongée produites en lit d\'air fluidisé.',
+        industrie: 'Ethocel™ Standard 10 (Dow) — base des systèmes Wurster pour libération prolongée 12–24 h ; perméabilité modulée par ajout de PEG ou HPMC.'
+    },
+    'hydroxypropylcellulose': {
+        pui: 'Liant thermosensible en PUI pour granulation à fusion chaude et films orodispersibles. Soluble dans l\'eau et l\'éthanol selon le grade.',
+        industrie: 'Klucel™ EF (Ashland) — grade fin pour films transdermiques et solutions éthanol ; HXF pour extrusion à fusion chaude (HME).'
+    },
+    'dioxyde de titane': {
+        pui: 'Opacifiant blanc pour enrobages pelliculaires en PUI. Améliore la photostabilité du PA et l\'esthétique du comprimé. Grade E171 soumis à restriction EU.',
+        industrie: 'Ti-Pure™ R-706 (Chemours) — dispersé dans les systèmes Opadry® (Colorcon) ; la réglementation UE E171 impose une surveillance granulométrique.'
+    },
+    'acide stearique': {
+        pui: 'Lubrifiant et agent de glissement en PUI pour compression directe, en alternative au stéarate de magnésium dans certaines formulations sensibles.',
+        industrie: 'Utilisé dans les suppositoires (base lipophile) et comme lubrifiant de comprimés à 1–5 % ; grade végétal disponible pour formulations halal/kasher.'
+    }
+};
+
+function getPuiContext(nomCommun) {
+    if (!nomCommun) return null;
+    const strip = s => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    const norm = strip(nomCommun);
+    // 1. Correspondance exacte ou sous-chaîne longue (≥5 chars) → évite les faux positifs
+    for (const [key, val] of Object.entries(PUI_CONTEXT)) {
+        const normKey = strip(key);
+        if (norm === normKey || norm.includes(normKey) || (normKey.length >= 5 && normKey.includes(norm))) return val;
+    }
+    return null;
+}
+
+const FORM_ICONS = {
+    'Comprimé':'fa-tablets','Comprimés':'fa-tablets','Gélule':'fa-capsules','Gélules':'fa-capsules',
+    'Capsule':'fa-capsules','Solution injectable':'fa-syringe','Injectable':'fa-syringe',
+    'Suspension':'fa-flask','Sirop':'fa-wine-bottle','Solution orale':'fa-tint',
+    'Pommade':'fa-hand-holding-medical','Crème':'fa-hand-holding-medical',
+    'Suppositoire':'fa-pills','Patch transdermique':'fa-band-aid',
+    'Lyophilisat':'fa-snowflake','Poudre':'fa-mortar-pestle','Granulé':'fa-circle',
+    'Émulsion':'fa-blender','Film':'fa-layer-group','Implant':'fa-circle-dot'
+};
+function formIcon(f) { return FORM_ICONS[f] || 'fa-box'; }
+
+const PHARMA_CLASSES = {
+    'Ph.Eur.':'pharma-pheur','Ph. Eur.':'pharma-pheur',
+    'USP':'pharma-usp','USP/NF':'pharma-usp','NF':'pharma-usp',
+    'JP':'pharma-jp','JP XVIII':'pharma-jp',
+    'BP':'pharma-bp',
+    'GMP':'pharma-gmp','ICH':'pharma-gmp'
+};
+function pharmaBadge(p) {
+    const cls = PHARMA_CLASSES[p] || 'pharma-default';
+    return `<span class="pharma-badge ${cls}">${p}</span>`;
+}
+
+function displayAcademiqueTab(exc) {
+    // Section 1 — Rôle Fonctionnel
+    const c1 = document.getElementById('acadFonctionnel');
+    const hasFunc = exc.fonction_principale || exc.description_fr || exc.mecanisme || exc.concentrations_typiques;
+    if (!hasFunc) {
+        c1.innerHTML = `<div class="acad-card"><p style="color:var(--text-muted);font-size:.88rem;">Données fonctionnelles non disponibles pour cet excipient.</p></div>`;
+    } else {
+        c1.innerHTML = `
+        <div class="acad-card">
+            ${exc.fonction_principale ? `
+            <div class="acad-field">
+                <div class="acad-label">Fonction</div>
+                <div class="acad-value"><span class="badge badge-primary">${exc.fonction_principale}</span></div>
+            </div>` : ''}
+            ${(exc.mecanisme || exc.description_fr) ? `
+            <div class="acad-field">
+                <div class="acad-label">Mécanisme d'action</div>
+                <div class="acad-value">${exc.mecanisme || exc.description_fr}</div>
+            </div>` : ''}
+            ${exc.concentrations_typiques ? `
+            <div class="acad-field">
+                <div class="acad-label">Concentrations typiques</div>
+                <div class="acad-value acad-conc">${exc.concentrations_typiques}</div>
+            </div>` : ''}
+        </div>`;
+    }
+
+    // Section 2 — Formes Pharmaceutiques
+    const c2 = document.getElementById('acadFormes');
+    const rawForms = exc.formes_pharmaceutiques;
+    const forms = Array.isArray(rawForms) ? rawForms
+        : (typeof rawForms === 'string' && rawForms ? rawForms.split(',').map(s => s.trim()) : []);
+    if (!forms.length) {
+        c2.innerHTML = `<div class="acad-card"><p style="color:var(--text-muted);font-size:.88rem;">Formes pharmaceutiques non renseignées.</p></div>`;
+    } else {
+        const badges = forms.map(f => `
+            <span class="form-badge"><i class="fas ${formIcon(f)}"></i>${f}</span>`).join('');
+        c2.innerHTML = `<div class="acad-card"><div class="forms-grid">${badges}</div></div>`;
+    }
+
+    // Section 3 — Réglementation & Qualité
+    const c3 = document.getElementById('acadReglementation');
+    const rawPharma = exc.pharmacopees;
+    const pharmas = Array.isArray(rawPharma) ? rawPharma
+        : (typeof rawPharma === 'string' && rawPharma ? rawPharma.split(',').map(s => s.trim()) : []);
+    if (!pharmas.length) {
+        c3.innerHTML = `<div class="acad-card"><p style="color:var(--text-muted);font-size:.88rem;">Informations réglementaires non renseignées.</p></div>`;
+    } else {
+        c3.innerHTML = `
+        <div class="acad-card">
+            <div class="acad-field">
+                <div class="acad-label">Pharmacopées reconnues</div>
+                <div class="pharma-grid">${pharmas.map(pharmaBadge).join('')}</div>
+            </div>
+        </div>`;
+    }
+
+    // Section 4 — Contexte PUI & Industrie
+    const c4 = document.getElementById('acadPUI');
+    const puiCtx = getPuiContext(exc.nom_commun);
+    if (!puiCtx) {
+        c4.innerHTML = `<div class="acad-card"><p style="color:var(--text-muted);font-size:.88rem;">Contexte PUI/industrie non disponible pour cet excipient.</p></div>`;
+    } else {
+        c4.innerHTML = `
+        <div class="pui-grid">
+            <div class="pui-card">
+                <div class="pui-card-label"><i class="fas fa-hospital"></i> Contexte PUI</div>
+                <div class="pui-card-text">${puiCtx.pui}</div>
+            </div>
+            <div class="pui-card">
+                <div class="pui-card-label"><i class="fas fa-industry"></i> Exemple industriel</div>
+                <div class="pui-card-text">${puiCtx.industrie}</div>
+            </div>
+        </div>`;
+    }
+
+    // Section 5 — Pour Aller Plus Loin
+    const c5 = document.getElementById('acadLinks');
+    const name = exc.nom_commun || '';
+    const cid  = exc.cid_pubchem;
+    const pubchemUrl = cid
+        ? `https://pubchem.ncbi.nlm.nih.gov/compound/${cid}`
+        : `https://pubchem.ncbi.nlm.nih.gov/#query=${encodeURIComponent(name)}`;
+    const pubmedUrl = `https://pubmed.ncbi.nlm.nih.gov/?term=${encodeURIComponent(name + ' excipient')}`;
+    const pheurUrl  = 'https://www.edqm.eu/en/european-pharmacopoeia-ph-eur';
+
+    c5.innerHTML = `
+    <div class="resource-grid">
+        <a href="${pubchemUrl}" target="_blank" rel="noopener" class="resource-link">
+            <div class="resource-icon pubchem"><i class="fas fa-atom"></i></div>
+            <div>
+                <div class="resource-title">PubChem</div>
+                <div class="resource-desc">${cid ? `CID ${cid} — structure, propriétés` : 'Recherche par nom'}</div>
+            </div>
+        </a>
+        <a href="${pheurUrl}" target="_blank" rel="noopener" class="resource-link">
+            <div class="resource-icon pheur"><i class="fas fa-book-medical"></i></div>
+            <div>
+                <div class="resource-title">Pharmacopée Européenne</div>
+                <div class="resource-desc">EDQM — Ph.Eur. en ligne</div>
+            </div>
+        </a>
+        <a href="${pubmedUrl}" target="_blank" rel="noopener" class="resource-link">
+            <div class="resource-icon pubmed"><i class="fas fa-microscope"></i></div>
+            <div>
+                <div class="resource-title">PubMed</div>
+                <div class="resource-desc">Littérature scientifique</div>
+            </div>
+        </a>
+    </div>`;
 }
 
 // ── TABS ──
