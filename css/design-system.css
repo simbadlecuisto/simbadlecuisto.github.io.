@@ -666,6 +666,23 @@ ul { list-style: none; }
 }
 .excipient-tag-more { background: var(--bg-surface); color: var(--text-muted); }
 
+/* Supplier price list (fournisseurs.html) */
+.supplier-price-list {
+    margin: 0.5rem 0 0.25rem;
+    border-top: 1px solid var(--border);
+    padding-top: 0.5rem;
+}
+.supplier-price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.25rem 0;
+    font-size: 0.8rem;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.supplier-price-name  { color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 55%; }
+.supplier-price-range { font-family: var(--mono); font-weight: 600; color: var(--primary); white-space: nowrap; }
+
 /* Pagination */
 .pagination {
     display: flex;

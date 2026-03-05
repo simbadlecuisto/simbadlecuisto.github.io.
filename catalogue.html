@@ -182,6 +182,34 @@
     </div>
 </div>
 
+<!-- ══ MODAL : PRIX EXACT ══ -->
+<div id="catalogPrixExactModal" class="modal">
+    <div class="modal-box" style="max-width:440px;">
+        <button class="modal-close" onclick="closeModal('catalogPrixExactModal')">&times;</button>
+        <div class="modal-title"><i class="fas fa-tag"></i> Obtenir le prix exact</div>
+        <p style="font-size:.88rem;color:var(--text-muted);margin-bottom:1rem;">Recevez le prix exact pour votre volume sous 24h ouvrées.</p>
+        <div id="cpe-product-label" style="background:var(--bg-surface);padding:.65rem 1rem;border-radius:var(--radius);margin-bottom:1.25rem;font-weight:600;color:var(--primary);font-size:.9rem;border-left:3px solid var(--primary);"></div>
+        <form id="cpeExactForm" onsubmit="handleCatalogPrixExact(event)">
+            <div class="form-group">
+                <label class="form-label">Email professionnel *</label>
+                <input id="cpe-email" type="email" class="form-input" required placeholder="jean.dupont@labo.com">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Quantité souhaitée (kg) *</label>
+                <input id="cpe-quantite" type="number" min="1" step="1" class="form-input" required placeholder="ex : 500">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Entreprise *</label>
+                <input id="cpe-entreprise" type="text" class="form-input" required placeholder="Laboratoire ABC">
+            </div>
+            <button type="submit" class="btn btn-primary w-full" style="margin-top:.5rem;">
+                <i class="fas fa-paper-plane"></i> Obtenir mon prix exact
+            </button>
+            <div id="cpeExactFeedback" style="display:none;margin-top:1rem;"></div>
+        </form>
+    </div>
+</div>
+
 <!-- ══ SCRIPTS ══ -->
 <script src="./js/supabase-config.js"></script>
 
@@ -318,18 +346,61 @@ function displayExcipients() {
             ${exc.formule ? `<div class="product-card-meta"><strong>Formule :</strong> ${exc.formule}</div>` : ''}
             ${priceDisp ? `<div class="product-card-price"><i class="fas fa-tag"></i> ${priceDisp}${srcLabel}</div>` : '<div class="product-card-price" style="color:var(--text-dim);">Prix sur demande</div>'}
             <div class="product-card-footer">
-                <button class="btn btn-primary btn-sm" onclick="viewExcipient(${exc.id})" style="flex:1;">
-                    <i class="fas fa-eye"></i> Voir détails
+                <button class="btn btn-primary btn-sm" onclick="openCatalogPrixExact(${exc.id}, this)" style="flex:1;"
+                    data-nom="${(exc.nom_commun||'').replace(/"/g,'&quot;')}">
+                    <i class="fas fa-tag"></i> Prix exact
                 </button>
-                <a href="fournisseurs.html" class="btn btn-outline btn-sm" title="Voir fournisseurs">
-                    <i class="fas fa-industry"></i>
+                <a href="produit-detail.html?id=${exc.id}" class="btn btn-outline btn-sm" title="Voir la fiche produit">
+                    <i class="fas fa-eye"></i>
                 </a>
             </div>
         </div>`;
     }).join('');
 }
 
-function viewExcipient(id) { window.location.href = `produit-detail.html?id=${id}`; }
+let catalogCurrentProduct = '';
+function openCatalogPrixExact(id, btn) {
+    catalogCurrentProduct = btn.dataset.nom || '';
+    document.getElementById('cpe-product-label').textContent = catalogCurrentProduct;
+    document.getElementById('cpeExactFeedback').style.display = 'none';
+    document.getElementById('cpeExactForm').reset();
+    openModal('catalogPrixExactModal');
+}
+async function handleCatalogPrixExact(e) {
+    e.preventDefault();
+    const fb  = document.getElementById('cpeExactFeedback');
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi…';
+    const qty = document.getElementById('cpe-quantite').value;
+    try {
+        const res = await fetch('https://jkaffpgqbyhuihvyvtld.supabase.co/rest/v1/contact_requests', {
+            method: 'POST',
+            headers: {
+                'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE2NTgzOTQsImV4cCI6MjA2NzIzNDM5NH0.OIjoz6uoPV25Nraral4YN_gz7q6COBW3dAVIYhBy1pI',
+                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE2NTgzOTQsImV4cCI6MjA2NzIzNDM5NH0.OIjoz6uoPV25Nraral4YN_gz7q6COBW3dAVIYhBy1pI',
+                'Content-Type': 'application/json', 'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify({
+                prenom: '', nom: '',
+                email:      document.getElementById('cpe-email').value.trim(),
+                entreprise: document.getElementById('cpe-entreprise').value.trim(),
+                sujet: 'quote',
+                message: `Demande de prix exact : ${qty} kg de ${catalogCurrentProduct}`
+            })
+        });
+        if (!res.ok) throw new Error();
+        fb.style.display = 'block';
+        fb.innerHTML = '<div class="status-bar status-success"><i class="fas fa-check-circle"></i> Vous recevrez le prix exact sous 24h.</div>';
+        e.target.reset();
+    } catch {
+        fb.style.display = 'block';
+        fb.innerHTML = '<div class="status-bar status-danger"><i class="fas fa-exclamation-circle"></i> Erreur — réessayez ou contactez-nous par email.</div>';
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Obtenir mon prix exact';
+    }
+}
 
 function showError() {
     document.getElementById('catalogLoading').innerHTML = `

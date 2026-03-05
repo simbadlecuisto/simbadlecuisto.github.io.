@@ -194,6 +194,7 @@ let supabaseClient;
 let allSuppliers      = [];
 let filteredSuppliers = [];
 let suppliersPage     = 1;
+let pricesBySupplier  = {}; // supplier_id → [{nom, min, max}]
 
 const COUNTRY_FLAGS = {
     'USA':'🇺🇸','United States':'🇺🇸','US':'🇺🇸','UK':'🇬🇧','United Kingdom':'🇬🇧',
@@ -218,8 +219,32 @@ function parseNotes(notes) {
 
 document.addEventListener('DOMContentLoaded', async () => {
     supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // Load excipient names + prices in background (non-blocking)
+    loadPricesBySupplier();
     await loadSuppliers();
 });
+
+async function loadPricesBySupplier() {
+    try {
+        const [excRes, spRes] = await Promise.all([
+            supabaseClient.from('excipients').select('id, nom_commun'),
+            supabaseClient.from('excipient_suppliers').select('supplier_id, excipient_id, prix_min, prix_max').range(0, 1999)
+        ]);
+        if (excRes.error || spRes.error) return;
+        const excMap = {};
+        (excRes.data || []).forEach(e => excMap[e.id] = e.nom_commun);
+        (spRes.data || []).forEach(row => {
+            if (!pricesBySupplier[row.supplier_id]) pricesBySupplier[row.supplier_id] = [];
+            pricesBySupplier[row.supplier_id].push({
+                nom: excMap[row.excipient_id] || '—',
+                min: parseFloat(row.prix_min),
+                max: parseFloat(row.prix_max)
+            });
+        });
+        // Re-render once prices are ready if suppliers already loaded
+        if (allSuppliers.length > 0) displaySuppliers();
+    } catch (e) { console.warn('Prix non chargés:', e); }
+}
 
 async function loadSuppliers() {
     showStatus('Chargement des fournisseurs PubChem...', 'loading');
@@ -271,6 +296,21 @@ function displaySuppliers() {
                 </div>
             </div>` : '';
 
+        // Price rows per excipient (max 3 shown)
+        const supplierPrices = pricesBySupplier[supplier.id] || [];
+        const shownPrices    = supplierPrices.slice(0, 3);
+        const morePrices     = supplierPrices.length - shownPrices.length;
+        const pricesHtml = shownPrices.length > 0 ? `
+            <div class="supplier-price-list">
+                <div class="filter-label mb-1">Fourchettes de prix</div>
+                ${shownPrices.map(p => `
+                <div class="supplier-price-row">
+                    <span class="supplier-price-name">${p.nom}</span>
+                    <span class="supplier-price-range">${p.min.toFixed(2).replace('.',',')}–${p.max.toFixed(2).replace('.',',')} €/kg</span>
+                </div>`).join('')}
+                ${morePrices > 0 ? `<div style="font-size:.75rem;color:var(--text-dim);margin-top:.25rem;">+${morePrices} autre${morePrices>1?'s':''} excipient${morePrices>1?'s':''}</div>` : ''}
+            </div>` : '';
+
         const pubchemBtn = pubchemUrl ? `
             <a href="${pubchemUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">
                 <i class="fas fa-database"></i> PubChem
@@ -282,6 +322,7 @@ function displaySuppliers() {
             </a>` : '';
 
         const excipientCount = excipients.length;
+        const safeName = (supplier.name || '').replace(/"/g, '&quot;');
 
         return `
         <div class="supplier-card">
@@ -293,9 +334,14 @@ function displaySuppliers() {
                 ${excipientCount > 0 ? `<span class="badge badge-primary">${excipientCount} excipient${excipientCount>1?'s':''}</span>` : ''}
             </div>
             ${tagsHtml}
+            ${pricesHtml}
             <div style="display:flex; gap:.4rem; flex-wrap:wrap; margin-top:.75rem;">
                 ${websiteBtn}
                 ${pubchemBtn}
+                <button class="btn btn-primary btn-sm" style="flex:1;min-width:110px;"
+                    onclick="openFournisseurPrixExact('${safeName}')">
+                    <i class="fas fa-tag"></i> Prix exact
+                </button>
             </div>
         </div>`;
     }).join('');
@@ -391,6 +437,78 @@ function showStatus(message, type) {
 
 function handleLogin(e) { e.preventDefault(); closeModal('loginModal'); }
 function handleRegister(e) { e.preventDefault(); closeModal('registerModal'); }
+
+let fournisseurCurrentName = '';
+function openFournisseurPrixExact(name) {
+    fournisseurCurrentName = name;
+    document.getElementById('fpe-supplier-label').textContent = name;
+    document.getElementById('fpeExactFeedback').style.display = 'none';
+    document.getElementById('fpeExactForm').reset();
+    openModal('fournisseurPrixExactModal');
+}
+async function handleFournisseurPrixExact(e) {
+    e.preventDefault();
+    const fb  = document.getElementById('fpeExactFeedback');
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi…';
+    const qty = document.getElementById('fpe-quantite').value;
+    try {
+        const res = await fetch('https://jkaffpgqbyhuihvyvtld.supabase.co/rest/v1/contact_requests', {
+            method: 'POST',
+            headers: {
+                'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE2NTgzOTQsImV4cCI6MjA2NzIzNDM5NH0.OIjoz6uoPV25Nraral4YN_gz7q6COBW3dAVIYhBy1pI',
+                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE2NTgzOTQsImV4cCI6MjA2NzIzNDM5NH0.OIjoz6uoPV25Nraral4YN_gz7q6COBW3dAVIYhBy1pI',
+                'Content-Type': 'application/json', 'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify({
+                prenom: '', nom: '',
+                email:      document.getElementById('fpe-email').value.trim(),
+                entreprise: document.getElementById('fpe-entreprise').value.trim(),
+                sujet: 'quote',
+                message: `Demande de prix exact : ${qty} kg via ${fournisseurCurrentName}`
+            })
+        });
+        if (!res.ok) throw new Error();
+        fb.style.display = 'block';
+        fb.innerHTML = '<div class="status-bar status-success"><i class="fas fa-check-circle"></i> Vous recevrez le prix exact sous 24h.</div>';
+        e.target.reset();
+    } catch {
+        fb.style.display = 'block';
+        fb.innerHTML = '<div class="status-bar status-danger"><i class="fas fa-exclamation-circle"></i> Erreur — réessayez ou contactez-nous par email.</div>';
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Obtenir mon prix exact';
+    }
+}
 </script>
+
+<!-- ══ MODAL : PRIX EXACT FOURNISSEUR ══ -->
+<div id="fournisseurPrixExactModal" class="modal">
+    <div class="modal-box" style="max-width:440px;">
+        <button class="modal-close" onclick="closeModal('fournisseurPrixExactModal')">&times;</button>
+        <div class="modal-title"><i class="fas fa-tag"></i> Obtenir le prix exact</div>
+        <p style="font-size:.88rem;color:var(--text-muted);margin-bottom:1rem;">Recevez le prix exact pour votre volume sous 24h ouvrées.</p>
+        <div id="fpe-supplier-label" style="background:var(--bg-surface);padding:.65rem 1rem;border-radius:var(--radius);margin-bottom:1.25rem;font-weight:600;color:var(--primary);font-size:.9rem;border-left:3px solid var(--primary);"></div>
+        <form id="fpeExactForm" onsubmit="handleFournisseurPrixExact(event)">
+            <div class="form-group">
+                <label class="form-label">Email professionnel *</label>
+                <input id="fpe-email" type="email" class="form-input" required placeholder="jean.dupont@labo.com">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Quantité souhaitée (kg) *</label>
+                <input id="fpe-quantite" type="number" min="1" step="1" class="form-input" required placeholder="ex : 500">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Entreprise *</label>
+                <input id="fpe-entreprise" type="text" class="form-input" required placeholder="Laboratoire ABC">
+            </div>
+            <button type="submit" class="btn btn-primary w-full" style="margin-top:.5rem;">
+                <i class="fas fa-paper-plane"></i> Obtenir mon prix exact
+            </button>
+            <div id="fpeExactFeedback" style="display:none;margin-top:1rem;"></div>
+        </form>
+    </div>
+</div>
 </body>
 </html>

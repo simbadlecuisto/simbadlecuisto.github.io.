@@ -40,12 +40,28 @@
     .cert-default { background: var(--bg-surface); color: var(--text-muted); }
     .cert-list { display: flex; gap: 0.3rem; flex-wrap: wrap; }
 
-    .btn-devis {
+    .btn-prix-exact {
         padding: 0.35rem 0.9rem; background: var(--primary); color: #0a0e1a;
         border: none; border-radius: var(--radius); cursor: pointer;
         font-size: 0.82rem; font-weight: 600; transition: var(--transition); white-space: nowrap;
     }
-    .btn-devis:hover { background: var(--primary-dark); }
+    .btn-prix-exact:hover { background: var(--primary-dark); }
+
+    .hero-price-block {
+        margin-top: 1.25rem; padding: 1rem 1.25rem;
+        background: rgba(0,212,170,0.07); border: 1px solid rgba(0,212,170,0.2);
+        border-radius: var(--radius); display: inline-flex; flex-direction: column; gap: .15rem;
+    }
+    .hero-price-label { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--text-muted); }
+    .hero-price-value { font-size: 2rem; font-weight: 800; font-family: var(--mono); color: var(--primary); line-height: 1.1; }
+    .hero-price-sub   { font-size: .78rem; color: var(--text-muted); }
+    .btn-hero-prix {
+        margin-top: 1rem; padding: .65rem 1.5rem;
+        background: var(--primary); color: #0a0e1a; border: none;
+        border-radius: var(--radius); font-size: .92rem; font-weight: 700;
+        cursor: pointer; transition: var(--transition); display: inline-flex; align-items: center; gap: .5rem;
+    }
+    .btn-hero-prix:hover { background: var(--primary-dark); transform: translateY(-1px); }
 
     .info-note {
         margin-top: 1.25rem; padding: 0.75rem 1rem;
@@ -240,11 +256,63 @@ function goSearch() {
 }
 document.getElementById('globalSearch').addEventListener('keydown', e => { if (e.key === 'Enter') goSearch(); });
 
+// ── MODAL ──
+function openModal(id)  { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.addEventListener('click', e => { if (e.target.classList.contains('modal')) e.target.classList.remove('open'); });
+
+let currentProductName = '';
+function openPrixExact(nom) {
+    currentProductName = nom;
+    document.getElementById('pe-product-label').textContent = nom;
+    document.getElementById('prixExactFeedback').style.display = 'none';
+    document.getElementById('prixExactForm').reset();
+    openModal('prixExactModal');
+}
+
+async function handlePrixExact(e) {
+    e.preventDefault();
+    const fb  = document.getElementById('prixExactFeedback');
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi…';
+    const qty = document.getElementById('pe-quantite').value;
+    try {
+        const res = await fetch('https://jkaffpgqbyhuihvyvtld.supabase.co/rest/v1/contact_requests', {
+            method: 'POST',
+            headers: {
+                'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE2NTgzOTQsImV4cCI6MjA2NzIzNDM5NH0.OIjoz6uoPV25Nraral4YN_gz7q6COBW3dAVIYhBy1pI',
+                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE2NTgzOTQsImV4cCI6MjA2NzIzNDM5NH0.OIjoz6uoPV25Nraral4YN_gz7q6COBW3dAVIYhBy1pI',
+                'Content-Type': 'application/json', 'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify({
+                prenom: '', nom: '',
+                email:      document.getElementById('pe-email').value.trim(),
+                entreprise: document.getElementById('pe-entreprise').value.trim(),
+                sujet: 'quote',
+                message: `Demande de prix exact : ${qty} kg de ${currentProductName}`
+            })
+        });
+        if (!res.ok) throw new Error();
+        fb.style.display = 'block';
+        fb.innerHTML = '<div class="status-bar status-success"><i class="fas fa-check-circle"></i> Vous recevrez le prix exact sous 24h.</div>';
+        e.target.reset();
+    } catch {
+        fb.style.display = 'block';
+        fb.innerHTML = '<div class="status-bar status-danger"><i class="fas fa-exclamation-circle"></i> Erreur — réessayez ou contactez-nous par email.</div>';
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Obtenir mon prix exact';
+    }
+}
+
 // ── SUPABASE ──
 const SUPABASE_URL      = 'https://jkaffpgqbyhuihvyvtld.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE2NTgzOTQsImV4cCI6MjA2NzIzNDM5NH0.OIjoz6uoPV25Nraral4YN_gz7q6COBW3dAVIYhBy1pI';
 let supabaseClient;
 let currentExcipientId = 10;
+let currentMarketPrice = null;
+let currentExcipientName = '';
 
 document.addEventListener('DOMContentLoaded', () => {
     supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -270,6 +338,7 @@ async function loadAllData() {
             loadExcipientSuppliers(currentExcipientId)
         ]);
         if (!excipient) throw new Error('Excipient non trouvé (id=' + currentExcipientId + ')');
+        currentMarketPrice = marketPrice;
 
         displayProductBand(excipient);
         displayPrixComparatif(suppliers, marketPrice);
@@ -304,8 +373,26 @@ async function loadExcipientSuppliers(excipientId) {
 }
 
 function displayProductBand(exc) {
-    document.getElementById('breadcrumbName').textContent = exc.nom_commun || 'Produit';
-    document.title = `${exc.nom_commun} — ChemistrySpot`;
+    currentExcipientName = exc.nom_commun || 'Excipient';
+    document.getElementById('breadcrumbName').textContent = currentExcipientName;
+    document.title = `${currentExcipientName} — ChemistrySpot`;
+
+    const mp = currentMarketPrice;
+    const heroPriceHtml = mp ? (() => {
+        const min = parseFloat(mp.prix_min).toFixed(2).replace('.', ',');
+        const max = parseFloat(mp.prix_max).toFixed(2).replace('.', ',');
+        return `
+        <div class="hero-price-block">
+            <div class="hero-price-label">Fourchette de prix indicative</div>
+            <div class="hero-price-value">${min} – ${max} <span style="font-size:1.1rem;font-weight:600;">${mp.devise||'EUR'}/kg</span></div>
+            <div class="hero-price-sub">Estimation marché — prix exact sur demande</div>
+        </div>
+        <div>
+            <button class="btn-hero-prix" onclick="openPrixExact('${(exc.nom_commun||'').replace(/'/g,"\\'")}')">
+                <i class="fas fa-tag"></i> Obtenir prix exact pour mon volume
+            </button>
+        </div>`;
+    })() : `<div style="margin-top:1rem;"><button class="btn-hero-prix" onclick="openPrixExact('${(exc.nom_commun||'').replace(/'/g,"\\'")}')"><i class="fas fa-tag"></i> Obtenir prix exact pour mon volume</button></div>`;
 
     document.getElementById('productInfo').innerHTML = `
         <h1 style="font-size:2rem; font-weight:700; color:var(--text); margin-bottom:.3rem;">${exc.nom_commun || 'Excipient'}</h1>
@@ -319,7 +406,8 @@ function displayProductBand(exc) {
             ${exc.formule       ? `<div class="product-meta-item"><span class="product-meta-label">Formule</span><span class="product-meta-value">${exc.formule}</span></div>` : ''}
             ${exc.masse_molaire ? `<div class="product-meta-item"><span class="product-meta-label">Masse molaire</span><span class="product-meta-value">${exc.masse_molaire} g/mol</span></div>` : ''}
             ${exc.cid_pubchem   ? `<div class="product-meta-item"><span class="product-meta-label">PubChem CID</span><span class="product-meta-value">${exc.cid_pubchem}</span></div>` : ''}
-        </div>`;
+        </div>
+        ${heroPriceHtml}`;
 
     if (exc.cid_pubchem) {
         const imgUrl = `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/${exc.cid_pubchem}/PNG?image_size=300x300`;
@@ -394,7 +482,7 @@ function displayPrixComparatif(rows, marketPrice) {
             <td style="font-size:.82rem;color:var(--text-muted);">${r.delai_livraison||'—'}</td>
             <td>${stockBadge}</td>
             <td>${certsHtml(r.certifications)}</td>
-            <td><button class="btn-devis"><i class="fas fa-file-alt"></i> Devis</button></td>
+            <td><button class="btn-prix-exact" data-sup="${(sup.name||'').replace(/"/g,'&quot;')}"><i class="fas fa-tag"></i> Prix exact</button></td>
         </tr>`;
     }).join('');
 
@@ -412,6 +500,12 @@ function displayPrixComparatif(rows, marketPrice) {
             <i class="fas fa-info-circle"></i>
             Prix indicatifs en €/kg. Trié par prix min croissant. ${rows.length} fournisseur${rows.length>1?'s':''} référencé${rows.length>1?'s':''}.
         </div>`;
+    container.querySelectorAll('.btn-prix-exact').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const sup = btn.dataset.sup || '';
+            openPrixExact(currentExcipientName + (sup ? ' — ' + sup : ''));
+        });
+    });
 }
 
 // ── TAB 3: CARTES FOURNISSEURS ──
@@ -447,12 +541,18 @@ function displayFournisseurs(rows) {
             </div>
             <div class="supplier-card-footer">
                 ${websiteBtn}
-                <button class="btn-devis" style="flex:1;"><i class="fas fa-file-alt"></i> Demander devis</button>
+                <button class="btn-prix-exact" style="flex:1;" data-sup="${(sup.name||'').replace(/"/g,'&quot;')}"><i class="fas fa-tag"></i> Prix exact</button>
             </div>
         </div>`;
     }).join('');
 
     container.innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.25rem;">${cards}</div>`;
+    container.querySelectorAll('.btn-prix-exact').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const sup = btn.dataset.sup || '';
+            openPrixExact(currentExcipientName + (sup ? ' — ' + sup : ''));
+        });
+    });
 }
 
 // ── TABS ──
@@ -463,5 +563,33 @@ function switchTab(event, tabName) {
     document.getElementById('tab-' + tabName).classList.add('active');
 }
 </script>
+
+<!-- ══ MODAL : PRIX EXACT ══ -->
+<div id="prixExactModal" class="modal">
+    <div class="modal-box" style="max-width:440px;">
+        <button class="modal-close" onclick="closeModal('prixExactModal')">&times;</button>
+        <div class="modal-title"><i class="fas fa-tag"></i> Obtenir le prix exact</div>
+        <p style="font-size:.88rem;color:var(--text-muted);margin-bottom:1rem;">Recevez le prix exact pour votre volume sous 24h ouvrées.</p>
+        <div id="pe-product-label" style="background:var(--bg-surface);padding:.65rem 1rem;border-radius:var(--radius);margin-bottom:1.25rem;font-weight:600;color:var(--primary);font-size:.9rem;border-left:3px solid var(--primary);"></div>
+        <form id="prixExactForm" onsubmit="handlePrixExact(event)">
+            <div class="form-group">
+                <label class="form-label">Email professionnel *</label>
+                <input id="pe-email" type="email" class="form-input" required placeholder="jean.dupont@labo.com">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Quantité souhaitée (kg) *</label>
+                <input id="pe-quantite" type="number" min="1" step="1" class="form-input" required placeholder="ex : 500">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Entreprise *</label>
+                <input id="pe-entreprise" type="text" class="form-input" required placeholder="Laboratoire ABC">
+            </div>
+            <button type="submit" class="btn btn-primary w-full" style="margin-top:.5rem;">
+                <i class="fas fa-paper-plane"></i> Obtenir mon prix exact
+            </button>
+            <div id="prixExactFeedback" style="display:none;margin-top:1rem;"></div>
+        </form>
+    </div>
+</div>
 </body>
 </html>
