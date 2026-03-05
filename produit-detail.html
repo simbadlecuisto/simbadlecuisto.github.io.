@@ -18,9 +18,10 @@
     <meta name="twitter:description" content="Prix indicatif, classement marché, fournisseurs et analyse comparative pour cet excipient pharmaceutique.">
     <meta name="twitter:image" content="https://chemistryspot.com/og-image.png">
     <link rel="canonical" href="https://chemistryspot.com/produit-detail.html">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/design-system.css">
@@ -603,7 +604,7 @@ function displayProductBand(exc) {
         const imgUrl = `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/${exc.cid_pubchem}/PNG?image_size=300x300`;
         document.getElementById('productStructure').innerHTML = `
             <div class="structure-box">
-                <img src="${imgUrl}" alt="Structure chimique" onerror="this.parentElement.style.display='none'" style="max-width:100%; border-radius:var(--radius);">
+                <img src="${imgUrl}" alt="Structure 2D du ${exc.nom_commun || 'excipient'}" width="300" height="300" onerror="this.parentElement.style.display='none'" style="max-width:100%; border-radius:var(--radius);">
                 <div class="structure-label">Structure 2D — PubChem</div>
             </div>`;
     }
@@ -1109,6 +1110,8 @@ function updatePageMeta(exc, mp, supCount) {
 function injectJsonLd(exc, mp, suppliers) {
     const existing = document.getElementById('jsonld-product');
     if (existing) existing.remove();
+    const existingBc = document.getElementById('jsonld-breadcrumb');
+    if (existingBc) existingBc.remove();
 
     // AggregateOffer (fourchette multi-fournisseurs) — requis par Google pour une plage de prix
     const offers = mp ? {
@@ -1129,23 +1132,42 @@ function injectJsonLd(exc, mp, suppliers) {
         });
 
     // Image URL — structure PubChem si CID disponible, sinon placeholder OG
-    const imageUrl = exc.pubchem_cid
-        ? `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/${exc.pubchem_cid}/PNG`
+    const imageUrl = exc.cid_pubchem
+        ? `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/${exc.cid_pubchem}/PNG`
         : `https://chemistryspot.com/og-image.png`;
 
     const additionalProps = [];
     if (exc.formule_chimique) additionalProps.push({ "@type": "PropertyValue", "name": "Chemical Formula", "value": exc.formule_chimique });
     if (exc.cas_number)       additionalProps.push({ "@type": "PropertyValue", "name": "CAS Number",       "value": exc.cas_number });
 
+    const pageUrl = `https://chemistryspot.com/produit-detail.html?id=${exc.id}`;
+
+    if (offers) {
+        offers["seller"] = { "@type": "Organization", "name": "ChemistrySpot" };
+    }
+
     const jsonLd = {
         "@context": "https://schema.org",
         "@type": "Product",
+        "@id": pageUrl,
         "name": exc.nom_commun || "Excipient Pharmaceutique",
         "description": exc.description_fr || `Excipient pharmaceutique — CAS ${exc.cas_number || 'N/A'}`,
         "image": imageUrl,
+        "sku": exc.cas_number || undefined,
+        "brand": { "@type": "Brand", "name": "ChemistrySpot" },
         "additionalProperty": additionalProps.length ? additionalProps : undefined,
         "offers": offers,
         "manufacturer": manufacturers.length ? manufacturers : undefined
+    };
+
+    const breadcrumb = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://chemistryspot.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Catalogue", "item": "https://chemistryspot.com/catalogue.html" },
+            { "@type": "ListItem", "position": 3, "name": exc.nom_commun || "Excipient", "item": pageUrl }
+        ]
     };
 
     // Remove undefined keys
@@ -1155,6 +1177,12 @@ function injectJsonLd(exc, mp, suppliers) {
     script.type = 'application/ld+json';
     script.text = JSON.stringify(clean, null, 2);
     document.head.appendChild(script);
+
+    const bcScript = document.createElement('script');
+    bcScript.id   = 'jsonld-breadcrumb';
+    bcScript.type = 'application/ld+json';
+    bcScript.text = JSON.stringify(breadcrumb, null, 2);
+    document.head.appendChild(bcScript);
 }
 
 async function loadMarcheTab() {

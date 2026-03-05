@@ -4,19 +4,98 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catalogue Excipients Pharmaceutiques — ChemistrySpot</title>
-    <meta name="description" content="Catalogue de 50 excipients pharmaceutiques avec prix indicatifs, N° CAS, formules chimiques et fournisseurs référencés.">
-    <meta property="og:title" content="Catalogue Excipients — ChemistrySpot">
-    <meta property="og:description" content="50 excipients pharmaceutiques : lactose, HPMC, mannitol, povidone… Prix indicatifs et comparatif fournisseurs.">
+    <meta name="description" content="50 excipients pharmaceutiques : lactose, HPMC, mannitol, povidone. N° CAS, formules, prix indicatifs et comparatif fournisseurs.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://simbadlecuisto.github.io/catalogue.html">
-    <meta property="og:image" content="https://simbadlecuisto.github.io/og-image.png">
+    <meta property="og:url" content="https://chemistryspot.com/catalogue.html">
+    <meta property="og:title" content="Catalogue Excipients Pharmaceutiques — ChemistrySpot">
+    <meta property="og:description" content="50 excipients pharma avec N° CAS, formules, prix indicatifs et comparatif fournisseurs. Filtrez par catégorie.">
+    <meta property="og:image" content="https://chemistryspot.com/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     <meta name="twitter:card" content="summary_large_image">
-    <link rel="canonical" href="https://simbadlecuisto.github.io/catalogue.html">
+    <meta name="twitter:site" content="@chemistryspot">
+    <meta name="twitter:title" content="Catalogue Excipients Pharmaceutiques — ChemistrySpot">
+    <meta name="twitter:description" content="50 excipients pharma avec N° CAS, formules, prix indicatifs et comparatif fournisseurs. Filtrez par catégorie.">
+    <meta name="twitter:image" content="https://chemistryspot.com/og-image.png">
+    <link rel="canonical" href="https://chemistryspot.com/catalogue.html">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="./css/design-system.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://chemistryspot.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Catalogue Excipients", "item": "https://chemistryspot.com/catalogue.html" }
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "name": "Catalogue Excipients Pharmaceutiques",
+      "description": "50 excipients pharmaceutiques référencés — données PubChem NCBI, prix indicatifs et fournisseurs.",
+      "url": "https://chemistryspot.com/catalogue.html",
+      "numberOfItems": 50,
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1,  "url": "https://chemistryspot.com/produit-detail.html?id=10", "name": "Lactose" },
+        { "@type": "ListItem", "position": 2,  "url": "https://chemistryspot.com/produit-detail.html?id=11", "name": "Cellulose microcristalline" },
+        { "@type": "ListItem", "position": 3,  "url": "https://chemistryspot.com/produit-detail.html?id=12", "name": "Stéarate de magnésium" },
+        { "@type": "ListItem", "position": 4,  "url": "https://chemistryspot.com/produit-detail.html?id=13", "name": "Povidone" },
+        { "@type": "ListItem", "position": 5,  "url": "https://chemistryspot.com/produit-detail.html?id=14", "name": "Talc" },
+        { "@type": "ListItem", "position": 6,  "url": "https://chemistryspot.com/produit-detail.html?id=15", "name": "Dioxyde de titane" },
+        { "@type": "ListItem", "position": 7,  "url": "https://chemistryspot.com/produit-detail.html?id=16", "name": "Glycérol" },
+        { "@type": "ListItem", "position": 8,  "url": "https://chemistryspot.com/produit-detail.html?id=17", "name": "Eau purifiée" },
+        { "@type": "ListItem", "position": 9,  "url": "https://chemistryspot.com/produit-detail.html?id=18", "name": "Éthanol" },
+        { "@type": "ListItem", "position": 10, "url": "https://chemistryspot.com/produit-detail.html?id=19", "name": "Mannitol" },
+        { "@type": "ListItem", "position": 11, "url": "https://chemistryspot.com/produit-detail.html?id=20", "name": "Sorbitol" },
+        { "@type": "ListItem", "position": 12, "url": "https://chemistryspot.com/produit-detail.html?id=21", "name": "Amidon" },
+        { "@type": "ListItem", "position": 13, "url": "https://chemistryspot.com/produit-detail.html?id=22", "name": "Acide stéarique" },
+        { "@type": "ListItem", "position": 14, "url": "https://chemistryspot.com/produit-detail.html?id=23", "name": "Acide citrique" },
+        { "@type": "ListItem", "position": 15, "url": "https://chemistryspot.com/produit-detail.html?id=24", "name": "Saccharose" },
+        { "@type": "ListItem", "position": 16, "url": "https://chemistryspot.com/produit-detail.html?id=25", "name": "Propylène glycol" },
+        { "@type": "ListItem", "position": 17, "url": "https://chemistryspot.com/produit-detail.html?id=26", "name": "Alcool benzylique" },
+        { "@type": "ListItem", "position": 18, "url": "https://chemistryspot.com/produit-detail.html?id=27", "name": "Laurylsulfate de sodium" },
+        { "@type": "ListItem", "position": 19, "url": "https://chemistryspot.com/produit-detail.html?id=28", "name": "Stéarate de calcium" },
+        { "@type": "ListItem", "position": 20, "url": "https://chemistryspot.com/produit-detail.html?id=29", "name": "Phosphate dicalcique" },
+        { "@type": "ListItem", "position": 21, "url": "https://chemistryspot.com/produit-detail.html?id=30", "name": "Carbonate de calcium" },
+        { "@type": "ListItem", "position": 22, "url": "https://chemistryspot.com/produit-detail.html?id=31", "name": "Chlorure de sodium" },
+        { "@type": "ListItem", "position": 23, "url": "https://chemistryspot.com/produit-detail.html?id=32", "name": "Chlorure de potassium" },
+        { "@type": "ListItem", "position": 24, "url": "https://chemistryspot.com/produit-detail.html?id=33", "name": "Oxyde de zinc" },
+        { "@type": "ListItem", "position": 25, "url": "https://chemistryspot.com/produit-detail.html?id=34", "name": "Dioxyde de silicium colloïdal" },
+        { "@type": "ListItem", "position": 26, "url": "https://chemistryspot.com/produit-detail.html?id=35", "name": "Hydroxypropylcellulose" },
+        { "@type": "ListItem", "position": 27, "url": "https://chemistryspot.com/produit-detail.html?id=36", "name": "Hypromellose" },
+        { "@type": "ListItem", "position": 28, "url": "https://chemistryspot.com/produit-detail.html?id=37", "name": "Macrogol 4000" },
+        { "@type": "ListItem", "position": 29, "url": "https://chemistryspot.com/produit-detail.html?id=38", "name": "Polysorbate 80" },
+        { "@type": "ListItem", "position": 30, "url": "https://chemistryspot.com/produit-detail.html?id=39", "name": "Chlorure de benzalkonium" },
+        { "@type": "ListItem", "position": 31, "url": "https://chemistryspot.com/produit-detail.html?id=40", "name": "Croscarmellose sodique" },
+        { "@type": "ListItem", "position": 32, "url": "https://chemistryspot.com/produit-detail.html?id=41", "name": "Crospovidone" },
+        { "@type": "ListItem", "position": 33, "url": "https://chemistryspot.com/produit-detail.html?id=42", "name": "Glycolate d'amidon sodique" },
+        { "@type": "ListItem", "position": 34, "url": "https://chemistryspot.com/produit-detail.html?id=43", "name": "Gélatine" },
+        { "@type": "ListItem", "position": 35, "url": "https://chemistryspot.com/produit-detail.html?id=44", "name": "Gomme arabique" },
+        { "@type": "ListItem", "position": 36, "url": "https://chemistryspot.com/produit-detail.html?id=45", "name": "Gomme xanthane" },
+        { "@type": "ListItem", "position": 37, "url": "https://chemistryspot.com/produit-detail.html?id=46", "name": "Carboxyméthylcellulose sodique" },
+        { "@type": "ListItem", "position": 38, "url": "https://chemistryspot.com/produit-detail.html?id=47", "name": "Éthylcellulose" },
+        { "@type": "ListItem", "position": 39, "url": "https://chemistryspot.com/produit-detail.html?id=48", "name": "Shellac" },
+        { "@type": "ListItem", "position": 40, "url": "https://chemistryspot.com/produit-detail.html?id=49", "name": "Carbomère" },
+        { "@type": "ListItem", "position": 41, "url": "https://chemistryspot.com/produit-detail.html?id=50", "name": "Bicarbonate de sodium" },
+        { "@type": "ListItem", "position": 42, "url": "https://chemistryspot.com/produit-detail.html?id=51", "name": "Acide ascorbique" },
+        { "@type": "ListItem", "position": 43, "url": "https://chemistryspot.com/produit-detail.html?id=52", "name": "Alpha-tocophérol" },
+        { "@type": "ListItem", "position": 44, "url": "https://chemistryspot.com/produit-detail.html?id=53", "name": "Hydroxytoluène butylé" },
+        { "@type": "ListItem", "position": 45, "url": "https://chemistryspot.com/produit-detail.html?id=54", "name": "Méthylparabène" },
+        { "@type": "ListItem", "position": 46, "url": "https://chemistryspot.com/produit-detail.html?id=55", "name": "Propylparabène" },
+        { "@type": "ListItem", "position": 47, "url": "https://chemistryspot.com/produit-detail.html?id=56", "name": "Acide sorbique" },
+        { "@type": "ListItem", "position": 48, "url": "https://chemistryspot.com/produit-detail.html?id=57", "name": "Sorbate de potassium" },
+        { "@type": "ListItem", "position": 49, "url": "https://chemistryspot.com/produit-detail.html?id=58", "name": "Alcool cétylique" },
+        { "@type": "ListItem", "position": 50, "url": "https://chemistryspot.com/produit-detail.html?id=59", "name": "Huile minérale" }
+      ]
+    }
+    </script>
 </head>
 <body>
 
