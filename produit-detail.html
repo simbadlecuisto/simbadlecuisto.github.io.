@@ -253,14 +253,26 @@ document.addEventListener('DOMContentLoaded', () => {
     loadAllData();
 });
 
+async function loadMarketPrice(excipientId) {
+    const { data } = await supabaseClient
+        .from('prices')
+        .select('prix_min, prix_max, devise, source, date_maj')
+        .eq('excipient_id', excipientId)
+        .single();
+    return data || null;
+}
+
 async function loadAllData() {
     try {
-        const excipient = await loadExcipient(currentExcipientId);
+        const [excipient, marketPrice, suppliers] = await Promise.all([
+            loadExcipient(currentExcipientId),
+            loadMarketPrice(currentExcipientId),
+            loadExcipientSuppliers(currentExcipientId)
+        ]);
         if (!excipient) throw new Error('Excipient non trouvé (id=' + currentExcipientId + ')');
-        const suppliers = await loadExcipientSuppliers(currentExcipientId);
 
         displayProductBand(excipient);
-        displayPrixComparatif(suppliers);
+        displayPrixComparatif(suppliers, marketPrice);
         displayFournisseurs(suppliers);
 
         document.getElementById('loadingState').style.display = 'none';
@@ -339,10 +351,29 @@ function certsHtml(certs) {
 function fmt(val) { return val == null ? '—' : parseFloat(val).toFixed(2) + ' €'; }
 
 // ── TAB 1: PRIX COMPARATIF ──
-function displayPrixComparatif(rows) {
+function displayPrixComparatif(rows, marketPrice) {
     const container = document.getElementById('prixContent');
+
+    // Market reference price banner
+    let priceBanner = '';
+    if (marketPrice) {
+        const min = parseFloat(marketPrice.prix_min).toFixed(2);
+        const max = parseFloat(marketPrice.prix_max).toFixed(2);
+        const devLabel = marketPrice.devise || 'EUR';
+        const srcLabel = marketPrice.source === 'Estimate' ? ' <span style="opacity:.6;font-size:.8rem;">(estimation)</span>' : ` <span style="opacity:.6;font-size:.8rem;">(${marketPrice.source})</span>`;
+        const dateLabel = marketPrice.date_maj ? new Date(marketPrice.date_maj).toLocaleDateString('fr-FR') : '';
+        priceBanner = `
+        <div style="background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.4rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;">
+            <div>
+                <div style="font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.2rem;">Prix indicatif marché</div>
+                <div style="font-size:1.6rem;font-weight:700;font-family:var(--mono);color:var(--primary);">${min} – ${max} ${devLabel}/kg${srcLabel}</div>
+            </div>
+            ${dateLabel ? `<div style="font-size:.8rem;color:var(--text-dim);margin-left:auto;">Mis à jour : ${dateLabel}</div>` : ''}
+        </div>`;
+    }
+
     if (!rows || rows.length === 0) {
-        container.innerHTML = `<div class="empty-state"><i class="fas fa-box-open"></i><p>Aucun fournisseur référencé pour cet excipient.</p></div>`;
+        container.innerHTML = priceBanner + `<div class="empty-state"><i class="fas fa-box-open"></i><p>Aucun fournisseur référencé pour cet excipient.</p></div>`;
         return;
     }
     const tbody = rows.map(r => {
@@ -367,7 +398,7 @@ function displayPrixComparatif(rows) {
         </tr>`;
     }).join('');
 
-    container.innerHTML = `
+    container.innerHTML = priceBanner + `
         <div class="table-wrap">
             <table class="price-table">
                 <thead><tr>

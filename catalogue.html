@@ -198,6 +198,20 @@ document.getElementById('globalSearch').addEventListener('keydown', e => { if (e
 
 let allExcipients = [];
 let filteredExcipients = [];
+let pricesMap = {}; // excipient_id → {prix_min, prix_max, source}
+
+async function fetchPrices() {
+    const SUPABASE_URL = 'https://jkaffpgqbyhuihvyvtld.supabase.co';
+    const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE2NTgzOTQsImV4cCI6MjA2NzIzNDM5NH0.OIjoz6uoPV25Nraral4YN_gz7q6COBW3dAVIYhBy1pI';
+    try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/prices?select=excipient_id,prix_min,prix_max,source`, {
+            headers: { 'apikey': ANON_KEY, 'Authorization': `Bearer ${ANON_KEY}` }
+        });
+        if (!res.ok) return;
+        const rows = await res.json();
+        rows.forEach(r => { pricesMap[r.excipient_id] = r; });
+    } catch (e) { console.warn('Prix non chargés:', e); }
+}
 
 document.addEventListener('DOMContentLoaded', async () => {
     let attempts = 0;
@@ -212,7 +226,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (urlQ) document.getElementById('catalogSearchInput').value = urlQ;
 
     try {
-        allExcipients = await window.ChemSpotDB.getAllExcipients();
+        [allExcipients] = await Promise.all([
+            window.ChemSpotDB.getAllExcipients(),
+            fetchPrices()
+        ]);
         filteredExcipients = [...allExcipients];
         applyFilters();
     } catch (err) {
@@ -255,19 +272,12 @@ function guessGrade(exc) {
     return 'Pharm. Grade';
 }
 
-/* Price range hint (fallback static) */
-const PRICE_HINTS = {
-    'lactose': '0,80–1,20', 'cellulose': '1,50–2,80', 'mannitol': '3,00–5,00',
-    'sorbitol': '0,80–1,40', 'talc': '0,30–0,80', 'stéarate': '2,50–4,00',
-    'povidone': '8,00–15,00', 'polyvinyle': '8,00–15,00', 'hypromellose': '15,00–30,00',
-    'hyprox': '12,00–22,00', 'glycérol': '0,90–1,50', 'polysorbate': '6,00–10,00',
-};
-function getPriceHint(exc) {
-    const name = (exc.nom_commun || '').toLowerCase();
-    for (const [key, range] of Object.entries(PRICE_HINTS)) {
-        if (name.includes(key)) return `${range} €/kg`;
-    }
-    return null;
+function getPriceDisplay(exc) {
+    const p = pricesMap[exc.id];
+    if (!p) return null;
+    const min = parseFloat(p.prix_min).toFixed(2).replace('.', ',');
+    const max = parseFloat(p.prix_max).toFixed(2).replace('.', ',');
+    return `${min}–${max} €/kg`;
 }
 
 function displayExcipients() {
@@ -291,9 +301,10 @@ function displayExcipients() {
     if (statEl) statEl.textContent = filteredExcipients.length;
 
     grid.innerHTML = filteredExcipients.map(exc => {
-        const grade     = guessGrade(exc);
-        const priceHint = getPriceHint(exc);
+        const grade      = guessGrade(exc);
+        const priceDisp  = getPriceDisplay(exc);
         const gradeClass = grade.startsWith('Ph') ? 'badge-ph-eur' : 'badge-usp';
+        const srcLabel   = pricesMap[exc.id]?.source === 'Estimate' ? ' <small style="opacity:.6;">(est.)</small>' : '';
 
         return `
         <div class="product-card fade-in">
@@ -305,7 +316,7 @@ function displayExcipients() {
             </div>
             <div class="product-card-meta"><strong>Nom chimique :</strong> ${exc.nom_chimique || 'N/A'}</div>
             ${exc.formule ? `<div class="product-card-meta"><strong>Formule :</strong> ${exc.formule}</div>` : ''}
-            ${priceHint ? `<div class="product-card-price"><i class="fas fa-tag"></i> ${priceHint}</div>` : '<div class="product-card-price" style="color:var(--text-dim);">Prix sur demande</div>'}
+            ${priceDisp ? `<div class="product-card-price"><i class="fas fa-tag"></i> ${priceDisp}${srcLabel}</div>` : '<div class="product-card-price" style="color:var(--text-dim);">Prix sur demande</div>'}
             <div class="product-card-footer">
                 <button class="btn btn-primary btn-sm" onclick="viewExcipient(${exc.id})" style="flex:1;">
                     <i class="fas fa-eye"></i> Voir détails

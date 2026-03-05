@@ -89,40 +89,40 @@
                 <div class="section-title"><i class="fas fa-paper-plane"></i> Envoyez-nous un message</div>
                 <p class="text-muted mb-2" style="font-size:.88rem;">Réponse sous 24h ouvrées</p>
 
-                <form onsubmit="handleContact(event)">
+                <form id="contactForm" onsubmit="handleContact(event)">
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label">Prénom *</label>
-                            <input type="text" class="form-input" required placeholder="Jean">
+                            <input id="cf-prenom" type="text" class="form-input" required placeholder="Jean">
                         </div>
                         <div class="form-group">
                             <label class="form-label">Nom *</label>
-                            <input type="text" class="form-input" required placeholder="Dupont">
+                            <input id="cf-nom" type="text" class="form-input" required placeholder="Dupont">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label">Email *</label>
-                            <input type="email" class="form-input" required placeholder="jean.dupont@labo.com">
+                            <input id="cf-email" type="email" class="form-input" required placeholder="jean.dupont@labo.com">
                         </div>
                         <div class="form-group">
                             <label class="form-label">Téléphone</label>
-                            <input type="tel" class="form-input" placeholder="+33 1 23 45 67 89">
+                            <input id="cf-tel" type="tel" class="form-input" placeholder="+33 1 23 45 67 89">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label">Entreprise *</label>
-                            <input type="text" class="form-input" required placeholder="Laboratoire ABC">
+                            <input id="cf-entreprise" type="text" class="form-input" required placeholder="Laboratoire ABC">
                         </div>
                         <div class="form-group">
                             <label class="form-label">Poste</label>
-                            <input type="text" class="form-input" placeholder="Responsable Achats">
+                            <input id="cf-poste" type="text" class="form-input" placeholder="Responsable Achats">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Sujet *</label>
-                        <select class="form-input form-select" required>
+                        <select id="cf-sujet" class="form-input form-select" required>
                             <option value="">Sélectionnez un sujet</option>
                             <option value="general">Question générale</option>
                             <option value="quote">Demande de devis</option>
@@ -134,7 +134,7 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Message *</label>
-                        <textarea class="form-input form-textarea" rows="5" required placeholder="Décrivez votre demande..."></textarea>
+                        <textarea id="cf-message" class="form-input form-textarea" rows="5" required placeholder="Décrivez votre demande..."></textarea>
                     </div>
                     <div class="form-group">
                         <label class="checkbox-label">
@@ -298,12 +298,54 @@ function toggleFaq(el) {
     item.classList.toggle('open');
 }
 
-function handleContact(e) {
+async function handleContact(e) {
     e.preventDefault();
-    const fb = document.getElementById('formFeedback');
-    fb.style.display = 'block';
-    fb.innerHTML = '<div class="status-bar status-success"><i class="fas fa-check-circle"></i> Message envoyé ! Nous vous répondrons sous 24h ouvrées.</div>';
-    e.target.reset();
+    const fb  = document.getElementById('formFeedback');
+    const btn = e.target.querySelector('button[type="submit"]');
+
+    const payload = {
+        prenom:     document.getElementById('cf-prenom').value.trim(),
+        nom:        document.getElementById('cf-nom').value.trim(),
+        email:      document.getElementById('cf-email').value.trim(),
+        telephone:  document.getElementById('cf-tel').value.trim() || null,
+        entreprise: document.getElementById('cf-entreprise').value.trim(),
+        poste:      document.getElementById('cf-poste').value.trim() || null,
+        sujet:      document.getElementById('cf-sujet').value,
+        message:    document.getElementById('cf-message').value.trim(),
+    };
+
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi…';
+    fb.style.display = 'none';
+
+    try {
+        const SUPABASE_URL = 'https://jkaffpgqbyhuihvyvtld.supabase.co';
+        const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE2NTgzOTQsImV4cCI6MjA2NzIzNDM5NH0.OIjoz6uoPV25Nraral4YN_gz7q6COBW3dAVIYhBy1pI';
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/contact_requests`, {
+            method: 'POST',
+            headers: {
+                'apikey': ANON_KEY,
+                'Authorization': `Bearer ${ANON_KEY}`,
+                'Content-Type': 'application/json',
+                'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify(payload)
+        });
+        if (!res.ok) {
+            const err = await res.text();
+            throw new Error(`HTTP ${res.status}: ${err}`);
+        }
+        fb.style.display = 'block';
+        fb.innerHTML = '<div class="status-bar status-success"><i class="fas fa-check-circle"></i> Message envoyé ! Nous vous répondrons sous 24h ouvrées.</div>';
+        e.target.reset();
+    } catch (err) {
+        console.error('Contact form error:', err);
+        fb.style.display = 'block';
+        fb.innerHTML = '<div class="status-bar status-danger"><i class="fas fa-exclamation-circle"></i> Erreur lors de l\'envoi. Veuillez réessayer ou nous contacter par email.</div>';
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Envoyer le message';
+    }
 }
 function handleLogin(e) { e.preventDefault(); closeModal('loginModal'); }
 function handleRegister(e) { e.preventDefault(); closeModal('registerModal'); }
