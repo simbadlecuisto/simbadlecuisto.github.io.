@@ -1,0 +1,49 @@
+# ChemistrySpot
+
+> Marketplace B2B pour excipients pharmaceutiques. Prix indicatifs marché, 192 fournisseurs référencés dans 17 pays, et fiches techniques sourçées depuis PubChem NCBI et la Pharmacopée Européenne.
+
+ChemistrySpot est une plateforme francophone B2B ciblant les pharmaciens hospitaliers (PUI), les formulateurs industriels et les équipes achats pharmaceutiques. Elle ne vend pas directement les excipients — elle fournit des benchmarks de prix, une cartographie des fournisseurs et des données techniques de référence.
+
+## Données clés
+
+- 50 excipients pharmaceutiques référencés (IDs 10–59)
+- 192 fournisseurs dans 17 pays (Chine 86, USA 60, Ukraine 7, UK 5, France…)
+- 1 737 relations excipient–fournisseur
+- Prix indicatifs sourçés depuis PharmaCompass, ICIS et enquêtes fournisseurs
+- Données chimiques sourçées depuis PubChem NCBI (numéros CAS, formules moléculaires, CID)
+- Données réglementaires : conformité Ph.Eur., USP, JP, BP par excipient
+- Marché mondial des excipients pharmaceutiques : 6,8 milliards €, TCAC 4,8 % (2026)
+
+## Catégories d'excipients couvertes
+
+Diluants/Liants, Désintégrants, Lubrifiants, Enrobants, Conservateurs, Solvants, Surfactants, Antioxydants, Épaississants/Gélifiants, Opacifiants
+
+## Excipients clés (échantillon avec prix indicatifs, EUR/kg)
+
+- Lactose monohydraté (CAS 5989-81-1) : 0,80–1,20 €/kg — diluant/liant pour comprimés et gélules
+- Cellulose microcristalline / MCC (CAS 9004-34-6) : 1,50–2,80 €/kg — diluant-liant de référence pour compression directe
+- Mannitol (CAS 69-65-8) : 3,00–5,00 €/kg — diluant pour lyophilisation et compression directe
+- Hypromellose / HPMC (CAS 9004-65-3) : 15,00–30,00 €/kg — formateur de matrice, libération prolongée, enrobage pelliculaire
+- Polysorbate 80 / Tween 80 (CAS 9005-65-6) : 6,00–10,00 €/kg — surfactant non ionique, solubilisant
+- Povidone / PVP K30 (CAS 9003-39-8) : 4,00–8,00 €/kg — liant pour granulation humide
+- Croscarmellose sodique (CAS 74811-65-7) : 5,00–9,00 €/kg — superdésintégrant pour comprimés
+- Stéarate de magnésium (CAS 557-04-0) : 1,20–2,50 €/kg — lubrifiant pour compression de comprimés
+- Carbomère 974P (CAS 9003-01-4) : 12,00–25,00 €/kg — épaississant/gélifiant pour formes topiques et buccales
+- Laurylsulfate de sodium / SLS (CAS 151-21-3) : 1,50–3,00 €/kg — surfactant, agent mouillant
+
+## Pages
+
+- [Accueil / Terminal](https://chemistryspot.com/) : Indice de marché en direct, ticker de prix, gazette réglementaire, carte des prix top 10
+- [Catalogue](https://chemistryspot.com/catalogue.html) : Les 50 excipients avec CAS, formule, grade, fourchette de prix, filtrable par catégorie
+- [Fournisseurs](https://chemistryspot.com/fournisseurs.html) : 192 fournisseurs, filtrables par pays/excipient, avec fourchettes de prix par excipient
+- [Contact](https://chemistryspot.com/contact.html) : Formulaire de contact B2B et demande de prix
+
+## Fiches produit détaillées
+
+Les pages individuelles suivent le pattern `/produit-detail.html?id={N}` (N=10 à 59). Chaque page contient :
+- Fourchette de prix indicative (min–max €/kg)
+- Tableau comparatif fournisseurs (nom, pays, prix, certifications, délai, stock)
+- Analyse marché (classement parmi 50, moyenne marché, graphique de positionnement)
+- Données académiques : mécanisme fonctionnel, concentrations typiques, formes pharmaceutiques applicables, pharmacopées, contexte PUI/hospitalier, exemples de formulations
+- Veille réglementaire : directives ICH applicables (Q1A, Q3A-D, Q6A, Q7, Q8(R2), Q9, Q10), flux RSS FDA
+- Liens externes : PubChem CID, EDQM Ph.Eur., PubMed
