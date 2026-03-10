@@ -586,6 +586,7 @@ async function loadAllData() {
         displayFournisseurs(suppliers);
         updatePageMeta(excipient, marketPrice, suppliers.length);
         injectJsonLd(excipient, marketPrice, suppliers);
+        injectFaqJsonLd(excipient, marketPrice);
 
         document.getElementById('loadingState').style.display = 'none';
         document.getElementById('mainContent').style.display  = 'block';
@@ -1428,6 +1429,102 @@ function injectJsonLd(exc, mp, suppliers) {
     bcScript.type = 'application/ld+json';
     bcScript.text = JSON.stringify(breadcrumb, null, 2);
     document.head.appendChild(bcScript);
+}
+
+function injectFaqJsonLd(exc, mp) {
+    const existing = document.getElementById('jsonld-faq');
+    if (existing) existing.remove();
+
+    const name = exc.nom_commun || 'cet excipient';
+    const cas  = exc.cas_number ? ` (CAS ${exc.cas_number})` : '';
+
+    const rawForms  = exc.formes_pharmaceutiques;
+    const forms = Array.isArray(rawForms) ? rawForms
+        : (typeof rawForms === 'string' && rawForms ? rawForms.split(',').map(s => s.trim()) : []);
+
+    const rawPharma = exc.pharmacopees;
+    const pharmas = Array.isArray(rawPharma) ? rawPharma
+        : (typeof rawPharma === 'string' && rawPharma ? rawPharma.split(',').map(s => s.trim()) : []);
+
+    const entries = [];
+
+    // Q1 — Rôle fonctionnel
+    const role = exc.fonction_principale || exc.description_fr || exc.mecanisme;
+    if (role) {
+        const answer = exc.mecanisme
+            ? `${name}${cas} est un excipient pharmaceutique de type ${exc.fonction_principale || 'auxiliaire de formulation'}. ${exc.mecanisme}${exc.concentrations_typiques ? ' Concentrations typiques d\'utilisation : ' + exc.concentrations_typiques + '.' : ''}`
+            : `${name}${cas} est utilisé comme ${role} dans les formulations pharmaceutiques.`;
+        entries.push({
+            "@type": "Question",
+            "name": `Qu'est-ce que ${name} et quel est son rôle dans les formulations pharmaceutiques ?`,
+            "acceptedAnswer": { "@type": "Answer", "text": answer }
+        });
+    }
+
+    // Q2 — Formes pharmaceutiques
+    if (forms.length) {
+        entries.push({
+            "@type": "Question",
+            "name": `Dans quelles formes pharmaceutiques ${name} est-il utilisé ?`,
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": `${name} est utilisé dans les formes pharmaceutiques suivantes : ${forms.join(', ')}. Il est adapté aussi bien à la fabrication industrielle qu'aux préparations hospitalières (PUI).`
+            }
+        });
+    }
+
+    // Q3 — Concentrations typiques
+    if (exc.concentrations_typiques) {
+        entries.push({
+            "@type": "Question",
+            "name": `Quelles sont les concentrations typiques de ${name} dans les formulations ?`,
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": `Les concentrations typiques de ${name} dans les formulations pharmaceutiques sont : ${exc.concentrations_typiques}. Ces valeurs sont données à titre indicatif ; la concentration optimale dépend de la forme galénique et du procédé de fabrication.`
+            }
+        });
+    }
+
+    // Q4 — Pharmacopées
+    if (pharmas.length) {
+        entries.push({
+            "@type": "Question",
+            "name": `Quelles pharmacopées réglementent ${name} ?`,
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": `${name} est inscrit dans les pharmacopées suivantes : ${pharmas.join(', ')}. Ces monographies définissent les spécifications de pureté, les tests d'identification et les limites d'impuretés applicables à cet excipient.`
+            }
+        });
+    }
+
+    // Q5 — Prix marché
+    if (mp && mp.prix_min && mp.prix_max) {
+        const min = parseFloat(mp.prix_min).toFixed(2);
+        const max = parseFloat(mp.prix_max).toFixed(2);
+        const dev = mp.devise || 'EUR';
+        entries.push({
+            "@type": "Question",
+            "name": `Quel est le prix indicatif de ${name} sur le marché pharmaceutique ?`,
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": `Le prix indicatif de ${name} sur le marché est de ${min} à ${max} ${dev}/kg (données ChemistrySpot, sources : PharmaCompass, ICIS). Ce prix varie selon le grade, le fournisseur, la quantité commandée et les certifications requises (GMP, USP, Ph.Eur.).`
+            }
+        });
+    }
+
+    if (!entries.length) return;
+
+    const faq = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": entries
+    };
+
+    const script = document.createElement('script');
+    script.id   = 'jsonld-faq';
+    script.type = 'application/ld+json';
+    script.text = JSON.stringify(faq, null, 2);
+    document.head.appendChild(script);
 }
 
 async function loadMarcheTab() {
