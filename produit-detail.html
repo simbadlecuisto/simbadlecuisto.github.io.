@@ -198,6 +198,61 @@
     .resource-title { font-size: .88rem; font-weight: 600; line-height: 1.3; }
     .resource-desc  { font-size: .74rem; color: var(--text-muted); margin-top: .15rem; }
 
+    /* ── Tab Alertes ── */
+    .alert-section { margin-bottom: 2rem; }
+    .alert-section:last-child { margin-bottom: 0; }
+
+    .ich-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: .75rem; margin-top: .5rem; }
+    .ich-card {
+        background: var(--bg-surface); border: 1px solid var(--border);
+        border-radius: var(--radius); padding: .9rem 1.1rem; transition: var(--transition);
+    }
+    .ich-card:hover { border-color: rgba(0,212,170,.3); }
+    .ich-code  { font-family: var(--mono); font-size: .82rem; font-weight: 700; color: var(--primary); margin-bottom: .2rem; }
+    .ich-title { font-size: .83rem; font-weight: 600; color: var(--text); margin-bottom: .15rem; }
+    .ich-desc  { font-size: .76rem; color: var(--text-muted); }
+
+    .alert-feed { display: flex; flex-direction: column; gap: .75rem; }
+    .alert-item {
+        background: var(--bg-surface); border: 1px solid var(--border);
+        border-radius: var(--radius); padding: 1rem 1.25rem;
+        transition: var(--transition); display: flex; align-items: flex-start; gap: 1rem;
+    }
+    .alert-item:hover { border-color: rgba(79,195,247,.3); }
+    .alert-item-icon {
+        width: 2.25rem; height: 2.25rem; border-radius: var(--radius);
+        display: flex; align-items: center; justify-content: center;
+        flex-shrink: 0; font-size: .88rem; margin-top: .1rem;
+    }
+    .alert-icon-fda { background: rgba(59,130,246,.12); color: #3b82f6; }
+    .alert-icon-gen { background: rgba(136,146,164,.1);  color: var(--text-muted); }
+    .alert-item-body { flex: 1; min-width: 0; }
+    .alert-item-title { font-size: .88rem; font-weight: 600; color: var(--text); line-height: 1.4; margin-bottom: .2rem; }
+    .alert-item-title a { color: var(--text); text-decoration: none; }
+    .alert-item-title a:hover { color: var(--primary); }
+    .alert-item-meta { font-size: .76rem; color: var(--text-muted); display: flex; gap: .75rem; flex-wrap: wrap; }
+    .alert-source-fda { color: #3b82f6; font-weight: 600; }
+
+    .portals-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: .75rem; margin-top: .5rem; }
+    .portal-card {
+        background: var(--bg-surface); border: 1px solid var(--border);
+        border-radius: var(--radius); padding: 1rem 1.25rem;
+        text-decoration: none; color: var(--text);
+        transition: var(--transition); display: flex; align-items: center; gap: .75rem;
+    }
+    .portal-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+    .portal-icon {
+        width: 2.25rem; height: 2.25rem; border-radius: var(--radius);
+        display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: .88rem;
+    }
+    .portal-name { font-size: .88rem; font-weight: 700; margin-bottom: .2rem; }
+    .portal-desc { font-size: .75rem; color: var(--text-muted); line-height: 1.35; }
+
+    .alert-empty {
+        text-align: center; padding: 2rem 1.5rem; color: var(--text-muted); font-size: .88rem;
+    }
+    .alert-empty i { font-size: 2rem; margin-bottom: .75rem; display: block; color: var(--text-dim); }
+
     /* ── Section 6 : Formulations ── */
     .form-cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
     .form-card {
@@ -387,11 +442,9 @@
 
         <!-- Tab: Alertes -->
         <div id="tab-alertes" class="tab-panel">
-            <div class="empty-state">
-                <i class="fas fa-shield-alt"></i>
-                <p style="font-weight:600; color:var(--text);">Veille réglementaire en cours de déploiement</p>
-                <p>Alertes EMA, FDA, ICH et pharmacopées — Phase 2</p>
-                <span class="phase2-badge">Phase 2 — Q2 2026</span>
+            <div class="section-title"><i class="fas fa-bell"></i> Veille Réglementaire</div>
+            <div id="alertesContent">
+                <div class="loading-state"><div class="spin-lg"></div><p>Chargement de la veille réglementaire…</p></div>
             </div>
         </div>
 
@@ -499,6 +552,7 @@ let supabaseClient;
 let currentExcipientId = 10;
 let currentMarketPrice = null;
 let currentExcipientName = '';
+let currentExcipient = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -525,6 +579,7 @@ async function loadAllData() {
         ]);
         if (!excipient) throw new Error('Excipient non trouvé (id=' + currentExcipientId + ')');
         currentMarketPrice = marketPrice;
+        currentExcipient = excipient;
 
         displayProductBand(excipient);
         displayPrixComparatif(suppliers, marketPrice);
@@ -1073,7 +1128,197 @@ function switchTab(event, tabName) {
     document.querySelectorAll('.tab-panel').forEach(c => c.classList.remove('active'));
     event.currentTarget.classList.add('active');
     document.getElementById('tab-' + tabName).classList.add('active');
-    if (tabName === 'marche' && !marcheLoaded) loadMarcheTab();
+    if (tabName === 'marche'   && !marcheLoaded)   loadMarcheTab();
+    if (tabName === 'alertes'  && !alertesLoaded)  loadAlertesTab(currentExcipient);
+}
+
+// ── TAB ALERTES RÉGLEMENTAIRES ──
+let alertesLoaded = false;
+
+const ICH_BY_CAT = {
+    'Diluant':          ['Q8(R2)', 'Q7', 'Q6A', 'Q9'],
+    'Liant':            ['Q8(R2)', 'Q7', 'Q6A', 'Q9'],
+    'Diluant / Liant':  ['Q8(R2)', 'Q7', 'Q6A', 'Q9'],
+    'Lubrifiant':       ['Q8(R2)', 'Q9', 'Q7'],
+    'Désintégrant':     ['Q8(R2)', 'Q6A', 'Q7'],
+    'Agent délitant':   ['Q8(R2)', 'Q6A', 'Q7'],
+    'Enrobant':         ['Q1A(R2)', 'Q8(R2)', 'Q7', 'Q3B'],
+    'Conservateur':     ['Q3D', 'Q8(R2)', 'Q7'],
+    'Surfactant':       ['Q8(R2)', 'Q7', 'Q9'],
+    'Émulsifiant':      ['Q8(R2)', 'Q7', 'Q9'],
+    'Plastifiant':      ['Q8(R2)', 'Q3B', 'Q7'],
+    'Solubilisant':     ['Q8(R2)', 'Q7', 'Q9'],
+    'Solvant':          ['Q3C', 'Q8(R2)', 'Q7'],
+    'Antioxydant':      ['Q3A', 'Q8(R2)', 'Q7'],
+    'Édulcorant':       ['Q8(R2)', 'Q7', 'Q6A'],
+    'Colorant':         ['Q8(R2)', 'Q3B', 'Q7'],
+};
+const ICH_DEFAULT = ['Q8(R2)', 'Q7', 'Q9', 'Q10'];
+const ICH_INFO = {
+    'Q1A(R2)': { title: 'Stability Testing',          desc: 'New Drug Substances and Products' },
+    'Q3A':     { title: 'Impurities',                  desc: 'New Drug Substances' },
+    'Q3B':     { title: 'Impurities',                  desc: 'New Drug Products' },
+    'Q3C':     { title: 'Residual Solvents',           desc: 'Permissible limits & classification' },
+    'Q3D':     { title: 'Elemental Impurities',        desc: 'Risk-based approach & limits' },
+    'Q6A':     { title: 'Specifications',              desc: 'Test Procedures & Acceptance Criteria' },
+    'Q7':      { title: 'GMP Guide for APIs',          desc: 'Active Pharmaceutical Ingredients' },
+    'Q8(R2)':  { title: 'Pharmaceutical Development',  desc: 'Design space & QbD approach' },
+    'Q9':      { title: 'Quality Risk Management',     desc: 'Risk assessment & control strategies' },
+    'Q10':     { title: 'Pharmaceutical Quality System', desc: 'ICH quality system model' },
+};
+const PORTALS_DATA = [
+    { name: 'EMA',  icon: 'fa-stethoscope',      url: 'https://www.ema.europa.eu/en/medicines',              desc: 'Agence Européenne du Médicament', color: '#4fc3f7', bg: 'rgba(79,195,247,.12)' },
+    { name: 'FDA',  icon: 'fa-shield-alt',        url: 'https://www.fda.gov/drugs',                           desc: 'Food & Drug Administration USA',  color: '#3b82f6', bg: 'rgba(59,130,246,.12)' },
+    { name: 'EDQM', icon: 'fa-book-open',         url: 'https://www.edqm.eu/en/substances',                   desc: 'Dir. Européenne Qualité Médicament', color: '#9966ff', bg: 'rgba(153,102,255,.12)' },
+    { name: 'ICH',  icon: 'fa-gavel',             url: 'https://www.ich.org/page/quality-guidelines',         desc: 'Harmonisation guidelines Q, S, E, M', color: '#f0b429', bg: 'rgba(240,180,41,.12)' },
+];
+
+function getIchGuidelines(exc) {
+    const cat = (exc.categorie || exc.fonction_principale || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+    for (const [key, guidelines] of Object.entries(ICH_BY_CAT)) {
+        const normKey = key.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+        if (cat === normKey || cat.includes(normKey) || normKey.includes(cat)) return guidelines;
+    }
+    return ICH_DEFAULT;
+}
+
+function buildIchSection(exc) {
+    const guidelines = getIchGuidelines(exc);
+    const cards = guidelines.map(code => {
+        const info = ICH_INFO[code] || { title: code, desc: '' };
+        return `<div class="ich-card">
+            <div class="ich-code">ICH ${code}</div>
+            <div class="ich-title">${info.title}</div>
+            ${info.desc ? `<div class="ich-desc">${info.desc}</div>` : ''}
+        </div>`;
+    }).join('');
+
+    const rawPharma = exc.pharmacopees;
+    const pharmas = Array.isArray(rawPharma) ? rawPharma
+        : (typeof rawPharma === 'string' && rawPharma ? rawPharma.split(',').map(s => s.trim()) : []);
+    const pharmaRow = pharmas.length ? `
+        <div class="acad-field" style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border);">
+            <div class="acad-label">Monographies inscrites</div>
+            <div class="pharma-grid" style="margin-top:.5rem;">${pharmas.map(pharmaBadge).join('')}</div>
+        </div>` : '';
+
+    return `<div class="alert-section">
+        <div class="section-subtitle" style="font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.75rem;font-weight:600;">
+            <i class="fas fa-gavel" style="color:var(--primary);margin-right:.4rem;"></i>1 — Directives ICH Applicables
+        </div>
+        <div class="acad-card">
+            <div class="acad-label" style="margin-bottom:.75rem;">Guidelines recommandées pour cet excipient</div>
+            <div class="ich-grid">${cards}</div>
+            ${pharmaRow}
+        </div>
+    </div>`;
+}
+
+function buildPortalsSection(exc) {
+    const cards = PORTALS_DATA.map(p => `
+        <a href="${p.url}" target="_blank" rel="noopener" class="portal-card">
+            <div class="portal-icon" style="background:${p.bg};color:${p.color};"><i class="fas ${p.icon}"></i></div>
+            <div>
+                <div class="portal-name" style="color:${p.color};">${p.name}</div>
+                <div class="portal-desc">${p.desc}</div>
+            </div>
+        </a>`).join('');
+    const pubchemCard = exc.cid_pubchem ? `
+        <a href="https://pubchem.ncbi.nlm.nih.gov/compound/${exc.cid_pubchem}" target="_blank" rel="noopener" class="portal-card">
+            <div class="portal-icon" style="background:rgba(0,212,170,.12);color:#00d4aa;"><i class="fas fa-atom"></i></div>
+            <div>
+                <div class="portal-name" style="color:var(--primary);">PubChem</div>
+                <div class="portal-desc">CID ${exc.cid_pubchem} — données chimiques</div>
+            </div>
+        </a>` : '';
+    return `<div class="alert-section">
+        <div class="section-subtitle" style="font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.75rem;font-weight:600;">
+            <i class="fas fa-external-link-alt" style="color:var(--primary);margin-right:.4rem;"></i>3 — Portails Officiels
+        </div>
+        <div class="portals-grid">${cards}${pubchemCard}</div>
+    </div>`;
+}
+
+async function loadAlertFeed(exc) {
+    const container = document.getElementById('alertFeed');
+    if (!container) return;
+    try {
+        const fdaRss = 'https://www.fda.gov/about-fda/contact-fda/stay-informed/rss-feeds/recalls-market-withdrawals-safety-alerts/rss.xml';
+        const api = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(fdaRss)}&count=20`;
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), 9000);
+        const res  = await fetch(api, { signal: ctrl.signal });
+        clearTimeout(timer);
+        const json = await res.json();
+        const items = json.status === 'ok' ? (json.items || []) : [];
+
+        const strip = s => (s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+        const nameWords = strip(exc.nom_commun || '').split(/\s+/).filter(w => w.length >= 4);
+        const cas = exc.cas_number || '';
+
+        const matched = items.filter(item => {
+            const text = strip((item.title || '') + ' ' + (item.description || ''));
+            return (cas && text.includes(cas)) || nameWords.some(w => text.includes(w));
+        });
+        const isFiltered = matched.length > 0;
+        const display    = isFiltered ? matched.slice(0, 6) : items.slice(0, 5);
+
+        if (!display.length) {
+            container.innerHTML = `<div class="alert-empty">
+                <i class="fas fa-check-circle" style="color:var(--primary);"></i>
+                <p>Aucune alerte de rappel FDA spécifique trouvée pour cet excipient.</p>
+                <p style="font-size:.82rem;margin-top:.4rem;">Consultez directement les portails officiels ci-dessous pour une veille complète.</p>
+            </div>`; return;
+        }
+        const rows = display.map(item => {
+            const date  = item.pubDate ? new Date(item.pubDate).toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'}) : '';
+            const desc  = (item.description || '').replace(/<[^>]+>/g,'').trim().slice(0, 130);
+            const icon  = isFiltered ? 'alert-icon-fda' : 'alert-icon-gen';
+            return `<div class="alert-item">
+                <div class="alert-item-icon ${icon}"><i class="fas fa-shield-alt"></i></div>
+                <div class="alert-item-body">
+                    <div class="alert-item-title"><a href="${item.link || '#'}" target="_blank" rel="noopener">${item.title || 'Alerte sans titre'}</a></div>
+                    ${desc ? `<div style="font-size:.8rem;color:var(--text-muted);margin-top:.2rem;line-height:1.5;">${desc}…</div>` : ''}
+                    <div class="alert-item-meta">
+                        <span class="alert-source-fda">FDA</span>
+                        ${date ? `<span>${date}</span>` : ''}
+                        ${!isFiltered ? `<span style="color:var(--text-dim);">Actualité générale</span>` : ''}
+                    </div>
+                </div>
+            </div>`;
+        }).join('');
+        container.innerHTML = `<div class="alert-feed">${rows}</div>
+            ${!isFiltered ? `<p style="font-size:.79rem;color:var(--text-dim);text-align:center;margin-top:1rem;">Aucune alerte spécifique — affichage des 5 dernières alertes FDA générales.</p>` : ''}`;
+    } catch (e) {
+        container.innerHTML = `<div class="alert-empty">
+            <i class="fas fa-exclamation-triangle"></i>
+            <p>Flux RSS temporairement indisponible.</p>
+            <p style="font-size:.82rem;margin-top:.4rem;">Consultez <a href="https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts" target="_blank" style="color:var(--primary);">FDA.gov</a> directement.</p>
+        </div>`;
+    }
+}
+
+async function loadAlertesTab(exc) {
+    alertesLoaded = true;
+    const container = document.getElementById('alertesContent');
+    if (!exc) {
+        container.innerHTML = `<div class="acad-card"><p style="color:var(--text-muted);">Données excipient non disponibles.</p></div>`;
+        return;
+    }
+    container.innerHTML = `
+    ${buildIchSection(exc)}
+    <div class="alert-section">
+        <div class="section-subtitle" style="font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.75rem;font-weight:600;">
+            <i class="fas fa-rss" style="color:var(--primary);margin-right:.4rem;"></i>2 — Alertes &amp; Rappels FDA
+        </div>
+        <div class="acad-card">
+            <div id="alertFeed">
+                <div class="loading-state" style="padding:1.5rem 0;"><div class="spin-lg"></div><p>Chargement des alertes FDA…</p></div>
+            </div>
+        </div>
+    </div>
+    ${buildPortalsSection(exc)}`;
+    await loadAlertFeed(exc);
 }
 
 // ── TAB 2: ANALYSE MARCHÉ ──
