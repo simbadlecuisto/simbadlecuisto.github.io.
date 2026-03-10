@@ -587,6 +587,7 @@ async function loadAllData() {
         updatePageMeta(excipient, marketPrice, suppliers.length);
         injectJsonLd(excipient, marketPrice, suppliers);
         injectFaqJsonLd(excipient, marketPrice);
+        if (excipient.cid_pubchem) fetchAndInjectChemical(excipient); // non-blocking
 
         document.getElementById('loadingState').style.display = 'none';
         document.getElementById('mainContent').style.display  = 'block';
@@ -1525,6 +1526,58 @@ function injectFaqJsonLd(exc, mp) {
     script.type = 'application/ld+json';
     script.text = JSON.stringify(faq, null, 2);
     document.head.appendChild(script);
+}
+
+function injectChemicalSubstanceJsonLd(exc, p) {
+    const existing = document.getElementById('jsonld-chemical');
+    if (existing) existing.remove();
+
+    const name = exc.nom_commun || 'Excipient pharmaceutique';
+    const pageUrl = `https://chemistryspot.com/produit-detail.html?id=${exc.id}`;
+
+    const additionalProps = [];
+    if (p.InChIKey)        additionalProps.push({ "@type": "PropertyValue", "name": "InChIKey",          "value": p.InChIKey });
+    if (p.IsomericSMILES) additionalProps.push({ "@type": "PropertyValue", "name": "SMILES",            "value": p.IsomericSMILES });
+    if (p.MolecularWeight) additionalProps.push({ "@type": "PropertyValue", "name": "MolecularWeight",  "value": `${p.MolecularWeight} g/mol` });
+    if (exc.cas_number)   additionalProps.push({ "@type": "PropertyValue", "name": "CAS Number",        "value": exc.cas_number });
+
+    const chemical = {
+        "@context": "https://schema.org",
+        "@type": "ChemicalSubstance",
+        "name": name,
+        "url": pageUrl,
+        "sameAs": `https://pubchem.ncbi.nlm.nih.gov/compound/${exc.cid_pubchem}`,
+        "description": exc.description_fr || exc.mecanisme || `Excipient pharmaceutique — ${exc.fonction_principale || 'auxiliaire de formulation'}`,
+        "chemicalComposition": p.InChI || p.MolecularFormula || undefined,
+        "potentialUse": exc.fonction_principale ? {
+            "@type": "DefinedTerm",
+            "name": exc.fonction_principale
+        } : undefined,
+        "additionalProperty": additionalProps.length ? additionalProps : undefined
+    };
+
+    const clean = JSON.parse(JSON.stringify(chemical));
+    const script = document.createElement('script');
+    script.id   = 'jsonld-chemical';
+    script.type = 'application/ld+json';
+    script.text = JSON.stringify(clean, null, 2);
+    document.head.appendChild(script);
+}
+
+async function fetchAndInjectChemical(exc) {
+    try {
+        const props = 'InChI,InChIKey,IsomericSMILES,MolecularFormula,MolecularWeight';
+        const url   = `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/${exc.cid_pubchem}/property/${props}/JSON`;
+        const ctrl  = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), 8000);
+        const res   = await fetch(url, { signal: ctrl.signal });
+        clearTimeout(timer);
+        const json = await res.json();
+        const p    = json?.PropertyTable?.Properties?.[0];
+        if (p) injectChemicalSubstanceJsonLd(exc, p);
+    } catch (e) {
+        // Non-blocking — silently skip if PubChem unreachable
+    }
 }
 
 async function loadMarcheTab() {
