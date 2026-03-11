@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirection — ChemistrySpot</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg:      #0a0e1a;
+            --primary: #00d4aa;
+            --text:    #e8e8e8;
+            --muted:   #8892a4;
+            --card:    #111827;
+            --border:  rgba(255,255,255,.08);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg); color: var(--text);
+            min-height: 100vh; display: flex;
+            align-items: center; justify-content: center;
+        }
+        .box {
+            background: var(--card); border: 1px solid rgba(0,212,170,.2);
+            border-radius: 12px; padding: 2.5rem 2rem;
+            max-width: 400px; width: 90%; text-align: center;
+            box-shadow: 0 0 0 1px rgba(0,212,170,.06), 0 24px 48px rgba(0,0,0,.5);
+        }
+        .spinner-wrap { margin-bottom: 1.5rem; }
+        .spinner {
+            display: inline-block; width: 2.5rem; height: 2.5rem;
+            border: 3px solid rgba(0,212,170,.2);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin .8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        h2 { font-size: 1rem; font-weight: 600; margin-bottom: .4rem; }
+        .dest {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .75rem; color: var(--muted);
+            overflow: hidden; text-overflow: ellipsis;
+            white-space: nowrap; max-width: 320px;
+            display: inline-block; margin-top: .5rem;
+        }
+        .meta { font-size: .78rem; color: var(--muted); margin-top: 1rem; }
+        .manual-link { color: var(--primary); text-decoration: none; font-size: .82rem; }
+        .manual-link:hover { text-decoration: underline; }
+        .error-box {
+            background: rgba(255,77,77,.08); border: 1px solid rgba(255,77,77,.2);
+            border-radius: 8px; padding: 1rem; margin-top: 1rem;
+            font-size: .82rem; color: #ff8080; display: none;
+        }
+        @media (prefers-reduced-motion: reduce) { .spinner { animation: none; opacity: .5; } }
+    </style>
+</head>
+<body>
+<div class="box">
+    <div class="spinner-wrap"><div class="spinner"></div></div>
+    <h2>Redirection en cours…</h2>
+    <div class="dest" id="destLabel"></div>
+    <p class="meta">Vous allez être redirigé vers le fournisseur.<br>
+        <a class="manual-link" id="manualLink" href="#">Cliquez ici si la redirection ne fonctionne pas.</a>
+    </p>
+    <div class="error-box" id="errorBox"></div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://jkaffpgqbyhuihvyvtld.supabase.co';
+const ANON_KEY     = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE2NTgzOTQsImV4cCI6MjA2NzIzNDM5NH0.OIjoz6uoPV25Nraral4YN_gz7q6COBW3dAVIYhBy1pI';
+
+// ── Parse URL params ──────────────────────────────────────────
+const params     = new URLSearchParams(window.location.search);
+const excipientId  = params.get('excipient')   || null;   // integer
+const excipientNom = params.get('exc_nom')      || null;
+const fournisseurId  = params.get('fournisseur') || null;
+const fournisseurNom = params.get('four_nom')    || null;
+const grade          = params.get('grade')       || null;
+const urlDest        = params.get('url')         || null;
+const refSource      = params.get('ref')         || 'CS';
+
+// ── UI setup ─────────────────────────────────────────────────
+const label  = document.getElementById('destLabel');
+const link   = document.getElementById('manualLink');
+const errBox = document.getElementById('errorBox');
+
+if (urlDest) {
+    try {
+        const u = new URL(urlDest);
+        label.textContent = u.hostname + (u.pathname !== '/' ? u.pathname : '');
+    } catch {
+        label.textContent = urlDest.slice(0, 60);
+    }
+    link.href = urlDest;
+} else {
+    label.textContent = 'URL de destination manquante';
+    showError('Paramètre "url" manquant dans l\'URL de redirection.');
+}
+
+// ── Log click in Supabase ─────────────────────────────────────
+async function logClick() {
+    if (!urlDest) return;
+    const payload = {
+        excipient_id:      excipientId  ? parseInt(excipientId)  : null,
+        excipient_nom:     excipientNom,
+        fournisseur_id:    fournisseurId ? parseInt(fournisseurId) : null,
+        fournisseur_nom:   fournisseurNom,
+        grade_selectionne: grade,
+        url_destination:   urlDest,
+        user_agent:        navigator.userAgent.slice(0, 512),
+        ref_source:        refSource,
+    };
+    try {
+        await fetch(`${SUPABASE_URL}/rest/v1/clicks`, {
+            method:  'POST',
+            headers: {
+                'apikey':       ANON_KEY,
+                'Authorization': `Bearer ${ANON_KEY}`,
+                'Content-Type':  'application/json',
+                'Prefer':        'return=minimal',
+            },
+            body: JSON.stringify(payload),
+        });
+    } catch {
+        // non-bloquant — on redirige quand même
+    }
+}
+
+function showError(msg) {
+    errBox.textContent = '⚠ ' + msg;
+    errBox.style.display = 'block';
+}
+
+// ── Redirect after 800ms ─────────────────────────────────────
+(async () => {
+    if (!urlDest) return;
+
+    // Log + délai de 800ms en parallèle
+    await Promise.allSettled([
+        logClick(),
+        new Promise(r => setTimeout(r, 800)),
+    ]);
+
+    try {
+        const safe = new URL(urlDest);
+        // Sécurité : on accepte http et https uniquement
+        if (!['http:', 'https:'].includes(safe.protocol)) {
+            throw new Error('Protocole non autorisé : ' + safe.protocol);
+        }
+        window.location.href = safe.href;
+    } catch (e) {
+        showError('URL invalide ou non autorisée : ' + e.message);
+    }
+})();
+</script>
+</body>
+</html>
