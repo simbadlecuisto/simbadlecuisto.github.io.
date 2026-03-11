@@ -1,586 +1,309 @@
-// ========================================
-// AUTH.JS - SYSTÈME D'AUTHENTIFICATION CHEM SPOT
-// ========================================
+// ═══════════════════════════════════════════════════════════════
+// ChemistrySpot — auth.js v2
+// Auth Supabase réelle (Connexion / Inscription / Déconnexion)
+// À charger dans toutes les pages après supabase-js CDN.
+// Crée son propre client auth (partage la session localStorage).
+// ═══════════════════════════════════════════════════════════════
 
-// Variables d'authentification
-let currentUser = null;
-let authToken = null;
+(function () {
+    'use strict';
 
-// Configuration API
-const AUTH_CONFIG = {
-    baseUrl: '/api/auth',
-    tokenKey: 'chemspot_token',
-    userKey: 'chemspot_user'
-};
+    const SUPABASE_URL = 'https://jkaffpgqbyhuihvyvtld.supabase.co';
+    const ANON_KEY     = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE2NTgzOTQsImV4cCI6MjA2NzIzNDM5NH0.OIjoz6uoPV25Nraral4YN_gz7q6COBW3dAVIYhBy1pI';
 
-// Initialisation du système d'auth
-document.addEventListener('DOMContentLoaded', function() {
-    initializeAuth();
-    setupAuthEventListeners();
-});
+    let authClient = null;
 
-function initializeAuth() {
-    // Vérifier si l'utilisateur est déjà connecté
-    checkExistingAuth();
-    updateUIBasedOnAuth();
-}
+    // ── Global modal helpers (no-op override if already defined) ─────
+    if (!window.openModal)  window.openModal  = id => { const el = document.getElementById(id); if (el) el.classList.add('open');    };
+    if (!window.closeModal) window.closeModal = id => { const el = document.getElementById(id); if (el) el.classList.remove('open'); };
 
-function setupAuthEventListeners() {
-    // Empêcher la soumission par défaut des formulaires
-    document.addEventListener('submit', function(e) {
-        if (e.target.matches('#loginForm, #registerForm, #demoForm, #supplierForm, #contactForm')) {
-            e.preventDefault();
-            handleFormSubmission(e.target);
-        }
-    });
-}
+    // ── Inject login + register modals ────────────────────────────────
+    function injectAuthModals() {
+        if (document.getElementById('loginModal')) return;
 
-// Vérification de l'authentification existante
-function checkExistingAuth() {
-    const token = localStorage.getItem(AUTH_CONFIG.tokenKey);
-    const userData = localStorage.getItem(AUTH_CONFIG.userKey);
-    
-    if (token && userData) {
-        try {
-            authToken = token;
-            currentUser = JSON.parse(userData);
-            console.log('Utilisateur connecté:', currentUser.email);
-        } catch (error) {
-            console.error('Erreur lors de la lecture des données utilisateur:', error);
-            clearAuthData();
-        }
-    }
-}
-
-// Mise à jour de l'interface selon l'état d'authentification
-function updateUIBasedOnAuth() {
-    const headerActions = document.querySelector('.header-actions');
-    if (!headerActions) return;
-
-    if (currentUser) {
-        // Utilisateur connecté
-        headerActions.innerHTML = `
-            <div class="user-menu">
-                <button class="btn btn-outline btn-sm" onclick="toggleUserDropdown()">
-                    <i class="fas fa-user"></i> ${currentUser.firstName || currentUser.email}
-                    <i class="fas fa-chevron-down"></i>
-                </button>
-                <div class="user-dropdown" id="userDropdown">
-                    <a href="compte.html"><i class="fas fa-user-cog"></i> Mon compte</a>
-                    <a href="#" onclick="viewOrders()"><i class="fas fa-shopping-cart"></i> Mes commandes</a>
-                    <a href="#" onclick="viewQuotes()"><i class="fas fa-file-invoice"></i> Mes devis</a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+        document.body.insertAdjacentHTML('beforeend', `
+            <div id="loginModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="auth-login-title">
+                <div class="modal-box" style="max-width:400px;">
+                    <button class="modal-close" data-close="loginModal" aria-label="Fermer">&times;</button>
+                    <div class="modal-title" id="auth-login-title">
+                        <i class="fas fa-sign-in-alt"></i> Connexion
+                    </div>
+                    <form id="loginAuthForm">
+                        <div class="form-group">
+                            <label class="form-label" for="auth-email">Email</label>
+                            <input id="auth-email" type="email" class="form-input" required
+                                autocomplete="email" placeholder="jean.dupont@labo.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="auth-password">Mot de passe</label>
+                            <input id="auth-password" type="password" class="form-input" required
+                                autocomplete="current-password" placeholder="••••••••">
+                        </div>
+                        <div id="loginAuthError" style="display:none;margin-bottom:.75rem;" role="alert"></div>
+                        <button type="submit" id="loginAuthBtn" class="btn btn-primary w-full">
+                            <i class="fas fa-sign-in-alt"></i> Se connecter
+                        </button>
+                        <p style="text-align:center;margin-top:.75rem;font-size:.82rem;color:var(--text-muted);">
+                            Pas encore de compte ?
+                            <a href="#" data-switch-to="registerModal" style="color:var(--primary);">S'inscrire</a>
+                        </p>
+                    </form>
                 </div>
             </div>
-        `;
-    } else {
-        // Utilisateur non connecté
-        headerActions.innerHTML = `
-            <button class="btn btn-outline btn-sm" onclick="openModal('loginModal')">
-                <i class="fas fa-sign-in-alt"></i> Connexion
-            </button>
-            <button class="btn btn-primary btn-sm" onclick="openModal('registerModal')">
-                <i class="fas fa-user-plus"></i> Inscription
-            </button>
-        `;
-    }
-}
 
-// Gestion de la soumission des formulaires
-function handleFormSubmission(form) {
-    const formId = form.id || form.getAttribute('onsubmit')?.match(/handle(\w+)/)?.[1];
-    
-    switch (formId) {
-        case 'loginForm':
-        case 'Login':
-            handleLogin(form);
-            break;
-        case 'registerForm':
-        case 'Register':
-            handleRegister(form);
-            break;
-        case 'demoForm':
-        case 'Demo':
-            handleDemo(form);
-            break;
-        case 'supplierForm':
-        case 'SupplierApplication':
-            handleSupplierApplication(form);
-            break;
-        case 'contactForm':
-        case 'ContactForm':
-            handleContactForm(form);
-            break;
-        case 'appointmentForm':
-        case 'Appointment':
-            handleAppointment(form);
-            break;
-        default:
-            console.warn('Formulaire non reconnu:', formId);
-    }
-}
+            <div id="registerModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="auth-register-title">
+                <div class="modal-box" style="max-width:400px;">
+                    <button class="modal-close" data-close="registerModal" aria-label="Fermer">&times;</button>
+                    <div class="modal-title" id="auth-register-title">
+                        <i class="fas fa-user-plus"></i> Inscription
+                    </div>
+                    <form id="registerAuthForm">
+                        <div class="form-group">
+                            <label class="form-label" for="auth-reg-entreprise">Entreprise *</label>
+                            <input id="auth-reg-entreprise" type="text" class="form-input" required
+                                autocomplete="organization" placeholder="Laboratoire ABC">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="auth-reg-email">Email professionnel *</label>
+                            <input id="auth-reg-email" type="email" class="form-input" required
+                                autocomplete="email" placeholder="jean.dupont@labo.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="auth-reg-password">Mot de passe *</label>
+                            <input id="auth-reg-password" type="password" class="form-input" required
+                                autocomplete="new-password" placeholder="Minimum 6 caractères" minlength="6">
+                        </div>
+                        <div id="registerAuthError"   style="display:none;margin-bottom:.75rem;" role="alert"></div>
+                        <div id="registerAuthSuccess" style="display:none;margin-bottom:.75rem;" role="status"></div>
+                        <button type="submit" id="registerAuthBtn" class="btn btn-primary w-full">
+                            <i class="fas fa-user-plus"></i> Créer mon compte
+                        </button>
+                        <p style="text-align:center;margin-top:.75rem;font-size:.82rem;color:var(--text-muted);">
+                            Déjà un compte ?
+                            <a href="#" data-switch-to="loginModal" style="color:var(--primary);">Se connecter</a>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        `);
 
-// Gestion de la connexion
-function handleLogin(form) {
-    const formData = new FormData(form);
-    const email = formData.get('email') || form.querySelector('input[type="email"]').value;
-    const password = formData.get('password') || form.querySelector('input[type="password"]').value;
-    
-    if (!email || !password) {
-        showNotification('Veuillez remplir tous les champs', 'warning');
-        return;
-    }
-    
-    showNotification('Connexion en cours...', 'info');
-    
-    // Simulation d'appel API
-    simulateAuthRequest({
-        endpoint: '/login',
-        data: { email, password },
-        successCallback: (response) => {
-            handleLoginSuccess(response);
-            closeModal('loginModal');
-        },
-        errorCallback: (error) => {
-            showNotification(error.message || 'Erreur de connexion', 'error');
-        }
-    });
-}
+        // Event delegation — no global onclick needed in injected HTML
+        document.addEventListener('click', function (e) {
+            const closeBtn   = e.target.closest('[data-close]');
+            const switchLink = e.target.closest('[data-switch-to]');
 
-// Gestion de l'inscription
-function handleRegister(form) {
-    const formData = new FormData(form);
-    const data = {
-        company: formData.get('company') || form.querySelector('input[placeholder*="entreprise"], input[placeholder*="Laboratoire"]').value,
-        email: formData.get('email') || form.querySelector('input[type="email"]').value,
-        password: formData.get('password') || form.querySelector('input[type="password"]').value,
-        phone: formData.get('phone') || form.querySelector('input[type="tel"]').value,
-        type: formData.get('type') || 'buyer'
-    };
-    
-    if (!data.company || !data.email || !data.password) {
-        showNotification('Veuillez remplir tous les champs obligatoires', 'warning');
-        return;
-    }
-    
-    if (!isValidEmail(data.email)) {
-        showNotification('Veuillez saisir un email valide', 'warning');
-        return;
-    }
-    
-    if (data.password.length < 6) {
-        showNotification('Le mot de passe doit contenir au moins 6 caractères', 'warning');
-        return;
-    }
-    
-    showNotification('Création du compte en cours...', 'info');
-    
-    simulateAuthRequest({
-        endpoint: '/register',
-        data,
-        successCallback: (response) => {
-            handleRegisterSuccess(response);
-            closeModal('registerModal');
-        },
-        errorCallback: (error) => {
-            showNotification(error.message || 'Erreur lors de la création du compte', 'error');
-        }
-    });
-}
-
-// Gestion de la demande de démo
-function handleDemo(form) {
-    const formData = new FormData(form);
-    const data = {
-        name: formData.get('name') || form.querySelector('input[placeholder*="nom"], input[placeholder*="Nom"]').value,
-        company: formData.get('company') || form.querySelector('input[placeholder*="entreprise"], input[placeholder*="Entreprise"]').value,
-        email: formData.get('email') || form.querySelector('input[type="email"]').value,
-        phone: formData.get('phone') || form.querySelector('input[type="tel"]').value,
-        position: formData.get('position') || form.querySelector('input[placeholder*="poste"], input[placeholder*="Poste"]').value,
-        needs: formData.get('needs') || form.querySelector('textarea').value
-    };
-    
-    if (!data.name || !data.company || !data.email) {
-        showNotification('Veuillez remplir tous les champs obligatoires', 'warning');
-        return;
-    }
-    
-    if (!isValidEmail(data.email)) {
-        showNotification('Veuillez saisir un email valide', 'warning');
-        return;
-    }
-    
-    showNotification('Demande de démo en cours d\'envoi...', 'info');
-    
-    simulateRequest({
-        endpoint: '/demo-request',
-        data,
-        successCallback: () => {
-            showNotification('Demande de démo enregistrée ! Notre équipe vous contactera sous 24h.', 'success');
-            closeModal('demoModal');
-            form.reset();
-        },
-        errorCallback: (error) => {
-            showNotification('Erreur lors de l\'envoi de la demande', 'error');
-        }
-    });
-}
-
-// Gestion de la candidature fournisseur
-function handleSupplierApplication(form) {
-    const formData = new FormData(form);
-    
-    // Récupération des spécialités sélectionnées
-    const specialties = Array.from(form.querySelectorAll('input[type="checkbox"]:checked'))
-        .map(checkbox => checkbox.value);
-    
-    // Récupération des certifications
-    const certifications = Array.from(form.querySelectorAll('input[name="certifications"]:checked'))
-        .map(checkbox => checkbox.value);
-    
-    const data = {
-        company: formData.get('company') || form.querySelector('input[placeholder*="entreprise"]').value,
-        country: formData.get('country') || form.querySelector('select').value,
-        specialties,
-        certifications,
-        email: formData.get('email') || form.querySelector('input[type="email"]').value
-    };
-    
-    if (!data.company || !data.country || !data.email || specialties.length === 0) {
-        showNotification('Veuillez remplir tous les champs obligatoires', 'warning');
-        return;
-    }
-    
-    showNotification('Candidature en cours d\'envoi...', 'info');
-    
-    simulateRequest({
-        endpoint: '/supplier-application',
-        data,
-        successCallback: () => {
-            showNotification('Candidature envoyée avec succès ! Notre équipe d\'audit vous contactera sous 48h.', 'success');
-            closeModal('supplierModal');
-            form.reset();
-        },
-        errorCallback: (error) => {
-            showNotification('Erreur lors de l\'envoi de la candidature', 'error');
-        }
-    });
-}
-
-// Gestion du formulaire de contact
-function handleContactForm(form) {
-    const formData = new FormData(form);
-    const data = {
-        firstName: formData.get('firstName') || form.querySelector('input[placeholder*="prénom"], input[placeholder*="Prénom"]').value,
-        lastName: formData.get('lastName') || form.querySelector('input[placeholder*="nom"], input[placeholder*="Nom"]').value,
-        email: formData.get('email') || form.querySelector('input[type="email"]').value,
-        phone: formData.get('phone') || form.querySelector('input[type="tel"]').value,
-        company: formData.get('company') || form.querySelector('input[placeholder*="entreprise"], input[placeholder*="Entreprise"]').value,
-        subject: formData.get('subject') || form.querySelector('select').value,
-        message: formData.get('message') || form.querySelector('textarea').value
-    };
-    
-    if (!data.firstName || !data.lastName || !data.email || !data.company || !data.subject || !data.message) {
-        showNotification('Veuillez remplir tous les champs obligatoires', 'warning');
-        return;
-    }
-    
-    if (!isValidEmail(data.email)) {
-        showNotification('Veuillez saisir un email valide', 'warning');
-        return;
-    }
-    
-    showNotification('Envoi du message en cours...', 'info');
-    
-    simulateRequest({
-        endpoint: '/contact',
-        data,
-        successCallback: () => {
-            showNotification('Message envoyé avec succès ! Nous vous répondrons sous 24h.', 'success');
-            form.reset();
-        },
-        errorCallback: (error) => {
-            showNotification('Erreur lors de l\'envoi du message', 'error');
-        }
-    });
-}
-
-// Gestion de la prise de rendez-vous
-function handleAppointment(form) {
-    const formData = new FormData(form);
-    const data = {
-        name: formData.get('name') || form.querySelector('input[placeholder*="nom"]').value,
-        company: formData.get('company') || form.querySelector('input[placeholder*="entreprise"]').value,
-        email: formData.get('email') || form.querySelector('input[type="email"]').value,
-        type: formData.get('type') || form.querySelector('select').value,
-        message: formData.get('message') || form.querySelector('textarea').value
-    };
-    
-    if (!data.name || !data.company || !data.email || !data.type) {
-        showNotification('Veuillez remplir tous les champs obligatoires', 'warning');
-        return;
-    }
-    
-    showNotification('Planification du rendez-vous...', 'info');
-    
-    simulateRequest({
-        endpoint: '/appointment',
-        data,
-        successCallback: () => {
-            showNotification('Rendez-vous planifié ! Vous recevrez un email de confirmation.', 'success');
-            closeModal('demoModal');
-            form.reset();
-        }
-    });
-}
-
-// Succès de connexion
-function handleLoginSuccess(response) {
-    authToken = response.token;
-    currentUser = response.user;
-    
-    // Sauvegarder les données d'authentification
-    localStorage.setItem(AUTH_CONFIG.tokenKey, authToken);
-    localStorage.setItem(AUTH_CONFIG.userKey, JSON.stringify(currentUser));
-    
-    showNotification(`Bienvenue ${currentUser.firstName || currentUser.email} !`, 'success');
-    updateUIBasedOnAuth();
-    
-    // Redirection si nécessaire
-    if (currentUser.type === 'supplier') {
-        setTimeout(() => {
-            window.location.href = 'compte.html';
-        }, 2000);
-    }
-}
-
-// Succès d'inscription
-function handleRegisterSuccess(response) {
-    showNotification('Compte créé avec succès ! Un email de validation vous a été envoyé.', 'success');
-    
-    // Auto-connexion après inscription
-    if (response.autoLogin) {
-        setTimeout(() => {
-            handleLoginSuccess(response);
-        }, 1500);
-    }
-}
-
-// Déconnexion
-function logout() {
-    showNotification('Déconnexion en cours...', 'info');
-    
-    setTimeout(() => {
-        clearAuthData();
-        updateUIBasedOnAuth();
-        showNotification('Vous avez été déconnecté', 'success');
-        
-        // Redirection vers l'accueil
-        if (window.location.pathname !== '/' && window.location.pathname !== '/index.html') {
-            window.location.href = 'index.html';
-        }
-    }, 1000);
-}
-
-// Nettoyage des données d'authentification
-function clearAuthData() {
-    authToken = null;
-    currentUser = null;
-    localStorage.removeItem(AUTH_CONFIG.tokenKey);
-    localStorage.removeItem(AUTH_CONFIG.userKey);
-}
-
-// Menu utilisateur
-function toggleUserDropdown() {
-    const dropdown = document.getElementById('userDropdown');
-    if (dropdown) {
-        dropdown.classList.toggle('show');
-    }
-}
-
-// Fermer le dropdown si on clique ailleurs
-document.addEventListener('click', function(e) {
-    if (!e.target.closest('.user-menu')) {
-        const dropdown = document.getElementById('userDropdown');
-        if (dropdown) {
-            dropdown.classList.remove('show');
-        }
-    }
-});
-
-// Fonctions de simulation d'API
-function simulateAuthRequest({ endpoint, data, successCallback, errorCallback }) {
-    // Simulation d'un délai réseau
-    setTimeout(() => {
-        if (endpoint === '/login') {
-            // Simulation de connexion
-            if (data.email && data.password) {
-                const userData = {
-                    id: Math.random().toString(36).substr(2, 9),
-                    email: data.email,
-                    firstName: data.email.split('@')[0],
-                    company: 'Laboratoire Demo',
-                    type: 'buyer',
-                    verified: true
-                };
-                
-                successCallback({
-                    token: 'demo_token_' + Date.now(),
-                    user: userData
-                });
-            } else {
-                errorCallback({ message: 'Email ou mot de passe incorrect' });
+            if (closeBtn) {
+                window.closeModal(closeBtn.dataset.close);
+                return;
             }
-        } else if (endpoint === '/register') {
-            // Simulation d'inscription
-            const userData = {
-                id: Math.random().toString(36).substr(2, 9),
-                email: data.email,
-                firstName: data.company.split(' ')[0],
-                company: data.company,
-                type: data.type,
-                verified: false
-            };
-            
-            successCallback({
-                user: userData,
-                autoLogin: false
-            });
-        }
-    }, 1500 + Math.random() * 1000);
-}
+            if (switchLink) {
+                e.preventDefault();
+                const from = switchLink.closest('.modal')?.id;
+                const to   = switchLink.dataset.switchTo;
+                if (from) window.closeModal(from);
+                setTimeout(() => window.openModal(to), 150);
+                return;
+            }
+            if (e.target.matches('#loginModal, #registerModal')) {
+                e.target.classList.remove('open');
+            }
+        });
 
-function simulateRequest({ endpoint, data, successCallback, errorCallback }) {
-    setTimeout(() => {
-        // 95% de chance de succès
-        if (Math.random() > 0.05) {
-            successCallback({ success: true, data });
+        document.getElementById('loginAuthForm').addEventListener('submit',    handleSignIn);
+        document.getElementById('registerAuthForm').addEventListener('submit', handleSignUp);
+    }
+
+    // ── Update header auth section ────────────────────────────────────
+    function updateAuthUI(user) {
+        const div = document.querySelector('.header-actions');
+        if (!div) return;
+
+        if (user) {
+            const meta    = user.user_metadata || {};
+            const name    = meta.entreprise || user.email.split('@')[0];
+            const display = escapeHtml(name.length > 16 ? name.slice(0, 16) + '…' : name);
+            div.innerHTML = `
+                <span style="font-size:.82rem;color:var(--text-muted);display:flex;align-items:center;gap:.4rem;white-space:nowrap;">
+                    <i class="fas fa-user-circle" style="color:var(--primary);font-size:1rem;"></i>
+                    ${display}
+                </span>
+                <button class="btn btn-ghost btn-sm" id="signOutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Déconnexion
+                </button>
+            `;
+            document.getElementById('signOutBtn').addEventListener('click', handleSignOut);
         } else {
-            errorCallback({ message: 'Erreur de communication avec le serveur' });
+            div.innerHTML = `
+                <button class="btn btn-ghost btn-sm" id="openLoginBtn">
+                    <i class="fas fa-sign-in-alt"></i> Connexion
+                </button>
+                <button class="btn btn-primary btn-sm" id="openRegisterBtn">
+                    <i class="fas fa-user-plus"></i> Inscription
+                </button>
+            `;
+            document.getElementById('openLoginBtn').addEventListener('click',    () => window.openModal('loginModal'));
+            document.getElementById('openRegisterBtn').addEventListener('click', () => window.openModal('registerModal'));
         }
-    }, 1000 + Math.random() * 2000);
-}
-
-// Fonctions utilitaires
-function isValidEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-}
-
-function isValidPhone(phone) {
-    const phoneRegex = /^[\+]?[\d\s\-\(\)]{10,}$/;
-    return phoneRegex.test(phone);
-}
-
-// Fonctions pour les utilisateurs connectés
-function viewOrders() {
-    if (!currentUser) {
-        showNotification('Veuillez vous connecter pour accéder à vos commandes', 'warning');
-        openModal('loginModal');
-        return;
     }
-    
-    showNotification('Redirection vers vos commandes...', 'info');
-    // Redirection vers la page des commandes
-    window.location.href = 'compte.html#commandes';
-}
 
-function viewQuotes() {
-    if (!currentUser) {
-        showNotification('Veuillez vous connecter pour accéder à vos devis', 'warning');
-        openModal('loginModal');
-        return;
+    // ── Sign in ───────────────────────────────────────────────────────
+    async function handleSignIn(e) {
+        e.preventDefault();
+        const email    = document.getElementById('auth-email').value.trim();
+        const password = document.getElementById('auth-password').value;
+        const errDiv   = document.getElementById('loginAuthError');
+        const btn      = document.getElementById('loginAuthBtn');
+
+        errDiv.style.display = 'none';
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connexion…';
+
+        try {
+            const { error } = await authClient.auth.signInWithPassword({ email, password });
+            if (error) throw error;
+            window.closeModal('loginModal');
+            document.getElementById('loginAuthForm').reset();
+            showAuthStatus('✅ Connecté — bienvenue !', 'success');
+        } catch (err) {
+            errDiv.style.display = 'block';
+            errDiv.innerHTML = errorHtml(getAuthErrorFr(err.message));
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Se connecter';
+        }
     }
-    
-    showNotification('Redirection vers vos devis...', 'info');
-    // Redirection vers la page des devis
-    window.location.href = 'compte.html#devis';
-}
 
-// Vérification des permissions
-function requireAuth(callback) {
-    if (!currentUser) {
-        showNotification('Veuillez vous connecter pour accéder à cette fonctionnalité', 'warning');
-        openModal('loginModal');
-        return false;
+    // ── Sign up ───────────────────────────────────────────────────────
+    async function handleSignUp(e) {
+        e.preventDefault();
+        const email      = document.getElementById('auth-reg-email').value.trim();
+        const password   = document.getElementById('auth-reg-password').value;
+        const entreprise = document.getElementById('auth-reg-entreprise').value.trim();
+        const errDiv     = document.getElementById('registerAuthError');
+        const succDiv    = document.getElementById('registerAuthSuccess');
+        const btn        = document.getElementById('registerAuthBtn');
+
+        errDiv.style.display  = 'none';
+        succDiv.style.display = 'none';
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Création…';
+
+        try {
+            const { error } = await authClient.auth.signUp({
+                email, password,
+                options: { data: { entreprise } }
+            });
+            if (error) throw error;
+            succDiv.style.display = 'block';
+            succDiv.innerHTML = `<div class="status-bar status-success"><i class="fas fa-envelope"></i> Compte créé ! Vérifiez votre boîte mail pour confirmer votre adresse.</div>`;
+            document.getElementById('registerAuthForm').reset();
+            btn.innerHTML = '<i class="fas fa-check"></i> Confirmation envoyée';
+        } catch (err) {
+            errDiv.style.display = 'block';
+            errDiv.innerHTML = errorHtml(getAuthErrorFr(err.message));
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-user-plus"></i> Créer mon compte';
+        }
     }
-    
-    if (callback) {
-        callback();
+
+    // ── Sign out ──────────────────────────────────────────────────────
+    async function handleSignOut() {
+        try {
+            await authClient.auth.signOut();
+            showAuthStatus('👋 Déconnecté avec succès', 'info');
+        } catch (err) {
+            console.error('Erreur déconnexion:', err);
+        }
     }
-    return true;
-}
 
-function requireSupplierAuth(callback) {
-    if (!currentUser) {
-        showNotification('Veuillez vous connecter', 'warning');
-        openModal('loginModal');
-        return false;
+    // ── Helpers ───────────────────────────────────────────────────────
+    function getAuthErrorFr(msg) {
+        if (!msg) return 'Une erreur est survenue.';
+        if (msg.includes('Invalid login credentials'))          return 'Email ou mot de passe incorrect.';
+        if (msg.includes('Email not confirmed'))                return 'Email non confirmé — vérifiez votre boîte mail.';
+        if (msg.includes('User already registered'))            return 'Un compte existe déjà avec cet email.';
+        if (msg.includes('Password should be'))                 return 'Mot de passe trop court (minimum 6 caractères).';
+        if (msg.includes('rate limit') || msg.includes('too many')) return 'Trop de tentatives — réessayez dans quelques minutes.';
+        return 'Une erreur est survenue. Réessayez ou contactez-nous.';
     }
-    
-    if (currentUser.type !== 'supplier') {
-        showNotification('Accès réservé aux fournisseurs', 'warning');
-        return false;
+
+    function errorHtml(text) {
+        return `<div class="status-bar status-danger"><i class="fas fa-exclamation-circle"></i> ${escapeHtml(text)}</div>`;
     }
-    
-    if (callback) {
-        callback();
+
+    function escapeHtml(str) {
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
     }
-    return true;
-}
 
-// Export des fonctions pour utilisation globale
-window.ChemSpotAuth = {
-    handleLogin,
-    handleRegister,
-    handleDemo,
-    handleSupplierApplication,
-    handleContactForm,
-    handleAppointment,
-    logout,
-    toggleUserDropdown,
-    viewOrders,
-    viewQuotes,
-    requireAuth,
-    requireSupplierAuth,
-    getCurrentUser: () => currentUser,
-    isAuthenticated: () => !!currentUser
-};
+    function showAuthStatus(msg, type) {
+        if (typeof window.showStatus === 'function') { window.showStatus(msg, type); return; }
+        const colors = { success: '#22c55e', error: '#ef4444', info: '#4fc3f7', warning: '#f0b429' };
+        const toast = Object.assign(document.createElement('div'), {
+            textContent: msg,
+        });
+        Object.assign(toast.style, {
+            position: 'fixed', top: '20px', right: '20px',
+            padding: '12px 20px', borderRadius: '8px',
+            color: '#fff', fontWeight: '600', zIndex: '10000',
+            fontFamily: 'Inter, sans-serif', fontSize: '.88rem',
+            background: colors[type] || colors.info,
+            boxShadow: '0 4px 12px rgba(0,0,0,.3)',
+            transition: 'opacity .3s ease',
+        });
+        document.body.appendChild(toast);
+        setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3000);
+    }
 
-// Alias pour les gestionnaires de formulaires (rétrocompatibilité)
-window.handleLogin = function(event) {
-    if (event && event.preventDefault) event.preventDefault();
-    const form = event ? event.target : document.querySelector('#loginModal form');
-    handleLogin(form);
-};
+    // ── Keyboard: Escape closes modals ────────────────────────────────
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+            ['loginModal', 'registerModal'].forEach(id => window.closeModal(id));
+        }
+    });
 
-window.handleRegister = function(event) {
-    if (event && event.preventDefault) event.preventDefault();
-    const form = event ? event.target : document.querySelector('#registerModal form');
-    handleRegister(form);
-};
+    // ── Init ──────────────────────────────────────────────────────────
+    async function initAuth() {
+        let attempts = 0;
+        while (typeof window.supabase === 'undefined' && attempts < 30) {
+            await new Promise(r => setTimeout(r, 200));
+            attempts++;
+        }
+        if (typeof window.supabase === 'undefined') {
+            console.warn('[auth.js] Supabase JS not available');
+            return;
+        }
 
-window.handleDemo = function(event) {
-    if (event && event.preventDefault) event.preventDefault();
-    const form = event ? event.target : document.querySelector('#demoModal form');
-    handleDemo(form);
-};
+        authClient = window.supabase.createClient(SUPABASE_URL, ANON_KEY);
 
-window.handleSupplierApplication = function(event) {
-    if (event && event.preventDefault) event.preventDefault();
-    const form = event ? event.target : document.querySelector('#supplierModal form');
-    handleSupplierApplication(form);
-};
+        injectAuthModals();
 
-window.handleContactForm = function(event) {
-    if (event && event.preventDefault) event.preventDefault();
-    const form = event ? event.target : document.querySelector('.contact-form');
-    handleContactForm(form);
-};
+        // Auth state change (fires immediately with current session from localStorage)
+        authClient.auth.onAuthStateChange((_event, session) => {
+            updateAuthUI(session?.user || null);
+        });
 
-window.handleAppointment = function(event) {
-    if (event && event.preventDefault) event.preventDefault();
-    const form = event ? event.target : document.querySelector('#demoModal form');
-    handleAppointment(form);
-};
+        // Fast init from cached session
+        const { data: { session } } = await authClient.auth.getSession();
+        updateAuthUI(session?.user || null);
+    }
+
+    document.addEventListener('DOMContentLoaded', initAuth);
+
+    // Public API
+    window.ChemSpotAuth = {
+        signIn:  (email, pw)       => authClient?.auth.signInWithPassword({ email, password: pw }),
+        signUp:  (email, pw, meta) => authClient?.auth.signUp({ email, password: pw, options: { data: meta } }),
+        signOut: ()                => authClient?.auth.signOut(),
+        getUser: async ()          => {
+            if (!authClient) return null;
+            const { data: { session } } = await authClient.auth.getSession();
+            return session?.user || null;
+        },
+        isAuthenticated: async () => !!(await window.ChemSpotAuth.getUser()),
+    };
+
+})();

@@ -107,15 +107,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         console.log('✅ Client Supabase créé');
-        
+
         await loadExcipients();
-        
+
         if (typeof updateDashboardStats === 'function') {
             updateDashboardStats();
         }
-        
+
         showStatus('✅ Base de données connectée', 'success');
-        
+
     } catch (error) {
         console.error('❌ Erreur initialisation:', error);
         showStatus('❌ Erreur connexion base de données', 'error');
@@ -235,3 +235,4 @@ window.ChemSpotDB = {
 };
 
 console.log('✅ ChemSpotDB initialisé');
+// Auth géré par js/auth.js (chargé séparément dans chaque page)
