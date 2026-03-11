@@ -512,6 +512,7 @@ function openFournisseurPrixExact(name) {
     document.getElementById('fpeExactFeedback').style.display = 'none';
     document.getElementById('fpeExactForm').reset();
     openModal('fournisseurPrixExactModal');
+    setTimeout(() => document.getElementById('fpe-email').focus(), 50);
 }
 async function handleFournisseurPrixExact(e) {
     e.preventDefault();
@@ -560,29 +561,29 @@ async function handleFournisseurPrixExact(e) {
 </script>
 
 <!-- ══ MODAL : PRIX EXACT FOURNISSEUR ══ -->
-<div id="fournisseurPrixExactModal" class="modal">
+<div id="fournisseurPrixExactModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="fpe-title">
     <div class="modal-box" style="max-width:440px;">
-        <button class="modal-close" onclick="closeModal('fournisseurPrixExactModal')">&times;</button>
-        <div class="modal-title"><i class="fas fa-tag"></i> Obtenir le prix exact</div>
+        <button class="modal-close" onclick="closeModal('fournisseurPrixExactModal')" aria-label="Fermer">&times;</button>
+        <div class="modal-title" id="fpe-title"><i class="fas fa-tag"></i> Obtenir le prix exact</div>
         <p style="font-size:.88rem;color:var(--text-muted);margin-bottom:1rem;">Recevez le prix exact pour votre volume sous 24h ouvrées.</p>
         <div id="fpe-supplier-label" style="background:var(--bg-surface);padding:.65rem 1rem;border-radius:var(--radius);margin-bottom:1.25rem;font-weight:600;color:var(--primary);font-size:.9rem;border-left:3px solid var(--primary);"></div>
         <form id="fpeExactForm" onsubmit="handleFournisseurPrixExact(event)">
             <div class="form-group">
-                <label class="form-label">Email professionnel *</label>
-                <input id="fpe-email" type="email" class="form-input" required placeholder="jean.dupont@labo.com">
+                <label class="form-label" for="fpe-email">Email professionnel *</label>
+                <input id="fpe-email" type="email" class="form-input" required placeholder="jean.dupont@labo.com" autocomplete="email">
             </div>
             <div class="form-group">
-                <label class="form-label">Quantité souhaitée (kg) *</label>
+                <label class="form-label" for="fpe-quantite">Quantité souhaitée (kg) *</label>
                 <input id="fpe-quantite" type="number" min="1" step="1" class="form-input" required placeholder="ex : 500">
             </div>
             <div class="form-group">
-                <label class="form-label">Entreprise *</label>
-                <input id="fpe-entreprise" type="text" class="form-input" required placeholder="Laboratoire ABC">
+                <label class="form-label" for="fpe-entreprise">Entreprise *</label>
+                <input id="fpe-entreprise" type="text" class="form-input" required placeholder="Laboratoire ABC" autocomplete="organization">
             </div>
             <button type="submit" class="btn btn-primary w-full" style="margin-top:.5rem;">
                 <i class="fas fa-paper-plane"></i> Obtenir mon prix exact
             </button>
-            <div id="fpeExactFeedback" style="display:none;margin-top:1rem;"></div>
+            <div id="fpeExactFeedback" style="display:none;margin-top:1rem;" role="alert"></div>
         </form>
     </div>
 </div>

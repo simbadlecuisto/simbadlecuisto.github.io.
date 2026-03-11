@@ -13,13 +13,14 @@
     --danger:         #ff4d4d;
     --warning:        #f0b429;
     --info:           #4fc3f7;
-    --success:        #00d4aa;
+    --success:        #22c55e;
 
     --text:           #e8e8e8;
     --text-muted:     #8892a4;
     --text-dim:       #556070;
 
     --bg:             #0a0e1a;
+    --bg-main:        #0a0e1a;   /* alias for --bg */
     --bg-card:        #111827;
     --bg-surface:     #1a2332;
     --bg-hover:       #1e2d3d;
@@ -514,17 +515,26 @@ ul { list-style: none; }
    MODALS
 ══════════════════════════════════════════════════════════════ */
 .modal {
-    display: none;
+    display: flex;
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.7);
-    backdrop-filter: blur(4px);
+    background: rgba(0,0,0,0.72);
+    backdrop-filter: blur(6px);
     z-index: 2000;
     align-items: center;
     justify-content: center;
     padding: 1rem;
+    /* Transition instead of display toggle for smooth animation */
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
 }
-.modal.open { display: flex; }
+.modal.open {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+}
 .modal-box {
     background: var(--bg-card);
     border: 1px solid var(--border);
@@ -534,6 +544,17 @@ ul { list-style: none; }
     max-width: 480px;
     position: relative;
     box-shadow: var(--shadow-lg);
+    /* Entrance animation */
+    transform: scale(0.96) translateY(10px);
+    opacity: 0;
+    transition: transform 0.22s ease, opacity 0.22s ease;
+}
+.modal.open .modal-box {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+    .modal, .modal-box { transition: none; }
 }
 .modal-close {
     position: absolute;

@@ -35,11 +35,14 @@
         /* ── STATS ── */
         .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
         @media (max-width: 700px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
-        .stat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem 1rem; text-align: center; }
+        .stat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem 1rem; text-align: center; transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+        .stat-card:hover { border-color: rgba(0,212,170,.3); box-shadow: 0 0 0 1px rgba(0,212,170,.1); }
         .stat-card .sv { font-family: var(--mono); font-size: 2rem; font-weight: 700; color: var(--primary); }
         .stat-card .sl { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--text-muted); margin-top: .25rem; }
-        .stat-card.nouveau .sv { color: var(--warning,#f59e0b); }
-        .stat-card.traite  .sv { color: var(--success,#22c55e); }
+        .stat-card.nouveau .sv { color: #f59e0b; }
+        .stat-card.nouveau:hover { border-color: rgba(245,158,11,.3); box-shadow: 0 0 0 1px rgba(245,158,11,.08); }
+        .stat-card.traite  .sv { color: #22c55e; }
+        .stat-card.traite:hover  { border-color: rgba(34,197,94,.3); box-shadow: 0 0 0 1px rgba(34,197,94,.08); }
 
         /* ── FILTERS ── */
         .filter-row { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 1.5rem; align-items: center; }
@@ -52,8 +55,10 @@
         /* ── TABLE ── */
         .table-wrap { overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; font-size: .82rem; }
-        th { background: var(--bg-surface); color: var(--text-muted); text-transform: uppercase; letter-spacing: .07em; font-size: .7rem; padding: .65rem .75rem; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; cursor: pointer; user-select: none; }
+        th { background: var(--bg-surface); color: var(--text-muted); text-transform: uppercase; letter-spacing: .07em; font-size: .7rem; padding: .65rem .75rem; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; cursor: pointer; user-select: none; transition: color 0.15s ease; }
         th:hover { color: var(--primary); }
+        th.sort-active { color: var(--primary); }
+        th .sort-icon { font-size: .6rem; margin-left: .3rem; opacity: .6; }
         td { padding: .65rem .75rem; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: top; }
         tr:hover td { background: rgba(0,212,170,.03); }
         .td-date { font-family: var(--mono); font-size: .75rem; color: var(--text-muted); white-space: nowrap; }
@@ -84,7 +89,17 @@
         @keyframes spin { to { transform: rotate(360deg); } }
 
         /* ── TOAST ── */
-        #toast { position: fixed; bottom: 1.5rem; right: 1.5rem; background: var(--bg-card); border: 1px solid var(--primary); border-radius: var(--radius); padding: .65rem 1.1rem; font-size: .82rem; color: var(--primary); font-family: var(--mono); display: none; z-index: 9999; }
+        #toast {
+            position: fixed; bottom: 1.5rem; right: 1.5rem;
+            background: var(--bg-card); border: 1px solid var(--primary);
+            border-radius: var(--radius); padding: .65rem 1.1rem;
+            font-size: .82rem; color: var(--primary); font-family: var(--mono);
+            z-index: 9999;
+            opacity: 0; transform: translateY(8px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            pointer-events: none;
+        }
+        #toast.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
     </style>
 </head>
 <body>
@@ -95,7 +110,9 @@
         <div class="auth-logo">⬡ ChemistrySpot</div>
         <div class="auth-sub">Dashboard Admin — accès restreint</div>
         <div class="form-group">
-            <input id="pinInput" type="password" class="form-input" placeholder="Mot de passe" autocomplete="current-password"
+            <label for="pinInput" class="form-label" style="text-align:left">Mot de passe</label>
+            <input id="pinInput" type="password" class="form-input" placeholder="••••••••"
+                   autocomplete="current-password" autofocus
                    onkeydown="if(event.key==='Enter') checkPin()">
         </div>
         <button class="btn btn-primary w-full" onclick="checkPin()">
@@ -174,7 +191,7 @@
 
 </main>
 
-<div id="toast"></div>
+<div id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
 <script>
 // ── CONFIG ──────────────────────────────────────────────────
@@ -245,6 +262,21 @@ function setFilter(f, btn) {
 function sortBy(col) {
     if (sortCol === col) sortAsc = !sortAsc;
     else { sortCol = col; sortAsc = true; }
+    // Update th visual state
+    document.querySelectorAll('#reqTable th').forEach(th => {
+        th.classList.remove('sort-active');
+        const icon = th.querySelector('.sort-icon');
+        if (icon) icon.remove();
+    });
+    const cols = ['id','created_at','email','entreprise','sujet',null,'statut',null];
+    const idx = cols.indexOf(col);
+    if (idx !== -1) {
+        const ths = document.querySelectorAll('#reqTable th');
+        if (ths[idx]) {
+            ths[idx].classList.add('sort-active');
+            ths[idx].insertAdjacentHTML('beforeend', `<span class="sort-icon">${sortAsc ? '▲' : '▼'}</span>`);
+        }
+    }
     renderTable();
 }
 
@@ -336,13 +368,15 @@ async function updateStatut(id, newStatut) {
     }
 }
 
+let _toastTimer;
 function showToast(msg, isErr = false) {
     const t = document.getElementById('toast');
     t.textContent = msg;
-    t.style.display = 'block';
     t.style.borderColor = isErr ? 'var(--danger)' : 'var(--primary)';
     t.style.color       = isErr ? 'var(--danger)' : 'var(--primary)';
-    setTimeout(() => { t.style.display = 'none'; }, 2500);
+    t.classList.add('visible');
+    clearTimeout(_toastTimer);
+    _toastTimer = setTimeout(() => { t.classList.remove('visible'); }, 2800);
 }
 </script>
 
