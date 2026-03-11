@@ -1404,7 +1404,8 @@ function injectJsonLd(exc, mp, suppliers) {
         "brand": { "@type": "Brand", "name": "ChemistrySpot" },
         "additionalProperty": additionalProps.length ? additionalProps : undefined,
         "offers": offers,
-        "manufacturer": manufacturers.length ? manufacturers : undefined
+        "manufacturer": manufacturers.length ? manufacturers : undefined,
+        "dateModified": mp?.date_maj ? mp.date_maj.slice(0, 10) : "2026-03-05"
     };
 
     const breadcrumb = {

@@ -38,6 +38,12 @@ Diluants/Liants, Désintégrants, Lubrifiants, Enrobants, Conservateurs, Solvant
 - [Fournisseurs](https://chemistryspot.com/fournisseurs.html) : 192 fournisseurs, filtrables par pays/excipient, avec fourchettes de prix par excipient
 - [Contact](https://chemistryspot.com/contact.html) : Formulaire de contact B2B et demande de prix
 
+## Guides Formulateurs (contenu statique, indexable)
+
+- [Guide Compression Directe](https://chemistryspot.com/guide-compression-directe.html) : Comparaison MCC, lactose monohydraté, mannitol — mécanismes, grades, concentrations, tableau comparatif
+- [Guide Désintégrants](https://chemistryspot.com/guide-desintegrants-pharmaceutiques.html) : Croscarmellose sodique vs crospovidone vs SSG — mécanismes, dosages ODT, granulation humide
+- [Guide Lubrifiants](https://chemistryspot.com/guide-lubrifiants-pharmaceutiques.html) : Stéarate de magnésium, béhénate de glycéryle, talc, sodium stéaryl fumarate — sur-lubrification et sélection
+
 ## Fiches produit détaillées
 
 Les pages individuelles suivent le pattern `/produit-detail.html?id={N}` (N=10 à 59). Chaque page contient :

@@ -34,6 +34,24 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://chemistryspot.com/guide-compression-directe.html</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://chemistryspot.com/guide-desintegrants-pharmaceutiques.html</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://chemistryspot.com/guide-lubrifiants-pharmaceutiques.html</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://chemistryspot.com/produit-detail.html?id=10</loc>
     <lastmod>2026-03-05</lastmod>
     <changefreq>monthly</changefreq>
