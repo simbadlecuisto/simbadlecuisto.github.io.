@@ -37,6 +37,7 @@ Diluants/Liants, Désintégrants, Lubrifiants, Enrobants, Conservateurs, Solvant
 - [Catalogue](https://chemistryspot.com/catalogue.html) : Les 50 excipients avec CAS, formule, grade, fourchette de prix, filtrable par catégorie
 - [Fournisseurs](https://chemistryspot.com/fournisseurs.html) : 192 fournisseurs, filtrables par pays/excipient, avec fourchettes de prix par excipient
 - [Contact](https://chemistryspot.com/contact.html) : Formulaire de contact B2B et demande de prix
+- [Réglementation](https://chemistryspot.com/reglementation.html) : Cadre réglementaire des excipients pharmaceutiques — ANSM, EMA, ICH (Q7/Q8/Q9/Q10/Q3D), Pharmacopée Européenne, GMP, règlement EU 2017/745
 
 ## Guides Formulateurs (contenu statique, indexable)
 

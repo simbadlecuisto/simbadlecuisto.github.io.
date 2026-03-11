@@ -742,6 +742,16 @@ ul { list-style: none; }
     color: var(--text-dim);
     letter-spacing: 0.5px;
 }
+a.footer-cert {
+    text-decoration: none;
+    transition: var(--transition);
+    cursor: pointer;
+}
+a.footer-cert:hover {
+    background: rgba(0,212,170,.12);
+    border-color: rgba(0,212,170,.35);
+    color: var(--primary);
+}
 
 .footer-col h4 {
     font-size: 0.78rem;

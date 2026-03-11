@@ -282,6 +282,18 @@
     .price-bar-fill { height: 100%; border-radius: 2px; background: linear-gradient(to right, #00d4aa44, var(--primary)); }
     .prices-note { margin-top: 14px; font-family: var(--mono); font-size: 9.5px; color: #1e2730; text-align: right; line-height: 1.7; }
 
+    /* ══ STATS COUNTERS ══ */
+    .stats-counters { background: var(--bg-card); border-bottom: 1px solid var(--border); padding: .9rem 0; }
+    .stats-grid { display: flex; justify-content: center; flex-wrap: wrap; }
+    .stat-item { text-align: center; padding: .5rem 3rem; border-right: 1px solid var(--border); }
+    .stat-item:last-child { border-right: none; }
+    .stat-value { font-family: var(--mono); font-size: 1.5rem; font-weight: 700; color: var(--primary); display: block; min-width: 4ch; }
+    .stat-label { font-size: .68rem; text-transform: uppercase; letter-spacing: .09em; color: var(--text-muted); margin-top: .15rem; white-space: nowrap; }
+    @media (max-width: 600px) {
+        .stat-item { padding: .5rem 1.5rem; border-right: 1px solid var(--border); }
+        .stat-value { font-size: 1.2rem; }
+    }
+
     /* ══ RESPONSIVE ══════════════════════════════════════════════ */
     @media (max-width: 1100px) {
         .t-gazette { grid-template-columns: 1fr 1fr; }
@@ -323,6 +335,7 @@
             <a href="catalogue.html" class="nav-link">Catalogue</a>
             <a href="fournisseurs.html" class="nav-link">Fournisseurs</a>
             <a href="contact.html" class="nav-link">Contact</a>
+            <a href="reglementation.html" class="nav-link">Réglementation</a>
         </div>
     </nav>
 </header>
@@ -346,6 +359,30 @@
     <span>50 EXCIPIENTS INDEXÉS</span>
     <span class="t-spacer"></span>
     <span>PubChem &nbsp;·&nbsp; EMA &nbsp;·&nbsp; PharmaCompass &nbsp;·&nbsp; PubMed NCBI</span>
+</div>
+
+<!-- ══ STATS COUNTERS ══ -->
+<div class="stats-counters">
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span class="stat-value" id="statExcipients">—</span>
+                <div class="stat-label">Excipients référencés</div>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value" id="statFournisseurs">—</span>
+                <div class="stat-label">Fournisseurs actifs</div>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value" id="statRelations">—</span>
+                <div class="stat-label">Relations excipient / fournisseur</div>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value" id="statPays">—</span>
+                <div class="stat-label">Pays couverts</div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- ══ MAIN TERMINAL ══ -->
@@ -540,7 +577,7 @@
                 <div class="footer-certs">
                     <span class="footer-cert">GMP</span>
                     <span class="footer-cert">ISO 9001</span>
-                    <span class="footer-cert">ANSM</span>
+                    <a href="reglementation.html" class="footer-cert">ANSM</a>
                 </div>
             </div>
             <div class="footer-col">
@@ -733,12 +770,55 @@ function tickClock() {
     el.textContent = `${p(n.getHours())}:${p(n.getMinutes())}:${p(n.getSeconds())}`;
 }
 
+function animateCounter(id, target) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const duration = 1400;
+    const start = performance.now();
+    const update = now => {
+        const t = Math.min((now - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - t, 3);
+        el.textContent = Math.round(ease * target).toLocaleString('fr-FR');
+        if (t < 1) requestAnimationFrame(update);
+        else el.textContent = target.toLocaleString('fr-FR');
+    };
+    requestAnimationFrame(update);
+}
+
+async function loadStats() {
+    const SUPABASE_URL = 'https://jkaffpgqbyhuihvyvtld.supabase.co';
+    const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE2NTgzOTQsImV4cCI6MjA2NzIzNDM5NH0.OIjoz6uoPV25Nraral4YN_gz7q6COBW3dAVIYhBy1pI';
+    const hCount = { 'apikey': ANON_KEY, 'Authorization': `Bearer ${ANON_KEY}`, 'Prefer': 'count=exact' };
+    const hPlain = { 'apikey': ANON_KEY, 'Authorization': `Bearer ${ANON_KEY}` };
+    const parseCount = res => { const cr = res.headers.get('Content-Range'); return cr ? parseInt(cr.split('/')[1]) || 0 : 0; };
+    try {
+        const [excRes, supRes, relRes, cRes] = await Promise.all([
+            fetch(`${SUPABASE_URL}/rest/v1/excipients?select=id&limit=0`, { headers: hCount }),
+            fetch(`${SUPABASE_URL}/rest/v1/suppliers?select=id&limit=0`,  { headers: hCount }),
+            fetch(`${SUPABASE_URL}/rest/v1/excipient_suppliers?select=id&limit=0`, { headers: hCount }),
+            fetch(`${SUPABASE_URL}/rest/v1/suppliers?select=country`, { headers: hPlain })
+        ]);
+        const countries = await cRes.json();
+        const pays = new Set((countries || []).map(r => r.country).filter(Boolean)).size;
+        animateCounter('statExcipients', parseCount(excRes) || 50);
+        animateCounter('statFournisseurs', parseCount(supRes) || 192);
+        animateCounter('statRelations', parseCount(relRes) || 1737);
+        animateCounter('statPays', pays || 17);
+    } catch (e) {
+        animateCounter('statExcipients', 50);
+        animateCounter('statFournisseurs', 192);
+        animateCounter('statRelations', 1737);
+        animateCounter('statPays', 17);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     buildTicker();
     document.getElementById('spk-cs30').innerHTML = makeSpark(+0.82);
     document.getElementById('spk-cel').innerHTML  = makeSpark(-0.43);
     document.getElementById('spk-suc').innerHTML  = makeSpark(+1.12);
     buildPriceTable();
+    loadStats();
     tickClock();
     setInterval(tickClock, 1000);
 });
