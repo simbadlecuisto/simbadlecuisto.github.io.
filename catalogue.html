@@ -103,439 +103,230 @@
     </script>
 
     <style>
-    /* ── Catalogue Layout ───────────────────────────────────────── */
+    /* ── Catalogue Layout ────────────────────────────────────────── */
     .catalogue-layout {
         display: flex;
-        gap: 1.5rem;
+        gap: 0;
         align-items: flex-start;
     }
 
-    /* ── Filter Sidebar ─────────────────────────────────────────── */
+    /* ── Filter Sidebar — Sigma-Aldrich style ────────────────────── */
     .filter-sidebar {
-        width: 264px;
+        width: 260px;
         flex-shrink: 0;
         position: sticky;
-        top: 90px;
-        max-height: calc(100vh - 110px);
+        top: 80px;
+        max-height: calc(100vh - 96px);
         overflow-y: auto;
+        background: #0d1117;
+        border-right: 1px solid #1e2a3a;
         scrollbar-width: thin;
-        scrollbar-color: var(--border) transparent;
+        scrollbar-color: #1e2a3a transparent;
     }
-    .filter-sidebar::-webkit-scrollbar { width: 4px; }
-    .filter-sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+    .filter-sidebar::-webkit-scrollbar { width: 3px; }
+    .filter-sidebar::-webkit-scrollbar-thumb { background: #1e2a3a; }
 
-    .sidebar-card {
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-lg);
-        padding: 1rem;
-        margin-bottom: 0.75rem;
-    }
-    .sidebar-title {
-        font-size: .78rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: .06em;
-        color: var(--text-muted);
-        margin-bottom: .75rem;
-        display: flex;
-        align-items: center;
-        gap: .5rem;
-    }
-    .sidebar-title i { color: var(--primary); font-size: .75rem; }
-
-    /* Stock toggle */
-    .toggle-row {
+    /* Sidebar stock toggle (top bar) */
+    .sidebar-stock-row {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        font-size: .88rem;
+        padding: .65rem 1rem;
+        border-bottom: 1px solid #1e2a3a;
+        font-size: .82rem;
+        color: #c8d6e5;
     }
-    .toggle-switch {
-        position: relative;
-        width: 36px;
-        height: 20px;
-        flex-shrink: 0;
-    }
+    /* Toggle switch */
+    .toggle-switch { position: relative; width: 34px; height: 18px; flex-shrink: 0; }
     .toggle-switch input { opacity: 0; width: 0; height: 0; position: absolute; }
     .toggle-track {
-        position: absolute;
-        inset: 0;
-        background: var(--bg-surface);
-        border: 1px solid var(--border);
-        border-radius: 99px;
-        cursor: pointer;
-        transition: background .2s;
+        position: absolute; inset: 0;
+        background: #1e2a3a; border-radius: 99px; cursor: pointer;
+        transition: background .2s; border: 1px solid #2a3a50;
     }
     .toggle-track::after {
-        content: '';
-        position: absolute;
-        left: 2px;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 14px;
-        height: 14px;
-        background: var(--text-muted);
-        border-radius: 50%;
+        content: ''; position: absolute; left: 2px; top: 50%;
+        transform: translateY(-50%); width: 12px; height: 12px;
+        background: #5a6a7a; border-radius: 50%;
         transition: transform .2s, background .2s;
     }
-    .toggle-switch input:checked + .toggle-track { background: var(--primary); border-color: var(--primary); }
-    .toggle-switch input:checked + .toggle-track::after {
-        transform: translateX(16px) translateY(-50%);
-        background: #fff;
-    }
+    .toggle-switch input:checked + .toggle-track { background: #00d4aa; border-color: #00d4aa; }
+    .toggle-switch input:checked + .toggle-track::after { transform: translateX(16px) translateY(-50%); background: #000; }
 
-    /* Pill checkboxes */
-    .pill-group {
-        display: flex;
-        flex-wrap: wrap;
-        gap: .4rem;
+    /* Accordion sections */
+    .filter-section { border-bottom: 1px solid #1e2a3a; }
+    .filter-section-header {
+        display: flex; align-items: center; width: 100%;
+        padding: .6rem 1rem; background: transparent; border: none;
+        cursor: pointer; text-align: left; gap: .5rem; transition: background .1s;
     }
-    .pill-label {
-        display: inline-flex;
-        align-items: center;
-        gap: .3rem;
-        padding: .28rem .7rem;
-        border-radius: 99px;
-        border: 1px solid var(--border);
-        background: var(--bg-surface);
-        font-size: .78rem;
-        color: var(--text-muted);
-        cursor: pointer;
-        transition: all .15s ease;
-        user-select: none;
+    .filter-section-header:hover { background: #0a1628; }
+    .fs-label { flex: 1; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: #8899aa; }
+    .fs-count { font-size: 11px; color: #5a6a7a; font-family: var(--mono); }
+    .fs-chevron { font-size: 9px; color: #5a6a7a; transition: transform .2s; flex-shrink: 0; }
+    .filter-section.open .fs-chevron { transform: rotate(180deg); }
+    .filter-section-body { max-height: 0; overflow: hidden; transition: max-height .25s ease; }
+    .filter-section.open .filter-section-body { max-height: 600px; }
+
+    /* Checkbox rows */
+    .filter-row {
+        display: flex; align-items: center; gap: .55rem;
+        padding: .3rem 1rem; cursor: pointer; transition: background .1s; user-select: none;
     }
-    .pill-label:hover { border-color: var(--primary); color: var(--primary); }
-    .pill-label input { display: none; }
-    .pill-label.active {
-        background: rgba(0,212,170,.12);
-        border-color: var(--primary);
-        color: var(--primary);
-        font-weight: 500;
+    .filter-row:hover { background: #0a1628; }
+    .filter-row input[type="checkbox"] { accent-color: #00d4aa; width: 13px; height: 13px; cursor: pointer; flex-shrink: 0; }
+    .filter-row-label { font-size: .82rem; color: #c8d6e5; flex: 1; }
+    .filter-row.checked .filter-row-label { color: #00d4aa; }
+
+    /* Grade search */
+    .grade-search-wrap { padding: .5rem 1rem .25rem; }
+    .grade-search-input {
+        width: 100%; background: #060d14; border: 1px solid #1e2a3a;
+        border-radius: 4px; padding: .35rem .6rem;
+        color: #c8d6e5; font-size: .8rem; font-family: var(--sans);
+        outline: none; transition: border-color .15s; box-sizing: border-box;
     }
+    .grade-search-input:focus { border-color: #00d4aa; }
+    .grade-search-input::placeholder { color: #3a4a5a; }
+    .grade-list { padding: .25rem 0 .5rem; }
+    .grade-item {
+        padding: .25rem 1rem; font-size: .78rem; color: #8899aa;
+        font-family: var(--mono); cursor: pointer; transition: background .1s, color .1s;
+    }
+    .grade-item:hover { background: #0a1628; color: #00d4aa; }
+    .grade-item.selected { color: #00d4aa; font-weight: 600; }
 
     /* Range slider */
-    .range-container { padding: .25rem 0 .5rem; }
-    .range-values {
-        display: flex;
-        justify-content: space-between;
-        font-size: .75rem;
-        color: var(--text-muted);
-        margin-bottom: .5rem;
-        font-family: var(--mono);
-    }
-    .range-values span { color: var(--primary); font-weight: 500; }
-    .dual-range-wrap {
-        position: relative;
-        height: 28px;
-        display: flex;
-        align-items: center;
-    }
-    .range-track-bg {
-        position: absolute;
-        left: 0; right: 0;
-        height: 4px;
-        background: var(--bg-surface);
-        border-radius: 2px;
-        border: 1px solid var(--border);
-    }
-    .range-track-fill {
-        position: absolute;
-        height: 4px;
-        background: var(--primary);
-        border-radius: 2px;
-    }
+    .range-container { padding: .5rem 1rem .75rem; }
+    .range-values { display: flex; justify-content: space-between; font-size: .75rem; color: #5a6a7a; margin-bottom: .5rem; font-family: var(--mono); }
+    .range-values span { color: #00d4aa; font-weight: 600; }
+    .dual-range-wrap { position: relative; height: 24px; display: flex; align-items: center; }
+    .range-track-bg { position: absolute; left: 0; right: 0; height: 3px; background: #1e2a3a; border-radius: 2px; }
+    .range-track-fill { position: absolute; height: 3px; background: #00d4aa; border-radius: 2px; pointer-events: none; }
     .range-thumb {
-        position: absolute;
-        width: 100%;
-        height: 0;
-        -webkit-appearance: none;
-        appearance: none;
-        background: transparent;
-        pointer-events: none;
-        outline: none;
+        position: absolute; width: 100%; height: 0;
+        -webkit-appearance: none; appearance: none;
+        background: transparent; pointer-events: none; outline: none;
     }
     .range-thumb::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        width: 16px; height: 16px;
-        border-radius: 50%;
-        background: var(--primary);
-        border: 2px solid var(--bg-card);
-        box-shadow: 0 0 0 2px var(--primary-glow);
-        cursor: pointer;
-        pointer-events: all;
-        transition: box-shadow .15s;
+        -webkit-appearance: none; width: 14px; height: 14px;
+        border-radius: 50%; background: #00d4aa;
+        border: 2px solid #0d1117; cursor: pointer; pointer-events: all;
     }
-    .range-thumb::-webkit-slider-thumb:hover { box-shadow: 0 0 0 4px var(--primary-glow); }
     .range-thumb::-moz-range-thumb {
-        width: 16px; height: 16px;
-        border-radius: 50%;
-        background: var(--primary);
-        border: 2px solid var(--bg-card);
-        cursor: pointer;
-        pointer-events: all;
+        width: 12px; height: 12px; border-radius: 50%;
+        background: #00d4aa; border: 2px solid #0d1117; cursor: pointer; pointer-events: all;
     }
 
-    /* Clear all button */
-    .clear-filters-btn {
-        width: 100%;
-        padding: .5rem;
-        background: transparent;
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        color: var(--text-muted);
-        font-size: .8rem;
-        cursor: pointer;
-        transition: all .15s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: .4rem;
+    /* Clear filters button (sidebar) */
+    .sidebar-clear-btn {
+        display: none; width: calc(100% - 2rem); margin: .75rem 1rem;
+        padding: .4rem .75rem; background: transparent;
+        border: 1px solid #1e2a3a; border-radius: 4px;
+        color: #5a6a7a; font-size: .78rem; cursor: pointer; text-align: center; transition: all .15s;
     }
-    .clear-filters-btn:hover { border-color: var(--danger); color: var(--danger); background: rgba(255,77,77,.06); }
+    .sidebar-clear-btn:hover { border-color: #ef4444; color: #ef4444; }
 
-    /* Mobile filter toggle */
+    /* Mobile toggle */
     .mobile-filter-toggle {
-        display: none;
-        align-items: center;
-        gap: .5rem;
-        padding: .5rem .875rem;
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        color: var(--text-muted);
-        font-size: .85rem;
-        cursor: pointer;
-        transition: all .15s;
+        display: none; align-items: center; gap: .5rem;
+        padding: .5rem .875rem; background: #0d1117;
+        border: 1px solid #1e2a3a; border-radius: var(--radius);
+        color: #8899aa; font-size: .85rem; cursor: pointer; margin-bottom: 1rem;
+        font-family: var(--sans); transition: border-color .15s;
     }
-    .mobile-filter-toggle:hover { border-color: var(--primary); color: var(--primary); }
+    .mobile-filter-toggle:hover { border-color: #00d4aa; color: #00d4aa; }
     .mobile-filter-toggle .active-count {
-        background: var(--primary);
-        color: #000;
-        font-size: .7rem;
-        font-weight: 700;
-        border-radius: 99px;
-        padding: .1rem .4rem;
-        min-width: 18px;
-        text-align: center;
-        display: none;
+        background: #00d4aa; color: #000; font-size: .7rem; font-weight: 700;
+        border-radius: 99px; padding: .1rem .4rem; display: none;
     }
     .mobile-filter-toggle .active-count.visible { display: inline-block; }
+    .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.65); z-index: 199; backdrop-filter: blur(2px); }
+    .sidebar-overlay.active { display: block; }
+    .sidebar-mobile-header { display: none; align-items: center; justify-content: space-between; padding: .875rem 1rem; border-bottom: 1px solid #1e2a3a; }
+    .sidebar-close-btn { background: transparent; border: none; color: #5a6a7a; font-size: 1.1rem; cursor: pointer; padding: .25rem; }
 
-    /* Catalogue main */
-    .catalogue-main { flex: 1; min-width: 0; }
+    /* ── Catalogue Main ──────────────────────────────────────────── */
+    .catalogue-main { flex: 1; min-width: 0; padding-left: 1.5rem; }
+
+    /* Search bar */
+    .top-filters { display: flex; gap: .75rem; margin-bottom: .875rem; flex-wrap: wrap; }
+    .search-wrap {
+        flex: 1; min-width: 200px; display: flex;
+        background: var(--bg-surface); border: 1px solid var(--border);
+        border-radius: var(--radius); overflow: hidden; transition: border-color .15s;
+    }
+    .search-wrap:focus-within { border-color: #00d4aa; }
+    .search-wrap input { flex: 1; background: transparent; border: none; padding: .5rem .75rem; color: var(--text); font-size: .88rem; outline: none; }
+    .search-wrap input::placeholder { color: var(--text-dim); }
+    .search-wrap button { padding: 0 .75rem; background: #00d4aa; border: none; color: #000; cursor: pointer; font-size: .88rem; transition: background .15s; }
+    .search-wrap button:hover { background: #00b896; }
 
     /* Active filter chips */
-    .active-filters-bar {
-        display: flex;
-        flex-wrap: wrap;
-        gap: .4rem;
-        margin-bottom: .75rem;
-        min-height: 0;
-    }
+    .active-filters-bar { display: flex; flex-wrap: wrap; gap: .375rem; margin-bottom: .75rem; min-height: 0; }
     .filter-chip {
-        display: inline-flex;
-        align-items: center;
-        gap: .35rem;
-        padding: .25rem .65rem;
-        background: rgba(0,212,170,.1);
-        border: 1px solid rgba(0,212,170,.3);
-        border-radius: 99px;
-        font-size: .76rem;
-        color: var(--primary);
-        cursor: pointer;
-        transition: all .15s;
+        display: inline-flex; align-items: center; gap: .35rem;
+        padding: .22rem .6rem; background: rgba(0,212,170,.1);
+        border: 1px solid rgba(0,212,170,.25); border-radius: 3px;
+        font-size: .76rem; color: #00d4aa; cursor: pointer; transition: all .15s;
     }
-    .filter-chip:hover { background: rgba(255,77,77,.1); border-color: rgba(255,77,77,.3); color: var(--danger); }
-    .filter-chip .chip-x { font-size: .7rem; opacity: .7; }
+    .filter-chip:hover { background: rgba(239,68,68,.08); border-color: rgba(239,68,68,.3); color: #ef4444; }
+    .chip-x { font-size: .7rem; opacity: .6; }
 
     /* Results bar */
-    .results-bar {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 1rem;
-        gap: 1rem;
-        flex-wrap: wrap;
-    }
-    .results-count {
-        font-size: .85rem;
-        color: var(--text-muted);
-    }
-    .results-count strong {
-        color: var(--primary);
-        font-family: var(--mono);
-        font-size: .9rem;
-    }
+    .results-bar { display: flex; align-items: center; margin-bottom: .875rem; font-size: .82rem; color: var(--text-muted); }
+    .results-count strong { color: #00d4aa; font-family: var(--mono); }
 
-    /* Search + category bar */
-    .top-filters {
-        display: flex;
-        gap: .75rem;
-        margin-bottom: 1rem;
-        flex-wrap: wrap;
-    }
-    .top-filters .search-wrap {
-        flex: 1;
-        min-width: 200px;
-        display: flex;
-        background: var(--bg-surface);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        overflow: hidden;
-        transition: border-color .15s;
-    }
-    .top-filters .search-wrap:focus-within { border-color: var(--border-focus); }
-    .top-filters .search-wrap input {
-        flex: 1;
-        background: transparent;
-        border: none;
-        padding: .5rem .75rem;
-        color: var(--text);
-        font-size: .88rem;
-        outline: none;
-    }
-    .top-filters .search-wrap input::placeholder { color: var(--text-dim); }
-    .top-filters .search-wrap button {
-        padding: 0 .75rem;
-        background: var(--primary);
-        border: none;
-        color: #000;
-        cursor: pointer;
-        transition: background .15s;
-    }
-    .top-filters .search-wrap button:hover { background: var(--primary-dark); }
-    .top-filters select {
-        padding: .5rem .75rem;
-        background: var(--bg-surface);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        color: var(--text);
-        font-size: .88rem;
-        cursor: pointer;
-        outline: none;
-        min-width: 160px;
-    }
-    .top-filters select:focus { border-color: var(--border-focus); }
+    /* Products grid — 2 columns */
+    .products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: .875rem; }
+    @media (max-width: 1400px) { .products-grid { grid-template-columns: 1fr; } }
 
-    /* Product card new features */
-    .card-stock-dot {
-        width: 8px; height: 8px;
-        border-radius: 50%;
-        background: var(--success);
-        box-shadow: 0 0 6px rgba(34,197,94,.5);
-        flex-shrink: 0;
+    /* Product card */
+    .product-card {
+        background: var(--bg-card); border: 1px solid #1e2a3a; border-radius: 6px;
+        padding: 1rem 1.1rem; display: flex; flex-direction: column; gap: .35rem;
+        transition: border-color .18s, box-shadow .18s;
     }
-    .card-stock-row {
-        display: flex;
-        align-items: center;
-        gap: .4rem;
-        font-size: .75rem;
-        color: var(--success);
-        margin-bottom: .5rem;
-    }
-    .card-cert-badges {
-        display: flex;
-        flex-wrap: wrap;
-        gap: .3rem;
-        margin-bottom: .5rem;
-    }
+    .product-card:hover { border-color: rgba(0,212,170,.35); box-shadow: 0 2px 16px rgba(0,212,170,.05); }
+    .product-card-cas { font-family: var(--mono); font-size: .7rem; color: #3a4a5a; letter-spacing: .04em; text-transform: uppercase; }
+    .product-card-name { font-size: .95rem; font-weight: 700; color: #e8f0f8; line-height: 1.3; margin-bottom: .1rem; }
+    .card-cert-badges { display: flex; flex-wrap: wrap; gap: .25rem; margin: .1rem 0; }
     .badge-cert {
-        padding: .15rem .5rem;
-        border-radius: 4px;
-        font-size: .7rem;
-        font-weight: 600;
-        font-family: var(--mono);
-        background: rgba(0,212,170,.08);
-        border: 1px solid rgba(0,212,170,.2);
-        color: var(--primary);
+        padding: .1rem .45rem; border-radius: 3px; font-size: .68rem; font-weight: 600;
+        font-family: var(--mono); background: rgba(0,212,170,.08); border: 1px solid rgba(0,212,170,.2); color: #00d4aa;
     }
-    .badge-cert-more {
-        padding: .15rem .5rem;
-        border-radius: 4px;
-        font-size: .7rem;
-        background: var(--bg-surface);
-        color: var(--text-muted);
-        border: 1px solid var(--border);
-    }
-    .card-grades {
-        font-size: .75rem;
-        color: var(--text-muted);
-        margin-bottom: .25rem;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-    .card-grades span { color: var(--text); }
+    .badge-cert-more { padding: .1rem .4rem; border-radius: 3px; font-size: .68rem; background: #0d1117; color: #3a4a5a; border: 1px solid #1e2a3a; }
+    .card-grades { font-size: .76rem; color: #5a6a7a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .card-grades span { color: #8899aa; }
+    .card-price { font-family: var(--mono); font-size: .88rem; color: #00d4aa; font-weight: 600; margin-top: .1rem; }
+    .card-stock-row { display: flex; align-items: center; gap: .35rem; font-size: .75rem; margin-top: .15rem; }
+    .card-stock-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .card-stock-dot.green { background: #10b981; box-shadow: 0 0 5px rgba(16,185,129,.4); }
+    .card-stock-dot.orange { background: #f59e0b; }
+    .card-stock-label.green { color: #10b981; }
+    .card-stock-label.orange { color: #8899aa; }
+    .product-card-footer { display: flex; gap: .5rem; margin-top: auto; padding-top: .625rem; }
 
-    /* Sidebar mobile overlay */
-    .sidebar-overlay {
-        display: none;
-        position: fixed;
-        inset: 0;
-        background: rgba(0,0,0,.6);
-        z-index: 199;
-        backdrop-filter: blur(2px);
-    }
-    .sidebar-overlay.active { display: block; }
+    /* Stats row */
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: .75rem; margin-bottom: 1.25rem; }
+    @media (max-width: 768px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
 
+    /* Mobile layout */
     @media (max-width: 1023px) {
         .filter-sidebar {
-            position: fixed;
-            top: 0; left: 0;
-            width: 280px;
-            height: 100vh;
-            max-height: 100vh;
-            z-index: 200;
-            background: var(--bg-card);
-            border-right: 1px solid var(--border);
-            border-radius: 0;
-            padding: 1rem;
-            transform: translateX(-100%);
-            transition: transform .25s ease;
-            overflow-y: auto;
+            position: fixed; top: 0; left: 0;
+            width: 280px; height: 100vh; max-height: 100vh;
+            z-index: 200; border-radius: 0;
+            transform: translateX(-100%); transition: transform .25s ease;
         }
         .filter-sidebar.open { transform: translateX(0); }
-        .sidebar-mobile-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 1rem;
-            padding-bottom: .75rem;
-            border-bottom: 1px solid var(--border);
-        }
-        .sidebar-mobile-header h3 {
-            font-size: .95rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-        .sidebar-close-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            font-size: 1.2rem;
-            cursor: pointer;
-            padding: .25rem;
-            line-height: 1;
-        }
+        .sidebar-mobile-header { display: flex; }
         .mobile-filter-toggle { display: flex; }
         .catalogue-layout { display: block; }
-        .catalogue-main { width: 100%; }
+        .catalogue-main { padding-left: 0; width: 100%; }
+        .products-grid { grid-template-columns: 1fr; }
     }
-    @media (min-width: 1024px) {
-        .sidebar-mobile-header { display: none; }
-    }
-
-    /* Stats row adjustments */
-    .stats-row {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: .75rem;
-        margin-bottom: 1.25rem;
-    }
-    @media (max-width: 768px) {
-        .stats-row { grid-template-columns: repeat(2, 1fr); }
-    }
+    @media (min-width: 1024px) { .sidebar-mobile-header { display: none; } }
     </style>
 </head>
 <body>
@@ -624,114 +415,146 @@
 
             <div class="catalogue-layout">
 
-                <!-- ── Filter sidebar ── -->
+                <!-- ── Filter sidebar — Sigma-Aldrich style ── -->
                 <aside class="filter-sidebar" id="filterSidebar" aria-label="Filtres avancés">
 
                     <!-- Mobile header -->
                     <div class="sidebar-mobile-header">
-                        <h3><i class="fas fa-sliders-h"></i> Filtres</h3>
-                        <button class="sidebar-close-btn" onclick="closeSidebar()" aria-label="Fermer les filtres">
-                            <i class="fas fa-times"></i>
+                        <span style="font-size:.88rem;font-weight:700;color:#00d4aa;"><i class="fas fa-sliders-h"></i> Filtres</span>
+                        <button class="sidebar-close-btn" onclick="closeSidebar()" aria-label="Fermer les filtres"><i class="fas fa-times"></i></button>
+                    </div>
+
+                    <!-- Stock disponible (toujours visible) -->
+                    <div class="sidebar-stock-row">
+                        <span>Stock disponible uniquement</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="filterStock" onchange="onFilterChange()">
+                            <span class="toggle-track"></span>
+                        </label>
+                    </div>
+
+                    <!-- 1. Catégorie (open by default) -->
+                    <div class="filter-section open" id="fs-categorie">
+                        <button class="filter-section-header" onclick="toggleSection('fs-categorie')" aria-expanded="true">
+                            <span class="fs-label">Catégorie</span>
+                            <span class="fs-count" id="cnt-categorie"></span>
+                            <i class="fas fa-chevron-down fs-chevron"></i>
                         </button>
-                    </div>
-
-                    <!-- Stock disponible -->
-                    <div class="sidebar-card">
-                        <div class="toggle-row">
-                            <span>Stock disponible uniquement</span>
-                            <label class="toggle-switch">
-                                <input type="checkbox" id="filterStock" onchange="onFilterChange()">
-                                <span class="toggle-track"></span>
-                            </label>
+                        <div class="filter-section-body">
+                            <label class="filter-row" data-filter="categorie" data-value="liant"><input type="checkbox" value="liant" onchange="onCbChange(this)"><span class="filter-row-label">Liant</span></label>
+                            <label class="filter-row" data-filter="categorie" data-value="désintégrant"><input type="checkbox" value="désintégrant" onchange="onCbChange(this)"><span class="filter-row-label">Désintégrant</span></label>
+                            <label class="filter-row" data-filter="categorie" data-value="lubrifiant"><input type="checkbox" value="lubrifiant" onchange="onCbChange(this)"><span class="filter-row-label">Lubrifiant</span></label>
+                            <label class="filter-row" data-filter="categorie" data-value="diluant"><input type="checkbox" value="diluant" onchange="onCbChange(this)"><span class="filter-row-label">Diluant</span></label>
+                            <label class="filter-row" data-filter="categorie" data-value="enrobant"><input type="checkbox" value="enrobant" onchange="onCbChange(this)"><span class="filter-row-label">Agent enrobant</span></label>
+                            <label class="filter-row" data-filter="categorie" data-value="conservateur"><input type="checkbox" value="conservateur" onchange="onCbChange(this)"><span class="filter-row-label">Conservateur</span></label>
+                            <label class="filter-row" data-filter="categorie" data-value="antioxydant"><input type="checkbox" value="antioxydant" onchange="onCbChange(this)"><span class="filter-row-label">Antioxydant</span></label>
                         </div>
                     </div>
 
-                    <!-- Certifications -->
-                    <div class="sidebar-card">
-                        <div class="sidebar-title"><i class="fas fa-certificate"></i> Certifications</div>
-                        <div class="pill-group" id="certPills">
-                            <label class="pill-label" data-filter="certifications" data-value="Ph.Eur.">
-                                <input type="checkbox" value="Ph.Eur." onchange="onPillChange(this)"> Ph.Eur.
-                            </label>
-                            <label class="pill-label" data-filter="certifications" data-value="USP/NF">
-                                <input type="checkbox" value="USP/NF" onchange="onPillChange(this)"> USP/NF
-                            </label>
-                            <label class="pill-label" data-filter="certifications" data-value="JP">
-                                <input type="checkbox" value="JP" onchange="onPillChange(this)"> JP
-                            </label>
-                            <label class="pill-label" data-filter="certifications" data-value="BP">
-                                <input type="checkbox" value="BP" onchange="onPillChange(this)"> BP
-                            </label>
-                            <label class="pill-label" data-filter="certifications" data-value="GMP">
-                                <input type="checkbox" value="GMP" onchange="onPillChange(this)"> GMP
-                            </label>
+                    <!-- 2. Certifications (open by default) -->
+                    <div class="filter-section open" id="fs-certifications">
+                        <button class="filter-section-header" onclick="toggleSection('fs-certifications')" aria-expanded="true">
+                            <span class="fs-label">Certifications</span>
+                            <span class="fs-count" id="cnt-certifications"></span>
+                            <i class="fas fa-chevron-down fs-chevron"></i>
+                        </button>
+                        <div class="filter-section-body">
+                            <label class="filter-row" data-filter="certifications" data-value="Ph.Eur."><input type="checkbox" value="Ph.Eur." onchange="onCbChange(this)"><span class="filter-row-label">Ph.Eur.</span></label>
+                            <label class="filter-row" data-filter="certifications" data-value="USP/NF"><input type="checkbox" value="USP/NF" onchange="onCbChange(this)"><span class="filter-row-label">USP/NF</span></label>
+                            <label class="filter-row" data-filter="certifications" data-value="JP"><input type="checkbox" value="JP" onchange="onCbChange(this)"><span class="filter-row-label">JP</span></label>
+                            <label class="filter-row" data-filter="certifications" data-value="BP"><input type="checkbox" value="BP" onchange="onCbChange(this)"><span class="filter-row-label">BP</span></label>
+                            <label class="filter-row" data-filter="certifications" data-value="GMP"><input type="checkbox" value="GMP" onchange="onCbChange(this)"><span class="filter-row-label">GMP</span></label>
                         </div>
                     </div>
 
-                    <!-- Origine -->
-                    <div class="sidebar-card">
-                        <div class="sidebar-title"><i class="fas fa-globe"></i> Origine</div>
-                        <div class="pill-group" id="originePills">
-                            <label class="pill-label" data-filter="origine" data-value="Europe">
-                                <input type="checkbox" value="Europe" onchange="onPillChange(this)"> Europe
-                            </label>
-                            <label class="pill-label" data-filter="origine" data-value="Inde">
-                                <input type="checkbox" value="Inde" onchange="onPillChange(this)"> Inde
-                            </label>
-                            <label class="pill-label" data-filter="origine" data-value="Chine">
-                                <input type="checkbox" value="Chine" onchange="onPillChange(this)"> Chine
-                            </label>
-                            <label class="pill-label" data-filter="origine" data-value="USA">
-                                <input type="checkbox" value="USA" onchange="onPillChange(this)"> USA
-                            </label>
-                        </div>
-                    </div>
-
-                    <!-- Conditionnements -->
-                    <div class="sidebar-card">
-                        <div class="sidebar-title"><i class="fas fa-box"></i> Conditionnements</div>
-                        <div class="pill-group" id="condPills">
-                            <label class="pill-label" data-filter="conditionnements" data-value="1 kg">
-                                <input type="checkbox" value="1 kg" onchange="onPillChange(this)"> 1 kg
-                            </label>
-                            <label class="pill-label" data-filter="conditionnements" data-value="5 kg">
-                                <input type="checkbox" value="5 kg" onchange="onPillChange(this)"> 5 kg
-                            </label>
-                            <label class="pill-label" data-filter="conditionnements" data-value="25 kg">
-                                <input type="checkbox" value="25 kg" onchange="onPillChange(this)"> 25 kg
-                            </label>
-                            <label class="pill-label" data-filter="conditionnements" data-value="Big Bag 500 kg">
-                                <input type="checkbox" value="Big Bag 500 kg" onchange="onPillChange(this)"> Big Bag
-                            </label>
-                        </div>
-                    </div>
-
-                    <!-- Taille particule -->
-                    <div class="sidebar-card">
-                        <div class="sidebar-title"><i class="fas fa-ruler"></i> Taille particule (µm)</div>
-                        <div class="range-container">
-                            <div class="range-values">
-                                <span id="rangeMinVal">0 µm</span>
-                                <span id="rangeMaxVal">500 µm</span>
+                    <!-- 3. Grade (collapsed) -->
+                    <div class="filter-section" id="fs-grade">
+                        <button class="filter-section-header" onclick="toggleSection('fs-grade')" aria-expanded="false">
+                            <span class="fs-label">Grade</span>
+                            <span class="fs-count" id="cnt-grade"></span>
+                            <i class="fas fa-chevron-down fs-chevron"></i>
+                        </button>
+                        <div class="filter-section-body">
+                            <div class="grade-search-wrap">
+                                <input type="text" class="grade-search-input" id="gradeSearchInput"
+                                    placeholder="Ex: PH-101, K4M..." autocomplete="off"
+                                    oninput="onGradeSearch(this.value)">
                             </div>
-                            <div class="dual-range-wrap">
-                                <div class="range-track-bg"></div>
-                                <div class="range-track-fill" id="rangeTrackFill"></div>
-                                <input type="range" class="range-thumb" id="rangeMin"
-                                    min="0" max="500" value="0" step="5"
-                                    oninput="onRangeChange()" aria-label="Taille particule minimum">
-                                <input type="range" class="range-thumb" id="rangeMax"
-                                    min="0" max="500" value="500" step="5"
-                                    oninput="onRangeChange()" aria-label="Taille particule maximum">
-                            </div>
-                            <p style="font-size:.72rem;color:var(--text-dim);margin-top:.5rem;">
-                                Données disponibles pour 10 excipients prioritaires.
-                            </p>
+                            <div id="gradeList" class="grade-list"></div>
                         </div>
                     </div>
 
-                    <!-- Clear all -->
-                    <button class="clear-filters-btn" onclick="clearAllFilters()" id="clearAllBtn" style="display:none;">
+                    <!-- 4. Forme physique (collapsed) -->
+                    <div class="filter-section" id="fs-forme">
+                        <button class="filter-section-header" onclick="toggleSection('fs-forme')" aria-expanded="false">
+                            <span class="fs-label">Forme physique</span>
+                            <span class="fs-count" id="cnt-forme"></span>
+                            <i class="fas fa-chevron-down fs-chevron"></i>
+                        </button>
+                        <div class="filter-section-body">
+                            <label class="filter-row" data-filter="formePhysique" data-value="Poudre"><input type="checkbox" value="Poudre" onchange="onCbChange(this)"><span class="filter-row-label">Poudre</span></label>
+                            <label class="filter-row" data-filter="formePhysique" data-value="Granulé"><input type="checkbox" value="Granulé" onchange="onCbChange(this)"><span class="filter-row-label">Granulé</span></label>
+                            <label class="filter-row" data-filter="formePhysique" data-value="Liquide"><input type="checkbox" value="Liquide" onchange="onCbChange(this)"><span class="filter-row-label">Liquide</span></label>
+                            <label class="filter-row" data-filter="formePhysique" data-value="Semi-solide"><input type="checkbox" value="Semi-solide" onchange="onCbChange(this)"><span class="filter-row-label">Semi-solide</span></label>
+                        </div>
+                    </div>
+
+                    <!-- 5. Origine (collapsed) -->
+                    <div class="filter-section" id="fs-origine">
+                        <button class="filter-section-header" onclick="toggleSection('fs-origine')" aria-expanded="false">
+                            <span class="fs-label">Origine</span>
+                            <span class="fs-count" id="cnt-origine"></span>
+                            <i class="fas fa-chevron-down fs-chevron"></i>
+                        </button>
+                        <div class="filter-section-body">
+                            <label class="filter-row" data-filter="origine" data-value="Europe"><input type="checkbox" value="Europe" onchange="onCbChange(this)"><span class="filter-row-label">Europe</span></label>
+                            <label class="filter-row" data-filter="origine" data-value="Inde"><input type="checkbox" value="Inde" onchange="onCbChange(this)"><span class="filter-row-label">Inde</span></label>
+                            <label class="filter-row" data-filter="origine" data-value="Chine"><input type="checkbox" value="Chine" onchange="onCbChange(this)"><span class="filter-row-label">Chine</span></label>
+                            <label class="filter-row" data-filter="origine" data-value="USA"><input type="checkbox" value="USA" onchange="onCbChange(this)"><span class="filter-row-label">USA</span></label>
+                        </div>
+                    </div>
+
+                    <!-- 6. Conditionnement (collapsed) -->
+                    <div class="filter-section" id="fs-cond">
+                        <button class="filter-section-header" onclick="toggleSection('fs-cond')" aria-expanded="false">
+                            <span class="fs-label">Conditionnement</span>
+                            <span class="fs-count" id="cnt-cond"></span>
+                            <i class="fas fa-chevron-down fs-chevron"></i>
+                        </button>
+                        <div class="filter-section-body">
+                            <label class="filter-row" data-filter="conditionnements" data-value="1 kg"><input type="checkbox" value="1 kg" onchange="onCbChange(this)"><span class="filter-row-label">1 kg</span></label>
+                            <label class="filter-row" data-filter="conditionnements" data-value="5 kg"><input type="checkbox" value="5 kg" onchange="onCbChange(this)"><span class="filter-row-label">5 kg</span></label>
+                            <label class="filter-row" data-filter="conditionnements" data-value="25 kg"><input type="checkbox" value="25 kg" onchange="onCbChange(this)"><span class="filter-row-label">25 kg</span></label>
+                            <label class="filter-row" data-filter="conditionnements" data-value="Big Bag 500 kg"><input type="checkbox" value="Big Bag 500 kg" onchange="onCbChange(this)"><span class="filter-row-label">Big Bag 500 kg</span></label>
+                        </div>
+                    </div>
+
+                    <!-- 7. Taille particule (collapsed) -->
+                    <div class="filter-section" id="fs-particule">
+                        <button class="filter-section-header" onclick="toggleSection('fs-particule')" aria-expanded="false">
+                            <span class="fs-label">Taille particule (µm)</span>
+                            <span class="fs-count" id="cnt-particule"></span>
+                            <i class="fas fa-chevron-down fs-chevron"></i>
+                        </button>
+                        <div class="filter-section-body">
+                            <div class="range-container">
+                                <div class="range-values">
+                                    <span id="rangeMinVal">0 µm</span>
+                                    <span id="rangeMaxVal">500 µm</span>
+                                </div>
+                                <div class="dual-range-wrap">
+                                    <div class="range-track-bg"></div>
+                                    <div class="range-track-fill" id="rangeTrackFill"></div>
+                                    <input type="range" class="range-thumb" id="rangeMin" min="0" max="500" value="0" step="5" oninput="onRangeChange()" aria-label="Taille particule minimum">
+                                    <input type="range" class="range-thumb" id="rangeMax" min="0" max="500" value="500" step="5" oninput="onRangeChange()" aria-label="Taille particule maximum">
+                                </div>
+                                <p style="font-size:.7rem;color:#3a4a5a;margin-top:.5rem;">Données disponibles pour 10 excipients prioritaires.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Clear filters -->
+                    <button class="sidebar-clear-btn" onclick="clearAllFilters()" id="clearAllBtn">
                         <i class="fas fa-times"></i> Effacer tous les filtres
                     </button>
 
@@ -740,21 +563,13 @@
                 <!-- ── Catalogue main ── -->
                 <div class="catalogue-main">
 
-                    <!-- Top filters (search + category) -->
+                    <!-- Search bar -->
                     <div class="top-filters">
                         <div class="search-wrap">
-                            <input type="text" id="catalogSearchInput" placeholder="Nom, CAS, formule..." autocomplete="off"
+                            <input type="text" id="catalogSearchInput" placeholder="Nom, N° CAS, formule, grade..." autocomplete="off"
                                 onkeydown="if(event.key==='Enter') applyFilters()">
                             <button onclick="applyFilters()" aria-label="Rechercher"><i class="fas fa-search"></i></button>
                         </div>
-                        <select id="categoryFilter" onchange="applyFilters()" aria-label="Filtrer par catégorie">
-                            <option value="">Toutes les catégories</option>
-                            <option value="liant">Liant</option>
-                            <option value="désintégrant">Désintégrant</option>
-                            <option value="lubrifiant">Lubrifiant</option>
-                            <option value="diluant">Diluant</option>
-                            <option value="conservateur">Conservateur</option>
-                        </select>
                     </div>
 
                     <!-- Active filter chips -->
@@ -876,11 +691,22 @@ let allExcipients = [];
 let filteredExcipients = [];
 let pricesMap = {};
 
+// ── Accordion ──────────────────────────────────────────────────
+function toggleSection(id) {
+    const sec = document.getElementById(id);
+    if (!sec) return;
+    const open = sec.classList.toggle('open');
+    sec.querySelector('.filter-section-header')?.setAttribute('aria-expanded', String(open));
+}
+
 // ── Advanced filter state ──────────────────────────────────────
 const advFilters = {
+    categorie: new Set(),
     certifications: new Set(),
+    formePhysique: new Set(),
     conditionnements: new Set(),
     origine: new Set(),
+    gradeSearch: '',
     stock: false,
     particuleMin: 0,
     particuleMax: 500,
@@ -898,17 +724,17 @@ function closeSidebar() {
     document.getElementById('mobileFilterToggle').setAttribute('aria-expanded', 'false');
 }
 
-// ── Pill checkbox change ───────────────────────────────────────
-function onPillChange(input) {
-    const label = input.closest('.pill-label');
-    const filterKey = label.dataset.filter;
+// ── Checkbox change (all filter rows) ────────────────────────
+function onCbChange(input) {
+    const row = input.closest('.filter-row');
+    const filterKey = row.dataset.filter;
     const value = input.value;
     if (input.checked) {
         advFilters[filterKey].add(value);
-        label.classList.add('active');
+        row.classList.add('checked');
     } else {
         advFilters[filterKey].delete(value);
-        label.classList.remove('active');
+        row.classList.remove('checked');
     }
     onFilterChange();
 }
@@ -919,12 +745,43 @@ function onFilterChange() {
     applyFilters();
 }
 
+// ── Grade search ───────────────────────────────────────────────
+function onGradeSearch(val) {
+    advFilters.gradeSearch = val.trim().toLowerCase();
+    renderGradeList();
+    applyFilters();
+}
+
+function renderGradeList() {
+    const list = document.getElementById('gradeList');
+    if (!list) return;
+    const q = advFilters.gradeSearch;
+    const allGrades = new Set();
+    allExcipients.forEach(exc => { (exc.grades || []).forEach(g => allGrades.add(g)); });
+    const filtered = [...allGrades].filter(g => !q || g.toLowerCase().includes(q)).sort();
+    if (filtered.length === 0) {
+        list.innerHTML = '<div class="grade-item" style="color:#3a4a5a;cursor:default;">Aucun grade trouvé</div>';
+        return;
+    }
+    list.innerHTML = filtered.map(g => {
+        const sel = q && g.toLowerCase() === q ? ' selected' : '';
+        return `<div class="grade-item${sel}" onclick="selectGrade('${g.replace(/'/g, "\\'")}')">${g}</div>`;
+    }).join('');
+}
+
+function selectGrade(g) {
+    const input = document.getElementById('gradeSearchInput');
+    if (input) input.value = g;
+    advFilters.gradeSearch = g.toLowerCase();
+    renderGradeList();
+    applyFilters();
+}
+
 // ── Range slider ───────────────────────────────────────────────
 function onRangeChange() {
     let min = parseInt(document.getElementById('rangeMin').value);
     let max = parseInt(document.getElementById('rangeMax').value);
     if (min > max) {
-        // Swap: determine which was last moved
         const active = document.activeElement;
         if (active && active.id === 'rangeMin') {
             document.getElementById('rangeMin').value = max;
@@ -936,7 +793,6 @@ function onRangeChange() {
     }
     document.getElementById('rangeMinVal').textContent = min + ' µm';
     document.getElementById('rangeMaxVal').textContent = max + ' µm';
-    // Update fill track
     const fill = document.getElementById('rangeTrackFill');
     fill.style.left  = (min / 500 * 100) + '%';
     fill.style.width = ((max - min) / 500 * 100) + '%';
@@ -945,11 +801,19 @@ function onRangeChange() {
     applyFilters();
 }
 
-// Initialize range track fill on load
 function initRangeFill() {
     const fill = document.getElementById('rangeTrackFill');
     fill.style.left  = '0%';
     fill.style.width = '100%';
+}
+
+// ── Section counts ─────────────────────────────────────────────
+function updateSectionCounts(n) {
+    const label = `(${n})`;
+    ['categorie','certifications','grade','forme','origine','cond','particule'].forEach(id => {
+        const el = document.getElementById('cnt-' + id);
+        if (el) el.textContent = label;
+    });
 }
 
 // ── Active filter chips ────────────────────────────────────────
@@ -957,46 +821,28 @@ function renderActiveFilters() {
     const bar = document.getElementById('activeFiltersBar');
     const chips = [];
 
-    // Certifications
-    advFilters.certifications.forEach(v => {
-        chips.push({ key: 'certifications', value: v, label: v });
-    });
-    // Origine
-    advFilters.origine.forEach(v => {
-        chips.push({ key: 'origine', value: v, label: v });
-    });
-    // Conditionnements
-    advFilters.conditionnements.forEach(v => {
-        chips.push({ key: 'conditionnements', value: v, label: v });
-    });
-    // Stock
-    if (advFilters.stock) {
-        chips.push({ key: 'stock', value: null, label: 'Stock disponible' });
-    }
-    // Particle range
+    advFilters.categorie.forEach(v => chips.push({ key: 'categorie', value: v, label: 'Cat: ' + v }));
+    advFilters.certifications.forEach(v => chips.push({ key: 'certifications', value: v, label: v }));
+    advFilters.formePhysique.forEach(v => chips.push({ key: 'formePhysique', value: v, label: 'Forme: ' + v }));
+    advFilters.origine.forEach(v => chips.push({ key: 'origine', value: v, label: v }));
+    advFilters.conditionnements.forEach(v => chips.push({ key: 'conditionnements', value: v, label: v }));
+    if (advFilters.gradeSearch) chips.push({ key: 'grade', value: null, label: 'Grade: ' + advFilters.gradeSearch });
+    if (advFilters.stock) chips.push({ key: 'stock', value: null, label: 'Stock disponible' });
     if (advFilters.particuleMin !== 0 || advFilters.particuleMax !== 500) {
-        chips.push({
-            key: 'range',
-            value: null,
-            label: `Particule ${advFilters.particuleMin}–${advFilters.particuleMax} µm`
-        });
+        chips.push({ key: 'range', value: null, label: `Particule ${advFilters.particuleMin}–${advFilters.particuleMax} µm` });
     }
 
     bar.innerHTML = chips.map(c => `
         <button class="filter-chip" role="listitem"
-            onclick="removeFilter('${c.key}','${c.value || ''}')"
+            onclick="removeFilter('${c.key}','${(c.value || '').replace(/'/g, "\\'")}')"
             aria-label="Supprimer le filtre ${c.label}">
             ${c.label} <span class="chip-x">✕</span>
         </button>
     `).join('');
 
-    // Show/hide "clear all"
-    const hasFilters = chips.length > 0 ||
-        document.getElementById('catalogSearchInput').value.trim() ||
-        document.getElementById('categoryFilter').value;
+    const hasFilters = chips.length > 0 || document.getElementById('catalogSearchInput').value.trim();
     document.getElementById('clearAllBtn').style.display = hasFilters ? 'flex' : 'none';
 
-    // Mobile badge count
     const countEl = document.getElementById('mobileFilterCount');
     countEl.textContent = chips.length;
     countEl.classList.toggle('visible', chips.length > 0);
@@ -1013,34 +859,36 @@ function removeFilter(key, value) {
         document.getElementById('rangeMax').value = 500;
         onRangeChange();
         return;
+    } else if (key === 'grade') {
+        advFilters.gradeSearch = '';
+        const gi = document.getElementById('gradeSearchInput');
+        if (gi) gi.value = '';
+        renderGradeList();
     } else if (value) {
         advFilters[key].delete(value);
-        // Uncheck the pill
-        const pill = document.querySelector(
-            `.pill-label[data-filter="${key}"][data-value="${value}"] input`
-        );
-        if (pill) { pill.checked = false; pill.closest('.pill-label').classList.remove('active'); }
+        const row = document.querySelector(`.filter-row[data-filter="${key}"][data-value="${value}"]`);
+        if (row) { const cb = row.querySelector('input'); if (cb) cb.checked = false; row.classList.remove('checked'); }
     }
     applyFilters();
 }
 
 function clearAllFilters() {
-    // Reset text/category
     document.getElementById('catalogSearchInput').value = '';
-    document.getElementById('categoryFilter').value = '';
-    // Reset all pills
-    document.querySelectorAll('.pill-label input[type="checkbox"]').forEach(cb => {
+    document.querySelectorAll('.filter-row input[type="checkbox"]').forEach(cb => {
         cb.checked = false;
-        cb.closest('.pill-label').classList.remove('active');
+        cb.closest('.filter-row').classList.remove('checked');
     });
-    // Reset sets
+    advFilters.categorie.clear();
     advFilters.certifications.clear();
+    advFilters.formePhysique.clear();
     advFilters.conditionnements.clear();
     advFilters.origine.clear();
-    // Reset stock
+    advFilters.gradeSearch = '';
+    const gi = document.getElementById('gradeSearchInput');
+    if (gi) gi.value = '';
+    renderGradeList();
     advFilters.stock = false;
     document.getElementById('filterStock').checked = false;
-    // Reset range
     advFilters.particuleMin = 0;
     advFilters.particuleMax = 500;
     document.getElementById('rangeMin').value = 0;
@@ -1065,7 +913,6 @@ async function fetchPrices() {
 
 // ── Init ───────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', async () => {
-    // Handle URL query param
     const urlQ = new URLSearchParams(window.location.search).get('q');
     if (urlQ) document.getElementById('catalogSearchInput').value = urlQ;
 
@@ -1086,6 +933,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         filteredExcipients = [...allExcipients];
         document.getElementById('catalogLoading').style.display = 'none';
         document.getElementById('catalogReady').style.display = 'block';
+        renderGradeList();
         applyFilters();
     } catch (err) {
         console.error(err);
@@ -1096,17 +944,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 // ── Main filter function ───────────────────────────────────────
 function applyFilters() {
     const query    = document.getElementById('catalogSearchInput').value.toLowerCase().trim();
-    const category = document.getElementById('categoryFilter').value.toLowerCase();
+    const catSel   = advFilters.categorie;
     const certSel  = advFilters.certifications;
+    const formeSel = advFilters.formePhysique;
     const condSel  = advFilters.conditionnements;
     const origSel  = advFilters.origine;
+    const gradeQ   = advFilters.gradeSearch;
     const stockOnly = advFilters.stock;
     const pMin = advFilters.particuleMin;
     const pMax = advFilters.particuleMax;
     const rangeActive = (pMin !== 0 || pMax !== 500);
 
     filteredExcipients = allExcipients.filter(exc => {
-        // Text search
         if (query && !(
             exc.nom_commun?.toLowerCase().includes(query) ||
             exc.nom_chimique?.toLowerCase().includes(query) ||
@@ -1114,22 +963,17 @@ function applyFilters() {
             exc.formule?.toLowerCase().includes(query)
         )) return false;
 
-        // Category
-        if (category && !exc.fonction_principale?.toLowerCase().includes(category)) return false;
+        if (catSel.size > 0 && !Array.from(catSel).some(c =>
+            exc.fonction_principale?.toLowerCase().includes(c)
+        )) return false;
 
-        // Certifications (at least one must match)
         if (certSel.size > 0 && !(exc.certifications || []).some(c => certSel.has(c))) return false;
-
-        // Conditionnements
+        if (formeSel.size > 0 && exc.forme_physique && !formeSel.has(exc.forme_physique)) return false;
         if (condSel.size > 0 && !(exc.conditionnements || []).some(c => condSel.has(c))) return false;
-
-        // Origine
         if (origSel.size > 0 && !(exc.origine || []).some(o => origSel.has(o))) return false;
-
-        // Stock
+        if (gradeQ && !(exc.grades || []).some(g => g.toLowerCase().includes(gradeQ))) return false;
         if (stockOnly && !exc.stock_disponible) return false;
 
-        // Taille particule (only filter excipients that HAVE data)
         if (rangeActive &&
             exc.taille_particule_min !== null &&
             exc.taille_particule_max !== null) {
@@ -1139,6 +983,7 @@ function applyFilters() {
         return true;
     });
 
+    updateSectionCounts(filteredExcipients.length);
     renderActiveFilters();
     displayExcipients();
 }
@@ -1188,42 +1033,36 @@ function displayExcipients() {
     grid.innerHTML = filteredExcipients.map(exc => {
         const priceInfo = getPriceDisplay(exc);
         const srcLabel  = priceInfo?.source === 'Estimate' ? ' <small style="opacity:.6;">(est.)</small>' : '';
-
-        const stockHtml = exc.stock_disponible ? `
-            <div class="card-stock-row">
-                <span class="card-stock-dot"></span> Stock disponible
-            </div>` : '';
-
+        const hasStock  = exc.stock_disponible;
+        const stockDot  = hasStock ? 'green' : 'orange';
+        const stockText = hasStock ? 'Stock disponible' : 'Sur commande';
         const certHtml  = renderCertBadges(exc.certifications);
         const gradeHtml = renderGrades(exc.grades);
-
-        const functionBadge = exc.fonction_principale
-            ? `<span class="badge badge-neutral" style="margin-left:4px;">${exc.fonction_principale}</span>`
-            : '';
+        const nomEscape = (exc.nom_commun || '').replace(/"/g, '&quot;');
 
         return `
         <div class="product-card fade-in">
             <div class="product-card-cas">${exc.cas_number ? 'CAS ' + exc.cas_number : 'CAS N/A'}</div>
             <div class="product-card-name">${exc.nom_commun || '—'}</div>
-            ${stockHtml}
             ${certHtml}
             ${gradeHtml}
-            <div class="mb-1">${functionBadge}</div>
-            <div class="product-card-meta"><strong>Nom chimique :</strong> ${exc.nom_chimique || 'N/A'}</div>
-            ${exc.formule ? `<div class="product-card-meta"><strong>Formule :</strong> ${exc.formule}</div>` : ''}
             ${priceInfo
-                ? `<div class="product-card-price"><i class="fas fa-tag"></i> ${priceInfo.text}${srcLabel}</div>`
-                : '<div class="product-card-price" style="color:var(--text-dim);">Prix sur demande</div>'
+                ? `<div class="card-price">${priceInfo.text}${srcLabel}</div>`
+                : '<div class="card-price" style="color:var(--text-dim);">Prix sur demande</div>'
             }
+            <div class="card-stock-row">
+                <span class="card-stock-dot ${stockDot}"></span>
+                <span class="card-stock-label ${stockDot}">${stockText}</span>
+            </div>
             <div class="product-card-footer">
-                <button class="btn btn-primary btn-sm" style="flex:1;"
-                    onclick="openCatalogPrixExact(${exc.id}, this)"
-                    data-nom="${(exc.nom_commun||'').replace(/"/g,'&quot;')}">
-                    <i class="fas fa-tag"></i> Prix exact
-                </button>
-                <a href="produit-detail.html?id=${exc.id}" class="btn btn-outline btn-sm" title="Voir la fiche produit">
-                    <i class="fas fa-eye"></i>
+                <a href="produit-detail.html?id=${exc.id}" class="btn btn-primary btn-sm" style="flex:1;">
+                    <i class="fas fa-flask"></i> Voir grades &amp; fournisseurs
                 </a>
+                <button class="btn btn-outline btn-sm" title="Obtenir le prix exact"
+                    onclick="openCatalogPrixExact(${exc.id}, this)"
+                    data-nom="${nomEscape}" aria-label="Prix exact pour ${nomEscape}">
+                    <i class="fas fa-tag"></i>
+                </button>
             </div>
         </div>`;
     }).join('');
