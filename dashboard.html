@@ -13,93 +13,164 @@
     <style>
         /* ── AUTH GATE ── */
         #authGate {
-            position: fixed; inset: 0; background: var(--bg-main);
+            position: fixed; inset: 0;
+            background: radial-gradient(ellipse at 50% 40%, #0d1627 0%, var(--bg-main) 70%);
             display: flex; align-items: center; justify-content: center;
             z-index: 9999;
         }
         .auth-box {
-            background: var(--bg-card); border: 1px solid var(--border);
+            background: var(--bg-card);
+            border: 1px solid rgba(0,212,170,.2);
             border-radius: var(--radius-lg); padding: 2.5rem 2rem;
             width: 100%; max-width: 360px; text-align: center;
+            box-shadow: 0 0 0 1px rgba(0,212,170,.06), 0 24px 64px rgba(0,0,0,.6);
         }
-        .auth-logo { font-family: var(--mono); font-size: 1.5rem; font-weight: 700; color: var(--primary); margin-bottom: .5rem; }
-        .auth-sub  { font-size: .82rem; color: var(--text-muted); margin-bottom: 1.75rem; }
+        .auth-icon { font-size: 2rem; color: var(--primary); margin-bottom: .75rem; opacity: .85; }
+        .auth-logo { font-family: var(--mono); font-size: 1.25rem; font-weight: 700; color: var(--text); margin-bottom: .25rem; }
+        .auth-sub  { font-size: .8rem; color: var(--text-muted); margin-bottom: 1.75rem; }
+        .auth-divider { border: none; border-top: 1px solid var(--border); margin: 1.25rem 0 1.5rem; }
         .auth-error { color: var(--danger); font-size: .82rem; margin-top: .75rem; display: none; }
 
         /* ── LAYOUT ── */
-        .dash-header { background: var(--bg-card); border-bottom: 1px solid var(--border); padding: 1rem 0; margin-bottom: 2rem; }
-        .dash-header-inner { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; }
-        .dash-title { font-family: var(--mono); font-size: 1rem; font-weight: 700; color: var(--primary); }
+        .dash-header {
+            background: var(--bg-card);
+            border-bottom: 2px solid transparent;
+            border-image: linear-gradient(to right, var(--primary), transparent 60%) 1;
+            padding: .9rem 0; margin-bottom: 2rem;
+        }
+        .dash-header-inner { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+        .dash-title { font-family: var(--mono); font-size: .95rem; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: .5rem; }
+        .dash-title-sub { font-size: .7rem; font-weight: 400; color: var(--text-muted); font-family: var(--font); }
         .dash-main  { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem 3rem; }
 
         /* ── STATS ── */
         .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
         @media (max-width: 700px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
-        .stat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem 1rem; text-align: center; transition: border-color 0.2s ease, box-shadow 0.2s ease; }
-        .stat-card:hover { border-color: rgba(0,212,170,.3); box-shadow: 0 0 0 1px rgba(0,212,170,.1); }
-        .stat-card .sv { font-family: var(--mono); font-size: 2rem; font-weight: 700; color: var(--primary); }
-        .stat-card .sl { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--text-muted); margin-top: .25rem; }
-        .stat-card.nouveau .sv { color: #f59e0b; }
-        .stat-card.nouveau:hover { border-color: rgba(245,158,11,.3); box-shadow: 0 0 0 1px rgba(245,158,11,.08); }
-        .stat-card.traite  .sv { color: #22c55e; }
-        .stat-card.traite:hover  { border-color: rgba(34,197,94,.3); box-shadow: 0 0 0 1px rgba(34,197,94,.08); }
+        .stat-card {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-top: 3px solid var(--primary);
+            border-radius: var(--radius); padding: 1.1rem 1rem 1rem;
+            text-align: center; transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+            cursor: default;
+        }
+        .stat-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,.3); transform: translateY(-2px); }
+        .stat-card .si { font-size: 1rem; margin-bottom: .45rem; opacity: .55; color: var(--primary); }
+        .stat-card .sv { font-family: var(--mono); font-size: 2.1rem; font-weight: 700; color: var(--primary); line-height: 1; }
+        .stat-card .sl { font-size: .7rem; text-transform: uppercase; letter-spacing: .09em; color: var(--text-muted); margin-top: .35rem; }
+        .stat-card.nouveau { border-top-color: #f59e0b; }
+        .stat-card.nouveau .si, .stat-card.nouveau .sv { color: #f59e0b; }
+        .stat-card.nouveau:hover { box-shadow: 0 4px 20px rgba(245,158,11,.1); }
+        .stat-card.lu { border-top-color: #818cf8; }
+        .stat-card.lu .si, .stat-card.lu .sv { color: #818cf8; }
+        .stat-card.lu:hover { box-shadow: 0 4px 20px rgba(129,140,248,.1); }
+        .stat-card.traite { border-top-color: #22c55e; }
+        .stat-card.traite .si, .stat-card.traite .sv { color: #22c55e; }
+        .stat-card.traite:hover { box-shadow: 0 4px 20px rgba(34,197,94,.1); }
 
         /* ── FILTERS ── */
-        .filter-row { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 1.5rem; align-items: center; }
-        .filter-btn { background: var(--bg-surface); border: 1px solid var(--border); color: var(--text-muted); border-radius: var(--radius); padding: .4rem 1rem; font-size: .82rem; cursor: pointer; transition: var(--transition); }
-        .filter-btn.active, .filter-btn:hover { background: var(--primary); border-color: var(--primary); color: #000; }
-        .filter-search { margin-left: auto; }
-        .filter-search input { background: var(--bg-surface); border: 1px solid var(--border); color: var(--text); border-radius: var(--radius); padding: .4rem .9rem; font-size: .82rem; width: 220px; }
-        .filter-search input:focus { outline: none; border-color: var(--primary); }
+        .filter-row { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 1.25rem; align-items: center; }
+        .filter-btn {
+            background: var(--bg-surface); border: 1px solid var(--border);
+            color: var(--text-muted); border-radius: 99px;
+            padding: .35rem 1rem; font-size: .8rem; cursor: pointer;
+            transition: var(--transition); display: flex; align-items: center; gap: .4rem;
+        }
+        .filter-btn .fcount {
+            background: rgba(255,255,255,.08); border-radius: 99px;
+            padding: 0 .45rem; font-size: .7rem; font-family: var(--mono);
+            line-height: 1.6; min-width: 1.4em; text-align: center;
+        }
+        .filter-btn.active { background: var(--primary); border-color: var(--primary); color: #000; font-weight: 600; }
+        .filter-btn.active .fcount { background: rgba(0,0,0,.2); }
+        .filter-btn:not(.active):hover { border-color: rgba(0,212,170,.4); color: var(--text); }
+        .filter-search { margin-left: auto; position: relative; }
+        .filter-search .search-icon { position: absolute; left: .75rem; top: 50%; transform: translateY(-50%); color: var(--text-dim); font-size: .78rem; pointer-events: none; }
+        .filter-search input {
+            background: var(--bg-surface); border: 1px solid var(--border);
+            color: var(--text); border-radius: 99px; padding: .38rem 1rem .38rem 2rem;
+            font-size: .82rem; width: 230px; transition: border-color 0.2s ease, width 0.25s ease;
+        }
+        .filter-search input:focus { outline: none; border-color: var(--primary); width: 270px; }
+        @media (max-width: 600px) { .filter-search { margin-left: 0; width: 100%; } .filter-search input { width: 100%; } }
 
         /* ── TABLE ── */
-        .table-wrap { overflow-x: auto; }
+        .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); }
         table { width: 100%; border-collapse: collapse; font-size: .82rem; }
-        th { background: var(--bg-surface); color: var(--text-muted); text-transform: uppercase; letter-spacing: .07em; font-size: .7rem; padding: .65rem .75rem; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; cursor: pointer; user-select: none; transition: color 0.15s ease; }
-        th:hover { color: var(--primary); }
+        thead { position: sticky; top: 0; z-index: 10; }
+        th {
+            background: var(--bg-surface); color: var(--text-muted);
+            text-transform: uppercase; letter-spacing: .07em; font-size: .68rem;
+            padding: .7rem .75rem; text-align: left;
+            border-bottom: 1px solid var(--border); white-space: nowrap;
+            user-select: none; transition: color 0.15s ease;
+        }
+        th[onclick] { cursor: pointer; }
+        th[onclick]:hover { color: var(--primary); }
         th.sort-active { color: var(--primary); }
-        th .sort-icon { font-size: .6rem; margin-left: .3rem; opacity: .6; }
-        td { padding: .65rem .75rem; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: top; }
-        tr:hover td { background: rgba(0,212,170,.03); }
-        .td-date { font-family: var(--mono); font-size: .75rem; color: var(--text-muted); white-space: nowrap; }
-        .td-msg  { max-width: 280px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; }
-        .td-msg:hover { color: var(--primary); white-space: normal; max-width: 280px; }
+        th .sort-icon { font-size: .6rem; margin-left: .3rem; opacity: .7; }
+        td { padding: .7rem .75rem; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: middle; }
+        tbody tr:last-child td { border-bottom: none; }
+        tbody tr { transition: background 0.12s ease; }
+        tbody tr:hover td { background: rgba(0,212,170,.04); }
+        tbody tr:hover td:first-child { border-left: 2px solid var(--primary); }
+        .td-date { font-family: var(--mono); font-size: .74rem; color: var(--text-muted); white-space: nowrap; line-height: 1.6; }
+        .td-msg { max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text-muted); font-size: .8rem; }
+        .td-name { font-weight: 600; font-size: .85rem; }
+        .td-email { color: var(--text-muted); font-size: .76rem; margin-top: .1rem; }
 
         /* ── BADGES ── */
-        .badge { display: inline-block; padding: .2rem .6rem; border-radius: 99px; font-size: .7rem; font-weight: 600; font-family: var(--mono); white-space: nowrap; }
-        .badge-nouveau { background: rgba(245,158,11,.15); color: #f59e0b; }
-        .badge-lu      { background: rgba(99,102,241,.15);  color: #818cf8; }
-        .badge-traite  { background: rgba(34,197,94,.15);   color: #22c55e; }
-        .badge-quote   { background: rgba(0,212,170,.12);   color: var(--primary); }
-        .badge-contact { background: rgba(99,102,241,.1);   color: #818cf8; }
+        .badge { display: inline-block; padding: .18rem .55rem; border-radius: 99px; font-size: .69rem; font-weight: 600; font-family: var(--mono); white-space: nowrap; }
+        .badge-nouveau { background: rgba(245,158,11,.12); color: #f59e0b; border: 1px solid rgba(245,158,11,.25); }
+        .badge-lu      { background: rgba(129,140,248,.12); color: #818cf8; border: 1px solid rgba(129,140,248,.25); }
+        .badge-traite  { background: rgba(34,197,94,.12);   color: #22c55e; border: 1px solid rgba(34,197,94,.25); }
+        .badge-quote   { background: rgba(0,212,170,.1);    color: var(--primary); border: 1px solid rgba(0,212,170,.2); }
+        .badge-contact { background: rgba(129,140,248,.08); color: #818cf8; border: 1px solid rgba(129,140,248,.2); }
 
         /* ── ACTION BUTTONS ── */
         .action-btns { display: flex; gap: .35rem; white-space: nowrap; }
-        .btn-xs { padding: .25rem .6rem; font-size: .72rem; border-radius: var(--radius); cursor: pointer; border: 1px solid; transition: var(--transition); font-family: var(--mono); }
-        .btn-xs-lu     { border-color: #6366f1; color: #818cf8; background: transparent; }
-        .btn-xs-lu:hover { background: rgba(99,102,241,.15); }
-        .btn-xs-traite { border-color: #22c55e; color: #22c55e; background: transparent; }
-        .btn-xs-traite:hover { background: rgba(34,197,94,.15); }
-        .btn-xs-del    { border-color: var(--danger,#ef4444); color: var(--danger,#ef4444); background: transparent; }
-        .btn-xs-del:hover { background: rgba(239,68,68,.12); }
+        .btn-xs { padding: .22rem .65rem; font-size: .72rem; border-radius: 99px; cursor: pointer; border: 1px solid; transition: var(--transition); font-family: var(--mono); }
+        .btn-xs:disabled { opacity: .3; cursor: not-allowed; }
+        .btn-xs-lu     { border-color: rgba(129,140,248,.4); color: #818cf8; background: transparent; }
+        .btn-xs-lu:not(:disabled):hover { background: rgba(99,102,241,.15); border-color: #818cf8; }
+        .btn-xs-traite { border-color: rgba(34,197,94,.4); color: #22c55e; background: transparent; }
+        .btn-xs-traite:not(:disabled):hover { background: rgba(34,197,94,.15); border-color: #22c55e; }
 
-        /* ── EMPTY / LOADING ── */
-        .empty-state { text-align: center; padding: 3rem 1rem; color: var(--text-muted); font-size: .9rem; }
-        .spinner { display: inline-block; width: 1.5rem; height: 1.5rem; border: 2px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin .7s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
+        /* ── SKELETON LOADING ── */
+        @keyframes shimmer { from { background-position: -600px 0; } to { background-position: 600px 0; } }
+        .skel {
+            background: linear-gradient(90deg, var(--bg-surface) 25%, var(--bg-hover) 50%, var(--bg-surface) 75%);
+            background-size: 600px 100%;
+            animation: shimmer 1.4s infinite linear;
+            border-radius: 4px; height: .8rem;
+        }
+        .skel-sm { width: 40%; }
+        .skel-md { width: 70%; }
+        .skel-lg { width: 90%; }
+        .skel-name { height: .85rem; width: 60%; margin-bottom: .35rem; }
+        .skel-sub  { height: .72rem; width: 80%; }
+        tr.skeleton-row td { padding: .75rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+
+        /* ── EMPTY STATE ── */
+        .empty-state { text-align: center; padding: 3.5rem 1rem; color: var(--text-muted); font-size: .88rem; }
+        .empty-state i { font-size: 2rem; opacity: .25; display: block; margin-bottom: .75rem; }
 
         /* ── TOAST ── */
         #toast {
             position: fixed; bottom: 1.5rem; right: 1.5rem;
             background: var(--bg-card); border: 1px solid var(--primary);
-            border-radius: var(--radius); padding: .65rem 1.1rem;
+            border-radius: var(--radius); padding: .6rem 1rem;
             font-size: .82rem; color: var(--primary); font-family: var(--mono);
-            z-index: 9999;
+            z-index: 9999; display: flex; align-items: center; gap: .5rem;
             opacity: 0; transform: translateY(8px);
             transition: opacity 0.2s ease, transform 0.2s ease;
             pointer-events: none;
         }
         #toast.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+
+        @media (prefers-reduced-motion: reduce) {
+            .skel { animation: none; }
+            .stat-card, .filter-btn, tbody tr { transition: none; }
+        }
     </style>
 </head>
 <body>
@@ -107,29 +178,34 @@
 <!-- ══ AUTH GATE ══ -->
 <div id="authGate">
     <div class="auth-box">
-        <div class="auth-logo">⬡ ChemistrySpot</div>
-        <div class="auth-sub">Dashboard Admin — accès restreint</div>
-        <div class="form-group">
-            <label for="pinInput" class="form-label" style="text-align:left">Mot de passe</label>
+        <div class="auth-icon"><i class="fas fa-flask"></i></div>
+        <div class="auth-logo">ChemistrySpot</div>
+        <div class="auth-sub">Espace administration — accès restreint</div>
+        <hr class="auth-divider">
+        <div class="form-group" style="text-align:left">
+            <label for="pinInput" class="form-label">Mot de passe</label>
             <input id="pinInput" type="password" class="form-input" placeholder="••••••••"
                    autocomplete="current-password" autofocus
                    onkeydown="if(event.key==='Enter') checkPin()">
         </div>
-        <button class="btn btn-primary w-full" onclick="checkPin()">
-            <i class="fas fa-sign-in-alt"></i> Accéder
+        <button class="btn btn-primary w-full" onclick="checkPin()" style="margin-top:.25rem;">
+            <i class="fas fa-arrow-right-to-bracket"></i> Accéder au Dashboard
         </button>
-        <div id="pinError" class="auth-error"><i class="fas fa-exclamation-circle"></i> Mot de passe incorrect.</div>
+        <div id="pinError" class="auth-error"><i class="fas fa-circle-xmark"></i> Mot de passe incorrect.</div>
     </div>
 </div>
 
 <!-- ══ HEADER ══ -->
 <header class="dash-header">
     <div class="dash-header-inner">
-        <div class="dash-title">⬡ ChemistrySpot — Dashboard</div>
-        <div style="display:flex;gap:.75rem;align-items:center;">
-            <span id="lastRefresh" style="font-family:var(--mono);font-size:.72rem;color:var(--text-muted);"></span>
-            <button class="btn btn-outline btn-sm" onclick="loadRequests()"><i class="fas fa-sync-alt"></i> Rafraîchir</button>
-            <a href="index.html" class="btn btn-outline btn-sm"><i class="fas fa-home"></i> Site</a>
+        <div>
+            <div class="dash-title"><i class="fas fa-flask"></i> ChemistrySpot Dashboard</div>
+            <div class="dash-title-sub">Demandes de contact &amp; devis</div>
+        </div>
+        <div style="display:flex;gap:.6rem;align-items:center;">
+            <span id="lastRefresh" style="font-family:var(--mono);font-size:.7rem;color:var(--text-muted);display:none;" id="lastRefresh"></span>
+            <button class="btn btn-outline btn-sm" onclick="loadRequests()"><i class="fas fa-rotate-right"></i> Rafraîchir</button>
+            <a href="index.html" class="btn btn-outline btn-sm"><i class="fas fa-arrow-up-right-from-square"></i> Site</a>
         </div>
     </div>
 </header>
@@ -140,18 +216,22 @@
     <!-- Stats -->
     <div class="stats-row">
         <div class="stat-card">
+            <div class="si"><i class="fas fa-inbox"></i></div>
             <div class="sv" id="statTotal">—</div>
             <div class="sl">Total demandes</div>
         </div>
         <div class="stat-card nouveau">
+            <div class="si"><i class="fas fa-bell"></i></div>
             <div class="sv" id="statNouveau">—</div>
             <div class="sl">Nouveau</div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card lu">
+            <div class="si"><i class="fas fa-eye"></i></div>
             <div class="sv" id="statLu">—</div>
             <div class="sl">Lu</div>
         </div>
         <div class="stat-card traite">
+            <div class="si"><i class="fas fa-circle-check"></i></div>
             <div class="sv" id="statTraite">—</div>
             <div class="sl">Traité</div>
         </div>
@@ -159,12 +239,13 @@
 
     <!-- Filters -->
     <div class="filter-row">
-        <button class="filter-btn active" onclick="setFilter('tous', this)">Tous</button>
-        <button class="filter-btn" onclick="setFilter('nouveau', this)">Nouveau</button>
-        <button class="filter-btn" onclick="setFilter('lu', this)">Lu</button>
-        <button class="filter-btn" onclick="setFilter('traite', this)">Traité</button>
+        <button class="filter-btn active" onclick="setFilter('tous', this)">Tous <span class="fcount" id="fc-tous">—</span></button>
+        <button class="filter-btn" onclick="setFilter('nouveau', this)">Nouveau <span class="fcount" id="fc-nouveau">—</span></button>
+        <button class="filter-btn" onclick="setFilter('lu', this)">Lu <span class="fcount" id="fc-lu">—</span></button>
+        <button class="filter-btn" onclick="setFilter('traite', this)">Traité <span class="fcount" id="fc-traite">—</span></button>
         <div class="filter-search">
-            <input id="searchInput" type="text" placeholder="Rechercher email / entreprise…" oninput="renderTable()">
+            <i class="fas fa-magnifying-glass search-icon"></i>
+            <input id="searchInput" type="search" placeholder="Rechercher email, entreprise…" oninput="renderTable()" autocomplete="off">
         </div>
     </div>
 
@@ -173,13 +254,13 @@
         <table id="reqTable">
             <thead>
                 <tr>
-                    <th onclick="sortBy('id')">#</th>
-                    <th onclick="sortBy('created_at')">Date ↓</th>
-                    <th onclick="sortBy('email')">Email</th>
-                    <th onclick="sortBy('entreprise')">Entreprise</th>
-                    <th onclick="sortBy('sujet')">Sujet</th>
+                    <th onclick="sortBy('id')" aria-sort="none">#</th>
+                    <th onclick="sortBy('created_at')" aria-sort="descending">Date</th>
+                    <th onclick="sortBy('email')" aria-sort="none">Contact</th>
+                    <th onclick="sortBy('entreprise')" aria-sort="none">Entreprise</th>
+                    <th onclick="sortBy('sujet')" aria-sort="none">Sujet</th>
                     <th>Message</th>
-                    <th onclick="sortBy('statut')">Statut</th>
+                    <th onclick="sortBy('statut')" aria-sort="none">Statut</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -191,7 +272,10 @@
 
 </main>
 
-<div id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+<div id="toast" role="status" aria-live="polite" aria-atomic="true">
+    <i class="fas fa-circle-check" id="toastIcon"></i>
+    <span id="toastMsg"></span>
+</div>
 
 <script>
 // ── CONFIG ──────────────────────────────────────────────────
@@ -221,9 +305,21 @@ let currentFilter = 'tous';
 let sortCol = 'created_at';
 let sortAsc = false;
 
+function skeletonRows() {
+    return Array.from({length: 5}, () => `<tr class="skeleton-row">
+        <td><div class="skel skel-sm"></div></td>
+        <td><div class="skel skel-md"></div></td>
+        <td><div class="skel skel-name"></div><div class="skel skel-sub"></div></td>
+        <td><div class="skel skel-md"></div></td>
+        <td><div class="skel skel-sm"></div></td>
+        <td><div class="skel skel-lg"></div></td>
+        <td><div class="skel skel-sm"></div></td>
+        <td><div class="skel skel-md"></div></td>
+    </tr>`).join('');
+}
+
 async function loadRequests() {
-    document.getElementById('reqBody').innerHTML =
-        '<tr><td colspan="8" class="empty-state"><div class="spinner"></div></td></tr>';
+    document.getElementById('reqBody').innerHTML = skeletonRows();
     try {
         const res = await fetch(
             `${SUPABASE_URL}/rest/v1/contact_requests?select=*&order=created_at.desc`,
@@ -233,8 +329,9 @@ async function loadRequests() {
         allRows = await res.json();
         updateStats();
         renderTable();
-        document.getElementById('lastRefresh').textContent =
-            'Mis à jour ' + new Date().toLocaleTimeString('fr-FR');
+        const lr = document.getElementById('lastRefresh');
+        lr.textContent = 'Mis à jour ' + new Date().toLocaleTimeString('fr-FR');
+        lr.style.display = '';
     } catch (err) {
         document.getElementById('reqBody').innerHTML =
             `<tr><td colspan="8" class="empty-state" style="color:var(--danger)"><i class="fas fa-exclamation-circle"></i> Erreur : ${err.message}</td></tr>`;
@@ -250,6 +347,11 @@ function updateStats() {
     document.getElementById('statNouveau').textContent = nouveau;
     document.getElementById('statLu').textContent      = lu;
     document.getElementById('statTraite').textContent  = traite;
+    // Filter count badges
+    document.getElementById('fc-tous').textContent    = total;
+    document.getElementById('fc-nouveau').textContent = nouveau;
+    document.getElementById('fc-lu').textContent      = lu;
+    document.getElementById('fc-traite').textContent  = traite;
 }
 
 function setFilter(f, btn) {
@@ -269,13 +371,13 @@ function sortBy(col) {
         if (icon) icon.remove();
     });
     const cols = ['id','created_at','email','entreprise','sujet',null,'statut',null];
+    const ths = document.querySelectorAll('#reqTable th');
+    ths.forEach(th => th.setAttribute('aria-sort', 'none'));
     const idx = cols.indexOf(col);
-    if (idx !== -1) {
-        const ths = document.querySelectorAll('#reqTable th');
-        if (ths[idx]) {
-            ths[idx].classList.add('sort-active');
-            ths[idx].insertAdjacentHTML('beforeend', `<span class="sort-icon">${sortAsc ? '▲' : '▼'}</span>`);
-        }
+    if (idx !== -1 && ths[idx]) {
+        ths[idx].classList.add('sort-active');
+        ths[idx].setAttribute('aria-sort', sortAsc ? 'ascending' : 'descending');
+        ths[idx].insertAdjacentHTML('beforeend', `<span class="sort-icon">${sortAsc ? '▲' : '▼'}</span>`);
     }
     renderTable();
 }
@@ -302,35 +404,36 @@ function renderTable() {
 
     if (!rows.length) {
         document.getElementById('reqBody').innerHTML =
-            '<tr><td colspan="8" class="empty-state">Aucune demande.</td></tr>';
+            '<tr><td colspan="8" class="empty-state"><i class="fas fa-inbox"></i>Aucune demande pour ce filtre.</td></tr>';
         return;
     }
 
     document.getElementById('reqBody').innerHTML = rows.map(r => {
         const d = new Date(r.created_at);
-        const dateStr = d.toLocaleDateString('fr-FR') + '<br>' + d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+        const dateStr = d.toLocaleDateString('fr-FR') + '<br><span style="opacity:.6">' + d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) + '</span>';
         const nom = [r.prenom, r.nom].filter(Boolean).join(' ') || '—';
+        const sujetLabel = { quote: 'Devis', general: 'Général', supplier: 'Fournisseur', technical: 'Technique', partnership: 'Partenariat', other: 'Autre' };
         const statutBadge = `<span class="badge badge-${r.statut}">${r.statut}</span>`;
         const sujetBadge  = r.sujet === 'quote'
-            ? `<span class="badge badge-quote">devis</span>`
-            : `<span class="badge badge-contact">${r.sujet}</span>`;
-        const disabledLu     = r.statut === 'lu'     ? 'disabled style="opacity:.4"' : '';
-        const disabledTraite = r.statut === 'traite' ? 'disabled style="opacity:.4"' : '';
+            ? `<span class="badge badge-quote"><i class="fas fa-tag" style="margin-right:.3rem;font-size:.6rem"></i>${sujetLabel[r.sujet] || r.sujet}</span>`
+            : `<span class="badge badge-contact">${sujetLabel[r.sujet] || r.sujet}</span>`;
+        const disabledLu     = r.statut === 'lu'     ? 'disabled' : '';
+        const disabledTraite = r.statut === 'traite' ? 'disabled' : '';
         return `<tr>
-            <td class="td-date" style="color:var(--text-muted)">${r.id}</td>
+            <td class="td-date">${r.id}</td>
             <td class="td-date">${dateStr}</td>
             <td>
-                <div style="font-weight:600">${nom}</div>
-                <div style="color:var(--text-muted);font-size:.75rem">${r.email}</div>
+                <div class="td-name">${escHtml(nom)}</div>
+                <div class="td-email">${escHtml(r.email)}</div>
             </td>
-            <td>${r.entreprise || '—'}</td>
+            <td>${escHtml(r.entreprise || '—')}</td>
             <td>${sujetBadge}</td>
             <td class="td-msg" title="${escHtml(r.message)}">${escHtml(r.message)}</td>
             <td>${statutBadge}</td>
             <td>
                 <div class="action-btns">
-                    <button class="btn-xs btn-xs-lu" onclick="updateStatut(${r.id},'lu')" ${disabledLu}>Lu</button>
-                    <button class="btn-xs btn-xs-traite" onclick="updateStatut(${r.id},'traite')" ${disabledTraite}>Traité</button>
+                    <button class="btn-xs btn-xs-lu" onclick="updateStatut(${r.id},'lu')" ${disabledLu} aria-label="Marquer lu">Lu</button>
+                    <button class="btn-xs btn-xs-traite" onclick="updateStatut(${r.id},'traite')" ${disabledTraite} aria-label="Marquer traité">Traité</button>
                 </div>
             </td>
         </tr>`;
@@ -370,13 +473,17 @@ async function updateStatut(id, newStatut) {
 
 let _toastTimer;
 function showToast(msg, isErr = false) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.style.borderColor = isErr ? 'var(--danger)' : 'var(--primary)';
-    t.style.color       = isErr ? 'var(--danger)' : 'var(--primary)';
+    const t    = document.getElementById('toast');
+    const icon = document.getElementById('toastIcon');
+    const span = document.getElementById('toastMsg');
+    const col  = isErr ? 'var(--danger)' : 'var(--primary)';
+    t.style.borderColor = col;
+    t.style.color       = col;
+    icon.className = isErr ? 'fas fa-circle-xmark' : 'fas fa-circle-check';
+    span.textContent = msg;
     t.classList.add('visible');
     clearTimeout(_toastTimer);
-    _toastTimer = setTimeout(() => { t.classList.remove('visible'); }, 2800);
+    _toastTimer = setTimeout(() => { t.classList.remove('visible'); }, 3000);
 }
 </script>
 
