@@ -97,6 +97,442 @@
       ]
     }
     </script>
+
+    <style>
+    /* ── Catalogue Layout ───────────────────────────────────────── */
+    .catalogue-layout {
+        display: flex;
+        gap: 1.5rem;
+        align-items: flex-start;
+    }
+
+    /* ── Filter Sidebar ─────────────────────────────────────────── */
+    .filter-sidebar {
+        width: 264px;
+        flex-shrink: 0;
+        position: sticky;
+        top: 90px;
+        max-height: calc(100vh - 110px);
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--border) transparent;
+    }
+    .filter-sidebar::-webkit-scrollbar { width: 4px; }
+    .filter-sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .sidebar-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 1rem;
+        margin-bottom: 0.75rem;
+    }
+    .sidebar-title {
+        font-size: .78rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+        color: var(--text-muted);
+        margin-bottom: .75rem;
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+    }
+    .sidebar-title i { color: var(--primary); font-size: .75rem; }
+
+    /* Stock toggle */
+    .toggle-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: .88rem;
+    }
+    .toggle-switch {
+        position: relative;
+        width: 36px;
+        height: 20px;
+        flex-shrink: 0;
+    }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+    .toggle-track {
+        position: absolute;
+        inset: 0;
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
+        border-radius: 99px;
+        cursor: pointer;
+        transition: background .2s;
+    }
+    .toggle-track::after {
+        content: '';
+        position: absolute;
+        left: 2px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 14px;
+        height: 14px;
+        background: var(--text-muted);
+        border-radius: 50%;
+        transition: transform .2s, background .2s;
+    }
+    .toggle-switch input:checked + .toggle-track { background: var(--primary); border-color: var(--primary); }
+    .toggle-switch input:checked + .toggle-track::after {
+        transform: translateX(16px) translateY(-50%);
+        background: #fff;
+    }
+
+    /* Pill checkboxes */
+    .pill-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .4rem;
+    }
+    .pill-label {
+        display: inline-flex;
+        align-items: center;
+        gap: .3rem;
+        padding: .28rem .7rem;
+        border-radius: 99px;
+        border: 1px solid var(--border);
+        background: var(--bg-surface);
+        font-size: .78rem;
+        color: var(--text-muted);
+        cursor: pointer;
+        transition: all .15s ease;
+        user-select: none;
+    }
+    .pill-label:hover { border-color: var(--primary); color: var(--primary); }
+    .pill-label input { display: none; }
+    .pill-label.active {
+        background: rgba(0,212,170,.12);
+        border-color: var(--primary);
+        color: var(--primary);
+        font-weight: 500;
+    }
+
+    /* Range slider */
+    .range-container { padding: .25rem 0 .5rem; }
+    .range-values {
+        display: flex;
+        justify-content: space-between;
+        font-size: .75rem;
+        color: var(--text-muted);
+        margin-bottom: .5rem;
+        font-family: var(--mono);
+    }
+    .range-values span { color: var(--primary); font-weight: 500; }
+    .dual-range-wrap {
+        position: relative;
+        height: 28px;
+        display: flex;
+        align-items: center;
+    }
+    .range-track-bg {
+        position: absolute;
+        left: 0; right: 0;
+        height: 4px;
+        background: var(--bg-surface);
+        border-radius: 2px;
+        border: 1px solid var(--border);
+    }
+    .range-track-fill {
+        position: absolute;
+        height: 4px;
+        background: var(--primary);
+        border-radius: 2px;
+    }
+    .range-thumb {
+        position: absolute;
+        width: 100%;
+        height: 0;
+        -webkit-appearance: none;
+        appearance: none;
+        background: transparent;
+        pointer-events: none;
+        outline: none;
+    }
+    .range-thumb::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 16px; height: 16px;
+        border-radius: 50%;
+        background: var(--primary);
+        border: 2px solid var(--bg-card);
+        box-shadow: 0 0 0 2px var(--primary-glow);
+        cursor: pointer;
+        pointer-events: all;
+        transition: box-shadow .15s;
+    }
+    .range-thumb::-webkit-slider-thumb:hover { box-shadow: 0 0 0 4px var(--primary-glow); }
+    .range-thumb::-moz-range-thumb {
+        width: 16px; height: 16px;
+        border-radius: 50%;
+        background: var(--primary);
+        border: 2px solid var(--bg-card);
+        cursor: pointer;
+        pointer-events: all;
+    }
+
+    /* Clear all button */
+    .clear-filters-btn {
+        width: 100%;
+        padding: .5rem;
+        background: transparent;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        color: var(--text-muted);
+        font-size: .8rem;
+        cursor: pointer;
+        transition: all .15s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: .4rem;
+    }
+    .clear-filters-btn:hover { border-color: var(--danger); color: var(--danger); background: rgba(255,77,77,.06); }
+
+    /* Mobile filter toggle */
+    .mobile-filter-toggle {
+        display: none;
+        align-items: center;
+        gap: .5rem;
+        padding: .5rem .875rem;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        color: var(--text-muted);
+        font-size: .85rem;
+        cursor: pointer;
+        transition: all .15s;
+    }
+    .mobile-filter-toggle:hover { border-color: var(--primary); color: var(--primary); }
+    .mobile-filter-toggle .active-count {
+        background: var(--primary);
+        color: #000;
+        font-size: .7rem;
+        font-weight: 700;
+        border-radius: 99px;
+        padding: .1rem .4rem;
+        min-width: 18px;
+        text-align: center;
+        display: none;
+    }
+    .mobile-filter-toggle .active-count.visible { display: inline-block; }
+
+    /* Catalogue main */
+    .catalogue-main { flex: 1; min-width: 0; }
+
+    /* Active filter chips */
+    .active-filters-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .4rem;
+        margin-bottom: .75rem;
+        min-height: 0;
+    }
+    .filter-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: .35rem;
+        padding: .25rem .65rem;
+        background: rgba(0,212,170,.1);
+        border: 1px solid rgba(0,212,170,.3);
+        border-radius: 99px;
+        font-size: .76rem;
+        color: var(--primary);
+        cursor: pointer;
+        transition: all .15s;
+    }
+    .filter-chip:hover { background: rgba(255,77,77,.1); border-color: rgba(255,77,77,.3); color: var(--danger); }
+    .filter-chip .chip-x { font-size: .7rem; opacity: .7; }
+
+    /* Results bar */
+    .results-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+    .results-count {
+        font-size: .85rem;
+        color: var(--text-muted);
+    }
+    .results-count strong {
+        color: var(--primary);
+        font-family: var(--mono);
+        font-size: .9rem;
+    }
+
+    /* Search + category bar */
+    .top-filters {
+        display: flex;
+        gap: .75rem;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+    }
+    .top-filters .search-wrap {
+        flex: 1;
+        min-width: 200px;
+        display: flex;
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        overflow: hidden;
+        transition: border-color .15s;
+    }
+    .top-filters .search-wrap:focus-within { border-color: var(--border-focus); }
+    .top-filters .search-wrap input {
+        flex: 1;
+        background: transparent;
+        border: none;
+        padding: .5rem .75rem;
+        color: var(--text);
+        font-size: .88rem;
+        outline: none;
+    }
+    .top-filters .search-wrap input::placeholder { color: var(--text-dim); }
+    .top-filters .search-wrap button {
+        padding: 0 .75rem;
+        background: var(--primary);
+        border: none;
+        color: #000;
+        cursor: pointer;
+        transition: background .15s;
+    }
+    .top-filters .search-wrap button:hover { background: var(--primary-dark); }
+    .top-filters select {
+        padding: .5rem .75rem;
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        color: var(--text);
+        font-size: .88rem;
+        cursor: pointer;
+        outline: none;
+        min-width: 160px;
+    }
+    .top-filters select:focus { border-color: var(--border-focus); }
+
+    /* Product card new features */
+    .card-stock-dot {
+        width: 8px; height: 8px;
+        border-radius: 50%;
+        background: var(--success);
+        box-shadow: 0 0 6px rgba(34,197,94,.5);
+        flex-shrink: 0;
+    }
+    .card-stock-row {
+        display: flex;
+        align-items: center;
+        gap: .4rem;
+        font-size: .75rem;
+        color: var(--success);
+        margin-bottom: .5rem;
+    }
+    .card-cert-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .3rem;
+        margin-bottom: .5rem;
+    }
+    .badge-cert {
+        padding: .15rem .5rem;
+        border-radius: 4px;
+        font-size: .7rem;
+        font-weight: 600;
+        font-family: var(--mono);
+        background: rgba(0,212,170,.08);
+        border: 1px solid rgba(0,212,170,.2);
+        color: var(--primary);
+    }
+    .badge-cert-more {
+        padding: .15rem .5rem;
+        border-radius: 4px;
+        font-size: .7rem;
+        background: var(--bg-surface);
+        color: var(--text-muted);
+        border: 1px solid var(--border);
+    }
+    .card-grades {
+        font-size: .75rem;
+        color: var(--text-muted);
+        margin-bottom: .25rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .card-grades span { color: var(--text); }
+
+    /* Sidebar mobile overlay */
+    .sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,.6);
+        z-index: 199;
+        backdrop-filter: blur(2px);
+    }
+    .sidebar-overlay.active { display: block; }
+
+    @media (max-width: 1023px) {
+        .filter-sidebar {
+            position: fixed;
+            top: 0; left: 0;
+            width: 280px;
+            height: 100vh;
+            max-height: 100vh;
+            z-index: 200;
+            background: var(--bg-card);
+            border-right: 1px solid var(--border);
+            border-radius: 0;
+            padding: 1rem;
+            transform: translateX(-100%);
+            transition: transform .25s ease;
+            overflow-y: auto;
+        }
+        .filter-sidebar.open { transform: translateX(0); }
+        .sidebar-mobile-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: .75rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .sidebar-mobile-header h3 {
+            font-size: .95rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .sidebar-close-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: .25rem;
+            line-height: 1;
+        }
+        .mobile-filter-toggle { display: flex; }
+        .catalogue-layout { display: block; }
+        .catalogue-main { width: 100%; }
+    }
+    @media (min-width: 1024px) {
+        .sidebar-mobile-header { display: none; }
+    }
+
+    /* Stats row adjustments */
+    .stats-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: .75rem;
+        margin-bottom: 1.25rem;
+    }
+    @media (max-width: 768px) {
+        .stats-row { grid-template-columns: repeat(2, 1fr); }
+    }
+    </style>
 </head>
 <body>
 
@@ -163,48 +599,183 @@
             </div>
         </div>
 
-        <!-- Filtres -->
-        <div class="filters-bar">
-            <div class="filter-group" style="flex:2; min-width:240px;">
-                <label class="filter-label"><i class="fas fa-search"></i> Rechercher</label>
-                <div style="display:flex; gap:0; background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden;">
-                    <input type="text" id="catalogSearchInput" class="form-input" placeholder="Nom, CAS, formule..." style="border:none; background:transparent; flex:1;">
-                    <button class="btn btn-primary btn-sm" style="border-radius:0;" onclick="handleSearch()"><i class="fas fa-search"></i></button>
-                </div>
-            </div>
-            <div class="filter-group">
-                <label class="filter-label"><i class="fas fa-tag"></i> Catégorie</label>
-                <select id="categoryFilter" class="form-input form-select" onchange="applyFilters()">
-                    <option value="">Toutes les catégories</option>
-                    <option value="liant">Liant</option>
-                    <option value="désintégrant">Désintégrant</option>
-                    <option value="lubrifiant">Lubrifiant</option>
-                    <option value="diluant">Diluant</option>
-                    <option value="conservateur">Conservateur</option>
-                </select>
-            </div>
-            <div class="filter-group" style="flex:0; min-width:auto; justify-content:flex-end; align-self:flex-end;">
-                <button class="btn btn-ghost btn-sm" onclick="resetFilters()"><i class="fas fa-redo"></i> Réinitialiser</button>
-            </div>
-        </div>
-
-        <!-- Loading -->
+        <!-- Loading skeleton -->
         <div id="catalogLoading" class="loading-state">
             <div class="spin-lg"></div>
             <p>Chargement des excipients depuis Supabase...</p>
         </div>
 
-        <!-- Résultats -->
-        <div id="catalogResults" style="display:none;">
-            <div class="products-grid" id="productsGrid"></div>
-        </div>
+        <!-- Catalogue layout (hidden until data loads) -->
+        <div id="catalogReady" style="display:none;">
 
-        <!-- No results -->
-        <div id="noResults" class="empty-state" style="display:none;">
-            <i class="fas fa-search"></i>
-            <p>Aucun excipient trouvé pour cette recherche.</p>
-            <button class="btn btn-outline btn-sm" onclick="resetFilters()">Réinitialiser les filtres</button>
-        </div>
+            <!-- Mobile filter toggle -->
+            <button class="mobile-filter-toggle" id="mobileFilterToggle" onclick="openSidebar()" aria-expanded="false" aria-controls="filterSidebar">
+                <i class="fas fa-sliders-h"></i>
+                Filtres avancés
+                <span class="active-count" id="mobileFilterCount">0</span>
+            </button>
+
+            <!-- Mobile overlay -->
+            <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+            <div class="catalogue-layout">
+
+                <!-- ── Filter sidebar ── -->
+                <aside class="filter-sidebar" id="filterSidebar" aria-label="Filtres avancés">
+
+                    <!-- Mobile header -->
+                    <div class="sidebar-mobile-header">
+                        <h3><i class="fas fa-sliders-h"></i> Filtres</h3>
+                        <button class="sidebar-close-btn" onclick="closeSidebar()" aria-label="Fermer les filtres">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+
+                    <!-- Stock disponible -->
+                    <div class="sidebar-card">
+                        <div class="toggle-row">
+                            <span>Stock disponible uniquement</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="filterStock" onchange="onFilterChange()">
+                                <span class="toggle-track"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Certifications -->
+                    <div class="sidebar-card">
+                        <div class="sidebar-title"><i class="fas fa-certificate"></i> Certifications</div>
+                        <div class="pill-group" id="certPills">
+                            <label class="pill-label" data-filter="certifications" data-value="Ph.Eur.">
+                                <input type="checkbox" value="Ph.Eur." onchange="onPillChange(this)"> Ph.Eur.
+                            </label>
+                            <label class="pill-label" data-filter="certifications" data-value="USP/NF">
+                                <input type="checkbox" value="USP/NF" onchange="onPillChange(this)"> USP/NF
+                            </label>
+                            <label class="pill-label" data-filter="certifications" data-value="JP">
+                                <input type="checkbox" value="JP" onchange="onPillChange(this)"> JP
+                            </label>
+                            <label class="pill-label" data-filter="certifications" data-value="BP">
+                                <input type="checkbox" value="BP" onchange="onPillChange(this)"> BP
+                            </label>
+                            <label class="pill-label" data-filter="certifications" data-value="GMP">
+                                <input type="checkbox" value="GMP" onchange="onPillChange(this)"> GMP
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Origine -->
+                    <div class="sidebar-card">
+                        <div class="sidebar-title"><i class="fas fa-globe"></i> Origine</div>
+                        <div class="pill-group" id="originePills">
+                            <label class="pill-label" data-filter="origine" data-value="Europe">
+                                <input type="checkbox" value="Europe" onchange="onPillChange(this)"> Europe
+                            </label>
+                            <label class="pill-label" data-filter="origine" data-value="Inde">
+                                <input type="checkbox" value="Inde" onchange="onPillChange(this)"> Inde
+                            </label>
+                            <label class="pill-label" data-filter="origine" data-value="Chine">
+                                <input type="checkbox" value="Chine" onchange="onPillChange(this)"> Chine
+                            </label>
+                            <label class="pill-label" data-filter="origine" data-value="USA">
+                                <input type="checkbox" value="USA" onchange="onPillChange(this)"> USA
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Conditionnements -->
+                    <div class="sidebar-card">
+                        <div class="sidebar-title"><i class="fas fa-box"></i> Conditionnements</div>
+                        <div class="pill-group" id="condPills">
+                            <label class="pill-label" data-filter="conditionnements" data-value="1 kg">
+                                <input type="checkbox" value="1 kg" onchange="onPillChange(this)"> 1 kg
+                            </label>
+                            <label class="pill-label" data-filter="conditionnements" data-value="5 kg">
+                                <input type="checkbox" value="5 kg" onchange="onPillChange(this)"> 5 kg
+                            </label>
+                            <label class="pill-label" data-filter="conditionnements" data-value="25 kg">
+                                <input type="checkbox" value="25 kg" onchange="onPillChange(this)"> 25 kg
+                            </label>
+                            <label class="pill-label" data-filter="conditionnements" data-value="Big Bag 500 kg">
+                                <input type="checkbox" value="Big Bag 500 kg" onchange="onPillChange(this)"> Big Bag
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Taille particule -->
+                    <div class="sidebar-card">
+                        <div class="sidebar-title"><i class="fas fa-ruler"></i> Taille particule (µm)</div>
+                        <div class="range-container">
+                            <div class="range-values">
+                                <span id="rangeMinVal">0 µm</span>
+                                <span id="rangeMaxVal">500 µm</span>
+                            </div>
+                            <div class="dual-range-wrap">
+                                <div class="range-track-bg"></div>
+                                <div class="range-track-fill" id="rangeTrackFill"></div>
+                                <input type="range" class="range-thumb" id="rangeMin"
+                                    min="0" max="500" value="0" step="5"
+                                    oninput="onRangeChange()" aria-label="Taille particule minimum">
+                                <input type="range" class="range-thumb" id="rangeMax"
+                                    min="0" max="500" value="500" step="5"
+                                    oninput="onRangeChange()" aria-label="Taille particule maximum">
+                            </div>
+                            <p style="font-size:.72rem;color:var(--text-dim);margin-top:.5rem;">
+                                Données disponibles pour 10 excipients prioritaires.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Clear all -->
+                    <button class="clear-filters-btn" onclick="clearAllFilters()" id="clearAllBtn" style="display:none;">
+                        <i class="fas fa-times"></i> Effacer tous les filtres
+                    </button>
+
+                </aside>
+
+                <!-- ── Catalogue main ── -->
+                <div class="catalogue-main">
+
+                    <!-- Top filters (search + category) -->
+                    <div class="top-filters">
+                        <div class="search-wrap">
+                            <input type="text" id="catalogSearchInput" placeholder="Nom, CAS, formule..." autocomplete="off"
+                                onkeydown="if(event.key==='Enter') applyFilters()">
+                            <button onclick="applyFilters()" aria-label="Rechercher"><i class="fas fa-search"></i></button>
+                        </div>
+                        <select id="categoryFilter" onchange="applyFilters()" aria-label="Filtrer par catégorie">
+                            <option value="">Toutes les catégories</option>
+                            <option value="liant">Liant</option>
+                            <option value="désintégrant">Désintégrant</option>
+                            <option value="lubrifiant">Lubrifiant</option>
+                            <option value="diluant">Diluant</option>
+                            <option value="conservateur">Conservateur</option>
+                        </select>
+                    </div>
+
+                    <!-- Active filter chips -->
+                    <div class="active-filters-bar" id="activeFiltersBar" role="list" aria-label="Filtres actifs"></div>
+
+                    <!-- Results count -->
+                    <div class="results-bar">
+                        <p class="results-count">
+                            <strong id="displayedProducts2">0</strong> excipient(s) trouvé(s)
+                        </p>
+                    </div>
+
+                    <!-- Products grid -->
+                    <div id="productsGrid" class="products-grid"></div>
+
+                    <!-- No results -->
+                    <div id="noResults" class="empty-state" style="display:none;">
+                        <i class="fas fa-search"></i>
+                        <p>Aucun excipient trouvé pour ces critères.</p>
+                        <button class="btn btn-outline btn-sm" onclick="clearAllFilters()">Effacer les filtres</button>
+                    </div>
+
+                </div><!-- /.catalogue-main -->
+            </div><!-- /.catalogue-layout -->
+        </div><!-- /#catalogReady -->
 
     </div>
 </main>
@@ -304,51 +875,229 @@
 
 <script>
 // ── EmailJS config ────────────────────────────────────────────
-// TODO: remplacer par vos vraies clés (https://www.emailjs.com/)
-const EMAILJS_PUBLIC_KEY  = 'VOTRE_PUBLIC_KEY';   // Account > API Keys
-const EMAILJS_SERVICE_ID  = 'VOTRE_SERVICE_ID';   // Email Services
-const EMAILJS_TEMPLATE_ID = 'VOTRE_TEMPLATE_ID';  // Email Templates
+const EMAILJS_PUBLIC_KEY  = 'VOTRE_PUBLIC_KEY';
+const EMAILJS_SERVICE_ID  = 'VOTRE_SERVICE_ID';
+const EMAILJS_TEMPLATE_ID = 'VOTRE_TEMPLATE_ID';
 emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
-// ─────────────────────────────────────────────────────────────
 
+// ── Modal helpers ─────────────────────────────────────────────
 function openModal(id) { document.getElementById(id).classList.add('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 document.querySelectorAll('.modal').forEach(m => m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); }));
 
+// ── Global search ──────────────────────────────────────────────
 function goSearch() {
     const q = document.getElementById('globalSearch').value.trim();
-    if (q) { document.getElementById('catalogSearchInput').value = q; handleSearch(); }
+    if (q) { document.getElementById('catalogSearchInput').value = q; applyFilters(); }
 }
 document.getElementById('globalSearch').addEventListener('keydown', e => { if (e.key === 'Enter') goSearch(); });
 
+// ── Data state ─────────────────────────────────────────────────
 let allExcipients = [];
 let filteredExcipients = [];
-let pricesMap = {}; // excipient_id → {prix_min, prix_max, source}
+let pricesMap = {};
 
+// ── Advanced filter state ──────────────────────────────────────
+const advFilters = {
+    certifications: new Set(),
+    conditionnements: new Set(),
+    origine: new Set(),
+    stock: false,
+    particuleMin: 0,
+    particuleMax: 500,
+};
+
+// ── Sidebar (mobile) ──────────────────────────────────────────
+function openSidebar() {
+    document.getElementById('filterSidebar').classList.add('open');
+    document.getElementById('sidebarOverlay').classList.add('active');
+    document.getElementById('mobileFilterToggle').setAttribute('aria-expanded', 'true');
+}
+function closeSidebar() {
+    document.getElementById('filterSidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('active');
+    document.getElementById('mobileFilterToggle').setAttribute('aria-expanded', 'false');
+}
+
+// ── Pill checkbox change ───────────────────────────────────────
+function onPillChange(input) {
+    const label = input.closest('.pill-label');
+    const filterKey = label.dataset.filter;
+    const value = input.value;
+    if (input.checked) {
+        advFilters[filterKey].add(value);
+        label.classList.add('active');
+    } else {
+        advFilters[filterKey].delete(value);
+        label.classList.remove('active');
+    }
+    onFilterChange();
+}
+
+// ── Stock toggle ───────────────────────────────────────────────
+function onFilterChange() {
+    advFilters.stock = document.getElementById('filterStock').checked;
+    applyFilters();
+}
+
+// ── Range slider ───────────────────────────────────────────────
+function onRangeChange() {
+    let min = parseInt(document.getElementById('rangeMin').value);
+    let max = parseInt(document.getElementById('rangeMax').value);
+    if (min > max) {
+        // Swap: determine which was last moved
+        const active = document.activeElement;
+        if (active && active.id === 'rangeMin') {
+            document.getElementById('rangeMin').value = max;
+            min = max;
+        } else {
+            document.getElementById('rangeMax').value = min;
+            max = min;
+        }
+    }
+    document.getElementById('rangeMinVal').textContent = min + ' µm';
+    document.getElementById('rangeMaxVal').textContent = max + ' µm';
+    // Update fill track
+    const fill = document.getElementById('rangeTrackFill');
+    fill.style.left  = (min / 500 * 100) + '%';
+    fill.style.width = ((max - min) / 500 * 100) + '%';
+    advFilters.particuleMin = min;
+    advFilters.particuleMax = max;
+    applyFilters();
+}
+
+// Initialize range track fill on load
+function initRangeFill() {
+    const fill = document.getElementById('rangeTrackFill');
+    fill.style.left  = '0%';
+    fill.style.width = '100%';
+}
+
+// ── Active filter chips ────────────────────────────────────────
+function renderActiveFilters() {
+    const bar = document.getElementById('activeFiltersBar');
+    const chips = [];
+
+    // Certifications
+    advFilters.certifications.forEach(v => {
+        chips.push({ key: 'certifications', value: v, label: v });
+    });
+    // Origine
+    advFilters.origine.forEach(v => {
+        chips.push({ key: 'origine', value: v, label: v });
+    });
+    // Conditionnements
+    advFilters.conditionnements.forEach(v => {
+        chips.push({ key: 'conditionnements', value: v, label: v });
+    });
+    // Stock
+    if (advFilters.stock) {
+        chips.push({ key: 'stock', value: null, label: 'Stock disponible' });
+    }
+    // Particle range
+    if (advFilters.particuleMin !== 0 || advFilters.particuleMax !== 500) {
+        chips.push({
+            key: 'range',
+            value: null,
+            label: `Particule ${advFilters.particuleMin}–${advFilters.particuleMax} µm`
+        });
+    }
+
+    bar.innerHTML = chips.map(c => `
+        <button class="filter-chip" role="listitem"
+            onclick="removeFilter('${c.key}','${c.value || ''}')"
+            aria-label="Supprimer le filtre ${c.label}">
+            ${c.label} <span class="chip-x">✕</span>
+        </button>
+    `).join('');
+
+    // Show/hide "clear all"
+    const hasFilters = chips.length > 0 ||
+        document.getElementById('catalogSearchInput').value.trim() ||
+        document.getElementById('categoryFilter').value;
+    document.getElementById('clearAllBtn').style.display = hasFilters ? 'flex' : 'none';
+
+    // Mobile badge count
+    const countEl = document.getElementById('mobileFilterCount');
+    countEl.textContent = chips.length;
+    countEl.classList.toggle('visible', chips.length > 0);
+}
+
+function removeFilter(key, value) {
+    if (key === 'stock') {
+        advFilters.stock = false;
+        document.getElementById('filterStock').checked = false;
+    } else if (key === 'range') {
+        advFilters.particuleMin = 0;
+        advFilters.particuleMax = 500;
+        document.getElementById('rangeMin').value = 0;
+        document.getElementById('rangeMax').value = 500;
+        onRangeChange();
+        return;
+    } else if (value) {
+        advFilters[key].delete(value);
+        // Uncheck the pill
+        const pill = document.querySelector(
+            `.pill-label[data-filter="${key}"][data-value="${value}"] input`
+        );
+        if (pill) { pill.checked = false; pill.closest('.pill-label').classList.remove('active'); }
+    }
+    applyFilters();
+}
+
+function clearAllFilters() {
+    // Reset text/category
+    document.getElementById('catalogSearchInput').value = '';
+    document.getElementById('categoryFilter').value = '';
+    // Reset all pills
+    document.querySelectorAll('.pill-label input[type="checkbox"]').forEach(cb => {
+        cb.checked = false;
+        cb.closest('.pill-label').classList.remove('active');
+    });
+    // Reset sets
+    advFilters.certifications.clear();
+    advFilters.conditionnements.clear();
+    advFilters.origine.clear();
+    // Reset stock
+    advFilters.stock = false;
+    document.getElementById('filterStock').checked = false;
+    // Reset range
+    advFilters.particuleMin = 0;
+    advFilters.particuleMax = 500;
+    document.getElementById('rangeMin').value = 0;
+    document.getElementById('rangeMax').value = 500;
+    document.getElementById('rangeMinVal').textContent = '0 µm';
+    document.getElementById('rangeMaxVal').textContent = '500 µm';
+    initRangeFill();
+    applyFilters();
+}
+
+// ── Fetch prices ───────────────────────────────────────────────
 async function fetchPrices() {
-    const SUPABASE_URL = 'https://jkaffpgqbyhuihvyvtld.supabase.co';
     const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE2NTgzOTQsImV4cCI6MjA2NzIzNDM5NH0.OIjoz6uoPV25Nraral4YN_gz7q6COBW3dAVIYhBy1pI';
     try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/prices?select=excipient_id,prix_min,prix_max,source`, {
+        const res = await fetch('https://jkaffpgqbyhuihvyvtld.supabase.co/rest/v1/prices?select=excipient_id,prix_min,prix_max,source', {
             headers: { 'apikey': ANON_KEY, 'Authorization': `Bearer ${ANON_KEY}` }
         });
         if (!res.ok) return;
-        const rows = await res.json();
-        rows.forEach(r => { pricesMap[r.excipient_id] = r; });
-    } catch (e) { console.warn('Prix non chargés:', e); }
+        (await res.json()).forEach(r => { pricesMap[r.excipient_id] = r; });
+    } catch { /* non-bloquant */ }
 }
 
+// ── Init ───────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', async () => {
-    let attempts = 0;
-    while (!window.ChemSpotDB && attempts < 20) {
-        await new Promise(resolve => setTimeout(resolve, 500));
-        attempts++;
-    }
-    if (!window.ChemSpotDB) { showError(); return; }
-
     // Handle URL query param
     const urlQ = new URLSearchParams(window.location.search).get('q');
     if (urlQ) document.getElementById('catalogSearchInput').value = urlQ;
+
+    initRangeFill();
+
+    let attempts = 0;
+    while (!window.ChemSpotDB && attempts < 20) {
+        await new Promise(r => setTimeout(r, 500));
+        attempts++;
+    }
+    if (!window.ChemSpotDB) { showError(); return; }
 
     try {
         [allExcipients] = await Promise.all([
@@ -356,6 +1105,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             fetchPrices()
         ]);
         filteredExcipients = [...allExcipients];
+        document.getElementById('catalogLoading').style.display = 'none';
+        document.getElementById('catalogReady').style.display = 'block';
         applyFilters();
     } catch (err) {
         console.error(err);
@@ -363,87 +1114,131 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-function handleSearch() { applyFilters(); }
-
+// ── Main filter function ───────────────────────────────────────
 function applyFilters() {
     const query    = document.getElementById('catalogSearchInput').value.toLowerCase().trim();
     const category = document.getElementById('categoryFilter').value.toLowerCase();
+    const certSel  = advFilters.certifications;
+    const condSel  = advFilters.conditionnements;
+    const origSel  = advFilters.origine;
+    const stockOnly = advFilters.stock;
+    const pMin = advFilters.particuleMin;
+    const pMax = advFilters.particuleMax;
+    const rangeActive = (pMin !== 0 || pMax !== 500);
 
     filteredExcipients = allExcipients.filter(exc => {
-        const matchQuery = !query ||
+        // Text search
+        if (query && !(
             exc.nom_commun?.toLowerCase().includes(query) ||
             exc.nom_chimique?.toLowerCase().includes(query) ||
             exc.cas_number?.toLowerCase().includes(query) ||
-            exc.formule?.toLowerCase().includes(query);
-        const matchCategory = !category ||
-            exc.fonction_principale?.toLowerCase().includes(category);
-        return matchQuery && matchCategory;
+            exc.formule?.toLowerCase().includes(query)
+        )) return false;
+
+        // Category
+        if (category && !exc.fonction_principale?.toLowerCase().includes(category)) return false;
+
+        // Certifications (at least one must match)
+        if (certSel.size > 0 && !(exc.certifications || []).some(c => certSel.has(c))) return false;
+
+        // Conditionnements
+        if (condSel.size > 0 && !(exc.conditionnements || []).some(c => condSel.has(c))) return false;
+
+        // Origine
+        if (origSel.size > 0 && !(exc.origine || []).some(o => origSel.has(o))) return false;
+
+        // Stock
+        if (stockOnly && !exc.stock_disponible) return false;
+
+        // Taille particule (only filter excipients that HAVE data)
+        if (rangeActive &&
+            exc.taille_particule_min !== null &&
+            exc.taille_particule_max !== null) {
+            if (exc.taille_particule_max < pMin || exc.taille_particule_min > pMax) return false;
+        }
+
+        return true;
     });
+
+    renderActiveFilters();
     displayExcipients();
 }
 
-function resetFilters() {
-    document.getElementById('catalogSearchInput').value = '';
-    document.getElementById('categoryFilter').value = '';
-    filteredExcipients = [...allExcipients];
-    displayExcipients();
-}
-
-/* Grade heuristic */
-function guessGrade(exc) {
-    const name = (exc.nom_commun || '').toLowerCase();
-    if (name.includes('ph eur') || name.includes('pheur')) return 'Ph. Eur.';
-    if (name.includes('usp') || name.includes('bp')) return 'USP/BP';
-    return 'Pharm. Grade';
-}
-
+// ── Display helpers ────────────────────────────────────────────
 function getPriceDisplay(exc) {
     const p = pricesMap[exc.id];
     if (!p) return null;
     const min = parseFloat(p.prix_min).toFixed(2).replace('.', ',');
     const max = parseFloat(p.prix_max).toFixed(2).replace('.', ',');
-    return `${min}–${max} €/kg`;
+    return { text: `${min}–${max} €/kg`, source: p.source };
+}
+
+function renderCertBadges(certs) {
+    if (!certs || certs.length === 0) return '';
+    const shown = certs.slice(0, 4);
+    const rest  = certs.length - shown.length;
+    let html = shown.map(c => `<span class="badge-cert">${c}</span>`).join('');
+    if (rest > 0) html += `<span class="badge-cert-more">+${rest}</span>`;
+    return `<div class="card-cert-badges">${html}</div>`;
+}
+
+function renderGrades(grades) {
+    if (!grades || grades.length === 0) return '';
+    const shown = grades.slice(0, 3).join(', ');
+    const extra = grades.length > 3 ? ` +${grades.length - 3}` : '';
+    return `<div class="card-grades">Grades : <span>${shown}${extra}</span></div>`;
 }
 
 function displayExcipients() {
-    const loading  = document.getElementById('catalogLoading');
-    const results  = document.getElementById('catalogResults');
-    const noRes    = document.getElementById('noResults');
-    const grid     = document.getElementById('productsGrid');
-    const statEl   = document.getElementById('displayedProducts');
+    const grid   = document.getElementById('productsGrid');
+    const noRes  = document.getElementById('noResults');
+    const countA = document.getElementById('displayedProducts');
+    const countB = document.getElementById('displayedProducts2');
 
-    loading.style.display = 'none';
+    const count = filteredExcipients.length;
+    if (countA) countA.textContent = count;
+    if (countB) countB.textContent = count;
 
-    if (filteredExcipients.length === 0) {
-        results.style.display = 'none';
+    if (count === 0) {
+        grid.innerHTML = '';
         noRes.style.display = 'flex';
-        if (statEl) statEl.textContent = '0';
         return;
     }
-
     noRes.style.display = 'none';
-    results.style.display = 'block';
-    if (statEl) statEl.textContent = filteredExcipients.length;
 
     grid.innerHTML = filteredExcipients.map(exc => {
-        const grade      = guessGrade(exc);
-        const priceDisp  = getPriceDisplay(exc);
-        const gradeClass = grade.startsWith('Ph') ? 'badge-ph-eur' : 'badge-usp';
-        const srcLabel   = pricesMap[exc.id]?.source === 'Estimate' ? ' <small style="opacity:.6;">(est.)</small>' : '';
+        const priceInfo = getPriceDisplay(exc);
+        const srcLabel  = priceInfo?.source === 'Estimate' ? ' <small style="opacity:.6;">(est.)</small>' : '';
+
+        const stockHtml = exc.stock_disponible ? `
+            <div class="card-stock-row">
+                <span class="card-stock-dot"></span> Stock disponible
+            </div>` : '';
+
+        const certHtml  = renderCertBadges(exc.certifications);
+        const gradeHtml = renderGrades(exc.grades);
+
+        const functionBadge = exc.fonction_principale
+            ? `<span class="badge badge-neutral" style="margin-left:4px;">${exc.fonction_principale}</span>`
+            : '';
 
         return `
         <div class="product-card fade-in">
             <div class="product-card-cas">${exc.cas_number ? 'CAS ' + exc.cas_number : 'CAS N/A'}</div>
             <div class="product-card-name">${exc.nom_commun || '—'}</div>
-            <div class="mb-1">
-                <span class="badge ${gradeClass} badge-grade">${grade}</span>
-                ${exc.fonction_principale ? `<span class="badge badge-neutral" style="margin-left:4px;">${exc.fonction_principale}</span>` : ''}
-            </div>
+            ${stockHtml}
+            ${certHtml}
+            ${gradeHtml}
+            <div class="mb-1">${functionBadge}</div>
             <div class="product-card-meta"><strong>Nom chimique :</strong> ${exc.nom_chimique || 'N/A'}</div>
             ${exc.formule ? `<div class="product-card-meta"><strong>Formule :</strong> ${exc.formule}</div>` : ''}
-            ${priceDisp ? `<div class="product-card-price"><i class="fas fa-tag"></i> ${priceDisp}${srcLabel}</div>` : '<div class="product-card-price" style="color:var(--text-dim);">Prix sur demande</div>'}
+            ${priceInfo
+                ? `<div class="product-card-price"><i class="fas fa-tag"></i> ${priceInfo.text}${srcLabel}</div>`
+                : '<div class="product-card-price" style="color:var(--text-dim);">Prix sur demande</div>'
+            }
             <div class="product-card-footer">
-                <button class="btn btn-primary btn-sm" onclick="openCatalogPrixExact(${exc.id}, this)" style="flex:1;"
+                <button class="btn btn-primary btn-sm" style="flex:1;"
+                    onclick="openCatalogPrixExact(${exc.id}, this)"
                     data-nom="${(exc.nom_commun||'').replace(/"/g,'&quot;')}">
                     <i class="fas fa-tag"></i> Prix exact
                 </button>
@@ -455,7 +1250,9 @@ function displayExcipients() {
     }).join('');
 }
 
+// ── Prix exact modal ───────────────────────────────────────────
 let catalogCurrentProduct = '';
+
 function openCatalogPrixExact(id, btn) {
     catalogCurrentProduct = btn.dataset.nom || '';
     document.getElementById('cpe-product-label').textContent = catalogCurrentProduct;
@@ -464,6 +1261,7 @@ function openCatalogPrixExact(id, btn) {
     openModal('catalogPrixExactModal');
     setTimeout(() => document.getElementById('cpe-email').focus(), 50);
 }
+
 async function handleCatalogPrixExact(e) {
     e.preventDefault();
     const fb  = document.getElementById('cpeExactFeedback');
@@ -471,32 +1269,33 @@ async function handleCatalogPrixExact(e) {
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi…';
     const qty = document.getElementById('cpe-quantite').value;
+    const email = document.getElementById('cpe-email').value.trim();
+    const entreprise = document.getElementById('cpe-entreprise').value.trim();
     try {
         const res = await fetch('https://jkaffpgqbyhuihvyvtld.supabase.co/rest/v1/contact_requests', {
             method: 'POST',
             headers: {
                 'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE2NTgzOTQsImV4cCI6MjA2NzIzNDM5NH0.OIjoz6uoPV25Nraral4YN_gz7q6COBW3dAVIYhBy1pI',
                 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE2NTgzOTQsImV4cCI6MjA2NzIzNDM5NH0.OIjoz6uoPV25Nraral4YN_gz7q6COBW3dAVIYhBy1pI',
-                'Content-Type': 'application/json', 'Prefer': 'return=minimal'
+                'Content-Type': 'application/json',
+                'Prefer': 'return=minimal'
             },
             body: JSON.stringify({
                 prenom: '', nom: '',
-                email:      document.getElementById('cpe-email').value.trim(),
-                entreprise: document.getElementById('cpe-entreprise').value.trim(),
+                email, entreprise,
                 sujet: 'quote',
                 message: `Demande de prix exact : ${qty} kg de ${catalogCurrentProduct}`
             })
         });
         if (!res.ok) throw new Error();
-        // Notification email (best-effort, non bloquant)
         emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-            source_page:  'Catalogue',
-            excipient:    catalogCurrentProduct,
-            quantite:     qty + ' kg',
-            email_client: document.getElementById('cpe-email').value.trim(),
-            entreprise:   document.getElementById('cpe-entreprise').value.trim(),
-            message:      `Demande de prix exact : ${qty} kg de ${catalogCurrentProduct}`,
-        }).catch(() => {}); // on ne bloque pas si emailjs échoue
+            source_page: 'Catalogue',
+            excipient:   catalogCurrentProduct,
+            quantite:    qty + ' kg',
+            email_client: email,
+            entreprise,
+            message: `Demande de prix exact : ${qty} kg de ${catalogCurrentProduct}`,
+        }).catch(() => {});
         fb.style.display = 'block';
         fb.innerHTML = '<div class="status-bar status-success"><i class="fas fa-check-circle"></i> Vous recevrez le prix exact sous 24h.</div>';
         e.target.reset();
@@ -517,10 +1316,16 @@ function showError() {
         </div>`;
 }
 
-function handleLogin(e) { e.preventDefault(); closeModal('loginModal'); }
+function handleLogin(e)    { e.preventDefault(); closeModal('loginModal'); }
 function handleRegister(e) { e.preventDefault(); closeModal('registerModal'); }
 
-document.getElementById('catalogSearchInput').addEventListener('keydown', e => { if (e.key === 'Enter') handleSearch(); });
+// Keyboard: close modals on Escape
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+        document.querySelectorAll('.modal.open').forEach(m => m.classList.remove('open'));
+        closeSidebar();
+    }
+});
 </script>
 </body>
 </html>
