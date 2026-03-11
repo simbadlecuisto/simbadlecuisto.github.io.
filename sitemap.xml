@@ -11,9 +11,21 @@
   </url>
   <url>
     <loc>https://chemistryspot.com/catalogue.html</loc>
-    <lastmod>2026-03-05</lastmod>
+    <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://chemistryspot.com/en/catalogue.html</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://chemistryspot.com/en/produit-detail.html</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://chemistryspot.com/fournisseurs.html</loc>
@@ -57,6 +69,78 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  <!-- EN product pages (10 priority excipients) -->
+  <url>
+    <loc>https://chemistryspot.com/en/produit-detail.html?id=10</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.65</priority>
+    <!-- Lactose (EN) -->
+  </url>
+  <url>
+    <loc>https://chemistryspot.com/en/produit-detail.html?id=11</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.65</priority>
+    <!-- Microcrystalline Cellulose (EN) -->
+  </url>
+  <url>
+    <loc>https://chemistryspot.com/en/produit-detail.html?id=12</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.65</priority>
+    <!-- Magnesium Stearate (EN) -->
+  </url>
+  <url>
+    <loc>https://chemistryspot.com/en/produit-detail.html?id=13</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.65</priority>
+    <!-- Povidone (EN) -->
+  </url>
+  <url>
+    <loc>https://chemistryspot.com/en/produit-detail.html?id=14</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.65</priority>
+    <!-- Talc (EN) -->
+  </url>
+  <url>
+    <loc>https://chemistryspot.com/en/produit-detail.html?id=19</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.65</priority>
+    <!-- Mannitol (EN) -->
+  </url>
+  <url>
+    <loc>https://chemistryspot.com/en/produit-detail.html?id=21</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.65</priority>
+    <!-- Starch (EN) -->
+  </url>
+  <url>
+    <loc>https://chemistryspot.com/en/produit-detail.html?id=28</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.65</priority>
+    <!-- Calcium Stearate (EN) -->
+  </url>
+  <url>
+    <loc>https://chemistryspot.com/en/produit-detail.html?id=36</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.65</priority>
+    <!-- Hypromellose HPMC (EN) -->
+  </url>
+  <url>
+    <loc>https://chemistryspot.com/en/produit-detail.html?id=40</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.65</priority>
+    <!-- Croscarmellose Sodium (EN) -->
+  </url>
+  <!-- FR product pages -->
   <url>
     <loc>https://chemistryspot.com/produit-detail.html?id=10</loc>
     <lastmod>2026-03-05</lastmod>

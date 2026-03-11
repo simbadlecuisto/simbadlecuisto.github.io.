@@ -1,23 +1,19 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catalogue Excipients Pharmaceutiques — ChemistrySpot</title>
-    <meta name="description" content="50 excipients pharmaceutiques : lactose, HPMC, mannitol, povidone. N° CAS, formules, prix indicatifs et comparatif fournisseurs.">
+    <title>Pharmaceutical Excipients Catalogue — ChemistrySpot</title>
+    <meta name="description" content="50 pharmaceutical excipients: MCC, lactose, HPMC, mannitol, povidone. CAS numbers, molecular formulas, indicative prices, and supplier comparison.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://chemistryspot.com/catalogue.html">
-    <meta property="og:title" content="Catalogue Excipients Pharmaceutiques — ChemistrySpot">
-    <meta property="og:description" content="50 excipients pharma avec N° CAS, formules, prix indicatifs et comparatif fournisseurs. Filtrez par catégorie.">
+    <meta property="og:url" content="https://chemistryspot.com/en/catalogue.html">
+    <meta property="og:title" content="Pharmaceutical Excipients Catalogue — ChemistrySpot">
+    <meta property="og:description" content="50 pharma excipients with CAS numbers, formulas, indicative prices and supplier comparison. Filter by category, certification, and origin.">
     <meta property="og:image" content="https://chemistryspot.com/og-image.png">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@chemistryspot">
-    <meta name="twitter:title" content="Catalogue Excipients Pharmaceutiques — ChemistrySpot">
-    <meta name="twitter:description" content="50 excipients pharma avec N° CAS, formules, prix indicatifs et comparatif fournisseurs. Filtrez par catégorie.">
-    <meta name="twitter:image" content="https://chemistryspot.com/og-image.png">
-    <link rel="canonical" href="https://chemistryspot.com/catalogue.html">
+    <meta name="twitter:title" content="Pharmaceutical Excipients Catalogue — ChemistrySpot">
+    <meta name="twitter:description" content="50 pharma excipients with CAS numbers, formulas, indicative prices and supplier comparison.">
+    <link rel="canonical" href="https://chemistryspot.com/en/catalogue.html">
     <link rel="alternate" hreflang="fr" href="https://chemistryspot.com/catalogue.html">
     <link rel="alternate" hreflang="en" href="https://chemistryspot.com/en/catalogue.html">
     <link rel="alternate" hreflang="x-default" href="https://chemistryspot.com/catalogue.html">
@@ -25,17 +21,16 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="./css/design-system.css">
+    <link rel="stylesheet" href="../css/design-system.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="./js/auth.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script src="../js/auth.js" defer></script>
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
       "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://chemistryspot.com/" },
-        { "@type": "ListItem", "position": 2, "name": "Catalogue Excipients", "item": "https://chemistryspot.com/catalogue.html" }
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://chemistryspot.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Excipients Catalogue", "item": "https://chemistryspot.com/en/catalogue.html" }
       ]
     }
     </script>
@@ -43,66 +38,79 @@
     {
       "@context": "https://schema.org",
       "@type": "ItemList",
-      "name": "Catalogue Excipients Pharmaceutiques",
-      "description": "50 excipients pharmaceutiques référencés — données PubChem NCBI, prix indicatifs et fournisseurs.",
-      "url": "https://chemistryspot.com/catalogue.html",
+      "name": "Pharmaceutical Excipients Catalogue",
+      "description": "50 pharmaceutical excipients — PubChem NCBI data, indicative prices and suppliers.",
+      "url": "https://chemistryspot.com/en/catalogue.html",
       "numberOfItems": 50,
       "itemListElement": [
-        { "@type": "ListItem", "position": 1,  "url": "https://chemistryspot.com/produit-detail.html?id=10", "name": "Lactose" },
-        { "@type": "ListItem", "position": 2,  "url": "https://chemistryspot.com/produit-detail.html?id=11", "name": "Cellulose microcristalline" },
-        { "@type": "ListItem", "position": 3,  "url": "https://chemistryspot.com/produit-detail.html?id=12", "name": "Stéarate de magnésium" },
-        { "@type": "ListItem", "position": 4,  "url": "https://chemistryspot.com/produit-detail.html?id=13", "name": "Povidone" },
-        { "@type": "ListItem", "position": 5,  "url": "https://chemistryspot.com/produit-detail.html?id=14", "name": "Talc" },
-        { "@type": "ListItem", "position": 6,  "url": "https://chemistryspot.com/produit-detail.html?id=15", "name": "Dioxyde de titane" },
-        { "@type": "ListItem", "position": 7,  "url": "https://chemistryspot.com/produit-detail.html?id=16", "name": "Glycérol" },
-        { "@type": "ListItem", "position": 8,  "url": "https://chemistryspot.com/produit-detail.html?id=17", "name": "Eau purifiée" },
-        { "@type": "ListItem", "position": 9,  "url": "https://chemistryspot.com/produit-detail.html?id=18", "name": "Éthanol" },
-        { "@type": "ListItem", "position": 10, "url": "https://chemistryspot.com/produit-detail.html?id=19", "name": "Mannitol" },
-        { "@type": "ListItem", "position": 11, "url": "https://chemistryspot.com/produit-detail.html?id=20", "name": "Sorbitol" },
-        { "@type": "ListItem", "position": 12, "url": "https://chemistryspot.com/produit-detail.html?id=21", "name": "Amidon" },
-        { "@type": "ListItem", "position": 13, "url": "https://chemistryspot.com/produit-detail.html?id=22", "name": "Acide stéarique" },
-        { "@type": "ListItem", "position": 14, "url": "https://chemistryspot.com/produit-detail.html?id=23", "name": "Acide citrique" },
-        { "@type": "ListItem", "position": 15, "url": "https://chemistryspot.com/produit-detail.html?id=24", "name": "Saccharose" },
-        { "@type": "ListItem", "position": 16, "url": "https://chemistryspot.com/produit-detail.html?id=25", "name": "Propylène glycol" },
-        { "@type": "ListItem", "position": 17, "url": "https://chemistryspot.com/produit-detail.html?id=26", "name": "Alcool benzylique" },
-        { "@type": "ListItem", "position": 18, "url": "https://chemistryspot.com/produit-detail.html?id=27", "name": "Laurylsulfate de sodium" },
-        { "@type": "ListItem", "position": 19, "url": "https://chemistryspot.com/produit-detail.html?id=28", "name": "Stéarate de calcium" },
-        { "@type": "ListItem", "position": 20, "url": "https://chemistryspot.com/produit-detail.html?id=29", "name": "Phosphate dicalcique" },
-        { "@type": "ListItem", "position": 21, "url": "https://chemistryspot.com/produit-detail.html?id=30", "name": "Carbonate de calcium" },
-        { "@type": "ListItem", "position": 22, "url": "https://chemistryspot.com/produit-detail.html?id=31", "name": "Chlorure de sodium" },
-        { "@type": "ListItem", "position": 23, "url": "https://chemistryspot.com/produit-detail.html?id=32", "name": "Chlorure de potassium" },
-        { "@type": "ListItem", "position": 24, "url": "https://chemistryspot.com/produit-detail.html?id=33", "name": "Oxyde de zinc" },
-        { "@type": "ListItem", "position": 25, "url": "https://chemistryspot.com/produit-detail.html?id=34", "name": "Dioxyde de silicium colloïdal" },
-        { "@type": "ListItem", "position": 26, "url": "https://chemistryspot.com/produit-detail.html?id=35", "name": "Hydroxypropylcellulose" },
-        { "@type": "ListItem", "position": 27, "url": "https://chemistryspot.com/produit-detail.html?id=36", "name": "Hypromellose" },
-        { "@type": "ListItem", "position": 28, "url": "https://chemistryspot.com/produit-detail.html?id=37", "name": "Macrogol 4000" },
-        { "@type": "ListItem", "position": 29, "url": "https://chemistryspot.com/produit-detail.html?id=38", "name": "Polysorbate 80" },
-        { "@type": "ListItem", "position": 30, "url": "https://chemistryspot.com/produit-detail.html?id=39", "name": "Chlorure de benzalkonium" },
-        { "@type": "ListItem", "position": 31, "url": "https://chemistryspot.com/produit-detail.html?id=40", "name": "Croscarmellose sodique" },
-        { "@type": "ListItem", "position": 32, "url": "https://chemistryspot.com/produit-detail.html?id=41", "name": "Crospovidone" },
-        { "@type": "ListItem", "position": 33, "url": "https://chemistryspot.com/produit-detail.html?id=42", "name": "Glycolate d'amidon sodique" },
-        { "@type": "ListItem", "position": 34, "url": "https://chemistryspot.com/produit-detail.html?id=43", "name": "Gélatine" },
-        { "@type": "ListItem", "position": 35, "url": "https://chemistryspot.com/produit-detail.html?id=44", "name": "Gomme arabique" },
-        { "@type": "ListItem", "position": 36, "url": "https://chemistryspot.com/produit-detail.html?id=45", "name": "Gomme xanthane" },
-        { "@type": "ListItem", "position": 37, "url": "https://chemistryspot.com/produit-detail.html?id=46", "name": "Carboxyméthylcellulose sodique" },
-        { "@type": "ListItem", "position": 38, "url": "https://chemistryspot.com/produit-detail.html?id=47", "name": "Éthylcellulose" },
-        { "@type": "ListItem", "position": 39, "url": "https://chemistryspot.com/produit-detail.html?id=48", "name": "Shellac" },
-        { "@type": "ListItem", "position": 40, "url": "https://chemistryspot.com/produit-detail.html?id=49", "name": "Carbomère" },
-        { "@type": "ListItem", "position": 41, "url": "https://chemistryspot.com/produit-detail.html?id=50", "name": "Bicarbonate de sodium" },
-        { "@type": "ListItem", "position": 42, "url": "https://chemistryspot.com/produit-detail.html?id=51", "name": "Acide ascorbique" },
-        { "@type": "ListItem", "position": 43, "url": "https://chemistryspot.com/produit-detail.html?id=52", "name": "Alpha-tocophérol" },
-        { "@type": "ListItem", "position": 44, "url": "https://chemistryspot.com/produit-detail.html?id=53", "name": "Hydroxytoluène butylé" },
-        { "@type": "ListItem", "position": 45, "url": "https://chemistryspot.com/produit-detail.html?id=54", "name": "Méthylparabène" },
-        { "@type": "ListItem", "position": 46, "url": "https://chemistryspot.com/produit-detail.html?id=55", "name": "Propylparabène" },
-        { "@type": "ListItem", "position": 47, "url": "https://chemistryspot.com/produit-detail.html?id=56", "name": "Acide sorbique" },
-        { "@type": "ListItem", "position": 48, "url": "https://chemistryspot.com/produit-detail.html?id=57", "name": "Sorbate de potassium" },
-        { "@type": "ListItem", "position": 49, "url": "https://chemistryspot.com/produit-detail.html?id=58", "name": "Alcool cétylique" },
-        { "@type": "ListItem", "position": 50, "url": "https://chemistryspot.com/produit-detail.html?id=59", "name": "Huile minérale" }
+        { "@type": "ListItem", "position": 1,  "url": "https://chemistryspot.com/en/produit-detail.html?id=10", "name": "Lactose" },
+        { "@type": "ListItem", "position": 2,  "url": "https://chemistryspot.com/en/produit-detail.html?id=11", "name": "Microcrystalline Cellulose" },
+        { "@type": "ListItem", "position": 3,  "url": "https://chemistryspot.com/en/produit-detail.html?id=12", "name": "Magnesium Stearate" },
+        { "@type": "ListItem", "position": 4,  "url": "https://chemistryspot.com/en/produit-detail.html?id=13", "name": "Povidone (PVP)" },
+        { "@type": "ListItem", "position": 5,  "url": "https://chemistryspot.com/en/produit-detail.html?id=14", "name": "Talc" },
+        { "@type": "ListItem", "position": 6,  "url": "https://chemistryspot.com/en/produit-detail.html?id=15", "name": "Titanium Dioxide" },
+        { "@type": "ListItem", "position": 7,  "url": "https://chemistryspot.com/en/produit-detail.html?id=16", "name": "Glycerol" },
+        { "@type": "ListItem", "position": 8,  "url": "https://chemistryspot.com/en/produit-detail.html?id=17", "name": "Purified Water" },
+        { "@type": "ListItem", "position": 9,  "url": "https://chemistryspot.com/en/produit-detail.html?id=18", "name": "Ethanol" },
+        { "@type": "ListItem", "position": 10, "url": "https://chemistryspot.com/en/produit-detail.html?id=19", "name": "Mannitol" },
+        { "@type": "ListItem", "position": 11, "url": "https://chemistryspot.com/en/produit-detail.html?id=20", "name": "Sorbitol" },
+        { "@type": "ListItem", "position": 12, "url": "https://chemistryspot.com/en/produit-detail.html?id=21", "name": "Starch" },
+        { "@type": "ListItem", "position": 13, "url": "https://chemistryspot.com/en/produit-detail.html?id=22", "name": "Stearic Acid" },
+        { "@type": "ListItem", "position": 14, "url": "https://chemistryspot.com/en/produit-detail.html?id=23", "name": "Citric Acid" },
+        { "@type": "ListItem", "position": 15, "url": "https://chemistryspot.com/en/produit-detail.html?id=24", "name": "Sucrose" },
+        { "@type": "ListItem", "position": 16, "url": "https://chemistryspot.com/en/produit-detail.html?id=25", "name": "Propylene Glycol" },
+        { "@type": "ListItem", "position": 17, "url": "https://chemistryspot.com/en/produit-detail.html?id=26", "name": "Benzyl Alcohol" },
+        { "@type": "ListItem", "position": 18, "url": "https://chemistryspot.com/en/produit-detail.html?id=27", "name": "Sodium Lauryl Sulfate" },
+        { "@type": "ListItem", "position": 19, "url": "https://chemistryspot.com/en/produit-detail.html?id=28", "name": "Calcium Stearate" },
+        { "@type": "ListItem", "position": 20, "url": "https://chemistryspot.com/en/produit-detail.html?id=29", "name": "Dicalcium Phosphate" },
+        { "@type": "ListItem", "position": 21, "url": "https://chemistryspot.com/en/produit-detail.html?id=30", "name": "Calcium Carbonate" },
+        { "@type": "ListItem", "position": 22, "url": "https://chemistryspot.com/en/produit-detail.html?id=31", "name": "Sodium Chloride" },
+        { "@type": "ListItem", "position": 23, "url": "https://chemistryspot.com/en/produit-detail.html?id=32", "name": "Potassium Chloride" },
+        { "@type": "ListItem", "position": 24, "url": "https://chemistryspot.com/en/produit-detail.html?id=33", "name": "Zinc Oxide" },
+        { "@type": "ListItem", "position": 25, "url": "https://chemistryspot.com/en/produit-detail.html?id=34", "name": "Colloidal Silicon Dioxide" },
+        { "@type": "ListItem", "position": 26, "url": "https://chemistryspot.com/en/produit-detail.html?id=35", "name": "Hydroxypropylcellulose (HPC)" },
+        { "@type": "ListItem", "position": 27, "url": "https://chemistryspot.com/en/produit-detail.html?id=36", "name": "Hypromellose (HPMC)" },
+        { "@type": "ListItem", "position": 28, "url": "https://chemistryspot.com/en/produit-detail.html?id=37", "name": "Macrogol 4000 (PEG 4000)" },
+        { "@type": "ListItem", "position": 29, "url": "https://chemistryspot.com/en/produit-detail.html?id=38", "name": "Polysorbate 80 (Tween 80)" },
+        { "@type": "ListItem", "position": 30, "url": "https://chemistryspot.com/en/produit-detail.html?id=39", "name": "Benzalkonium Chloride" },
+        { "@type": "ListItem", "position": 31, "url": "https://chemistryspot.com/en/produit-detail.html?id=40", "name": "Croscarmellose Sodium" },
+        { "@type": "ListItem", "position": 32, "url": "https://chemistryspot.com/en/produit-detail.html?id=41", "name": "Crospovidone (PVPP)" },
+        { "@type": "ListItem", "position": 33, "url": "https://chemistryspot.com/en/produit-detail.html?id=42", "name": "Sodium Starch Glycolate" },
+        { "@type": "ListItem", "position": 34, "url": "https://chemistryspot.com/en/produit-detail.html?id=43", "name": "Gelatin" },
+        { "@type": "ListItem", "position": 35, "url": "https://chemistryspot.com/en/produit-detail.html?id=44", "name": "Acacia Gum" },
+        { "@type": "ListItem", "position": 36, "url": "https://chemistryspot.com/en/produit-detail.html?id=45", "name": "Xanthan Gum" },
+        { "@type": "ListItem", "position": 37, "url": "https://chemistryspot.com/en/produit-detail.html?id=46", "name": "Sodium Carboxymethylcellulose" },
+        { "@type": "ListItem", "position": 38, "url": "https://chemistryspot.com/en/produit-detail.html?id=47", "name": "Ethylcellulose" },
+        { "@type": "ListItem", "position": 39, "url": "https://chemistryspot.com/en/produit-detail.html?id=48", "name": "Shellac" },
+        { "@type": "ListItem", "position": 40, "url": "https://chemistryspot.com/en/produit-detail.html?id=49", "name": "Carbomer" },
+        { "@type": "ListItem", "position": 41, "url": "https://chemistryspot.com/en/produit-detail.html?id=50", "name": "Sodium Bicarbonate" },
+        { "@type": "ListItem", "position": 42, "url": "https://chemistryspot.com/en/produit-detail.html?id=51", "name": "Ascorbic Acid" },
+        { "@type": "ListItem", "position": 43, "url": "https://chemistryspot.com/en/produit-detail.html?id=52", "name": "Alpha-Tocopherol" },
+        { "@type": "ListItem", "position": 44, "url": "https://chemistryspot.com/en/produit-detail.html?id=53", "name": "Butylated Hydroxytoluene (BHT)" },
+        { "@type": "ListItem", "position": 45, "url": "https://chemistryspot.com/en/produit-detail.html?id=54", "name": "Methylparaben" },
+        { "@type": "ListItem", "position": 46, "url": "https://chemistryspot.com/en/produit-detail.html?id=55", "name": "Propylparaben" },
+        { "@type": "ListItem", "position": 47, "url": "https://chemistryspot.com/en/produit-detail.html?id=56", "name": "Sorbic Acid" },
+        { "@type": "ListItem", "position": 48, "url": "https://chemistryspot.com/en/produit-detail.html?id=57", "name": "Potassium Sorbate" },
+        { "@type": "ListItem", "position": 49, "url": "https://chemistryspot.com/en/produit-detail.html?id=58", "name": "Cetyl Alcohol" },
+        { "@type": "ListItem", "position": 50, "url": "https://chemistryspot.com/en/produit-detail.html?id=59", "name": "Mineral Oil" }
       ]
     }
     </script>
 
     <style>
+    /* ── Language Banner ─────────────────────────────────────────── */
+    .lang-banner {
+        background: rgba(0,212,170,.08);
+        border-bottom: 1px solid rgba(0,212,170,.2);
+        padding: .5rem 0;
+        font-size: .82rem;
+        color: var(--text-muted);
+        text-align: center;
+    }
+    .lang-banner a { color: var(--primary); text-decoration: none; margin: 0 .25rem; }
+    .lang-banner a:hover { text-decoration: underline; }
+    .lang-sep { margin: 0 .5rem; opacity: .4; }
+
     /* ── Catalogue Layout ───────────────────────────────────────── */
     .catalogue-layout {
         display: flex;
@@ -244,14 +252,15 @@
         height: 4px;
         background: var(--primary);
         border-radius: 2px;
+        pointer-events: none;
     }
     .range-thumb {
         position: absolute;
         width: 100%;
-        height: 0;
+        height: 4px;
+        background: transparent;
         -webkit-appearance: none;
         appearance: none;
-        background: transparent;
         pointer-events: none;
         outline: none;
     }
@@ -261,14 +270,12 @@
         border-radius: 50%;
         background: var(--primary);
         border: 2px solid var(--bg-card);
-        box-shadow: 0 0 0 2px var(--primary-glow);
         cursor: pointer;
         pointer-events: all;
-        transition: box-shadow .15s;
+        box-shadow: 0 0 0 2px rgba(0,212,170,.25);
     }
-    .range-thumb::-webkit-slider-thumb:hover { box-shadow: 0 0 0 4px var(--primary-glow); }
     .range-thumb::-moz-range-thumb {
-        width: 16px; height: 16px;
+        width: 14px; height: 14px;
         border-radius: 50%;
         background: var(--primary);
         border: 2px solid var(--bg-card);
@@ -276,54 +283,75 @@
         pointer-events: all;
     }
 
-    /* Clear all button */
+    /* Clear filters button */
     .clear-filters-btn {
         width: 100%;
         padding: .5rem;
-        background: transparent;
         border: 1px solid var(--border);
         border-radius: var(--radius);
+        background: transparent;
         color: var(--text-muted);
-        font-size: .8rem;
+        font-size: .82rem;
         cursor: pointer;
-        transition: all .15s;
         display: flex;
         align-items: center;
         justify-content: center;
         gap: .4rem;
+        transition: all .15s;
+        margin-bottom: .75rem;
     }
-    .clear-filters-btn:hover { border-color: var(--danger); color: var(--danger); background: rgba(255,77,77,.06); }
+    .clear-filters-btn:hover { border-color: var(--danger); color: var(--danger); }
 
-    /* Mobile filter toggle */
-    .mobile-filter-toggle {
-        display: none;
-        align-items: center;
-        gap: .5rem;
-        padding: .5rem .875rem;
+    /* ── Catalogue Main ──────────────────────────────────────────── */
+    .catalogue-main { flex: 1; min-width: 0; }
+
+    .top-filters {
+        display: flex;
+        gap: .75rem;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+    }
+    .search-wrap {
+        flex: 1;
+        min-width: 180px;
+        display: flex;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        overflow: hidden;
+        background: var(--bg-card);
+    }
+    .search-wrap input {
+        flex: 1;
+        background: transparent;
+        border: none;
+        outline: none;
+        padding: .55rem .75rem;
+        font-size: .88rem;
+        color: var(--text);
+        font-family: var(--sans);
+    }
+    .search-wrap button {
+        padding: 0 .85rem;
+        background: transparent;
+        border: none;
+        border-left: 1px solid var(--border);
+        color: var(--text-muted);
+        cursor: pointer;
+        font-size: .88rem;
+        transition: color .15s;
+    }
+    .search-wrap button:hover { color: var(--primary); }
+    #categoryFilter {
+        padding: .55rem .75rem;
         background: var(--bg-card);
         border: 1px solid var(--border);
         border-radius: var(--radius);
-        color: var(--text-muted);
-        font-size: .85rem;
+        color: var(--text);
+        font-size: .88rem;
+        font-family: var(--sans);
         cursor: pointer;
-        transition: all .15s;
+        outline: none;
     }
-    .mobile-filter-toggle:hover { border-color: var(--primary); color: var(--primary); }
-    .mobile-filter-toggle .active-count {
-        background: var(--primary);
-        color: #000;
-        font-size: .7rem;
-        font-weight: 700;
-        border-radius: 99px;
-        padding: .1rem .4rem;
-        min-width: 18px;
-        text-align: center;
-        display: none;
-    }
-    .mobile-filter-toggle .active-count.visible { display: inline-block; }
-
-    /* Catalogue main */
-    .catalogue-main { flex: 1; min-width: 0; }
 
     /* Active filter chips */
     .active-filters-bar {
@@ -341,13 +369,13 @@
         background: rgba(0,212,170,.1);
         border: 1px solid rgba(0,212,170,.3);
         border-radius: 99px;
-        font-size: .76rem;
+        font-size: .78rem;
         color: var(--primary);
         cursor: pointer;
         transition: all .15s;
     }
-    .filter-chip:hover { background: rgba(255,77,77,.1); border-color: rgba(255,77,77,.3); color: var(--danger); }
-    .filter-chip .chip-x { font-size: .7rem; opacity: .7; }
+    .filter-chip:hover { background: rgba(0,212,170,.2); }
+    .chip-x { opacity: .7; font-size: .72rem; }
 
     /* Results bar */
     .results-bar {
@@ -355,100 +383,94 @@
         align-items: center;
         justify-content: space-between;
         margin-bottom: 1rem;
-        gap: 1rem;
-        flex-wrap: wrap;
-    }
-    .results-count {
-        font-size: .85rem;
+        font-size: .82rem;
         color: var(--text-muted);
     }
-    .results-count strong {
-        color: var(--primary);
+
+    /* Products grid */
+    .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 1rem;
+    }
+
+    .product-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 1.1rem;
+        display: flex;
+        flex-direction: column;
+        gap: .4rem;
+        transition: border-color .2s, box-shadow .2s;
+    }
+    .product-card:hover {
+        border-color: rgba(0,212,170,.4);
+        box-shadow: 0 4px 20px rgba(0,212,170,.06);
+    }
+    .product-card-cas {
+        font-family: var(--mono);
+        font-size: .72rem;
+        color: var(--text-dim);
+        letter-spacing: .04em;
+    }
+    .product-card-name {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--text);
+        line-height: 1.25;
+    }
+    .product-card-meta {
+        font-size: .78rem;
+        color: var(--text-muted);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .product-card-price {
         font-family: var(--mono);
         font-size: .9rem;
+        color: var(--primary);
+        font-weight: 600;
+        margin-top: .25rem;
+    }
+    .product-card-footer {
+        display: flex;
+        gap: .5rem;
+        margin-top: auto;
+        padding-top: .75rem;
     }
 
-    /* Search + category bar */
-    .top-filters {
-        display: flex;
-        gap: .75rem;
-        margin-bottom: 1rem;
-        flex-wrap: wrap;
-    }
-    .top-filters .search-wrap {
-        flex: 1;
-        min-width: 200px;
-        display: flex;
-        background: var(--bg-surface);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        overflow: hidden;
-        transition: border-color .15s;
-    }
-    .top-filters .search-wrap:focus-within { border-color: var(--border-focus); }
-    .top-filters .search-wrap input {
-        flex: 1;
-        background: transparent;
-        border: none;
-        padding: .5rem .75rem;
-        color: var(--text);
-        font-size: .88rem;
-        outline: none;
-    }
-    .top-filters .search-wrap input::placeholder { color: var(--text-dim); }
-    .top-filters .search-wrap button {
-        padding: 0 .75rem;
-        background: var(--primary);
-        border: none;
-        color: #000;
-        cursor: pointer;
-        transition: background .15s;
-    }
-    .top-filters .search-wrap button:hover { background: var(--primary-dark); }
-    .top-filters select {
-        padding: .5rem .75rem;
-        background: var(--bg-surface);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        color: var(--text);
-        font-size: .88rem;
-        cursor: pointer;
-        outline: none;
-        min-width: 160px;
-    }
-    .top-filters select:focus { border-color: var(--border-focus); }
-
-    /* Product card new features */
-    .card-stock-dot {
-        width: 8px; height: 8px;
-        border-radius: 50%;
-        background: var(--success);
-        box-shadow: 0 0 6px rgba(34,197,94,.5);
-        flex-shrink: 0;
-    }
+    /* Stock dot */
     .card-stock-row {
         display: flex;
         align-items: center;
         gap: .4rem;
-        font-size: .75rem;
-        color: var(--success);
-        margin-bottom: .5rem;
+        font-size: .78rem;
+        color: #10b981;
     }
+    .card-stock-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #10b981;
+        flex-shrink: 0;
+    }
+
+    /* Cert badges */
     .card-cert-badges {
         display: flex;
         flex-wrap: wrap;
         gap: .3rem;
-        margin-bottom: .5rem;
     }
     .badge-cert {
         padding: .15rem .5rem;
         border-radius: 4px;
         font-size: .7rem;
-        font-weight: 600;
-        font-family: var(--mono);
-        background: rgba(0,212,170,.08);
-        border: 1px solid rgba(0,212,170,.2);
+        background: rgba(0,212,170,.1);
         color: var(--primary);
+        border: 1px solid rgba(0,212,170,.25);
+        font-weight: 600;
     }
     .badge-cert-more {
         padding: .15rem .5rem;
@@ -461,12 +483,37 @@
     .card-grades {
         font-size: .75rem;
         color: var(--text-muted);
-        margin-bottom: .25rem;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
     }
     .card-grades span { color: var(--text); }
+
+    /* Mobile filter toggle */
+    .mobile-filter-toggle {
+        display: none;
+        align-items: center;
+        gap: .5rem;
+        padding: .55rem 1rem;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        color: var(--text);
+        font-size: .88rem;
+        cursor: pointer;
+        margin-bottom: 1rem;
+        font-family: var(--sans);
+    }
+    .active-count {
+        background: var(--primary);
+        color: #000;
+        font-size: .7rem;
+        font-weight: 700;
+        border-radius: 99px;
+        padding: .1rem .45rem;
+        display: none;
+    }
+    .active-count.visible { display: inline-block; }
 
     /* Sidebar mobile overlay */
     .sidebar-overlay {
@@ -526,7 +573,7 @@
         .sidebar-mobile-header { display: none; }
     }
 
-    /* Stats row adjustments */
+    /* Stats row */
     .stats-row {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -540,28 +587,35 @@
 </head>
 <body>
 
+<!-- ══ LANGUAGE BANNER ══ -->
+<div class="lang-banner">
+    <i class="fas fa-language"></i>
+    Viewing in <strong>English</strong>
+    <span class="lang-sep">|</span>
+    <a href="../catalogue.html">Voir en français</a>
+</div>
+
 <!-- ══ SITE HEADER ══ -->
 <header class="site-header">
     <div class="header-top">
         <div class="container">
-            <a href="index.html" class="site-logo"><span class="logo-hex">⬡</span>ChemistrySpot</a>
+            <a href="../index.html" class="site-logo"><span class="logo-hex">⬡</span>ChemistrySpot</a>
             <div class="header-search">
-                <input type="text" placeholder="Rechercher un excipient, N° CAS..." id="globalSearch">
+                <input type="text" placeholder="Search excipient, CAS number..." id="globalSearch">
                 <button onclick="goSearch()"><i class="fas fa-search"></i></button>
             </div>
             <div class="header-actions">
-                <button class="btn btn-ghost btn-sm" onclick="openModal('loginModal')"><i class="fas fa-sign-in-alt"></i> Connexion</button>
-                <button class="btn btn-primary btn-sm" onclick="openModal('registerModal')"><i class="fas fa-user-plus"></i> Inscription</button>
+                <button class="btn btn-ghost btn-sm" id="openLoginBtn"><i class="fas fa-sign-in-alt"></i> Login</button>
+                <button class="btn btn-primary btn-sm" id="openRegisterBtn"><i class="fas fa-user-plus"></i> Sign Up</button>
             </div>
         </div>
     </div>
     <nav class="header-nav">
         <div class="container">
-            <a href="index.html" class="nav-link">Terminal</a>
+            <a href="../index.html" class="nav-link">Terminal</a>
             <a href="catalogue.html" class="nav-link active">Catalogue</a>
-            <a href="fournisseurs.html" class="nav-link">Fournisseurs</a>
-            <a href="contact.html" class="nav-link">Contact</a>
-            <a href="reglementation.html" class="nav-link">Réglementation</a>
+            <a href="../fournisseurs.html" class="nav-link">Suppliers</a>
+            <a href="../contact.html" class="nav-link">Contact</a>
         </div>
     </nav>
 </header>
@@ -570,12 +624,12 @@
 <div class="page-band">
     <div class="container">
         <nav class="breadcrumb">
-            <a href="index.html">Accueil</a>
+            <a href="../index.html">Home</a>
             <span class="sep">›</span>
-            <span class="current">Catalogue</span>
+            <span class="current">Excipients Catalogue</span>
         </nav>
-        <h1><i class="fas fa-flask text-primary"></i> Catalogue Excipients</h1>
-        <p>50 excipients pharmaceutiques référencés — données PubChem NCBI</p>
+        <h1><i class="fas fa-flask text-primary"></i> Pharmaceutical Excipients Catalogue</h1>
+        <p>50 pharmaceutical excipients — PubChem NCBI data, indicative prices and suppliers</p>
     </div>
 </div>
 
@@ -587,26 +641,26 @@
         <div class="stats-row">
             <div class="stat-item">
                 <span class="stat-num" id="displayedProducts">0</span>
-                <span class="stat-label">Excipients affichés</span>
+                <span class="stat-label">Excipients shown</span>
             </div>
             <div class="stat-item">
                 <span class="stat-num">50</span>
-                <span class="stat-label">Total indexés</span>
+                <span class="stat-label">Total indexed</span>
             </div>
             <div class="stat-item">
                 <span class="stat-num">192</span>
-                <span class="stat-label">Fournisseurs</span>
+                <span class="stat-label">Suppliers</span>
             </div>
             <div class="stat-item">
                 <span class="stat-num">1 737</span>
-                <span class="stat-label">Liaisons excipient-fournisseur</span>
+                <span class="stat-label">Excipient-supplier links</span>
             </div>
         </div>
 
         <!-- Loading skeleton -->
         <div id="catalogLoading" class="loading-state">
             <div class="spin-lg"></div>
-            <p>Chargement des excipients depuis Supabase...</p>
+            <p>Loading excipients from database...</p>
         </div>
 
         <!-- Catalogue layout (hidden until data loads) -->
@@ -615,7 +669,7 @@
             <!-- Mobile filter toggle -->
             <button class="mobile-filter-toggle" id="mobileFilterToggle" onclick="openSidebar()" aria-expanded="false" aria-controls="filterSidebar">
                 <i class="fas fa-sliders-h"></i>
-                Filtres avancés
+                Advanced filters
                 <span class="active-count" id="mobileFilterCount">0</span>
             </button>
 
@@ -625,20 +679,20 @@
             <div class="catalogue-layout">
 
                 <!-- ── Filter sidebar ── -->
-                <aside class="filter-sidebar" id="filterSidebar" aria-label="Filtres avancés">
+                <aside class="filter-sidebar" id="filterSidebar" aria-label="Advanced filters">
 
                     <!-- Mobile header -->
                     <div class="sidebar-mobile-header">
-                        <h3><i class="fas fa-sliders-h"></i> Filtres</h3>
-                        <button class="sidebar-close-btn" onclick="closeSidebar()" aria-label="Fermer les filtres">
+                        <h3><i class="fas fa-sliders-h"></i> Filters</h3>
+                        <button class="sidebar-close-btn" onclick="closeSidebar()" aria-label="Close filters">
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
 
-                    <!-- Stock disponible -->
+                    <!-- In stock only -->
                     <div class="sidebar-card">
                         <div class="toggle-row">
-                            <span>Stock disponible uniquement</span>
+                            <span>In stock only</span>
                             <label class="toggle-switch">
                                 <input type="checkbox" id="filterStock" onchange="onFilterChange()">
                                 <span class="toggle-track"></span>
@@ -668,18 +722,18 @@
                         </div>
                     </div>
 
-                    <!-- Origine -->
+                    <!-- Origin -->
                     <div class="sidebar-card">
-                        <div class="sidebar-title"><i class="fas fa-globe"></i> Origine</div>
+                        <div class="sidebar-title"><i class="fas fa-globe"></i> Origin</div>
                         <div class="pill-group" id="originePills">
                             <label class="pill-label" data-filter="origine" data-value="Europe">
                                 <input type="checkbox" value="Europe" onchange="onPillChange(this)"> Europe
                             </label>
                             <label class="pill-label" data-filter="origine" data-value="Inde">
-                                <input type="checkbox" value="Inde" onchange="onPillChange(this)"> Inde
+                                <input type="checkbox" value="Inde" onchange="onPillChange(this)"> India
                             </label>
                             <label class="pill-label" data-filter="origine" data-value="Chine">
-                                <input type="checkbox" value="Chine" onchange="onPillChange(this)"> Chine
+                                <input type="checkbox" value="Chine" onchange="onPillChange(this)"> China
                             </label>
                             <label class="pill-label" data-filter="origine" data-value="USA">
                                 <input type="checkbox" value="USA" onchange="onPillChange(this)"> USA
@@ -687,9 +741,9 @@
                         </div>
                     </div>
 
-                    <!-- Conditionnements -->
+                    <!-- Pack sizes -->
                     <div class="sidebar-card">
-                        <div class="sidebar-title"><i class="fas fa-box"></i> Conditionnements</div>
+                        <div class="sidebar-title"><i class="fas fa-box"></i> Pack sizes</div>
                         <div class="pill-group" id="condPills">
                             <label class="pill-label" data-filter="conditionnements" data-value="1 kg">
                                 <input type="checkbox" value="1 kg" onchange="onPillChange(this)"> 1 kg
@@ -706,9 +760,9 @@
                         </div>
                     </div>
 
-                    <!-- Taille particule -->
+                    <!-- Particle size -->
                     <div class="sidebar-card">
-                        <div class="sidebar-title"><i class="fas fa-ruler"></i> Taille particule (µm)</div>
+                        <div class="sidebar-title"><i class="fas fa-ruler"></i> Particle size (µm)</div>
                         <div class="range-container">
                             <div class="range-values">
                                 <span id="rangeMinVal">0 µm</span>
@@ -719,20 +773,20 @@
                                 <div class="range-track-fill" id="rangeTrackFill"></div>
                                 <input type="range" class="range-thumb" id="rangeMin"
                                     min="0" max="500" value="0" step="5"
-                                    oninput="onRangeChange()" aria-label="Taille particule minimum">
+                                    oninput="onRangeChange()" aria-label="Minimum particle size">
                                 <input type="range" class="range-thumb" id="rangeMax"
                                     min="0" max="500" value="500" step="5"
-                                    oninput="onRangeChange()" aria-label="Taille particule maximum">
+                                    oninput="onRangeChange()" aria-label="Maximum particle size">
                             </div>
                             <p style="font-size:.72rem;color:var(--text-dim);margin-top:.5rem;">
-                                Données disponibles pour 10 excipients prioritaires.
+                                Data available for 10 priority excipients.
                             </p>
                         </div>
                     </div>
 
                     <!-- Clear all -->
                     <button class="clear-filters-btn" onclick="clearAllFilters()" id="clearAllBtn" style="display:none;">
-                        <i class="fas fa-times"></i> Effacer tous les filtres
+                        <i class="fas fa-times"></i> Clear all filters
                     </button>
 
                 </aside>
@@ -743,27 +797,27 @@
                     <!-- Top filters (search + category) -->
                     <div class="top-filters">
                         <div class="search-wrap">
-                            <input type="text" id="catalogSearchInput" placeholder="Nom, CAS, formule..." autocomplete="off"
+                            <input type="text" id="catalogSearchInput" placeholder="Name, CAS number, formula..." autocomplete="off"
                                 onkeydown="if(event.key==='Enter') applyFilters()">
-                            <button onclick="applyFilters()" aria-label="Rechercher"><i class="fas fa-search"></i></button>
+                            <button onclick="applyFilters()" aria-label="Search"><i class="fas fa-search"></i></button>
                         </div>
-                        <select id="categoryFilter" onchange="applyFilters()" aria-label="Filtrer par catégorie">
-                            <option value="">Toutes les catégories</option>
-                            <option value="liant">Liant</option>
-                            <option value="désintégrant">Désintégrant</option>
-                            <option value="lubrifiant">Lubrifiant</option>
-                            <option value="diluant">Diluant</option>
-                            <option value="conservateur">Conservateur</option>
+                        <select id="categoryFilter" onchange="applyFilters()" aria-label="Filter by category">
+                            <option value="">All categories</option>
+                            <option value="liant">Binder</option>
+                            <option value="désintégrant">Disintegrant</option>
+                            <option value="lubrifiant">Lubricant</option>
+                            <option value="diluant">Diluent / Filler</option>
+                            <option value="conservateur">Preservative</option>
                         </select>
                     </div>
 
                     <!-- Active filter chips -->
-                    <div class="active-filters-bar" id="activeFiltersBar" role="list" aria-label="Filtres actifs"></div>
+                    <div class="active-filters-bar" id="activeFiltersBar" role="list" aria-label="Active filters"></div>
 
                     <!-- Results count -->
                     <div class="results-bar">
                         <p class="results-count">
-                            <strong id="displayedProducts2">0</strong> excipient(s) trouvé(s)
+                            <strong id="displayedProducts2">0</strong> excipient(s) found
                         </p>
                     </div>
 
@@ -773,8 +827,8 @@
                     <!-- No results -->
                     <div id="noResults" class="empty-state" style="display:none;">
                         <i class="fas fa-search"></i>
-                        <p>Aucun excipient trouvé pour ces critères.</p>
-                        <button class="btn btn-outline btn-sm" onclick="clearAllFilters()">Effacer les filtres</button>
+                        <p>No excipients found for these criteria.</p>
+                        <button class="btn btn-outline btn-sm" onclick="clearAllFilters()">Clear filters</button>
                     </div>
 
                 </div><!-- /.catalogue-main -->
@@ -790,19 +844,20 @@
         <div class="footer-grid">
             <div class="footer-col">
                 <div class="footer-logo">⬡ ChemistrySpot</div>
-                <p class="footer-desc">Terminal B2B pour les excipients pharmaceutiques. Données indicatives à visée comparative.</p>
+                <p class="footer-desc">B2B terminal for pharmaceutical excipients. Indicative data for comparison purposes.</p>
                 <div class="footer-certs">
                     <span class="footer-cert">GMP</span>
                     <span class="footer-cert">ISO 9001</span>
-                    <a href="reglementation.html" class="footer-cert">ANSM</a>
+                    <a href="../reglementation.html" class="footer-cert">ANSM</a>
                 </div>
             </div>
             <div class="footer-col">
                 <h4>Navigation</h4>
                 <ul>
                     <li><a href="catalogue.html">Catalogue (50 excipients)</a></li>
-                    <li><a href="fournisseurs.html">Fournisseurs (192)</a></li>
-                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="../fournisseurs.html">Suppliers (192)</a></li>
+                    <li><a href="../contact.html">Contact</a></li>
+                    <li><a href="../catalogue.html">Version française</a></li>
                 </ul>
             </div>
             <div class="footer-col">
@@ -816,33 +871,33 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2026 ChemistrySpot — Données à titre indicatif. Pas de conseil en investissement.</p>
+            <p>&copy; 2026 ChemistrySpot — Indicative data only. Not investment advice.</p>
         </div>
     </div>
 </footer>
 
-<!-- ══ MODAL : PRIX EXACT ══ -->
+<!-- ══ MODAL : EXACT QUOTE ══ -->
 <div id="catalogPrixExactModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="cpe-title">
     <div class="modal-box" style="max-width:440px;">
-        <button class="modal-close" onclick="closeModal('catalogPrixExactModal')" aria-label="Fermer">&times;</button>
-        <div class="modal-title" id="cpe-title"><i class="fas fa-tag"></i> Obtenir le prix exact</div>
-        <p style="font-size:.88rem;color:var(--text-muted);margin-bottom:1rem;">Recevez le prix exact pour votre volume sous 24h ouvrées.</p>
+        <button class="modal-close" onclick="closeModal('catalogPrixExactModal')" aria-label="Close">&times;</button>
+        <div class="modal-title" id="cpe-title"><i class="fas fa-tag"></i> Get exact price</div>
+        <p style="font-size:.88rem;color:var(--text-muted);margin-bottom:1rem;">Receive the exact price for your volume within 24 business hours.</p>
         <div id="cpe-product-label" style="background:var(--bg-surface);padding:.65rem 1rem;border-radius:var(--radius);margin-bottom:1.25rem;font-weight:600;color:var(--primary);font-size:.9rem;border-left:3px solid var(--primary);"></div>
         <form id="cpeExactForm" onsubmit="handleCatalogPrixExact(event)">
             <div class="form-group">
-                <label class="form-label" for="cpe-email">Email professionnel *</label>
-                <input id="cpe-email" type="email" class="form-input" required placeholder="jean.dupont@labo.com" autocomplete="email">
+                <label class="form-label" for="cpe-email">Professional email *</label>
+                <input id="cpe-email" type="email" class="form-input" required placeholder="john.doe@pharmalab.com" autocomplete="email">
             </div>
             <div class="form-group">
-                <label class="form-label" for="cpe-quantite">Quantité souhaitée (kg) *</label>
-                <input id="cpe-quantite" type="number" min="1" step="1" class="form-input" required placeholder="ex : 500">
+                <label class="form-label" for="cpe-quantite">Quantity needed (kg) *</label>
+                <input id="cpe-quantite" type="number" min="1" step="1" class="form-input" required placeholder="e.g. 500">
             </div>
             <div class="form-group">
-                <label class="form-label" for="cpe-entreprise">Entreprise *</label>
-                <input id="cpe-entreprise" type="text" class="form-input" required placeholder="Laboratoire ABC" autocomplete="organization">
+                <label class="form-label" for="cpe-entreprise">Company *</label>
+                <input id="cpe-entreprise" type="text" class="form-input" required placeholder="Pharma Lab Inc." autocomplete="organization">
             </div>
             <button type="submit" class="btn btn-primary w-full" style="margin-top:.5rem;">
-                <i class="fas fa-paper-plane"></i> Obtenir mon prix exact
+                <i class="fas fa-paper-plane"></i> Get my exact price
             </button>
             <div id="cpeExactFeedback" style="display:none;margin-top:1rem;" role="alert"></div>
         </form>
@@ -850,14 +905,66 @@
 </div>
 
 <!-- ══ SCRIPTS ══ -->
-<script src="./js/supabase-config.js"></script>
+<script src="../js/supabase-config.js"></script>
 
 <script>
-// ── EmailJS config ────────────────────────────────────────────
-const EMAILJS_PUBLIC_KEY  = 'VOTRE_PUBLIC_KEY';
-const EMAILJS_SERVICE_ID  = 'VOTRE_SERVICE_ID';
-const EMAILJS_TEMPLATE_ID = 'VOTRE_TEMPLATE_ID';
-emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+// ── English name overrides ─────────────────────────────────────
+const EN_NAMES = {
+    10: 'Lactose',
+    11: 'Microcrystalline Cellulose (MCC)',
+    12: 'Magnesium Stearate',
+    13: 'Povidone (PVP)',
+    14: 'Talc',
+    15: 'Titanium Dioxide',
+    16: 'Glycerol',
+    17: 'Purified Water',
+    18: 'Ethanol',
+    19: 'Mannitol',
+    20: 'Sorbitol',
+    21: 'Starch',
+    22: 'Stearic Acid',
+    23: 'Citric Acid',
+    24: 'Sucrose',
+    25: 'Propylene Glycol',
+    26: 'Benzyl Alcohol',
+    27: 'Sodium Lauryl Sulfate',
+    28: 'Calcium Stearate',
+    29: 'Dicalcium Phosphate',
+    30: 'Calcium Carbonate',
+    31: 'Sodium Chloride',
+    32: 'Potassium Chloride',
+    33: 'Zinc Oxide',
+    34: 'Colloidal Silicon Dioxide',
+    35: 'Hydroxypropylcellulose (HPC)',
+    36: 'Hypromellose (HPMC)',
+    37: 'Macrogol 4000 (PEG 4000)',
+    38: 'Polysorbate 80 (Tween 80)',
+    39: 'Benzalkonium Chloride',
+    40: 'Croscarmellose Sodium',
+    41: 'Crospovidone (PVPP)',
+    42: 'Sodium Starch Glycolate',
+    43: 'Gelatin',
+    44: 'Acacia Gum',
+    45: 'Xanthan Gum',
+    46: 'Sodium Carboxymethylcellulose',
+    47: 'Ethylcellulose',
+    48: 'Shellac',
+    49: 'Carbomer',
+    50: 'Sodium Bicarbonate',
+    51: 'Ascorbic Acid',
+    52: 'Alpha-Tocopherol',
+    53: 'Butylated Hydroxytoluene (BHT)',
+    54: 'Methylparaben',
+    55: 'Propylparaben',
+    56: 'Sorbic Acid',
+    57: 'Potassium Sorbate',
+    58: 'Cetyl Alcohol',
+    59: 'Mineral Oil',
+};
+
+function getEnName(exc) {
+    return EN_NAMES[exc.id] || exc.nom_commun || '—';
+}
 
 // ── Modal helpers ─────────────────────────────────────────────
 function openModal(id) { document.getElementById(id).classList.add('open'); }
@@ -924,7 +1031,6 @@ function onRangeChange() {
     let min = parseInt(document.getElementById('rangeMin').value);
     let max = parseInt(document.getElementById('rangeMax').value);
     if (min > max) {
-        // Swap: determine which was last moved
         const active = document.activeElement;
         if (active && active.id === 'rangeMin') {
             document.getElementById('rangeMin').value = max;
@@ -936,7 +1042,6 @@ function onRangeChange() {
     }
     document.getElementById('rangeMinVal').textContent = min + ' µm';
     document.getElementById('rangeMaxVal').textContent = max + ' µm';
-    // Update fill track
     const fill = document.getElementById('rangeTrackFill');
     fill.style.left  = (min / 500 * 100) + '%';
     fill.style.width = ((max - min) / 500 * 100) + '%';
@@ -945,7 +1050,6 @@ function onRangeChange() {
     applyFilters();
 }
 
-// Initialize range track fill on load
 function initRangeFill() {
     const fill = document.getElementById('rangeTrackFill');
     fill.style.left  = '0%';
@@ -957,46 +1061,40 @@ function renderActiveFilters() {
     const bar = document.getElementById('activeFiltersBar');
     const chips = [];
 
-    // Certifications
     advFilters.certifications.forEach(v => {
         chips.push({ key: 'certifications', value: v, label: v });
     });
-    // Origine
     advFilters.origine.forEach(v => {
-        chips.push({ key: 'origine', value: v, label: v });
+        const labels = { 'Inde': 'India', 'Chine': 'China' };
+        chips.push({ key: 'origine', value: v, label: labels[v] || v });
     });
-    // Conditionnements
     advFilters.conditionnements.forEach(v => {
         chips.push({ key: 'conditionnements', value: v, label: v });
     });
-    // Stock
     if (advFilters.stock) {
-        chips.push({ key: 'stock', value: null, label: 'Stock disponible' });
+        chips.push({ key: 'stock', value: null, label: 'In stock' });
     }
-    // Particle range
     if (advFilters.particuleMin !== 0 || advFilters.particuleMax !== 500) {
         chips.push({
             key: 'range',
             value: null,
-            label: `Particule ${advFilters.particuleMin}–${advFilters.particuleMax} µm`
+            label: `Particle ${advFilters.particuleMin}–${advFilters.particuleMax} µm`
         });
     }
 
     bar.innerHTML = chips.map(c => `
         <button class="filter-chip" role="listitem"
             onclick="removeFilter('${c.key}','${c.value || ''}')"
-            aria-label="Supprimer le filtre ${c.label}">
+            aria-label="Remove filter ${c.label}">
             ${c.label} <span class="chip-x">✕</span>
         </button>
     `).join('');
 
-    // Show/hide "clear all"
     const hasFilters = chips.length > 0 ||
         document.getElementById('catalogSearchInput').value.trim() ||
         document.getElementById('categoryFilter').value;
     document.getElementById('clearAllBtn').style.display = hasFilters ? 'flex' : 'none';
 
-    // Mobile badge count
     const countEl = document.getElementById('mobileFilterCount');
     countEl.textContent = chips.length;
     countEl.classList.toggle('visible', chips.length > 0);
@@ -1015,7 +1113,6 @@ function removeFilter(key, value) {
         return;
     } else if (value) {
         advFilters[key].delete(value);
-        // Uncheck the pill
         const pill = document.querySelector(
             `.pill-label[data-filter="${key}"][data-value="${value}"] input`
         );
@@ -1025,22 +1122,17 @@ function removeFilter(key, value) {
 }
 
 function clearAllFilters() {
-    // Reset text/category
     document.getElementById('catalogSearchInput').value = '';
     document.getElementById('categoryFilter').value = '';
-    // Reset all pills
     document.querySelectorAll('.pill-label input[type="checkbox"]').forEach(cb => {
         cb.checked = false;
         cb.closest('.pill-label').classList.remove('active');
     });
-    // Reset sets
     advFilters.certifications.clear();
     advFilters.conditionnements.clear();
     advFilters.origine.clear();
-    // Reset stock
     advFilters.stock = false;
     document.getElementById('filterStock').checked = false;
-    // Reset range
     advFilters.particuleMin = 0;
     advFilters.particuleMax = 500;
     document.getElementById('rangeMin').value = 0;
@@ -1060,12 +1152,11 @@ async function fetchPrices() {
         });
         if (!res.ok) return;
         (await res.json()).forEach(r => { pricesMap[r.excipient_id] = r; });
-    } catch { /* non-bloquant */ }
+    } catch { /* non-blocking */ }
 }
 
 // ── Init ───────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', async () => {
-    // Handle URL query param
     const urlQ = new URLSearchParams(window.location.search).get('q');
     if (urlQ) document.getElementById('catalogSearchInput').value = urlQ;
 
@@ -1106,30 +1197,22 @@ function applyFilters() {
     const rangeActive = (pMin !== 0 || pMax !== 500);
 
     filteredExcipients = allExcipients.filter(exc => {
-        // Text search
+        const enName = getEnName(exc).toLowerCase();
         if (query && !(
+            enName.includes(query) ||
             exc.nom_commun?.toLowerCase().includes(query) ||
             exc.nom_chimique?.toLowerCase().includes(query) ||
             exc.cas_number?.toLowerCase().includes(query) ||
             exc.formule?.toLowerCase().includes(query)
         )) return false;
 
-        // Category
         if (category && !exc.fonction_principale?.toLowerCase().includes(category)) return false;
 
-        // Certifications (at least one must match)
         if (certSel.size > 0 && !(exc.certifications || []).some(c => certSel.has(c))) return false;
-
-        // Conditionnements
         if (condSel.size > 0 && !(exc.conditionnements || []).some(c => condSel.has(c))) return false;
-
-        // Origine
         if (origSel.size > 0 && !(exc.origine || []).some(o => origSel.has(o))) return false;
-
-        // Stock
         if (stockOnly && !exc.stock_disponible) return false;
 
-        // Taille particule (only filter excipients that HAVE data)
         if (rangeActive &&
             exc.taille_particule_min !== null &&
             exc.taille_particule_max !== null) {
@@ -1147,8 +1230,8 @@ function applyFilters() {
 function getPriceDisplay(exc) {
     const p = pricesMap[exc.id];
     if (!p) return null;
-    const min = parseFloat(p.prix_min).toFixed(2).replace('.', ',');
-    const max = parseFloat(p.prix_max).toFixed(2).replace('.', ',');
+    const min = parseFloat(p.prix_min).toFixed(2);
+    const max = parseFloat(p.prix_max).toFixed(2);
     return { text: `${min}–${max} €/kg`, source: p.source };
 }
 
@@ -1165,7 +1248,30 @@ function renderGrades(grades) {
     if (!grades || grades.length === 0) return '';
     const shown = grades.slice(0, 3).join(', ');
     const extra = grades.length > 3 ? ` +${grades.length - 3}` : '';
-    return `<div class="card-grades">Grades : <span>${shown}${extra}</span></div>`;
+    return `<div class="card-grades">Grades: <span>${shown}${extra}</span></div>`;
+}
+
+function getFunctionEn(fn) {
+    if (!fn) return null;
+    const map = {
+        'liant': 'Binder',
+        'désintégrant': 'Disintegrant',
+        'lubrifiant': 'Lubricant',
+        'diluant': 'Diluent',
+        'conservateur': 'Preservative',
+        'édulcorant': 'Sweetener',
+        'surfactant': 'Surfactant',
+        'épaississant': 'Thickener',
+        'antioxydant': 'Antioxidant',
+        'enrobage': 'Coating agent',
+        'solvant': 'Solvent',
+        'plastifiant': 'Plasticizer',
+    };
+    const lower = fn.toLowerCase();
+    for (const [fr, en] of Object.entries(map)) {
+        if (lower.includes(fr)) return en;
+    }
+    return fn;
 }
 
 function displayExcipients() {
@@ -1188,40 +1294,42 @@ function displayExcipients() {
     grid.innerHTML = filteredExcipients.map(exc => {
         const priceInfo = getPriceDisplay(exc);
         const srcLabel  = priceInfo?.source === 'Estimate' ? ' <small style="opacity:.6;">(est.)</small>' : '';
+        const displayName = getEnName(exc);
 
         const stockHtml = exc.stock_disponible ? `
             <div class="card-stock-row">
-                <span class="card-stock-dot"></span> Stock disponible
+                <span class="card-stock-dot"></span> In stock
             </div>` : '';
 
         const certHtml  = renderCertBadges(exc.certifications);
         const gradeHtml = renderGrades(exc.grades);
 
-        const functionBadge = exc.fonction_principale
-            ? `<span class="badge badge-neutral" style="margin-left:4px;">${exc.fonction_principale}</span>`
+        const fnEn = getFunctionEn(exc.fonction_principale);
+        const functionBadge = fnEn
+            ? `<span class="badge badge-neutral" style="margin-left:4px;">${fnEn}</span>`
             : '';
 
         return `
         <div class="product-card fade-in">
             <div class="product-card-cas">${exc.cas_number ? 'CAS ' + exc.cas_number : 'CAS N/A'}</div>
-            <div class="product-card-name">${exc.nom_commun || '—'}</div>
+            <div class="product-card-name">${displayName}</div>
             ${stockHtml}
             ${certHtml}
             ${gradeHtml}
             <div class="mb-1">${functionBadge}</div>
-            <div class="product-card-meta"><strong>Nom chimique :</strong> ${exc.nom_chimique || 'N/A'}</div>
-            ${exc.formule ? `<div class="product-card-meta"><strong>Formule :</strong> ${exc.formule}</div>` : ''}
+            <div class="product-card-meta"><strong>Chemical name:</strong> ${exc.nom_chimique || 'N/A'}</div>
+            ${exc.formule ? `<div class="product-card-meta"><strong>Formula:</strong> ${exc.formule}</div>` : ''}
             ${priceInfo
                 ? `<div class="product-card-price"><i class="fas fa-tag"></i> ${priceInfo.text}${srcLabel}</div>`
-                : '<div class="product-card-price" style="color:var(--text-dim);">Prix sur demande</div>'
+                : '<div class="product-card-price" style="color:var(--text-dim);">Price on request</div>'
             }
             <div class="product-card-footer">
                 <button class="btn btn-primary btn-sm" style="flex:1;"
                     onclick="openCatalogPrixExact(${exc.id}, this)"
-                    data-nom="${(exc.nom_commun||'').replace(/"/g,'&quot;')}">
-                    <i class="fas fa-tag"></i> Prix exact
+                    data-nom="${displayName.replace(/"/g,'&quot;')}">
+                    <i class="fas fa-tag"></i> Get quote
                 </button>
-                <a href="produit-detail.html?id=${exc.id}" class="btn btn-outline btn-sm" title="Voir la fiche produit">
+                <a href="produit-detail.html?id=${exc.id}" class="btn btn-outline btn-sm" title="View product sheet">
                     <i class="fas fa-eye"></i>
                 </a>
             </div>
@@ -1229,7 +1337,7 @@ function displayExcipients() {
     }).join('');
 }
 
-// ── Prix exact modal ───────────────────────────────────────────
+// ── Exact quote modal ──────────────────────────────────────────
 let catalogCurrentProduct = '';
 
 function openCatalogPrixExact(id, btn) {
@@ -1246,7 +1354,7 @@ async function handleCatalogPrixExact(e) {
     const fb  = document.getElementById('cpeExactFeedback');
     const btn = e.target.querySelector('button[type="submit"]');
     btn.disabled = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi…';
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending…';
     const qty = document.getElementById('cpe-quantite').value;
     const email = document.getElementById('cpe-email').value.trim();
     const entreprise = document.getElementById('cpe-entreprise').value.trim();
@@ -1263,27 +1371,19 @@ async function handleCatalogPrixExact(e) {
                 prenom: '', nom: '',
                 email, entreprise,
                 sujet: 'quote',
-                message: `Demande de prix exact : ${qty} kg de ${catalogCurrentProduct}`
+                message: `[EN] Price quote request: ${qty} kg of ${catalogCurrentProduct}`
             })
         });
         if (!res.ok) throw new Error();
-        emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-            source_page: 'Catalogue',
-            excipient:   catalogCurrentProduct,
-            quantite:    qty + ' kg',
-            email_client: email,
-            entreprise,
-            message: `Demande de prix exact : ${qty} kg de ${catalogCurrentProduct}`,
-        }).catch(() => {});
         fb.style.display = 'block';
-        fb.innerHTML = '<div class="status-bar status-success"><i class="fas fa-check-circle"></i> Vous recevrez le prix exact sous 24h.</div>';
+        fb.innerHTML = '<div class="status-bar status-success"><i class="fas fa-check-circle"></i> You will receive the exact price within 24 business hours.</div>';
         e.target.reset();
     } catch {
         fb.style.display = 'block';
-        fb.innerHTML = '<div class="status-bar status-danger"><i class="fas fa-exclamation-circle"></i> Erreur — réessayez ou contactez-nous par email.</div>';
+        fb.innerHTML = '<div class="status-bar status-danger"><i class="fas fa-exclamation-circle"></i> Error — please retry or contact us by email.</div>';
     } finally {
         btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Obtenir mon prix exact';
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Get my exact price';
     }
 }
 
@@ -1291,7 +1391,7 @@ function showError() {
     document.getElementById('catalogLoading').innerHTML = `
         <div class="empty-state">
             <i class="fas fa-exclamation-triangle" style="color:var(--danger);"></i>
-            <p>Erreur de chargement des données Supabase.</p>
+            <p>Error loading data from database.</p>
         </div>`;
 }
 

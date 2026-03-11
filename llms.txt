@@ -1,5 +1,13 @@
 # ChemistrySpot
 
+> B2B marketplace for pharmaceutical excipients. Indicative market prices, 192 referenced suppliers in 17 countries, and technical data sourced from PubChem NCBI and the European Pharmacopoeia.
+
+ChemistrySpot is a B2B platform targeting hospital pharmacists (PUI), industrial formulators and pharmaceutical procurement teams. It does not sell excipients directly — it provides price benchmarks, a supplier map and reference technical data.
+
+Available in French (primary) and English (`/en/` pages for 10 priority excipients).
+
+---
+
 > Marketplace B2B pour excipients pharmaceutiques. Prix indicatifs marché, 192 fournisseurs référencés dans 17 pays, et fiches techniques sourçées depuis PubChem NCBI et la Pharmacopée Européenne.
 
 ChemistrySpot est une plateforme francophone B2B ciblant les pharmaciens hospitaliers (PUI), les formulateurs industriels et les équipes achats pharmaceutiques. Elle ne vend pas directement les excipients — elle fournit des benchmarks de prix, une cartographie des fournisseurs et des données techniques de référence.
@@ -44,6 +52,43 @@ Diluants/Liants, Désintégrants, Lubrifiants, Enrobants, Conservateurs, Solvant
 - [Guide Compression Directe](https://chemistryspot.com/guide-compression-directe.html) : Comparaison MCC, lactose monohydraté, mannitol — mécanismes, grades, concentrations, tableau comparatif
 - [Guide Désintégrants](https://chemistryspot.com/guide-desintegrants-pharmaceutiques.html) : Croscarmellose sodique vs crospovidone vs SSG — mécanismes, dosages ODT, granulation humide
 - [Guide Lubrifiants](https://chemistryspot.com/guide-lubrifiants-pharmaceutiques.html) : Stéarate de magnésium, béhénate de glycéryle, talc, sodium stéaryl fumarate — sur-lubrification et sélection
+
+## English Pages (EN)
+
+- [English Catalogue](https://chemistryspot.com/en/catalogue.html): All 50 excipients in English — CAS, formula, grades, indicative price range
+- [English Product Pages](https://chemistryspot.com/en/produit-detail.html): Dynamic product sheets at `/en/produit-detail.html?id={N}`
+
+### 10 Priority Excipients — English Summaries
+
+**Microcrystalline Cellulose (MCC)** — CAS 9004-34-6 — €1.50–2.80/kg
+Partially depolymerized cellulose used as binder/filler in direct compression and wet granulation. Grades: PH-101 (50 µm), PH-102 (90 µm), PH-200 (180 µm). Certifications: Ph.Eur., USP/NF, JP, BP. Key properties: high compressibility, self-lubricating, moisture absorption ~5%. Used in 70%+ of oral solid dosage forms.
+
+**Lactose Monohydrate** — CAS 5989-81-1 — €0.80–1.20/kg
+Most widely used tablet filler/binder. Grades: spray-dried (direct compression), milled (wet granulation), anhydrous. Certifications: Ph.Eur., USP/NF, BP, JP. Reducing sugar — incompatible with primary amines (Maillard reaction). Used in oral tablets, capsules, DPI inhalation.
+
+**Magnesium Stearate** — CAS 557-04-0 — €1.20–2.50/kg
+Gold standard tablet lubricant at 0.25–1.0% w/w. Prevents die sticking and reduces punch adhesion. Hydrophobic — prolonged blending reduces tablet hardness (over-lubrication). Certifications: Ph.Eur., USP/NF, BP, JP. Sources: vegetable (preferred) or animal origin.
+
+**Povidone (PVP K30)** — CAS 9003-39-8 — €4.00–8.00/kg
+Hydrophilic polymer binder for wet granulation at 3–10% w/w. Also used as film-former and solubilizer. K-value indicates molecular weight (K25, K30, K90). Certifications: Ph.Eur., USP/NF, JP. Highly hygroscopic — store below 25°C, <60% RH.
+
+**Mannitol** — CAS 69-65-8 — €3.00–5.00/kg
+Preferred filler for lyophilization (bulking agent) and ODT (pleasant mouthfeel, non-hygroscopic). Grades: spray-dried (direct compression), crystalline. Certifications: Ph.Eur., USP/NF, JP. Non-reducing sugar — compatible with most APIs. Cooling effect on dissolution.
+
+**Hypromellose (HPMC)** — CAS 9004-65-3 — €15.00–30.00/kg
+Versatile cellulose ether used as matrix former (sustained release), film coating agent and viscosity modifier. Grades: K4M, K15M, K100M (viscosity at 2% in water). Certifications: Ph.Eur., USP/NF, JP. Used in extended-release tablets, ophthalmic solutions, hydrogels.
+
+**Starch** — CAS 9005-25-8 — €0.50–1.50/kg
+Classical disintegrant (5–20% w/w) and binder for wet granulation. Sources: corn, potato, wheat, rice. Pregelatinized starch offers direct compression compatibility. Certifications: Ph.Eur., USP/NF, BP, JP. Also used as a diluent in capsule formulations.
+
+**Calcium Stearate** — CAS 1592-23-0 — €1.00–2.00/kg
+Alternative lubricant to magnesium stearate. Less hydrophobic, better suited for acid-sensitive APIs. Used at 0.5–2.0% in tablet formulations. Certifications: Ph.Eur., USP/NF. Derived from stearic acid and calcium hydroxide.
+
+**Croscarmellose Sodium** — CAS 74811-65-7 — €5.00–9.00/kg
+Superdisintegrant used at 1–5% w/w via swelling and wicking mechanisms. Superior to starch — effective at lower concentrations. Used in direct compression and wet granulation. Certifications: Ph.Eur., USP/NF, JP, BP. Trade name: Ac-Di-Sol.
+
+**Talc** — CAS 14807-96-6 — €0.30–0.80/kg
+Lubricant and glidant at 1–5% w/w. Also used as anti-caking agent in powder blends. Micronized grades for pharmaceutical use. Certifications: Ph.Eur., USP/NF, BP, JP. Concerns: potential asbestos contamination — pharmaceutical grade testing required.
 
 ## Fiches produit détaillées
 

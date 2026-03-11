@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Pharmaceutical Excipient — ChemistrySpot</title>
+    <meta id="metaDesc" name="description" content="Pharmaceutical excipient specifications, grades, certifications and supplier pricing — ChemistrySpot B2B marketplace.">
+    <meta id="ogTitle" property="og:title" content="Pharmaceutical Excipient — ChemistrySpot">
+    <meta id="ogDesc" property="og:description" content="Pharmaceutical excipient B2B data: CAS number, grades, certifications, indicative pricing.">
+    <meta property="og:image" content="https://chemistryspot.com/og-image.png">
+    <meta property="og:type" content="product">
+    <link id="canonicalTag" rel="canonical" href="https://chemistryspot.com/en/produit-detail.html">
+    <link rel="alternate" hreflang="fr" id="hreflangFr" href="https://chemistryspot.com/produit-detail.html">
+    <link rel="alternate" hreflang="en" id="hreflangEn" href="https://chemistryspot.com/en/produit-detail.html">
+    <link rel="alternate" hreflang="x-default" id="hreflangDefault" href="https://chemistryspot.com/produit-detail.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/design-system.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/auth.js" defer></script>
+    <script id="jsonld-product" type="application/ld+json">{}</script>
+    <script id="jsonld-breadcrumb" type="application/ld+json">{}</script>
+
+    <style>
+    .en-lang-banner {
+        background: rgba(0,212,170,.06);
+        border-bottom: 1px solid rgba(0,212,170,.15);
+        padding: .45rem 0;
+        font-size: .8rem;
+        text-align: center;
+        color: var(--text-muted);
+    }
+    .en-lang-banner a { color: var(--primary); font-weight: 500; }
+    .hero-section {
+        background: linear-gradient(135deg, #0d1627 0%, #111827 100%);
+        border-bottom: 1px solid var(--border);
+        padding: 2.5rem 0 2rem;
+    }
+    .hero-cas {
+        font-family: var(--mono);
+        font-size: .78rem;
+        color: var(--primary);
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        margin-bottom: .4rem;
+    }
+    .hero-name {
+        font-size: 2rem;
+        font-weight: 800;
+        line-height: 1.2;
+        margin-bottom: .5rem;
+    }
+    .hero-iupac {
+        font-size: .88rem;
+        color: var(--text-muted);
+        margin-bottom: 1rem;
+    }
+    .hero-badges { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: 1.25rem; }
+    .hero-price-box {
+        display: inline-flex;
+        flex-direction: column;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-left: 3px solid var(--primary);
+        border-radius: var(--radius);
+        padding: .75rem 1.25rem;
+        margin-top: .5rem;
+    }
+    .hero-price-label { font-size: .72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: .06em; }
+    .hero-price-value { font-family: var(--mono); font-size: 1.3rem; font-weight: 700; color: var(--primary); }
+    .hero-price-note  { font-size: .7rem; color: var(--text-dim); margin-top: .1rem; }
+
+    /* Specs grid */
+    .specs-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: .75rem;
+        margin-bottom: 1.5rem;
+    }
+    .spec-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: .875rem 1rem;
+    }
+    .spec-label { font-size: .72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: .3rem; }
+    .spec-value { font-size: .9rem; font-weight: 500; }
+    .spec-value.mono { font-family: var(--mono); color: var(--primary); }
+
+    /* Grades & certs */
+    .section-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 1.25rem;
+        margin-bottom: 1rem;
+    }
+    .section-card h3 {
+        font-size: .8rem;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+        color: var(--text-muted);
+        margin-bottom: .875rem;
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+    }
+    .section-card h3 i { color: var(--primary); }
+    .tag-list { display: flex; flex-wrap: wrap; gap: .4rem; }
+    .tag-grade {
+        padding: .3rem .7rem;
+        border-radius: var(--radius);
+        background: rgba(0,212,170,.08);
+        border: 1px solid rgba(0,212,170,.2);
+        font-size: .78rem;
+        font-family: var(--mono);
+        color: var(--primary);
+    }
+    .tag-cert {
+        padding: .3rem .7rem;
+        border-radius: var(--radius);
+        background: rgba(79,195,247,.08);
+        border: 1px solid rgba(79,195,247,.2);
+        font-size: .78rem;
+        font-weight: 600;
+        color: var(--info);
+    }
+    .tag-origine {
+        padding: .3rem .7rem;
+        border-radius: var(--radius);
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
+        font-size: .78rem;
+        color: var(--text-muted);
+    }
+
+    /* Stock indicator */
+    .stock-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: .4rem;
+        font-size: .8rem;
+        color: var(--success);
+    }
+    .stock-dot {
+        width: 8px; height: 8px;
+        border-radius: 50%;
+        background: var(--success);
+        box-shadow: 0 0 6px rgba(34,197,94,.5);
+    }
+
+    /* CTA box */
+    .cta-box {
+        background: linear-gradient(135deg, rgba(0,212,170,.08) 0%, rgba(0,212,170,.04) 100%);
+        border: 1px solid rgba(0,212,170,.2);
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        text-align: center;
+        margin-top: 1.5rem;
+    }
+    .cta-box h3 { font-size: 1.05rem; margin-bottom: .4rem; }
+    .cta-box p  { font-size: .85rem; color: var(--text-muted); margin-bottom: 1rem; }
+
+    /* Technical description */
+    .tech-desc {
+        font-size: .9rem;
+        line-height: 1.7;
+        color: var(--text-muted);
+    }
+    .tech-desc strong { color: var(--text); }
+
+    /* Use cases */
+    .use-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: .4rem;
+    }
+    .use-list li {
+        font-size: .88rem;
+        color: var(--text-muted);
+        display: flex;
+        align-items: flex-start;
+        gap: .5rem;
+    }
+    .use-list li::before {
+        content: '→';
+        color: var(--primary);
+        flex-shrink: 0;
+        margin-top: .05rem;
+    }
+
+    /* Particle size bar */
+    .particle-bar-wrap { margin-top: .75rem; }
+    .particle-bar-track {
+        height: 6px;
+        background: var(--bg-surface);
+        border-radius: 3px;
+        border: 1px solid var(--border);
+        position: relative;
+        overflow: hidden;
+    }
+    .particle-bar-fill {
+        position: absolute;
+        top: 0; bottom: 0;
+        background: linear-gradient(to right, var(--primary-light), var(--primary));
+        border-radius: 3px;
+    }
+    .particle-labels {
+        display: flex;
+        justify-content: space-between;
+        font-size: .72rem;
+        color: var(--text-dim);
+        margin-top: .3rem;
+        font-family: var(--mono);
+    }
+    .particle-range {
+        font-family: var(--mono);
+        font-size: .95rem;
+        font-weight: 600;
+        color: var(--primary);
+    }
+
+    /* Quote modal */
+    .quote-product-label {
+        background: var(--bg-surface);
+        padding: .65rem 1rem;
+        border-radius: var(--radius);
+        margin-bottom: 1.25rem;
+        font-weight: 600;
+        color: var(--primary);
+        font-size: .9rem;
+        border-left: 3px solid var(--primary);
+    }
+
+    @media (max-width: 768px) {
+        .hero-name { font-size: 1.5rem; }
+        .specs-grid { grid-template-columns: 1fr 1fr; }
+    }
+    </style>
+</head>
+<body>
+
+<!-- ══ LANGUAGE BANNER ══ -->
+<div class="en-lang-banner">
+    <i class="fas fa-language"></i>
+    Viewing in English —
+    <a id="frLink" href="../produit-detail.html">Voir en français</a>
+</div>
+
+<!-- ══ SITE HEADER ══ -->
+<header class="site-header">
+    <div class="header-top">
+        <div class="container">
+            <a href="../index.html" class="site-logo"><span class="logo-hex">⬡</span>ChemistrySpot</a>
+            <div class="header-search">
+                <input type="text" placeholder="Search excipient, CAS number..." id="globalSearch">
+                <button onclick="goSearch()"><i class="fas fa-search"></i></button>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-ghost btn-sm" onclick="window.openModal && openModal('loginModal')"><i class="fas fa-sign-in-alt"></i> Login</button>
+                <button class="btn btn-primary btn-sm" onclick="window.openModal && openModal('registerModal')"><i class="fas fa-user-plus"></i> Sign up</button>
+            </div>
+        </div>
+    </div>
+    <nav class="header-nav">
+        <div class="container">
+            <a href="../index.html" class="nav-link">Terminal</a>
+            <a href="../catalogue.html" class="nav-link">Catalogue (FR)</a>
+            <a href="../fournisseurs.html" class="nav-link">Suppliers</a>
+            <a href="../contact.html" class="nav-link">Contact</a>
+        </div>
+    </nav>
+</header>
+
+<!-- ══ LOADING ══ -->
+<div id="pageLoading" style="min-height:60vh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;">
+    <div class="spin-lg"></div>
+    <p style="color:var(--text-muted);">Loading excipient data…</p>
+</div>
+
+<!-- ══ PAGE CONTENT (shown after load) ══ -->
+<div id="pageContent" style="display:none;">
+
+    <!-- Hero -->
+    <section class="hero-section">
+        <div class="container">
+            <nav class="breadcrumb" style="margin-bottom:1rem;">
+                <a href="../index.html">Home</a>
+                <span class="sep">›</span>
+                <a href="../catalogue.html">Catalogue</a>
+                <span class="sep">›</span>
+                <span class="current" id="bcName">—</span>
+            </nav>
+            <div class="hero-cas" id="heroCas">CAS —</div>
+            <h1 class="hero-name" id="heroName">—</h1>
+            <p class="hero-iupac" id="heroIupac"></p>
+            <div class="hero-badges" id="heroBadges"></div>
+            <div id="heroStockRow"></div>
+            <div class="hero-price-box" id="heroPriceBox" style="display:none;">
+                <span class="hero-price-label">Indicative price</span>
+                <span class="hero-price-value" id="heroPriceValue">—</span>
+                <span class="hero-price-note">Per kg · Estimate · Contact for exact quote</span>
+            </div>
+        </div>
+    </section>
+
+    <main class="section">
+        <div class="container">
+            <div style="display:grid;grid-template-columns:1fr 340px;gap:1.5rem;align-items:start;">
+
+                <!-- Left: Specs + Details -->
+                <div>
+                    <!-- Key specifications -->
+                    <div class="specs-grid" id="specsGrid"></div>
+
+                    <!-- Technical description -->
+                    <div class="section-card" id="techDescCard" style="display:none;">
+                        <h3><i class="fas fa-flask"></i> Technical Overview</h3>
+                        <div class="tech-desc" id="techDesc"></div>
+                    </div>
+
+                    <!-- Use cases -->
+                    <div class="section-card" id="usesCard" style="display:none;">
+                        <h3><i class="fas fa-industry"></i> Pharmaceutical Applications</h3>
+                        <ul class="use-list" id="usesList"></ul>
+                    </div>
+
+                    <!-- Grades -->
+                    <div class="section-card" id="gradesCard" style="display:none;">
+                        <h3><i class="fas fa-tag"></i> Available Grades</h3>
+                        <div class="tag-list" id="gradesList"></div>
+                    </div>
+
+                    <!-- Certifications + Origine + Conditionnements -->
+                    <div class="section-card" id="certsCard" style="display:none;">
+                        <h3><i class="fas fa-certificate"></i> Certifications &amp; Regulatory</h3>
+                        <div class="tag-list" id="certsList"></div>
+                    </div>
+
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
+                        <div class="section-card" id="origineCard" style="display:none;">
+                            <h3><i class="fas fa-globe"></i> Origin</h3>
+                            <div class="tag-list" id="origineList"></div>
+                        </div>
+                        <div class="section-card" id="condCard" style="display:none;">
+                            <h3><i class="fas fa-box"></i> Pack Sizes</h3>
+                            <div class="tag-list" id="condList"></div>
+                        </div>
+                    </div>
+
+                    <!-- Particle size -->
+                    <div class="section-card" id="particleCard" style="display:none;">
+                        <h3><i class="fas fa-ruler-horizontal"></i> Particle Size Distribution</h3>
+                        <div class="particle-range" id="particleRange"></div>
+                        <div class="particle-bar-wrap">
+                            <div class="particle-bar-track">
+                                <div class="particle-bar-fill" id="particleBarFill"></div>
+                            </div>
+                            <div class="particle-labels">
+                                <span>0 µm</span><span>500 µm</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Regulatory references -->
+                    <div class="section-card">
+                        <h3><i class="fas fa-gavel"></i> Regulatory References</h3>
+                        <div style="display:flex;flex-wrap:wrap;gap:.5rem;font-size:.82rem;">
+                            <a href="https://www.ema.europa.eu" target="_blank" rel="noopener" class="btn btn-ghost btn-sm"><i class="fas fa-external-link-alt"></i> EMA</a>
+                            <a href="https://www.fda.gov/drugs/pharmaceutical-quality-resources/inactive-ingredient-search-approved-drug-products" target="_blank" rel="noopener" class="btn btn-ghost btn-sm"><i class="fas fa-external-link-alt"></i> FDA IIG</a>
+                            <a href="https://www.edqm.eu/en/european-pharmacopoeia-ph-eur-11th-edition" target="_blank" rel="noopener" class="btn btn-ghost btn-sm"><i class="fas fa-external-link-alt"></i> Ph.Eur.</a>
+                            <a id="pubchemLink" href="#" target="_blank" rel="noopener" class="btn btn-ghost btn-sm" style="display:none;"><i class="fas fa-external-link-alt"></i> PubChem</a>
+                        </div>
+                        <p style="font-size:.75rem;color:var(--text-dim);margin-top:.75rem;">
+                            Data for informational purposes only. Always verify with official pharmacopoeial monographs before use.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Right: Sidebar -->
+                <div style="position:sticky;top:90px;">
+
+                    <!-- Quote request -->
+                    <div class="section-card" style="border-color:rgba(0,212,170,.25);">
+                        <h3><i class="fas fa-tag"></i> Request Exact Quote</h3>
+                        <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:1rem;">
+                            Receive a firm price for your volume within 24 business hours.
+                        </p>
+                        <div class="quote-product-label" id="quoteProductLabel"></div>
+                        <form id="quoteForm" onsubmit="handleQuote(event)">
+                            <div class="form-group">
+                                <label class="form-label" for="q-email">Professional email *</label>
+                                <input id="q-email" type="email" class="form-input" required
+                                    autocomplete="email" placeholder="john.smith@pharma.com">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="q-qty">Quantity (kg) *</label>
+                                <input id="q-qty" type="number" min="1" step="1" class="form-input" required
+                                    placeholder="e.g. 500">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="q-company">Company *</label>
+                                <input id="q-company" type="text" class="form-input" required
+                                    autocomplete="organization" placeholder="Pharma Corp Ltd">
+                            </div>
+                            <button type="submit" class="btn btn-primary w-full" id="quoteBtn">
+                                <i class="fas fa-paper-plane"></i> Get exact quote
+                            </button>
+                            <div id="quoteFeedback" style="display:none;margin-top:.75rem;" role="alert"></div>
+                        </form>
+                    </div>
+
+                    <!-- French version link -->
+                    <div class="section-card" style="text-align:center;">
+                        <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:.75rem;">
+                            <i class="fas fa-flag"></i> Version française disponible
+                        </p>
+                        <a id="frVersionBtn" href="../produit-detail.html" class="btn btn-outline btn-sm w-full">
+                            <i class="fas fa-language"></i> Voir la fiche en français
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+</div><!-- /#pageContent -->
+
+<!-- ══ FOOTER ══ -->
+<footer class="site-footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <div class="footer-logo">⬡ ChemistrySpot</div>
+                <p class="footer-desc">B2B terminal for pharmaceutical excipients. Indicative data for comparative purposes only.</p>
+                <div class="footer-certs">
+                    <span class="footer-cert">GMP</span>
+                    <span class="footer-cert">ISO 9001</span>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Navigation</h4>
+                <ul>
+                    <li><a href="../catalogue.html">Catalogue (50 excipients)</a></li>
+                    <li><a href="../fournisseurs.html">Suppliers (192)</a></li>
+                    <li><a href="../contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <p><i class="fas fa-envelope"></i> contact@chemistryspot.com</p>
+                <p><i class="fas fa-map-marker-alt"></i> Paris, France</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 ChemistrySpot — Indicative data only. Not investment advice.</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+const SUPABASE_URL = 'https://jkaffpgqbyhuihvyvtld.supabase.co';
+const ANON_KEY     = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE2NTgzOTQsImV4cCI6MjA2NzIzNDM5NH0.OIjoz6uoPV25Nraral4YN_gz7q6COBW3dAVIYhBy1pI';
+const HEADERS = { 'apikey': ANON_KEY, 'Authorization': `Bearer ${ANON_KEY}` };
+
+// Technical content for 10 priority excipients
+const EN_CONTENT = {
+    11: { // MCC
+        desc: '<strong>Microcrystalline Cellulose (MCC)</strong> is a purified, partially depolymerized cellulose occurring as a white, odourless, tasteless crystalline powder. It is the most widely used pharmaceutical excipient for <strong>direct compression</strong> and wet granulation, valued for its exceptional compressibility, binding capacity, and disintegration properties.',
+        uses: ['Direct compression binder/filler for tablets', 'Wet and dry granulation aid', 'Spheronization carrier for pellets', 'Anti-caking agent in powders', 'Diluent in capsule formulations'],
+    },
+    10: { // Lactose
+        desc: '<strong>Lactose Monohydrate</strong> is a natural disaccharide derived from whey. It is the most widely used <strong>tablet filler and diluent</strong> in oral solid dosage forms, offering excellent flow properties, chemical inertness, and compatibility with most APIs.',
+        uses: ['Filler/diluent in tablets and capsules', 'Carrier for dry powder inhalers (DPI)', 'Direct compression grades for high-speed tableting', 'Wet granulation diluent', 'Lyophilization stabilizer'],
+    },
+    19: { // Mannitol
+        desc: '<strong>Mannitol</strong> is a sugar alcohol (polyol) occurring naturally in plants. In pharmaceutics, it is the excipient of choice for <strong>orally disintegrating tablets (ODTs)</strong>, parenteral formulations, and lyophilized products, due to its pleasant sweet taste, non-hygroscopic nature, and negative heat of solution.',
+        uses: ['Orally disintegrating tablets (ODT) base', 'Lyophilization bulking agent', 'Parenteral formulations (IV)', 'Direct compression diluent (DC grades)', 'Masking bitter taste of APIs'],
+    },
+    12: { // Mg stearate
+        desc: '<strong>Magnesium Stearate</strong> is the most widely used <strong>tablet lubricant</strong> in the pharmaceutical industry. It prevents adhesion of tablet mass to punches and dies, improves powder flow, and reduces ejection force. Available in vegetable (non-bovine) and synthetic grades.',
+        uses: ['Tablet lubricant (0.1–1% w/w)', 'Capsule lubricant', 'Powder flow improver', 'Anti-adherent in tablet presses', 'Controlled-release coating aid'],
+    },
+    36: { // HPMC
+        desc: '<strong>Hypromellose (HPMC)</strong> is a semisynthetic cellulose ether used as a <strong>viscosity-building polymer</strong>, film former, and extended-release matrix former. Different substitution types (2910, 2208) and viscosity grades (E3 to K100M) cover a wide range of applications from immediate-release coating to sustained-release matrices.',
+        uses: ['Extended-release tablet matrix (K grades)', 'Film coating polymer (E grades)', 'Ophthalmic lubricant', 'Binder in wet granulation', 'Viscosity modifier in liquid formulations'],
+    },
+    13: { // PVP
+        desc: '<strong>Povidone (PVP)</strong> is a synthetic homopolymer of N-vinylpyrrolidinone. It is the gold-standard <strong>binder for wet granulation</strong> and a key solubilizer for poorly water-soluble APIs via solid dispersions. K-values (K17 to K90) determine molecular weight and viscosity.',
+        uses: ['Granulation binder (K25–K30)', 'Solid dispersion carrier for BCS II drugs', 'Film-coating co-polymer', 'Tablet disintegrant (low K-values)', 'Ophthalmic vehicle'],
+    },
+    40: { // Croscarmellose
+        desc: '<strong>Croscarmellose Sodium</strong> is a cross-linked polymer of carboxymethylcellulose sodium, used as a <strong>superdisintegrant</strong> in tablets and capsules at 2–4% concentration. It swells rapidly in contact with water, providing fast disintegration even in direct compression formulations.',
+        uses: ['Superdisintegrant in tablets (2–4%)', 'Capsule disintegrant', 'Direct compression disintegrant', 'Orally disintegrating tablet (ODT) disintegrant', 'Water-swellable polymer'],
+    },
+    21: { // Starch
+        desc: '<strong>Starch</strong> (corn, wheat, potato, rice) is a polysaccharide used as <strong>diluent, binder, and disintegrant</strong> in solid dosage forms. Pregelatinized starch (Starch 1500) offers improved flow and compressibility for direct compression. Native starches are widely used in wet granulation.',
+        uses: ['Tablet diluent and filler', 'Disintegrant (native starch 5–20%)', 'Binder in wet granulation (starch paste)', 'Dusting agent', 'Controlled-release coating component'],
+    },
+    14: { // Talc
+        desc: '<strong>Talc</strong> is a purified, hydrated magnesium silicate. In pharmaceutics, it functions as a <strong>glidant, lubricant, and anti-adherent</strong> in tablet and capsule manufacturing, and as a barrier in film coatings. Pharma grades are tested for the absence of asbestos.',
+        uses: ['Glidant in tablet manufacturing (1–2%)', 'Lubricant supplement with Mg stearate', 'Anti-adherent in film coating', 'Dusting powder base', 'Capsule fill lubricant'],
+    },
+    28: { // Ca stearate
+        desc: '<strong>Calcium Stearate</strong> is a calcium salt of stearic acid, used as an alternative <strong>lubricant</strong> to magnesium stearate. It is particularly suited for formulations where magnesium ions could cause compatibility issues, and for chewable tablets due to its slightly different sensory profile.',
+        uses: ['Tablet lubricant (alternative to Mg stearate)', 'Capsule manufacturing lubricant', 'PVC stabilizer (non-pharma)', 'Powder anti-caking agent', 'Water-repellent coating'],
+    },
+};
+
+let currentExcipient = null;
+let currentPrice     = null;
+
+function goSearch() {
+    const q = document.getElementById('globalSearch').value.trim();
+    if (q) window.location.href = `../catalogue.html?q=${encodeURIComponent(q)}`;
+}
+document.getElementById('globalSearch').addEventListener('keydown', e => { if (e.key === 'Enter') goSearch(); });
+
+async function loadData(id) {
+    const [excRes, priceRes] = await Promise.all([
+        fetch(`${SUPABASE_URL}/rest/v1/excipients?id=eq.${id}&select=*`, { headers: HEADERS }),
+        fetch(`${SUPABASE_URL}/rest/v1/prices?excipient_id=eq.${id}&select=prix_min,prix_max,source`, { headers: HEADERS }),
+    ]);
+    const [excData, priceData] = await Promise.all([excRes.json(), priceRes.json()]);
+    return { exc: excData[0] || null, price: priceData[0] || null };
+}
+
+function getEnglishName(exc) {
+    const map = {
+        11: 'Microcrystalline Cellulose (MCC)',
+        10: 'Lactose Monohydrate',
+        19: 'Mannitol',
+        12: 'Magnesium Stearate',
+        36: 'Hypromellose (HPMC)',
+        13: 'Povidone (PVP)',
+        40: 'Croscarmellose Sodium',
+        21: 'Starch',
+        14: 'Talc',
+        28: 'Calcium Stearate',
+    };
+    return map[exc.id] || exc.nom_commun;
+}
+
+function getFunctionEn(fn) {
+    const map = {
+        'liant': 'Binder', 'désintégrant': 'Disintegrant', 'lubrifiant': 'Lubricant',
+        'diluant': 'Diluent/Filler', 'conservateur': 'Preservative',
+        'filmogène': 'Film former', 'épaississant': 'Thickener', 'glissant': 'Glidant',
+        'solubilisant': 'Solubilizer', 'enrobant': 'Coating agent',
+    };
+    if (!fn) return null;
+    const key = fn.toLowerCase().trim();
+    for (const [fr, en] of Object.entries(map)) {
+        if (key.includes(fr)) return en;
+    }
+    return fn;
+}
+
+function renderPage(exc, price) {
+    currentExcipient = exc;
+    currentPrice     = price;
+    const id         = exc.id;
+    const nameEn     = getEnglishName(exc);
+    const functionEn = getFunctionEn(exc.fonction_principale);
+
+    // Update head
+    document.title = `${nameEn} — Pharmaceutical Excipient | ChemistrySpot`;
+    document.getElementById('metaDesc').content = `${nameEn} (CAS ${exc.cas_number || 'N/A'}) — grades, certifications, indicative pricing and supplier data. B2B pharmaceutical marketplace.`;
+    document.getElementById('ogTitle').content  = `${nameEn} — ChemistrySpot`;
+    document.getElementById('ogDesc').content   = `${nameEn} pharma grade: CAS ${exc.cas_number || 'N/A'}, grades ${(exc.grades||[]).slice(0,3).join(', ')}, certifications ${(exc.certifications||[]).join(', ')}.`;
+
+    const enUrl = `https://chemistryspot.com/en/produit-detail.html?id=${id}`;
+    const frUrl = `https://chemistryspot.com/produit-detail.html?id=${id}`;
+    document.getElementById('canonicalTag').href = enUrl;
+    document.getElementById('hreflangFr').href   = frUrl;
+    document.getElementById('hreflangEn').href   = enUrl;
+    document.getElementById('hreflangDefault').href = frUrl;
+    document.getElementById('frLink').href       = frUrl;
+    document.getElementById('frVersionBtn').href = frUrl;
+
+    // Hero
+    document.getElementById('bcName').textContent    = nameEn;
+    document.getElementById('heroCas').textContent   = exc.cas_number ? `CAS ${exc.cas_number}` : 'CAS N/A';
+    document.getElementById('heroName').textContent  = nameEn;
+    document.getElementById('heroIupac').textContent = exc.nom_chimique || '';
+
+    const badges = document.getElementById('heroBadges');
+    if (functionEn) badges.innerHTML = `<span class="badge badge-neutral">${functionEn}</span>`;
+    if (exc.certifications?.length) {
+        exc.certifications.slice(0,4).forEach(c => {
+            badges.innerHTML += `<span class="badge badge-ph-eur">${c}</span>`;
+        });
+    }
+
+    if (exc.stock_disponible) {
+        document.getElementById('heroStockRow').innerHTML = `
+            <div class="stock-badge"><span class="stock-dot"></span> In stock — available for order</div>`;
+    }
+
+    // Price
+    if (price) {
+        const min = parseFloat(price.prix_min).toFixed(2);
+        const max = parseFloat(price.prix_max).toFixed(2);
+        document.getElementById('heroPriceValue').textContent = `${min}–${max} €/kg`;
+        document.getElementById('heroPriceBox').style.display = 'inline-flex';
+    }
+
+    // Quote sidebar label
+    document.getElementById('quoteProductLabel').textContent = nameEn;
+
+    // Specs grid
+    const specs = [];
+    if (exc.formule)        specs.push({ label: 'Molecular Formula', value: exc.formule, mono: true });
+    if (exc.cas_number)     specs.push({ label: 'CAS Number', value: exc.cas_number, mono: true });
+    if (exc.cid_pubchem)    specs.push({ label: 'PubChem CID', value: exc.cid_pubchem, mono: true });
+    if (functionEn)         specs.push({ label: 'Primary Function', value: functionEn });
+    if (exc.taille_particule_min !== null && exc.taille_particule_max !== null) {
+        specs.push({ label: 'Particle Size', value: `${exc.taille_particule_min}–${exc.taille_particule_max} µm` });
+    }
+
+    document.getElementById('specsGrid').innerHTML = specs.map(s => `
+        <div class="spec-card">
+            <div class="spec-label">${s.label}</div>
+            <div class="spec-value${s.mono ? ' mono' : ''}">${s.value}</div>
+        </div>
+    `).join('');
+
+    // PubChem link
+    if (exc.cid_pubchem) {
+        const pcLink = document.getElementById('pubchemLink');
+        pcLink.href = `https://pubchem.ncbi.nlm.nih.gov/compound/${exc.cid_pubchem}`;
+        pcLink.style.display = 'inline-flex';
+    }
+
+    // Technical description
+    const content = EN_CONTENT[id];
+    if (content?.desc) {
+        document.getElementById('techDesc').innerHTML = content.desc;
+        document.getElementById('techDescCard').style.display = 'block';
+    }
+    if (content?.uses?.length) {
+        document.getElementById('usesList').innerHTML = content.uses.map(u => `<li>${u}</li>`).join('');
+        document.getElementById('usesCard').style.display = 'block';
+    }
+
+    // Grades
+    if (exc.grades?.length) {
+        document.getElementById('gradesList').innerHTML = exc.grades.map(g => `<span class="tag-grade">${g}</span>`).join('');
+        document.getElementById('gradesCard').style.display = 'block';
+    }
+
+    // Certifications
+    if (exc.certifications?.length) {
+        document.getElementById('certsList').innerHTML = exc.certifications.map(c => `<span class="tag-cert">${c}</span>`).join('');
+        document.getElementById('certsCard').style.display = 'block';
+    }
+
+    // Origine
+    if (exc.origine?.length) {
+        document.getElementById('origineList').innerHTML = exc.origine.map(o => `<span class="tag-origine"><i class="fas fa-map-marker-alt" style="color:var(--primary);font-size:.7rem;"></i> ${o}</span>`).join('');
+        document.getElementById('origineCard').style.display = 'block';
+    }
+
+    // Conditionnements
+    if (exc.conditionnements?.length) {
+        document.getElementById('condList').innerHTML = exc.conditionnements.map(c => `<span class="tag-origine"><i class="fas fa-box" style="color:var(--primary);font-size:.7rem;"></i> ${c}</span>`).join('');
+        document.getElementById('condCard').style.display = 'block';
+    }
+
+    // Particle size bar
+    if (exc.taille_particule_min !== null && exc.taille_particule_max !== null) {
+        const MAX_SCALE = 500;
+        const left  = (exc.taille_particule_min / MAX_SCALE * 100).toFixed(1);
+        const width = ((exc.taille_particule_max - exc.taille_particule_min) / MAX_SCALE * 100).toFixed(1);
+        document.getElementById('particleRange').textContent = `${exc.taille_particule_min}–${exc.taille_particule_max} µm`;
+        document.getElementById('particleBarFill').style.left  = left  + '%';
+        document.getElementById('particleBarFill').style.width = width + '%';
+        document.getElementById('particleCard').style.display  = 'block';
+    }
+
+    // JSON-LD Product
+    const productSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        'name': nameEn,
+        'alternateName': exc.nom_commun,
+        'identifier': exc.cas_number || '',
+        'description': content?.desc?.replace(/<[^>]+>/g, '') || `${nameEn} pharmaceutical grade excipient. CAS ${exc.cas_number}.`,
+        'category': functionEn || 'Pharmaceutical Excipient',
+        'url': enUrl,
+        'brand': { '@type': 'Brand', 'name': 'ChemistrySpot' },
+        'offers': price ? {
+            '@type': 'AggregateOffer',
+            'priceCurrency': 'EUR',
+            'lowPrice':  parseFloat(price.prix_min).toFixed(2),
+            'highPrice': parseFloat(price.prix_max).toFixed(2),
+            'offerCount': '1',
+            'priceSpecification': { '@type': 'UnitPriceSpecification', 'price': parseFloat(price.prix_min).toFixed(2), 'priceCurrency': 'EUR', 'referenceQuantity': { '@type': 'QuantitativeValue', 'value': 1, 'unitCode': 'KGM' } }
+        } : undefined,
+    };
+    document.getElementById('jsonld-product').textContent = JSON.stringify(productSchema, null, 2);
+
+    // JSON-LD Breadcrumb
+    document.getElementById('jsonld-breadcrumb').textContent = JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        'itemListElement': [
+            { '@type': 'ListItem', 'position': 1, 'name': 'Home',      'item': 'https://chemistryspot.com/' },
+            { '@type': 'ListItem', 'position': 2, 'name': 'Catalogue', 'item': 'https://chemistryspot.com/catalogue.html' },
+            { '@type': 'ListItem', 'position': 3, 'name': nameEn,      'item': enUrl },
+        ]
+    }, null, 2);
+
+    // Show page
+    document.getElementById('pageLoading').style.display = 'none';
+    document.getElementById('pageContent').style.display = 'block';
+}
+
+// Quote form
+async function handleQuote(e) {
+    e.preventDefault();
+    const fb  = document.getElementById('quoteFeedback');
+    const btn = document.getElementById('quoteBtn');
+    const email    = document.getElementById('q-email').value.trim();
+    const qty      = document.getElementById('q-qty').value;
+    const company  = document.getElementById('q-company').value.trim();
+    const prodName = getEnglishName(currentExcipient);
+
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending…';
+    fb.style.display = 'none';
+
+    try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/contact_requests`, {
+            method: 'POST',
+            headers: { ...HEADERS, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+            body: JSON.stringify({
+                prenom: '', nom: '',
+                email, entreprise: company,
+                sujet: 'quote',
+                message: `[EN] Exact price request: ${qty} kg of ${prodName} (id=${currentExcipient.id})`
+            })
+        });
+        if (!res.ok) throw new Error();
+        fb.style.display = 'block';
+        fb.innerHTML = '<div class="status-bar status-success"><i class="fas fa-check-circle"></i> Request received — you will hear from us within 24 business hours.</div>';
+        e.target.reset();
+    } catch {
+        fb.style.display = 'block';
+        fb.innerHTML = '<div class="status-bar status-danger"><i class="fas fa-exclamation-circle"></i> Error — please retry or email us directly.</div>';
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Get exact quote';
+    }
+}
+
+// Init
+document.addEventListener('DOMContentLoaded', async () => {
+    const id = new URLSearchParams(window.location.search).get('id');
+    if (!id || isNaN(parseInt(id))) {
+        document.getElementById('pageLoading').innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-search"></i>
+                <p>No excipient specified. <a href="../catalogue.html" class="text-primary">Browse the catalogue →</a></p>
+            </div>`;
+        return;
+    }
+
+    try {
+        const { exc, price } = await loadData(parseInt(id));
+        if (!exc) throw new Error('Not found');
+        renderPage(exc, price);
+    } catch (err) {
+        console.error(err);
+        document.getElementById('pageLoading').innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-exclamation-triangle" style="color:var(--danger);"></i>
+                <p>Excipient not found. <a href="../catalogue.html">Browse catalogue →</a></p>
+            </div>`;
+    }
+});
+</script>
+</body>
+</html>

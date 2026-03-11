@@ -18,6 +18,9 @@
     <meta name="twitter:description" content="Prix indicatif, classement marché, fournisseurs et analyse comparative pour cet excipient pharmaceutique.">
     <meta name="twitter:image" content="https://chemistryspot.com/og-image.png">
     <link rel="canonical" href="https://chemistryspot.com/produit-detail.html">
+    <link rel="alternate" hreflang="fr" href="https://chemistryspot.com/produit-detail.html" id="hreflang-fr">
+    <link rel="alternate" hreflang="en" href="https://chemistryspot.com/en/produit-detail.html" id="hreflang-en">
+    <link rel="alternate" hreflang="x-default" href="https://chemistryspot.com/produit-detail.html" id="hreflang-xdefault">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="./js/auth.js" defer></script>
     <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
@@ -1354,6 +1357,9 @@ function updatePageMeta(exc, mp, supCount) {
     setMeta('meta[name="twitter:title"]', `${name} — ChemistrySpot`);
     setMeta('meta[name="twitter:description"]', desc);
     setLink('link[rel="canonical"]', url);
+    setLink('#hreflang-fr', url);
+    setLink('#hreflang-xdefault', url);
+    setLink('#hreflang-en', `https://chemistryspot.com/en/produit-detail.html?id=${exc.id}`);
 }
 
 function injectJsonLd(exc, mp, suppliers) {
