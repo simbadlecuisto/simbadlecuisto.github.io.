@@ -57,6 +57,7 @@
       "description": "Marketplace B2B d'excipients pharmaceutiques. 50 excipients, 192 fournisseurs référencés dans 17 pays."
     }
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
 
@@ -333,6 +334,14 @@
 </div>
 
 <script>
+// ── EmailJS config ────────────────────────────────────────────
+// TODO: remplacer par vos vraies clés (https://www.emailjs.com/)
+const EMAILJS_PUBLIC_KEY  = 'VOTRE_PUBLIC_KEY';   // Account > API Keys
+const EMAILJS_SERVICE_ID  = 'VOTRE_SERVICE_ID';   // Email Services
+const EMAILJS_TEMPLATE_ID = 'VOTRE_TEMPLATE_ID';  // Email Templates
+emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+// ─────────────────────────────────────────────────────────────
+
 function openModal(id) { document.getElementById(id).classList.add('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 document.querySelectorAll('.modal').forEach(m => m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); }));
@@ -385,6 +394,15 @@ async function handleContact(e) {
             const err = await res.text();
             throw new Error(`HTTP ${res.status}: ${err}`);
         }
+        // Notification email (best-effort, non bloquant)
+        emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+            source_page:  'Contact',
+            excipient:    payload.sujet,
+            quantite:     '—',
+            email_client: payload.email,
+            entreprise:   payload.entreprise,
+            message:      `[${payload.prenom} ${payload.nom}] ${payload.message}`,
+        }).catch(() => {});
         fb.style.display = 'block';
         fb.innerHTML = '<div class="status-bar status-success"><i class="fas fa-check-circle"></i> Message envoyé ! Nous vous répondrons sous 24h ouvrées.</div>';
         e.target.reset();

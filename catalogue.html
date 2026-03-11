@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="./css/design-system.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -302,6 +303,14 @@
 <script src="./js/supabase-config.js"></script>
 
 <script>
+// ── EmailJS config ────────────────────────────────────────────
+// TODO: remplacer par vos vraies clés (https://www.emailjs.com/)
+const EMAILJS_PUBLIC_KEY  = 'VOTRE_PUBLIC_KEY';   // Account > API Keys
+const EMAILJS_SERVICE_ID  = 'VOTRE_SERVICE_ID';   // Email Services
+const EMAILJS_TEMPLATE_ID = 'VOTRE_TEMPLATE_ID';  // Email Templates
+emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+// ─────────────────────────────────────────────────────────────
+
 function openModal(id) { document.getElementById(id).classList.add('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 document.querySelectorAll('.modal').forEach(m => m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); }));
@@ -478,6 +487,15 @@ async function handleCatalogPrixExact(e) {
             })
         });
         if (!res.ok) throw new Error();
+        // Notification email (best-effort, non bloquant)
+        emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+            source_page:  'Catalogue',
+            excipient:    catalogCurrentProduct,
+            quantite:     qty + ' kg',
+            email_client: document.getElementById('cpe-email').value.trim(),
+            entreprise:   document.getElementById('cpe-entreprise').value.trim(),
+            message:      `Demande de prix exact : ${qty} kg de ${catalogCurrentProduct}`,
+        }).catch(() => {}); // on ne bloque pas si emailjs échoue
         fb.style.display = 'block';
         fb.innerHTML = '<div class="status-bar status-success"><i class="fas fa-check-circle"></i> Vous recevrez le prix exact sous 24h.</div>';
         e.target.reset();

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard — ChemistrySpot Admin</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/design-system.css">
+    <style>
+        /* ── AUTH GATE ── */
+        #authGate {
+            position: fixed; inset: 0; background: var(--bg-main);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 9999;
+        }
+        .auth-box {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: var(--radius-lg); padding: 2.5rem 2rem;
+            width: 100%; max-width: 360px; text-align: center;
+        }
+        .auth-logo { font-family: var(--mono); font-size: 1.5rem; font-weight: 700; color: var(--primary); margin-bottom: .5rem; }
+        .auth-sub  { font-size: .82rem; color: var(--text-muted); margin-bottom: 1.75rem; }
+        .auth-error { color: var(--danger); font-size: .82rem; margin-top: .75rem; display: none; }
+
+        /* ── LAYOUT ── */
+        .dash-header { background: var(--bg-card); border-bottom: 1px solid var(--border); padding: 1rem 0; margin-bottom: 2rem; }
+        .dash-header-inner { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; }
+        .dash-title { font-family: var(--mono); font-size: 1rem; font-weight: 700; color: var(--primary); }
+        .dash-main  { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem 3rem; }
+
+        /* ── STATS ── */
+        .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+        @media (max-width: 700px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
+        .stat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem 1rem; text-align: center; }
+        .stat-card .sv { font-family: var(--mono); font-size: 2rem; font-weight: 700; color: var(--primary); }
+        .stat-card .sl { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--text-muted); margin-top: .25rem; }
+        .stat-card.nouveau .sv { color: var(--warning,#f59e0b); }
+        .stat-card.traite  .sv { color: var(--success,#22c55e); }
+
+        /* ── FILTERS ── */
+        .filter-row { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 1.5rem; align-items: center; }
+        .filter-btn { background: var(--bg-surface); border: 1px solid var(--border); color: var(--text-muted); border-radius: var(--radius); padding: .4rem 1rem; font-size: .82rem; cursor: pointer; transition: var(--transition); }
+        .filter-btn.active, .filter-btn:hover { background: var(--primary); border-color: var(--primary); color: #000; }
+        .filter-search { margin-left: auto; }
+        .filter-search input { background: var(--bg-surface); border: 1px solid var(--border); color: var(--text); border-radius: var(--radius); padding: .4rem .9rem; font-size: .82rem; width: 220px; }
+        .filter-search input:focus { outline: none; border-color: var(--primary); }
+
+        /* ── TABLE ── */
+        .table-wrap { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: .82rem; }
+        th { background: var(--bg-surface); color: var(--text-muted); text-transform: uppercase; letter-spacing: .07em; font-size: .7rem; padding: .65rem .75rem; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; cursor: pointer; user-select: none; }
+        th:hover { color: var(--primary); }
+        td { padding: .65rem .75rem; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: top; }
+        tr:hover td { background: rgba(0,212,170,.03); }
+        .td-date { font-family: var(--mono); font-size: .75rem; color: var(--text-muted); white-space: nowrap; }
+        .td-msg  { max-width: 280px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; }
+        .td-msg:hover { color: var(--primary); white-space: normal; max-width: 280px; }
+
+        /* ── BADGES ── */
+        .badge { display: inline-block; padding: .2rem .6rem; border-radius: 99px; font-size: .7rem; font-weight: 600; font-family: var(--mono); white-space: nowrap; }
+        .badge-nouveau { background: rgba(245,158,11,.15); color: #f59e0b; }
+        .badge-lu      { background: rgba(99,102,241,.15);  color: #818cf8; }
+        .badge-traite  { background: rgba(34,197,94,.15);   color: #22c55e; }
+        .badge-quote   { background: rgba(0,212,170,.12);   color: var(--primary); }
+        .badge-contact { background: rgba(99,102,241,.1);   color: #818cf8; }
+
+        /* ── ACTION BUTTONS ── */
+        .action-btns { display: flex; gap: .35rem; white-space: nowrap; }
+        .btn-xs { padding: .25rem .6rem; font-size: .72rem; border-radius: var(--radius); cursor: pointer; border: 1px solid; transition: var(--transition); font-family: var(--mono); }
+        .btn-xs-lu     { border-color: #6366f1; color: #818cf8; background: transparent; }
+        .btn-xs-lu:hover { background: rgba(99,102,241,.15); }
+        .btn-xs-traite { border-color: #22c55e; color: #22c55e; background: transparent; }
+        .btn-xs-traite:hover { background: rgba(34,197,94,.15); }
+        .btn-xs-del    { border-color: var(--danger,#ef4444); color: var(--danger,#ef4444); background: transparent; }
+        .btn-xs-del:hover { background: rgba(239,68,68,.12); }
+
+        /* ── EMPTY / LOADING ── */
+        .empty-state { text-align: center; padding: 3rem 1rem; color: var(--text-muted); font-size: .9rem; }
+        .spinner { display: inline-block; width: 1.5rem; height: 1.5rem; border: 2px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin .7s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── TOAST ── */
+        #toast { position: fixed; bottom: 1.5rem; right: 1.5rem; background: var(--bg-card); border: 1px solid var(--primary); border-radius: var(--radius); padding: .65rem 1.1rem; font-size: .82rem; color: var(--primary); font-family: var(--mono); display: none; z-index: 9999; }
+    </style>
+</head>
+<body>
+
+<!-- ══ AUTH GATE ══ -->
+<div id="authGate">
+    <div class="auth-box">
+        <div class="auth-logo">⬡ ChemistrySpot</div>
+        <div class="auth-sub">Dashboard Admin — accès restreint</div>
+        <div class="form-group">
+            <input id="pinInput" type="password" class="form-input" placeholder="Mot de passe" autocomplete="current-password"
+                   onkeydown="if(event.key==='Enter') checkPin()">
+        </div>
+        <button class="btn btn-primary w-full" onclick="checkPin()">
+            <i class="fas fa-sign-in-alt"></i> Accéder
+        </button>
+        <div id="pinError" class="auth-error"><i class="fas fa-exclamation-circle"></i> Mot de passe incorrect.</div>
+    </div>
+</div>
+
+<!-- ══ HEADER ══ -->
+<header class="dash-header">
+    <div class="dash-header-inner">
+        <div class="dash-title">⬡ ChemistrySpot — Dashboard</div>
+        <div style="display:flex;gap:.75rem;align-items:center;">
+            <span id="lastRefresh" style="font-family:var(--mono);font-size:.72rem;color:var(--text-muted);"></span>
+            <button class="btn btn-outline btn-sm" onclick="loadRequests()"><i class="fas fa-sync-alt"></i> Rafraîchir</button>
+            <a href="index.html" class="btn btn-outline btn-sm"><i class="fas fa-home"></i> Site</a>
+        </div>
+    </div>
+</header>
+
+<!-- ══ MAIN ══ -->
+<main class="dash-main">
+
+    <!-- Stats -->
+    <div class="stats-row">
+        <div class="stat-card">
+            <div class="sv" id="statTotal">—</div>
+            <div class="sl">Total demandes</div>
+        </div>
+        <div class="stat-card nouveau">
+            <div class="sv" id="statNouveau">—</div>
+            <div class="sl">Nouveau</div>
+        </div>
+        <div class="stat-card">
+            <div class="sv" id="statLu">—</div>
+            <div class="sl">Lu</div>
+        </div>
+        <div class="stat-card traite">
+            <div class="sv" id="statTraite">—</div>
+            <div class="sl">Traité</div>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filter-row">
+        <button class="filter-btn active" onclick="setFilter('tous', this)">Tous</button>
+        <button class="filter-btn" onclick="setFilter('nouveau', this)">Nouveau</button>
+        <button class="filter-btn" onclick="setFilter('lu', this)">Lu</button>
+        <button class="filter-btn" onclick="setFilter('traite', this)">Traité</button>
+        <div class="filter-search">
+            <input id="searchInput" type="text" placeholder="Rechercher email / entreprise…" oninput="renderTable()">
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrap">
+        <table id="reqTable">
+            <thead>
+                <tr>
+                    <th onclick="sortBy('id')">#</th>
+                    <th onclick="sortBy('created_at')">Date ↓</th>
+                    <th onclick="sortBy('email')">Email</th>
+                    <th onclick="sortBy('entreprise')">Entreprise</th>
+                    <th onclick="sortBy('sujet')">Sujet</th>
+                    <th>Message</th>
+                    <th onclick="sortBy('statut')">Statut</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="reqBody">
+                <tr><td colspan="8" class="empty-state"><div class="spinner"></div></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+</main>
+
+<div id="toast"></div>
+
+<script>
+// ── CONFIG ──────────────────────────────────────────────────
+// TODO: remplacer DASHBOARD_PIN par votre mot de passe admin
+const DASHBOARD_PIN    = 'cspot2026';
+const SUPABASE_URL     = 'https://jkaffpgqbyhuihvyvtld.supabase.co';
+// La service_role key est nécessaire : la RLS bloque SELECT anon sur contact_requests
+const SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MTY1ODM5NCwiZXhwIjoyMDY3MjM0Mzk0fQ.dgU2hQsRW0kWKriCNwx_SMES5GWO25Wl7Y-jmes05b0';
+// ────────────────────────────────────────────────────────────
+
+// ── AUTH ────────────────────────────────────────────────────
+function checkPin() {
+    const val = document.getElementById('pinInput').value;
+    if (val === DASHBOARD_PIN) {
+        document.getElementById('authGate').style.display = 'none';
+        loadRequests();
+    } else {
+        document.getElementById('pinError').style.display = 'block';
+        document.getElementById('pinInput').value = '';
+        document.getElementById('pinInput').focus();
+    }
+}
+
+// ── DATA ─────────────────────────────────────────────────────
+let allRows = [];
+let currentFilter = 'tous';
+let sortCol = 'created_at';
+let sortAsc = false;
+
+async function loadRequests() {
+    document.getElementById('reqBody').innerHTML =
+        '<tr><td colspan="8" class="empty-state"><div class="spinner"></div></td></tr>';
+    try {
+        const res = await fetch(
+            `${SUPABASE_URL}/rest/v1/contact_requests?select=*&order=created_at.desc`,
+            { headers: { 'apikey': SERVICE_ROLE_KEY, 'Authorization': `Bearer ${SERVICE_ROLE_KEY}` } }
+        );
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        allRows = await res.json();
+        updateStats();
+        renderTable();
+        document.getElementById('lastRefresh').textContent =
+            'Mis à jour ' + new Date().toLocaleTimeString('fr-FR');
+    } catch (err) {
+        document.getElementById('reqBody').innerHTML =
+            `<tr><td colspan="8" class="empty-state" style="color:var(--danger)"><i class="fas fa-exclamation-circle"></i> Erreur : ${err.message}</td></tr>`;
+    }
+}
+
+function updateStats() {
+    const total   = allRows.length;
+    const nouveau = allRows.filter(r => r.statut === 'nouveau').length;
+    const lu      = allRows.filter(r => r.statut === 'lu').length;
+    const traite  = allRows.filter(r => r.statut === 'traite').length;
+    document.getElementById('statTotal').textContent   = total;
+    document.getElementById('statNouveau').textContent = nouveau;
+    document.getElementById('statLu').textContent      = lu;
+    document.getElementById('statTraite').textContent  = traite;
+}
+
+function setFilter(f, btn) {
+    currentFilter = f;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderTable();
+}
+
+function sortBy(col) {
+    if (sortCol === col) sortAsc = !sortAsc;
+    else { sortCol = col; sortAsc = true; }
+    renderTable();
+}
+
+function renderTable() {
+    const search = document.getElementById('searchInput').value.trim().toLowerCase();
+    let rows = allRows.filter(r => {
+        if (currentFilter !== 'tous' && r.statut !== currentFilter) return false;
+        if (search) {
+            const haystack = `${r.email} ${r.entreprise} ${r.prenom} ${r.nom} ${r.message}`.toLowerCase();
+            if (!haystack.includes(search)) return false;
+        }
+        return true;
+    });
+    // sort
+    rows.sort((a, b) => {
+        let va = a[sortCol] ?? '', vb = b[sortCol] ?? '';
+        if (typeof va === 'string') va = va.toLowerCase();
+        if (typeof vb === 'string') vb = vb.toLowerCase();
+        if (va < vb) return sortAsc ? -1 : 1;
+        if (va > vb) return sortAsc ? 1 : -1;
+        return 0;
+    });
+
+    if (!rows.length) {
+        document.getElementById('reqBody').innerHTML =
+            '<tr><td colspan="8" class="empty-state">Aucune demande.</td></tr>';
+        return;
+    }
+
+    document.getElementById('reqBody').innerHTML = rows.map(r => {
+        const d = new Date(r.created_at);
+        const dateStr = d.toLocaleDateString('fr-FR') + '<br>' + d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+        const nom = [r.prenom, r.nom].filter(Boolean).join(' ') || '—';
+        const statutBadge = `<span class="badge badge-${r.statut}">${r.statut}</span>`;
+        const sujetBadge  = r.sujet === 'quote'
+            ? `<span class="badge badge-quote">devis</span>`
+            : `<span class="badge badge-contact">${r.sujet}</span>`;
+        const disabledLu     = r.statut === 'lu'     ? 'disabled style="opacity:.4"' : '';
+        const disabledTraite = r.statut === 'traite' ? 'disabled style="opacity:.4"' : '';
+        return `<tr>
+            <td class="td-date" style="color:var(--text-muted)">${r.id}</td>
+            <td class="td-date">${dateStr}</td>
+            <td>
+                <div style="font-weight:600">${nom}</div>
+                <div style="color:var(--text-muted);font-size:.75rem">${r.email}</div>
+            </td>
+            <td>${r.entreprise || '—'}</td>
+            <td>${sujetBadge}</td>
+            <td class="td-msg" title="${escHtml(r.message)}">${escHtml(r.message)}</td>
+            <td>${statutBadge}</td>
+            <td>
+                <div class="action-btns">
+                    <button class="btn-xs btn-xs-lu" onclick="updateStatut(${r.id},'lu')" ${disabledLu}>Lu</button>
+                    <button class="btn-xs btn-xs-traite" onclick="updateStatut(${r.id},'traite')" ${disabledTraite}>Traité</button>
+                </div>
+            </td>
+        </tr>`;
+    }).join('');
+}
+
+function escHtml(s) {
+    return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+async function updateStatut(id, newStatut) {
+    try {
+        const res = await fetch(
+            `${SUPABASE_URL}/rest/v1/contact_requests?id=eq.${id}`,
+            {
+                method: 'PATCH',
+                headers: {
+                    'apikey': SERVICE_ROLE_KEY,
+                    'Authorization': `Bearer ${SERVICE_ROLE_KEY}`,
+                    'Content-Type': 'application/json',
+                    'Prefer': 'return=minimal'
+                },
+                body: JSON.stringify({ statut: newStatut })
+            }
+        );
+        if (!res.ok) throw new Error();
+        // Mise à jour locale immédiate (sans refetch)
+        const row = allRows.find(r => r.id === id);
+        if (row) row.statut = newStatut;
+        updateStats();
+        renderTable();
+        showToast(`Demande #${id} → ${newStatut}`);
+    } catch {
+        showToast('Erreur mise à jour statut', true);
+    }
+}
+
+function showToast(msg, isErr = false) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.display = 'block';
+    t.style.borderColor = isErr ? 'var(--danger)' : 'var(--primary)';
+    t.style.color       = isErr ? 'var(--danger)' : 'var(--primary)';
+    setTimeout(() => { t.style.display = 'none'; }, 2500);
+}
+</script>
+
+</body>
+</html>
