@@ -76,8 +76,8 @@
 
         markersLayer = L.layerGroup().addTo(mapInstance);
 
-        // Force reflow in case the container had 0 dimensions at init
-        setTimeout(function () { mapInstance.invalidateSize(); }, 200);
+        // Force reflow — 500ms to let the grid/flex layout fully settle
+        setTimeout(function () { mapInstance.invalidateSize(); }, 500);
 
         // Load data then render
         loadData();
