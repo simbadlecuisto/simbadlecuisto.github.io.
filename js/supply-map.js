@@ -4,9 +4,8 @@
  * Leaflet.js + CartoDB dark tiles + Supabase data
  */
 
-(function () {
-    'use strict';
-    console.log('[supply-map] script loaded');
+console.log('[supply-map] script loaded');
+// No IIFE / no 'use strict' — avoids cross-script let scoping edge cases
 
     // ── CONFIG ───────────────────────────────────────────────────────────────
     const EXCIPIENTS = [
@@ -331,36 +330,5 @@
         if (hhi) hhi.innerHTML = '';
     }
 
-    // ── INIT TRIGGER ─────────────────────────────────────────────────────────
-    function setupLazyInit() {
-        const section = document.getElementById('supplyMapSection');
-        console.log('[supply-map] setupLazyInit, section found:', !!section);
-        if (!section) { initSupplyMap(); return; }
-
-        if ('IntersectionObserver' in window) {
-            const observer = new IntersectionObserver(function (entries) {
-                if (entries[0].isIntersecting) {
-                    console.log('[supply-map] section intersecting, init map');
-                    initSupplyMap();
-                    observer.disconnect();
-                }
-            }, { threshold: 0 });  // fire as soon as 1px is visible
-            observer.observe(section);
-        } else {
-            initSupplyMap();
-        }
-
-        // Hard fallback: init after 3s regardless (catches cases where
-        // the section is off-screen and IntersectionObserver never fires
-        // during the initial visit)
-        setTimeout(function () { initSupplyMap(); }, 3000);
-    }
-
-    // ── BOOT ─────────────────────────────────────────────────────────────────
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', setupLazyInit);
-    } else {
-        setupLazyInit();
-    }
-
-})();
+    // ── BOOT — called explicitly from index.html inline script ───────────────
+    // window.supplyMapInit() is called by the inline <script> after all deps load

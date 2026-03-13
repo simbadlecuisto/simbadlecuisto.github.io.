@@ -762,6 +762,17 @@
 <script src="./js/auth.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script src="./js/supply-map.js"></script>
+<script>
+/* Supply chain map — explicit boot, no IIFE/IntersectionObserver ambiguity */
+window.addEventListener('load', function () {
+    console.log('[index] window.load, calling initSupplyMap');
+    if (typeof initSupplyMap === 'function') {
+        initSupplyMap();
+    } else {
+        console.error('[index] initSupplyMap not found on window');
+    }
+});
+</script>
 
 <script>
 /* Modal helpers */
