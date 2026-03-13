@@ -81,12 +81,36 @@
     }
 
     // ── DATA FETCH ───────────────────────────────────────────────────────────
+
+    // supabaseClient is assigned async in supabase-config.js DOMContentLoaded.
+    // Poll until it's ready (max 8s) before querying.
+    function waitForClient(maxMs) {
+        maxMs = maxMs || 8000;
+        return new Promise(function (resolve, reject) {
+            if (typeof supabaseClient !== 'undefined' && supabaseClient) {
+                return resolve(supabaseClient);
+            }
+            var elapsed = 0;
+            var interval = setInterval(function () {
+                elapsed += 100;
+                if (typeof supabaseClient !== 'undefined' && supabaseClient) {
+                    clearInterval(interval);
+                    resolve(supabaseClient);
+                } else if (elapsed >= maxMs) {
+                    clearInterval(interval);
+                    reject(new Error('Supabase client non disponible après ' + maxMs + 'ms'));
+                }
+            }, 100);
+        });
+    }
+
     async function loadData() {
         showMapLoading(true);
         try {
+            const client = await waitForClient();
             const [tradeRes, riskRes] = await Promise.all([
-                supabaseClient.from('supply_chain_data').select('*').order('rank_in_excipient'),
-                supabaseClient.from('geopolitical_risks').select('*'),
+                client.from('supply_chain_data').select('*').order('rank_in_excipient'),
+                client.from('geopolitical_risks').select('*'),
             ]);
 
             allTradeData = tradeRes.data || [];
