@@ -16,7 +16,7 @@ from datetime import datetime, timezone
 
 # ── SUPABASE CONFIG ──────────────────────────────────────────────────────────
 SUPABASE_URL = "https://jkaffpgqbyhuihvyvtld.supabase.co"
-SERVICE_KEY  = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0MDI4MzQ4MiwiZXhwIjoyMDU1ODU5NDgyfQ.dgU2hQsRW0kWKriCNwx_SMES5GWO25Wl7Y-jmes05b0"
+SERVICE_KEY  = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MTY1ODM5NCwiZXhwIjoyMDY3MjM0Mzk0fQ.dgU2hQsRW0kWKriCNwx_SMES5GWO25Wl7Y-jmes05b0"
 
 # ── EXCIPIENTS CONFIG ────────────────────────────────────────────────────────
 EXCIPIENTS = [
@@ -399,7 +399,7 @@ def fetch_comtrade_preview(hs_code, year=2023):
     """Fetch top-10 exporters from UN Comtrade public preview API."""
     url = (
         f"https://comtradeapi.un.org/public/v1/preview/C/A/HS"
-        f"?cmdCode={hs_code}&flowCode=X&reporterCode=all"
+        f"?cmdCode={hs_code}&flowCode=X"
         f"&period={year}&partner=0&includeDesc=true"
     )
     print(f"  → Comtrade API: HS {hs_code} / {year} ...")
