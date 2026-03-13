@@ -51,8 +51,8 @@
         if (mapInitialized) return;
         mapInitialized = true;
 
-        const container = document.getElementById('supplyMapContainer');
-        if (!container) return;
+        const mapEl = document.getElementById('supplyMap');
+        if (!mapEl) return;
 
         // Map
         mapInstance = L.map('supplyMap', {
@@ -75,6 +75,9 @@
         ).addTo(mapInstance);
 
         markersLayer = L.layerGroup().addTo(mapInstance);
+
+        // Force reflow in case the container had 0 dimensions at init
+        setTimeout(function () { mapInstance.invalidateSize(); }, 200);
 
         // Load data then render
         loadData();
