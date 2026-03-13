@@ -277,7 +277,11 @@
             return;
         }
 
-        authClient = window.supabase.createClient(SUPABASE_URL, ANON_KEY);
+        // Reuse supabaseClient created by supabase-config.js to avoid
+        // "Multiple GoTrueClient instances" warning
+        authClient = (typeof supabaseClient !== 'undefined' && supabaseClient)
+            ? supabaseClient
+            : window.supabase.createClient(SUPABASE_URL, ANON_KEY);
 
         injectAuthModals();
 

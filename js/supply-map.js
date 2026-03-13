@@ -6,6 +6,7 @@
 
 (function () {
     'use strict';
+    console.log('[supply-map] script loaded');
 
     // ── CONFIG ───────────────────────────────────────────────────────────────
     const EXCIPIENTS = [
@@ -50,9 +51,10 @@
     function initSupplyMap() {
         if (mapInitialized) return;
         mapInitialized = true;
+        console.log('[supply-map] initSupplyMap called');
 
         const mapEl = document.getElementById('supplyMap');
-        if (!mapEl) return;
+        if (!mapEl) { console.error('[supply-map] #supplyMap not found'); return; }
 
         // Map
         mapInstance = L.map('supplyMap', {
@@ -109,8 +111,10 @@
 
     async function loadData() {
         showMapLoading(true);
+        console.log('[supply-map] loadData called');
         try {
             const client = await waitForClient();
+            console.log('[supply-map] Supabase client ready, querying...');
             const [tradeRes, riskRes] = await Promise.all([
                 client.from('supply_chain_data').select('*').order('rank_in_excipient'),
                 client.from('geopolitical_risks').select('*'),
@@ -118,6 +122,7 @@
 
             allTradeData = tradeRes.data || [];
             (riskRes.data || []).forEach(r => { allRiskData[r.country_iso3] = r; });
+            console.log('[supply-map] data loaded:', allTradeData.length, 'trade rows,', Object.keys(allRiskData).length, 'risk countries');
 
             if (allTradeData.length === 0) {
                 showEmptyState("Aucune donnée supply chain disponible. Exécutez scripts/fetch_comtrade.py.");
@@ -128,6 +133,7 @@
             renderMarkers(activeExcipient);
             renderHhiPanel(activeExcipient);
         } catch (err) {
+            console.error('[supply-map] loadData error:', err);
             showEmptyState("Erreur chargement données : " + err.message);
         } finally {
             showMapLoading(false);
@@ -325,23 +331,29 @@
         if (hhi) hhi.innerHTML = '';
     }
 
-    // ── INTERSECTION OBSERVER (lazy init) ────────────────────────────────────
+    // ── INIT TRIGGER ─────────────────────────────────────────────────────────
     function setupLazyInit() {
         const section = document.getElementById('supplyMapSection');
-        if (!section) return;
+        console.log('[supply-map] setupLazyInit, section found:', !!section);
+        if (!section) { initSupplyMap(); return; }
 
         if ('IntersectionObserver' in window) {
-            const observer = new IntersectionObserver(entries => {
+            const observer = new IntersectionObserver(function (entries) {
                 if (entries[0].isIntersecting) {
+                    console.log('[supply-map] section intersecting, init map');
                     initSupplyMap();
                     observer.disconnect();
                 }
-            }, { threshold: 0.1 });
+            }, { threshold: 0 });  // fire as soon as 1px is visible
             observer.observe(section);
         } else {
-            // Fallback: init on DOMContentLoaded
             initSupplyMap();
         }
+
+        // Hard fallback: init after 3s regardless (catches cases where
+        // the section is off-screen and IntersectionObserver never fires
+        // during the initial visit)
+        setTimeout(function () { initSupplyMap(); }, 3000);
     }
 
     // ── BOOT ─────────────────────────────────────────────────────────────────
