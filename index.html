@@ -26,6 +26,67 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="./css/design-system.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+    <style>
+        /* ── Supply Chain Map ── */
+        #supplyMapSection { padding: 2rem 0; }
+        #supplyMap {
+            height: 420px;
+            border-radius: 10px;
+            background: #0d1117;
+            z-index: 0;
+        }
+        .smap-filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .45rem;
+            margin-bottom: .85rem;
+        }
+        .smap-filter-btn {
+            background: rgba(255,255,255,.05);
+            border: 1px solid rgba(255,255,255,.1);
+            color: #8892a4;
+            border-radius: 20px;
+            padding: .25rem .85rem;
+            font-size: .75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .15s;
+            font-family: inherit;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 160px;
+        }
+        .smap-filter-btn:hover { border-color: rgba(0,212,170,.4); color: #c0cfe0; }
+        .smap-filter-btn.active { background: rgba(0,212,170,.12); border-color: rgba(0,212,170,.6); color: #00d4aa; }
+        .smap-popup .leaflet-popup-content-wrapper {
+            background: #151c2c;
+            color: #c0cfe0;
+            border: 1px solid rgba(255,255,255,.1);
+            border-radius: 10px;
+            box-shadow: 0 8px 32px rgba(0,0,0,.6);
+        }
+        .smap-popup .leaflet-popup-tip { background: #151c2c; }
+        #supplyMapLoading {
+            display: none;
+            position: absolute;
+            inset: 0;
+            z-index: 999;
+            background: rgba(10,14,26,.8);
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+        }
+        .smap-panel {
+            background: rgba(255,255,255,.03);
+            border: 1px solid rgba(255,255,255,.07);
+            border-radius: 10px;
+            padding: .9rem 1.1rem;
+            margin-top: .9rem;
+        }
+        .leaflet-attribution-flag { display: none !important; }
+    </style>
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -569,6 +630,70 @@
 
 </div><!-- /terminal-main -->
 
+<!-- ══ SUPPLY CHAIN MAP ══ -->
+<section id="supplyMapSection" style="max-width:1280px;margin:0 auto;padding:2rem 1.5rem 1rem;">
+
+    <div class="sec-hdr">
+        <span class="sec-icon">🌍</span>
+        <span class="sec-label">SUPPLY CHAIN MONDIALE</span>
+        <div class="sec-line"></div>
+        <span class="sec-badge badge-monthly">DONNÉES UN COMTRADE</span>
+    </div>
+
+    <p style="font-size:.82rem;color:#8892a4;margin:.6rem 0 1.1rem;max-width:680px;">
+        Top 10 exportateurs mondiaux par excipient — taille des cercles proportionnelle aux volumes exportés.
+        Couleur = niveau de risque géopolitique évalué par ChemistrySpot.
+    </p>
+
+    <!-- Filters -->
+    <div class="smap-filter-bar" id="supplyMapFilters">
+        <span style="font-size:.78rem;color:#555e70;align-self:center;">Chargement…</span>
+    </div>
+
+    <!-- Map + HHI side-by-side -->
+    <div style="display:grid;grid-template-columns:1fr 260px;gap:1rem;align-items:start;">
+
+        <!-- Map -->
+        <div style="position:relative;">
+            <div id="supplyMap"></div>
+            <div id="supplyMapLoading">
+                <div class="spin-lg"></div>
+            </div>
+        </div>
+
+        <!-- Right panel: legend + HHI -->
+        <div>
+            <!-- Risk legend -->
+            <div class="smap-panel" style="margin-top:0;">
+                <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;color:#8892a4;margin-bottom:.55rem;">Risque géopolitique</div>
+                <div style="display:flex;flex-direction:column;gap:.3rem;">
+                    <div style="display:flex;align-items:center;gap:.5rem;font-size:.78rem;"><span style="width:12px;height:12px;border-radius:50%;background:#00d4aa;flex-shrink:0;"></span> Faible</div>
+                    <div style="display:flex;align-items:center;gap:.5rem;font-size:.78rem;"><span style="width:12px;height:12px;border-radius:50%;background:#4fc3f7;flex-shrink:0;"></span> Faible-Modéré</div>
+                    <div style="display:flex;align-items:center;gap:.5rem;font-size:.78rem;"><span style="width:12px;height:12px;border-radius:50%;background:#f0b429;flex-shrink:0;"></span> Modéré</div>
+                    <div style="display:flex;align-items:center;gap:.5rem;font-size:.78rem;"><span style="width:12px;height:12px;border-radius:50%;background:#fb923c;flex-shrink:0;"></span> Élevé</div>
+                    <div style="display:flex;align-items:center;gap:.5rem;font-size:.78rem;"><span style="width:12px;height:12px;border-radius:50%;background:#ef4444;flex-shrink:0;"></span> Critique 🚫</div>
+                </div>
+                <div style="margin-top:.6rem;font-size:.7rem;color:#555e70;border-top:1px solid rgba(255,255,255,.06);padding-top:.5rem;">
+                    Taille ∝ volume exporté · Cliquer pour détails
+                </div>
+            </div>
+
+            <!-- HHI panel -->
+            <div class="smap-panel" id="supplyHhiPanel">
+                <div style="font-size:.78rem;color:#555e70;">Sélectionnez un excipient pour voir l'indice HHI</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Sources -->
+    <div style="margin-top:.75rem;font-size:.72rem;color:#555e70;display:flex;align-items:center;gap:.5rem;">
+        <i class="fas fa-globe"></i>
+        Source : <strong style="color:#8892a4;">UN Comtrade</strong> — données 2023 · Évaluation risque géopolitique ChemistrySpot · Indices HHI calculés sur parts de marché déclarées
+    </div>
+
+</section>
+
 <!-- ══ SITE FOOTER ══ -->
 <footer class="site-footer">
     <div class="container">
@@ -635,6 +760,8 @@
 <script src="./js/supabase-config.js"></script>
 <script src="./js/main.js"></script>
 <script src="./js/auth.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="./js/supply-map.js"></script>
 
 <script>
 /* Modal helpers */
