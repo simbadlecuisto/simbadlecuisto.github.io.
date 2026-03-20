@@ -219,6 +219,10 @@ console.log('[supply-map] script loaded');
                 className: 'smap-popup',
             });
 
+            circle.on('click', function() {
+                showCountrySuppliers(country.name, country.iso3);
+            });
+
             circle.addTo(markersLayer);
         });
     }
@@ -329,6 +333,90 @@ console.log('[supply-map] script loaded');
         const hhi = document.getElementById('supplyHhiPanel');
         if (hhi) hhi.innerHTML = '';
     }
+
+    // ── COUNTRY SUPPLIER PANEL ───────────────────────────────────────────────
+
+    async function showCountrySuppliers(countryName, countryIso3) {
+        const panel = document.getElementById('gazettePanel');
+        if (!panel) return;
+
+        // Show loading state
+        panel.innerHTML = '<div class="sup-panel-loading">Chargement des fournisseurs…</div>';
+
+        try {
+            const client = await waitForClient();
+
+            // Step 1: Get suppliers in this country
+            const { data: suppliers, error: suppErr } = await client
+                .from('suppliers')
+                .select('id, name, country, website, contact_email')
+                .eq('country', countryName)
+                .order('name');
+
+            if (suppErr) throw suppErr;
+
+            if (!suppliers || suppliers.length === 0) {
+                panel.innerHTML = '<div class="gazette-placeholder"><div style="font-size:.8rem;color:#555e70;text-align:center;padding:2rem;">Aucun fournisseur référencé pour ' + countryName + '</div></div>';
+                return;
+            }
+
+            // Step 2: Get excipient relationships for these supplier IDs
+            const supplierIds = suppliers.map(function(s) { return s.id; });
+            const { data: relations, error: relErr } = await client
+                .from('excipient_suppliers')
+                .select('supplier_id, excipients(nom_commun)')
+                .in('supplier_id', supplierIds);
+
+            if (relErr) throw relErr;
+
+            // Build map: supplierId → [excipient names]
+            var supplierMap = {};
+            (relations || []).forEach(function(r) {
+                var sid = r.supplier_id;
+                if (!supplierMap[sid]) supplierMap[sid] = [];
+                if (r.excipients && r.excipients.nom_commun) {
+                    supplierMap[sid].push(r.excipients.nom_commun);
+                }
+            });
+
+            // Render supplier cards
+            var cardsHtml = suppliers.map(function(sup) {
+                var excipients = supplierMap[sup.id] || [];
+                var excText = excipients.length > 0
+                    ? excipients.join(' · ')
+                    : '<em style="color:#444c5c;">—</em>';
+                var linkHtml = sup.website
+                    ? '<a href="' + sup.website + '" class="sup-card-link" target="_blank" rel="noopener">Site web ↗</a>'
+                    : '';
+                return '<div class="sup-card">'
+                    + '<div class="sup-card-name">' + sup.name + '</div>'
+                    + '<div class="sup-card-excipients">' + excText + '</div>'
+                    + linkHtml
+                    + '</div>';
+            }).join('');
+
+            panel.innerHTML = '<div class="sup-panel">'
+                + '<div class="sup-panel-header">'
+                + '<button class="sup-panel-close" onclick="closeSupplierPanel()">&#10005;</button>'
+                + '<div class="sup-panel-title">Fournisseurs \u2014 ' + countryName + '</div>'
+                + '<div class="sup-panel-count">' + suppliers.length + ' fournisseur' + (suppliers.length > 1 ? 's' : '') + '</div>'
+                + '</div>'
+                + '<div class="sup-panel-body">' + cardsHtml + '</div>'
+                + '<div class="sup-panel-footer">'
+                + '<a href="fournisseurs.html" class="sup-panel-all">Voir tous les fournisseurs \u2192</a>'
+                + '</div>'
+                + '</div>';
+
+        } catch (err) {
+            console.error('[supply-map] showCountrySuppliers error:', err);
+            panel.innerHTML = '<div class="gazette-placeholder"><div style="font-size:.8rem;color:#555e70;text-align:center;padding:2rem;">Erreur chargement : ' + err.message + '</div></div>';
+        }
+    }
+
+    window.closeSupplierPanel = function() {
+        var panel = document.getElementById('gazettePanel');
+        if (panel) panel.innerHTML = '<div class="gazette-placeholder"><div style="font-size:.8rem;color:#555e70;text-align:center;padding:2rem;">Cliquez sur un pays pour voir ses fournisseurs</div></div>';
+    };
 
     // ── BOOT — called explicitly from index.html inline script ───────────────
     // window.supplyMapInit() is called by the inline <script> after all deps load
