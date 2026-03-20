@@ -4,18 +4,18 @@
     <meta charset="UTF-8">
     <meta name="google-site-verification" content="5wNfkVJrkI_jydHng6ztr6ZyLH7qCumPA8dZtmQOaFk" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChemistrySpot Terminal — Marché des Excipients Pharmaceutiques</title>
-    <meta name="description" content="Terminal B2B pour excipients pharmaceutiques. 50 excipients, 192 fournisseurs référencés, prix indicatifs marché en temps réel.">
+    <title>ChemistrySpot — Catalogue Excipients Pharmaceutiques B2B</title>
+    <meta name="description" content="Base de données B2B des excipients pharmaceutiques. 50 excipients, 192 fournisseurs, analyses supply chain mondiale.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://chemistryspot.com/">
-    <meta property="og:title" content="ChemistrySpot — Terminal Marché Excipients Pharmaceutiques">
+    <meta property="og:title" content="ChemistrySpot — Catalogue Excipients Pharmaceutiques B2B">
     <meta property="og:description" content="50 excipients, 192 fournisseurs dans 17 pays. Prix indicatifs, analyse marché et comparatif fournisseurs B2B.">
     <meta property="og:image" content="https://chemistryspot.com/og-image.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@chemistryspot">
-    <meta name="twitter:title" content="ChemistrySpot — Terminal Marché Excipients Pharmaceutiques">
+    <meta name="twitter:title" content="ChemistrySpot — Catalogue Excipients Pharmaceutiques B2B">
     <meta name="twitter:description" content="50 excipients, 192 fournisseurs dans 17 pays. Prix indicatifs, analyse marché et comparatif fournisseurs B2B.">
     <meta name="twitter:image" content="https://chemistryspot.com/og-image.png">
     <link rel="canonical" href="https://chemistryspot.com/">
@@ -29,7 +29,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
     <style>
         /* ── Supply Chain Map ── */
-        #supplyMapSection { padding: 2rem 0; }
+        #supplyMapSection { padding: 0; }
         #supplyMap {
             height: 420px;
             border-radius: 10px;
@@ -86,6 +86,168 @@
             margin-top: .9rem;
         }
         .leaflet-attribution-flag { display: none !important; }
+
+        /* ── Hero Catalog ── */
+        .hero-catalog {
+            background: linear-gradient(135deg, #0a0e1a 0%, #0d1529 50%, #091a14 100%);
+            border-bottom: 1px solid rgba(0,212,170,.15);
+            padding: 4rem 0 3rem;
+            text-align: center;
+        }
+        .hero-label {
+            font-family: var(--mono);
+            font-size: .72rem;
+            color: #00d4aa;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        .hero-h1 {
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-weight: 800;
+            color: #fff;
+            margin: 0 0 .75rem;
+            letter-spacing: -.02em;
+        }
+        .hero-sub {
+            color: #8892a4;
+            font-size: .9rem;
+            margin-bottom: 2rem;
+        }
+        .hero-search-wrap {
+            max-width: 680px;
+            margin: 0 auto 1.25rem;
+            display: flex;
+            gap: 0;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(0,0,0,.4);
+        }
+        .hero-search-input {
+            flex: 1;
+            padding: .85rem 1.2rem;
+            background: #fff;
+            color: #1a1a2e;
+            font-size: .95rem;
+            border: none;
+            outline: none;
+            font-family: var(--sans);
+        }
+        .hero-search-btn {
+            padding: .85rem 1.6rem;
+            background: #00d4aa;
+            color: #0a0e1a;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            font-size: .9rem;
+            font-family: var(--sans);
+            white-space: nowrap;
+            transition: background .15s;
+        }
+        .hero-search-btn:hover { background: #00bfa0; }
+        .hero-quicklinks {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .5rem;
+            justify-content: center;
+            margin-bottom: 2.5rem;
+        }
+        .hero-quicklink {
+            background: rgba(255,255,255,.05);
+            border: 1px solid rgba(255,255,255,.1);
+            color: #c0cfe0;
+            border-radius: 20px;
+            padding: .3rem .9rem;
+            font-size: .78rem;
+            text-decoration: none;
+            transition: all .15s;
+        }
+        .hero-quicklink:hover { border-color: rgba(0,212,170,.5); color: #00d4aa; }
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 0;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+        .hero-stat {
+            padding: 1.2rem 2.5rem;
+            border-right: 1px solid rgba(255,255,255,.08);
+        }
+        .hero-stat:last-child { border-right: none; }
+        .hero-stat-val {
+            font-family: var(--mono);
+            font-size: 2rem;
+            font-weight: 700;
+            color: #00d4aa;
+            display: block;
+        }
+        .hero-stat-lbl {
+            font-size: .75rem;
+            color: #8892a4;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            margin-top: .2rem;
+        }
+
+        /* ── 2-column catalog layout ── */
+        .catalog-main {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 2rem;
+            padding: 2.5rem 1.5rem;
+            align-items: start;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+        .catalog-gazette-col {
+            position: sticky;
+            top: 80px;
+        }
+        .gazette-placeholder {
+            background: rgba(255,255,255,.02);
+            border: 1px solid rgba(255,255,255,.07);
+            border-radius: 10px;
+        }
+        @media (max-width: 1100px) {
+            .catalog-main { grid-template-columns: 1fr; }
+            .catalog-gazette-col { position: static; }
+        }
+
+        /* ── Section headers ── */
+        .sec-hdr {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 0 0 16px;
+        }
+        .sec-line { height: 1px; flex: 1; background: linear-gradient(to right, #00d4aa40, transparent); }
+        .sec-icon { font-size: 15px; line-height: 1; }
+        .sec-label {
+            font-family: var(--mono);
+            font-size: 10.5px;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            color: #6b7585;
+            white-space: nowrap;
+            text-transform: uppercase;
+        }
+        .sec-badge {
+            font-family: var(--mono);
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            padding: 3px 8px;
+            border-radius: 2px;
+            white-space: nowrap;
+        }
+        .badge-monthly { background: rgba(240,180,41,.13); color: #f0b429; }
+
+        @media (max-width: 600px) {
+            .hero-stat { padding: .8rem 1.2rem; }
+            .hero-stat-val { font-size: 1.5rem; }
+        }
     </style>
     <script type="application/ld+json">
     {
@@ -96,7 +258,7 @@
           "@id": "https://chemistryspot.com/#website",
           "url": "https://chemistryspot.com/",
           "name": "ChemistrySpot",
-          "description": "Terminal B2B pour excipients pharmaceutiques. 50 excipients, 192 fournisseurs référencés, prix indicatifs marché.",
+          "description": "Base de données B2B des excipients pharmaceutiques. 50 excipients, 192 fournisseurs référencés, analyses supply chain mondiale.",
           "inLanguage": "fr",
           "potentialAction": {
             "@type": "SearchAction",
@@ -111,7 +273,7 @@
           "@type": "WebPage",
           "@id": "https://chemistryspot.com/#webpage",
           "url": "https://chemistryspot.com/",
-          "name": "ChemistrySpot Terminal — Marché des Excipients Pharmaceutiques",
+          "name": "ChemistrySpot — Catalogue Excipients Pharmaceutiques B2B",
           "inLanguage": "fr",
           "dateModified": "2026-03-11",
           "publisher": { "@id": "https://chemistryspot.com/#organization" }
@@ -170,208 +332,6 @@
     }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.js"></script>
-
-    <style>
-    /* ══ TICKER ══════════════════════════════════════════════════ */
-    .ticker-wrap {
-        position: relative;
-        background: #090f0d;
-        border-bottom: 1px solid #0f2018;
-        overflow: hidden;
-        height: 42px;
-        display: flex;
-        align-items: center;
-    }
-    .ticker-badge {
-        position: absolute; left: 0; top: 0; bottom: 0; z-index: 3;
-        background: var(--primary); color: #0a0e1a;
-        font-family: var(--mono); font-size: 10px; font-weight: 700;
-        letter-spacing: 2px; padding: 0 14px;
-        display: flex; align-items: center; white-space: nowrap; gap: 6px;
-    }
-    .ticker-badge-dot {
-        width: 7px; height: 7px; border-radius: 50%; background: #0a0e1a;
-        animation: blink 1.8s ease-in-out infinite;
-    }
-    .ticker-fade-l, .ticker-fade-r {
-        position: absolute; top: 0; bottom: 0; width: 60px; z-index: 2; pointer-events: none;
-    }
-    .ticker-fade-l { left: 90px;  background: linear-gradient(to right, #090f0d, transparent); }
-    .ticker-fade-r { right: 0;    background: linear-gradient(to left,  #090f0d, transparent); }
-    .ticker-scroll {
-        display: flex; animation: scroll-left 130s linear infinite; width: max-content; padding-left: 100px;
-    }
-    .ticker-scroll:hover { animation-play-state: paused; }
-    @keyframes scroll-left { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
-
-    .t-item {
-        display: inline-flex; align-items: center; gap: 8px;
-        padding: 0 22px; border-right: 1px solid #0f2018;
-        font-family: var(--mono); font-size: 13px; white-space: nowrap;
-    }
-    .ti-code  { color: var(--primary); font-weight: 700; min-width: 40px; }
-    .ti-name  { color: #4a5568; font-size: 12px; }
-    .ti-price { color: #c8d0dc; font-weight: 500; }
-    .ti-unit  { color: #2a3540; font-size: 11px; }
-    .ti-chg   { font-size: 12px; min-width: 54px; }
-    .c-up  { color: var(--primary); }
-    .c-dn  { color: #ff4444; }
-    .c-neu { color: #6b7585; }
-
-    /* ══ STATUS BAR ══════════════════════════════════════════════ */
-    .t-statusbar {
-        display: flex; align-items: center; gap: 14px;
-        padding: 6px 24px; background: #060606;
-        border-bottom: 1px solid #111;
-        font-family: var(--mono); font-size: 10.5px; color: #3a4555;
-    }
-    .t-live-dot {
-        display: inline-block; width: 6px; height: 6px; border-radius: 50%;
-        background: var(--primary); margin-right: 4px;
-        animation: blink 1.8s ease-in-out infinite;
-    }
-    .t-clock-val { color: #c8d0dc; font-weight: 500; }
-    .t-bar-sep   { color: #1e1e1e; }
-    .t-spacer    { flex: 1; }
-
-    /* ══ SECTION HEADERS ══════════════════════════════════════════ */
-    .sec-hdr {
-        display: flex; align-items: center; gap: 14px;
-        padding: 28px 24px 18px; background: #0a0e1a;
-    }
-    .sec-line { height: 1px; flex: 1; background: linear-gradient(to right, #00d4aa40, transparent); }
-    .sec-icon { font-size: 15px; line-height: 1; }
-    .sec-label {
-        font-family: var(--mono); font-size: 10.5px; font-weight: 700;
-        letter-spacing: 2.5px; color: #6b7585; white-space: nowrap; text-transform: uppercase;
-    }
-    .sec-badge {
-        font-family: var(--mono); font-size: 9px; font-weight: 700;
-        letter-spacing: 1px; padding: 3px 8px; border-radius: 2px; white-space: nowrap;
-    }
-    .badge-live    { background: rgba(0,212,170,.14); color: var(--primary); }
-    .badge-monthly { background: rgba(240,180,41,.13); color: #f0b429; }
-    .badge-hebdo   { background: rgba(79,195,247,.13); color: #4fc3f7; }
-
-    /* ══ INDICES ══════════════════════════════════════════════════ */
-    .t-indices {
-        display: grid; grid-template-columns: repeat(3, 1fr);
-        gap: 1px; background: #141414; border-bottom: 1px solid #141414;
-    }
-    .idx-card {
-        background: #0f0f0f; padding: 28px; display: flex; align-items: center;
-        gap: 20px; cursor: default; transition: background .2s; position: relative; overflow: hidden;
-    }
-    .idx-card:hover { background: #111; }
-    .idx-stripe { position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
-    .s-up  { background: var(--primary); }
-    .s-dn  { background: #ff4444; }
-    .idx-left  { flex: 1; }
-    .idx-tag   { font-family: var(--mono); font-size: 9.5px; letter-spacing: 2px; text-transform: uppercase; color: #3a4555; margin-bottom: 4px; }
-    .idx-label { font-size: 13px; font-weight: 600; color: #6b7585; margin-bottom: 10px; }
-    .idx-val   { font-family: var(--mono); font-size: 34px; font-weight: 700; color: #eaeaea; letter-spacing: -1px; line-height: 1; margin-bottom: 10px; }
-    .idx-badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 11px; border-radius: 3px; font-family: var(--mono); font-size: 12px; font-weight: 700; }
-    .b-up  { background: rgba(0,212,170,.13); color: var(--primary); }
-    .b-dn  { background: rgba(255,68,68,.13);  color: #ff4444; }
-    .idx-meta  { margin-top: 7px; font-family: var(--mono); font-size: 9.5px; color: #2a3540; }
-    .idx-spark { flex-shrink: 0; }
-
-    /* ══ GAZETTE ══════════════════════════════════════════════════ */
-    .t-gazette {
-        display: grid; grid-template-columns: repeat(3, 1fr);
-        gap: 1px; background: #141414; border-bottom: 1px solid #141414;
-    }
-    .g-col { background: #0b0b0b; padding: 0 18px 20px; min-height: 460px; }
-    .g-col-head {
-        display: flex; align-items: center; gap: 8px;
-        padding: 16px 0 12px; margin-bottom: 4px; border-bottom: 1px solid #181818;
-        position: sticky; top: 0; background: #0b0b0b; z-index: 1;
-    }
-    .g-dot   { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-    .g-title { font-size: 10px; text-transform: uppercase; letter-spacing: 1.8px; color: #6b7585; font-weight: 600; }
-    .g-src   { margin-left: auto; font-family: var(--mono); font-size: 9px; color: #2a3540; }
-    .g-article {
-        padding: 11px 0 11px 12px; border-bottom: 1px solid #111;
-        border-left: 2px solid var(--primary); margin: 8px 0; transition: border-left-color .2s;
-    }
-    .g-article:hover { border-left-color: #00ffcc; }
-    .g-article:last-child { border-bottom: none; }
-    .g-art-tag { font-family: var(--mono); font-size: 9px; color: #3a4555; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
-    .g-art-title { font-size: 13px; color: #b8c0cc; line-height: 1.45; margin-bottom: 5px; font-weight: 400; }
-    .g-art-title a { color: inherit; text-decoration: none; }
-    .g-art-title a:hover { color: var(--primary); }
-    .g-art-meta { font-family: var(--mono); font-size: 9.5px; color: #2a3540; }
-    .g-art-meta a { color: #3a5060; text-decoration: none; }
-    .g-art-meta a:hover { color: var(--primary); }
-    .g-col-reg  .g-article { border-left-color: #4fc3f7; }
-    .g-col-reg  .g-article:hover { border-left-color: #81d4f7; }
-    .g-col-mkt  .g-article { border-left-color: var(--primary); }
-    .g-col-mkt  .g-article:hover { border-left-color: #00ffcc; }
-    .g-col-acad .g-article { border-left-color: #f0b429; }
-    .g-col-acad .g-article:hover { border-left-color: #f5c842; }
-
-    /* ══ PRIX TABLE ══════════════════════════════════════════════ */
-    .t-prices-full { background: #0b0b0b; border-bottom: 1px solid #141414; padding: 0 24px 28px; }
-    .price-tbl { width: 100%; border-collapse: collapse; margin-top: 4px; }
-    .price-tbl th {
-        text-align: left; padding: 10px 14px;
-        font-family: var(--mono); font-size: 9.5px; color: #2a3540;
-        text-transform: uppercase; letter-spacing: 1px; font-weight: 400;
-        border-bottom: 1px solid #1a1a1a;
-    }
-    .price-tbl th:not(:first-child):not(:nth-child(2)) { text-align: right; }
-    .price-tbl td {
-        padding: 13px 14px; border-bottom: 1px solid #111;
-        font-family: var(--mono); font-size: 13px; vertical-align: middle;
-    }
-    .price-tbl tbody tr:hover td { background: #0e0e0e; }
-    .td-rk  { color: #2a3540; font-size: 11px; width: 28px; }
-    .td-nm  { color: #c0c8d4; font-family: var(--font); font-size: 13.5px; font-weight: 500; min-width: 200px; }
-    .td-cas { color: #3a4555; font-size: 10.5px; }
-    .td-rng { color: #6b7585; text-align: right; }
-    .td-min { color: #4a5568; text-align: right; }
-    .td-max { color: #4a5568; text-align: right; }
-    .td-pct { text-align: right; font-weight: 700; font-size: 12px; }
-    .td-pct.up  { color: var(--primary); }
-    .td-pct.dn  { color: #ff4444; }
-    .td-pct.neu { color: #4a5568; }
-    .td-arr { text-align: center; font-size: 15px; width: 28px; }
-    .td-arr.up  { color: var(--primary); }
-    .td-arr.dn  { color: #ff4444; }
-    .td-arr.neu { color: #3a4555; }
-    .td-bar { width: 80px; text-align: right; }
-    .price-bar-wrap { display: flex; align-items: center; height: 4px; background: #1a1a1a; border-radius: 2px; overflow: hidden; width: 80px; }
-    .price-bar-fill { height: 100%; border-radius: 2px; background: linear-gradient(to right, #00d4aa44, var(--primary)); }
-    .prices-note { margin-top: 14px; font-family: var(--mono); font-size: 9.5px; color: #1e2730; text-align: right; line-height: 1.7; }
-
-    /* ══ STATS COUNTERS ══ */
-    .stats-counters { background: var(--bg-card); border-bottom: 1px solid var(--border); padding: .9rem 0; }
-    .stats-grid { display: flex; justify-content: center; flex-wrap: wrap; }
-    .stat-item { text-align: center; padding: .5rem 3rem; border-right: 1px solid var(--border); }
-    .stat-item:last-child { border-right: none; }
-    .stat-value { font-family: var(--mono); font-size: 1.5rem; font-weight: 700; color: var(--primary); display: block; min-width: 4ch; }
-    .stat-label { font-size: .68rem; text-transform: uppercase; letter-spacing: .09em; color: var(--text-muted); margin-top: .15rem; white-space: nowrap; }
-    @media (max-width: 600px) {
-        .stat-item { padding: .5rem 1.5rem; border-right: 1px solid var(--border); }
-        .stat-value { font-size: 1.2rem; }
-    }
-
-    /* ══ RESPONSIVE ══════════════════════════════════════════════ */
-    @media (max-width: 1100px) {
-        .t-gazette { grid-template-columns: 1fr 1fr; }
-        .g-col:last-child { grid-column: 1/-1; }
-    }
-    @media (max-width: 860px) {
-        .t-indices { grid-template-columns: 1fr; }
-        .t-gazette { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 540px) {
-        .idx-spark { display: none; }
-        .t-statusbar span:nth-child(n+4):not(.t-spacer):not(.t-clock-val) { display: none; }
-        .price-tbl .td-cas, .price-tbl .td-bar { display: none; }
-    }
-    </style>
 </head>
 <body>
 
@@ -394,7 +354,7 @@
     </div>
     <nav class="header-nav">
         <div class="container">
-            <a href="index.html" class="nav-link active">Terminal</a>
+            <a href="index.html" class="nav-link active">Accueil</a>
             <a href="catalogue.html" class="nav-link">Catalogue</a>
             <a href="fournisseurs.html" class="nav-link">Fournisseurs</a>
             <a href="contact.html" class="nav-link">Contact</a>
@@ -403,296 +363,132 @@
     </nav>
 </header>
 
-<!-- ══ TICKER BAR ══ -->
-<div class="ticker-wrap">
-    <span class="ticker-badge"><span class="ticker-badge-dot"></span>LIVE</span>
-    <span class="ticker-fade-l"></span>
-    <div class="ticker-scroll" id="tickerScroll"></div>
-    <span class="ticker-fade-r"></span>
-</div>
-
-<!-- ══ STATUS BAR ══ -->
-<div class="t-statusbar">
-    <span><span class="t-live-dot"></span>DONNÉES INDICATIVES</span>
-    <span class="t-bar-sep">|</span>
-    <span class="t-clock-val" id="termClock">--:--:--</span>
-    <span class="t-bar-sep">|</span>
-    <span>PARIS (CET)</span>
-    <span class="t-bar-sep">|</span>
-    <span>50 EXCIPIENTS INDEXÉS</span>
-    <span class="t-spacer"></span>
-    <span>PubChem &nbsp;·&nbsp; EMA &nbsp;·&nbsp; PharmaCompass &nbsp;·&nbsp; PubMed NCBI</span>
-</div>
-
-<!-- ══ STATS COUNTERS ══ -->
-<div class="stats-counters">
+<!-- ══ HERO SECTION ══ -->
+<section class="hero-catalog">
     <div class="container">
-        <div class="stats-grid">
-            <div class="stat-item">
-                <span class="stat-value" id="statExcipients">—</span>
-                <div class="stat-label">Excipients référencés</div>
+        <div class="hero-label">Base de données pharmaceutique B2B</div>
+        <h1 class="hero-h1">Excipients Pharmaceutiques</h1>
+        <p class="hero-sub">50 excipients référencés · 192 fournisseurs · 17 pays · données PubChem NCBI</p>
+
+        <div class="hero-search-wrap">
+            <input
+                type="text"
+                class="hero-search-input"
+                id="heroSearch"
+                placeholder="Rechercher un excipient — ex: cellulose, HPMC, mannitol…"
+                onkeydown="if(event.key==='Enter'){goHeroSearch()}"
+            >
+            <button class="hero-search-btn" onclick="goHeroSearch()">
+                <i class="fas fa-search"></i> Rechercher
+            </button>
+        </div>
+
+        <div class="hero-quicklinks">
+            <a href="catalogue.html?q=cellulose" class="hero-quicklink">Cellulose Microcristalline</a>
+            <a href="catalogue.html?q=mannitol" class="hero-quicklink">Mannitol</a>
+            <a href="catalogue.html?q=HPMC" class="hero-quicklink">HPMC</a>
+            <a href="catalogue.html?q=lactose" class="hero-quicklink">Lactose</a>
+            <a href="catalogue.html?q=stearate" class="hero-quicklink">Stéarate de Magnésium</a>
+        </div>
+
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <span class="hero-stat-val" id="statExcipients">—</span>
+                <div class="hero-stat-lbl">Excipients référencés</div>
             </div>
-            <div class="stat-item">
-                <span class="stat-value" id="statFournisseurs">—</span>
-                <div class="stat-label">Fournisseurs actifs</div>
+            <div class="hero-stat">
+                <span class="hero-stat-val" id="statFournisseurs">—</span>
+                <div class="hero-stat-lbl">Fournisseurs actifs</div>
             </div>
-            <div class="stat-item">
-                <span class="stat-value" id="statRelations">—</span>
-                <div class="stat-label">Relations excipient / fournisseur</div>
+            <div class="hero-stat">
+                <span class="hero-stat-val" id="statRelations">—</span>
+                <div class="hero-stat-lbl">Relations excipient / fournisseur</div>
             </div>
-            <div class="stat-item">
-                <span class="stat-value" id="statPays">—</span>
-                <div class="stat-label">Pays couverts</div>
+            <div class="hero-stat">
+                <span class="hero-stat-val" id="statPays">—</span>
+                <div class="hero-stat-lbl">Pays couverts</div>
             </div>
         </div>
     </div>
-</div>
-
-<!-- ══ MAIN TERMINAL ══ -->
-<div class="terminal-main">
-
-    <!-- ── INDICES ── -->
-    <div class="sec-hdr">
-        <span class="sec-icon">📊</span>
-        <span class="sec-label">INDICES MARCHÉ</span>
-        <div class="sec-line"></div>
-        <span class="sec-badge badge-live">● LIVE</span>
-    </div>
-
-    <div class="t-indices">
-        <div class="idx-card">
-            <div class="idx-stripe s-up"></div>
-            <div class="idx-left">
-                <div class="idx-tag">CS-30</div>
-                <div class="idx-label">ChemSpot-30 — Indice Global</div>
-                <div class="idx-val">1 847,32</div>
-                <span class="idx-badge b-up">▲ +0,82% ce mois</span>
-                <div class="idx-meta">Base 1000 · Jan 2023 · 30 composants</div>
-            </div>
-            <div class="idx-spark" id="spk-cs30"></div>
-        </div>
-        <div class="idx-card">
-            <div class="idx-stripe s-dn"></div>
-            <div class="idx-left">
-                <div class="idx-tag">CS-CEL</div>
-                <div class="idx-label">ChemSpot-Cellulose</div>
-                <div class="idx-val">2 341,15</div>
-                <span class="idx-badge b-dn">▼ −0,43% ce mois</span>
-                <div class="idx-meta">MCC · HPC · HPMC · CMC-Na · EC · CCS</div>
-            </div>
-            <div class="idx-spark" id="spk-cel"></div>
-        </div>
-        <div class="idx-card">
-            <div class="idx-stripe s-up"></div>
-            <div class="idx-left">
-                <div class="idx-tag">CS-SUC</div>
-                <div class="idx-label">ChemSpot-Sucres &amp; Polyols</div>
-                <div class="idx-val">1 203,47</div>
-                <span class="idx-badge b-up">▲ +1,12% ce mois</span>
-                <div class="idx-meta">Lactose · Mannitol · Sorbitol · Sucrose</div>
-            </div>
-            <div class="idx-spark" id="spk-suc"></div>
-        </div>
-    </div>
-
-    <!-- ── GAZETTE ── -->
-    <div class="sec-hdr">
-        <span class="sec-icon">📰</span>
-        <span class="sec-label">GAZETTE PHARMACEUTIQUE</span>
-        <div class="sec-line"></div>
-        <span class="sec-badge badge-hebdo">MAJ HEBDOMADAIRE</span>
-    </div>
-
-    <div class="t-gazette">
-        <div class="g-col g-col-reg">
-            <div class="g-col-head">
-                <div class="g-dot" style="background:#4fc3f7"></div>
-                <span class="g-title">Réglementaire</span>
-                <span class="g-src">EMA · EDQM · ICH</span>
-            </div>
-            <div class="g-article">
-                <div class="g-art-tag">EMA · CHMP · Fév 2026</div>
-                <div class="g-art-title"><a href="https://www.ema.europa.eu/en/guideline-excipients-label-package-leaflet-medicinal-products-human-use" target="_blank" rel="noopener">Guideline on excipients in the label and package leaflet of medicinal products for human use — révision 2026</a></div>
-                <div class="g-art-meta">EMA/CHMP/QWP/126423/2004 Rev. 2 &nbsp;·&nbsp; ema.europa.eu</div>
-            </div>
-            <div class="g-article">
-                <div class="g-art-tag">EDQM · Ph. Eur. · Jan 2026</div>
-                <div class="g-art-title"><a href="https://www.edqm.eu/en/ph-eur-online" target="_blank" rel="noopener">Pharmacopée Européenne Suppl. 11.5 : révision des monographies HPMC et HPC</a></div>
-                <div class="g-art-meta">Ph. Eur. 11.5 · 01/2026:0347 &nbsp;·&nbsp; edqm.eu</div>
-            </div>
-            <div class="g-article">
-                <div class="g-art-tag">EMA · Q&A · Déc 2025</div>
-                <div class="g-art-title"><a href="https://www.ema.europa.eu/en/documents/other/questions-answers-polysorbate_en.pdf" target="_blank" rel="noopener">Q&amp;A on polysorbate 80 impurity profile and degradation products in biological medicines</a></div>
-                <div class="g-art-meta">EMA/CHMP/BWP/534898/2018 &nbsp;·&nbsp; ema.europa.eu</div>
-            </div>
-            <div class="g-article">
-                <div class="g-art-tag">EMA · Reflection Paper · Nov 2025</div>
-                <div class="g-art-title"><a href="https://www.ema.europa.eu/en/documents/scientific-guideline/reflection-paper-use-polyethylene-glycols-excipients-human-medicines_en.pdf" target="_blank" rel="noopener">Reflection paper on the use of polyethylene glycols (PEGs) as excipients — risques d'hypersensibilité</a></div>
-                <div class="g-art-meta">EMA/CHMP/QWP/351590/2022 &nbsp;·&nbsp; ema.europa.eu</div>
-            </div>
-            <div class="g-article">
-                <div class="g-art-tag">ICH · Q3E · Oct 2025</div>
-                <div class="g-art-title"><a href="https://www.ema.europa.eu/en/ich-q3e-extractables-leachables-guideline" target="_blank" rel="noopener">ICH Q3E Guideline on Extractables and Leachables from excipient packaging — étape 4 finalisée</a></div>
-                <div class="g-art-meta">ICH Q3E Step 4 · Oct 2025 &nbsp;·&nbsp; ema.europa.eu</div>
-            </div>
-        </div>
-
-        <div class="g-col g-col-mkt">
-            <div class="g-col-head">
-                <div class="g-dot" style="background:#00d4aa"></div>
-                <span class="g-title">Marché &amp; Prix</span>
-                <span class="g-src">PharmaCompass</span>
-            </div>
-            <div class="g-article">
-                <div class="g-art-tag">PharmaCompass · 1 Mars 2026</div>
-                <div class="g-art-title"><a href="https://www.pharmacompass.com/price/hypromellose" target="_blank" rel="noopener">HPMC : prix spot en hausse de +5,1% en Q1 2026, contraintes d'approvisionnement chez les fournisseurs chinois</a></div>
-                <div class="g-art-meta">Hypromellose · 15,00–30,00 €/kg &nbsp;·&nbsp; pharmacompass.com</div>
-            </div>
-            <div class="g-article">
-                <div class="g-art-tag">PharmaCompass · 20 Fév 2026</div>
-                <div class="g-art-title"><a href="https://www.pharmacompass.com/price/mannitol" target="_blank" rel="noopener">Mannitol : expansion de capacité mondiale par Roquette et SPI Pharma, demande lyophilisation en forte croissance</a></div>
-                <div class="g-art-meta">Mannitol · 3,00–5,00 €/kg · +3,4% &nbsp;·&nbsp; pharmacompass.com</div>
-            </div>
-            <div class="g-article">
-                <div class="g-art-tag">PharmaCompass · 10 Fév 2026</div>
-                <div class="g-art-title"><a href="https://www.pharmacompass.com/price/polysorbate-80" target="_blank" rel="noopener">Polysorbate 80 : 3 fournisseurs majeurs réduisent la production, prix en hausse de 8% depuis janvier</a></div>
-                <div class="g-art-meta">Polysorbate 80 · 6,00–10,00 €/kg · −2,8% &nbsp;·&nbsp; pharmacompass.com</div>
-            </div>
-            <div class="g-article">
-                <div class="g-art-tag">PharmaCompass · 25 Jan 2026</div>
-                <div class="g-art-title"><a href="https://www.pharmacompass.com/price/microcrystalline-cellulose" target="_blank" rel="noopener">Cellulose microcristalline (MCC) : prix européens spot +2,1%, concurrence asiatique stabilise la tendance</a></div>
-                <div class="g-art-meta">MCC · 1,50–2,80 €/kg · +1,2% &nbsp;·&nbsp; pharmacompass.com</div>
-            </div>
-            <div class="g-article">
-                <div class="g-art-tag">PharmaCompass · 12 Jan 2026</div>
-                <div class="g-art-title"><a href="https://www.pharmacompass.com/radio-compass-blog/pharmaceutical-excipients" target="_blank" rel="noopener">Marché mondial des excipients pharmaceutiques 2026 : 6,8 Md€, CAGR 4,8% — cellulose et polyols en tête</a></div>
-                <div class="g-art-meta">Market report 2026 &nbsp;·&nbsp; pharmacompass.com</div>
-            </div>
-        </div>
-
-        <div class="g-col g-col-acad">
-            <div class="g-col-head">
-                <div class="g-dot" style="background:#f0b429"></div>
-                <span class="g-title">Académique</span>
-                <span class="g-src">PubMed NCBI</span>
-            </div>
-            <div class="g-article">
-                <div class="g-art-tag">Int J Pharm · Fév 2026</div>
-                <div class="g-art-title"><a href="https://pubmed.ncbi.nlm.nih.gov/?term=croscarmellose+sodium+starch+glycolate+disintegration+2026" target="_blank" rel="noopener">Croscarmellose sodium versus sodium starch glycolate : disintegration kinetics in ODT — comparative in vitro study</a></div>
-                <div class="g-art-meta">DOI: 10.1016/j.ijpharm.2026.124123 &nbsp;·&nbsp; <a href="https://pubmed.ncbi.nlm.nih.gov/?term=croscarmellose+sodium+ODT+2026" target="_blank" rel="noopener">PubMed</a></div>
-            </div>
-            <div class="g-article">
-                <div class="g-art-tag">AAPS PharmSciTech · Jan 2026</div>
-                <div class="g-art-title"><a href="https://pubmed.ncbi.nlm.nih.gov/?term=HPMC+K100M+matrix+drug+release+2026" target="_blank" rel="noopener">HPMC K100M hydrophilic matrix tablets : mechanistic analysis of drug release and polymer erosion front</a></div>
-                <div class="g-art-meta">DOI: 10.1208/s12249-025-03012-4 &nbsp;·&nbsp; <a href="https://pubmed.ncbi.nlm.nih.gov/?term=HPMC+matrix+erosion+2025" target="_blank" rel="noopener">PubMed</a></div>
-            </div>
-            <div class="g-article">
-                <div class="g-art-tag">Eur J Pharm Biopharm · Jan 2026</div>
-                <div class="g-art-title"><a href="https://pubmed.ncbi.nlm.nih.gov/?term=mannitol+polymorphism+freeze-drying+2026" target="_blank" rel="noopener">Mannitol polymorphism in lyophilized formulations : impact of δ/β ratio on cake appearance and reconstitution time</a></div>
-                <div class="g-art-meta">DOI: 10.1016/j.ejpb.2025.114589 &nbsp;·&nbsp; <a href="https://pubmed.ncbi.nlm.nih.gov/?term=mannitol+polymorph+lyophilization+2025" target="_blank" rel="noopener">PubMed</a></div>
-            </div>
-            <div class="g-article">
-                <div class="g-art-tag">Int J Pharm · Déc 2025</div>
-                <div class="g-art-title"><a href="https://pubmed.ncbi.nlm.nih.gov/?term=carbomer+974P+bioadhesive+buccal+2025" target="_blank" rel="noopener">Carbomer 974P bioadhesive hydrogels for buccal drug delivery : mucoadhesion force and permeation study</a></div>
-                <div class="g-art-meta">DOI: 10.1016/j.ijpharm.2025.123981 &nbsp;·&nbsp; <a href="https://pubmed.ncbi.nlm.nih.gov/?term=carbomer+bioadhesive+buccal+2025" target="_blank" rel="noopener">PubMed</a></div>
-            </div>
-            <div class="g-article">
-                <div class="g-art-tag">J Pharm Sci · Déc 2025</div>
-                <div class="g-art-title"><a href="https://pubmed.ncbi.nlm.nih.gov/?term=polysorbate+80+degradation+monoclonal+antibody+2025" target="_blank" rel="noopener">Polysorbate 80 degradation in mAb formulations : oxidation vs. enzymatic hydrolysis — updated mechanistic review</a></div>
-                <div class="g-art-meta">DOI: 10.1007/s11095-025-03882-1 &nbsp;·&nbsp; <a href="https://pubmed.ncbi.nlm.nih.gov/?term=polysorbate+degradation+biologics+2025" target="_blank" rel="noopener">PubMed</a></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ── CARTE DES PRIX ── -->
-    <div class="sec-hdr">
-        <span class="sec-icon">💰</span>
-        <span class="sec-label">CARTE DES PRIX</span>
-        <div class="sec-line"></div>
-        <span class="sec-badge badge-monthly">MAJ MENSUELLE</span>
-    </div>
-
-    <div class="t-prices-full">
-        <table class="price-tbl">
-            <thead>
-                <tr>
-                    <th>#</th><th>Excipient</th><th>N° CAS</th>
-                    <th>Min €/kg</th><th>Max €/kg</th>
-                    <th>Δ 30 jours</th><th>Tendance</th><th>Fourchette</th>
-                </tr>
-            </thead>
-            <tbody id="priceBody"></tbody>
-        </table>
-        <div class="prices-note">
-            * Prix indicatifs hors contrats-cadre — sources : PharmaCompass, ICIS, enquêtes fournisseurs &nbsp;·&nbsp; Mars 2026
-        </div>
-    </div>
-
-</div><!-- /terminal-main -->
-
-<!-- ══ SUPPLY CHAIN MAP ══ -->
-<section id="supplyMapSection" style="max-width:1280px;margin:0 auto;padding:2rem 1.5rem 1rem;">
-
-    <div class="sec-hdr">
-        <span class="sec-icon">🌍</span>
-        <span class="sec-label">SUPPLY CHAIN MONDIALE</span>
-        <div class="sec-line"></div>
-        <span class="sec-badge badge-monthly">DONNÉES UN COMTRADE</span>
-    </div>
-
-    <p style="font-size:.82rem;color:#8892a4;margin:.6rem 0 1.1rem;max-width:680px;">
-        Top 10 exportateurs mondiaux par excipient — taille des cercles proportionnelle aux volumes exportés.
-        Couleur = niveau de risque géopolitique évalué par ChemistrySpot.
-    </p>
-
-    <!-- Filters -->
-    <div class="smap-filter-bar" id="supplyMapFilters">
-        <span style="font-size:.78rem;color:#555e70;align-self:center;">Chargement…</span>
-    </div>
-
-    <!-- Map + HHI side-by-side -->
-    <div style="display:grid;grid-template-columns:1fr 260px;gap:1rem;align-items:start;">
-
-        <!-- Map -->
-        <div style="position:relative;">
-            <div id="supplyMap" style="height:500px;min-height:500px;width:100%;"></div>
-            <div id="supplyMapLoading">
-                <div class="spin-lg"></div>
-            </div>
-        </div>
-
-        <!-- Right panel: legend + HHI -->
-        <div>
-            <!-- Risk legend -->
-            <div class="smap-panel" style="margin-top:0;">
-                <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;color:#8892a4;margin-bottom:.55rem;">Risque géopolitique</div>
-                <div style="display:flex;flex-direction:column;gap:.3rem;">
-                    <div style="display:flex;align-items:center;gap:.5rem;font-size:.78rem;"><span style="width:12px;height:12px;border-radius:50%;background:#00d4aa;flex-shrink:0;"></span> Faible</div>
-                    <div style="display:flex;align-items:center;gap:.5rem;font-size:.78rem;"><span style="width:12px;height:12px;border-radius:50%;background:#4fc3f7;flex-shrink:0;"></span> Faible-Modéré</div>
-                    <div style="display:flex;align-items:center;gap:.5rem;font-size:.78rem;"><span style="width:12px;height:12px;border-radius:50%;background:#f0b429;flex-shrink:0;"></span> Modéré</div>
-                    <div style="display:flex;align-items:center;gap:.5rem;font-size:.78rem;"><span style="width:12px;height:12px;border-radius:50%;background:#fb923c;flex-shrink:0;"></span> Élevé</div>
-                    <div style="display:flex;align-items:center;gap:.5rem;font-size:.78rem;"><span style="width:12px;height:12px;border-radius:50%;background:#ef4444;flex-shrink:0;"></span> Critique 🚫</div>
-                </div>
-                <div style="margin-top:.6rem;font-size:.7rem;color:#555e70;border-top:1px solid rgba(255,255,255,.06);padding-top:.5rem;">
-                    Taille ∝ volume exporté · Cliquer pour détails
-                </div>
-            </div>
-
-            <!-- HHI panel -->
-            <div class="smap-panel" id="supplyHhiPanel">
-                <div style="font-size:.78rem;color:#555e70;">Sélectionnez un excipient pour voir l'indice HHI</div>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- Sources -->
-    <div style="margin-top:.75rem;font-size:.72rem;color:#555e70;display:flex;align-items:center;gap:.5rem;">
-        <i class="fas fa-globe"></i>
-        Source : <strong style="color:#8892a4;">UN Comtrade</strong> — données 2023 · Évaluation risque géopolitique ChemistrySpot · Indices HHI calculés sur parts de marché déclarées
-    </div>
-
 </section>
+
+<!-- ══ CATALOG MAIN: MAP + GAZETTE ══ -->
+<div class="catalog-main">
+
+    <!-- Left column: Supply Chain Map -->
+    <div class="catalog-map-col">
+        <div id="supplyMapSection">
+
+            <div class="sec-hdr">
+                <span class="sec-icon">🌍</span>
+                <span class="sec-label">SUPPLY CHAIN MONDIALE</span>
+                <div class="sec-line"></div>
+                <span class="sec-badge badge-monthly">DONNÉES UN COMTRADE</span>
+            </div>
+
+            <p style="font-size:.82rem;color:#8892a4;margin:.6rem 0 1.1rem;max-width:680px;">
+                Top 10 exportateurs mondiaux par excipient — taille des cercles proportionnelle aux volumes exportés.
+                Couleur = niveau de risque géopolitique évalué par ChemistrySpot.
+            </p>
+
+            <!-- Filters -->
+            <div class="smap-filter-bar" id="supplyMapFilters">
+                <span style="font-size:.78rem;color:#555e70;align-self:center;">Chargement…</span>
+            </div>
+
+            <!-- Map + HHI side-by-side -->
+            <div style="display:grid;grid-template-columns:1fr 260px;gap:1rem;align-items:start;">
+
+                <!-- Map -->
+                <div style="position:relative;">
+                    <div id="supplyMap" style="height:500px;min-height:500px;width:100%;"></div>
+                    <div id="supplyMapLoading">
+                        <div class="spin-lg"></div>
+                    </div>
+                </div>
+
+                <!-- Right panel: legend + HHI -->
+                <div>
+                    <!-- Risk legend -->
+                    <div class="smap-panel" style="margin-top:0;">
+                        <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;color:#8892a4;margin-bottom:.55rem;">Risque géopolitique</div>
+                        <div style="display:flex;flex-direction:column;gap:.3rem;">
+                            <div style="display:flex;align-items:center;gap:.5rem;font-size:.78rem;"><span style="width:12px;height:12px;border-radius:50%;background:#00d4aa;flex-shrink:0;"></span> Faible</div>
+                            <div style="display:flex;align-items:center;gap:.5rem;font-size:.78rem;"><span style="width:12px;height:12px;border-radius:50%;background:#4fc3f7;flex-shrink:0;"></span> Faible-Modéré</div>
+                            <div style="display:flex;align-items:center;gap:.5rem;font-size:.78rem;"><span style="width:12px;height:12px;border-radius:50%;background:#f0b429;flex-shrink:0;"></span> Modéré</div>
+                            <div style="display:flex;align-items:center;gap:.5rem;font-size:.78rem;"><span style="width:12px;height:12px;border-radius:50%;background:#fb923c;flex-shrink:0;"></span> Élevé</div>
+                            <div style="display:flex;align-items:center;gap:.5rem;font-size:.78rem;"><span style="width:12px;height:12px;border-radius:50%;background:#ef4444;flex-shrink:0;"></span> Critique 🚫</div>
+                        </div>
+                        <div style="margin-top:.6rem;font-size:.7rem;color:#555e70;border-top:1px solid rgba(255,255,255,.06);padding-top:.5rem;">
+                            Taille ∝ volume exporté · Cliquer pour détails
+                        </div>
+                    </div>
+
+                    <!-- HHI panel -->
+                    <div class="smap-panel" id="supplyHhiPanel">
+                        <div style="font-size:.78rem;color:#555e70;">Sélectionnez un excipient pour voir l'indice HHI</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Sources -->
+            <div style="margin-top:.75rem;font-size:.72rem;color:#555e70;display:flex;align-items:center;gap:.5rem;">
+                <i class="fas fa-globe"></i>
+                Source : <strong style="color:#8892a4;">UN Comtrade</strong> — données 2023 · Évaluation risque géopolitique ChemistrySpot · Indices HHI calculés sur parts de marché déclarées
+            </div>
+
+        </div><!-- /#supplyMapSection -->
+    </div><!-- /.catalog-map-col -->
+
+    <!-- Right column: Gazette placeholder -->
+    <div class="catalog-gazette-col" id="gazettePanel">
+        <div class="gazette-placeholder">
+            <div style="font-size:.8rem;color:#555e70;text-align:center;padding:2rem;">Gazette pharmaceutique — chargement…</div>
+        </div>
+    </div>
+
+</div><!-- /.catalog-main -->
 
 <!-- ══ SITE FOOTER ══ -->
 <footer class="site-footer">
@@ -700,7 +496,7 @@
         <div class="footer-grid">
             <div class="footer-col">
                 <div class="footer-logo">⬡ ChemistrySpot</div>
-                <p class="footer-desc">Terminal B2B pour les excipients pharmaceutiques. Données indicatives à visée comparative — sources PubChem, EMA, PharmaCompass.</p>
+                <p class="footer-desc">Base de données B2B pour les excipients pharmaceutiques. Données indicatives à visée comparative — sources PubChem, EMA, PharmaCompass.</p>
                 <div class="footer-certs">
                     <span class="footer-cert">GMP</span>
                     <span class="footer-cert">ISO 9001</span>
@@ -786,128 +582,9 @@ function goSearch() {
 }
 document.getElementById('globalSearch').addEventListener('keydown', e => { if (e.key === 'Enter') goSearch(); });
 
-/* ── TICKER DATA ───────────────────────────────────── */
-const TICKER_DATA = [
-    { code:'LAC', name:'Lactose',                min:0.80,  max:1.20,  chg:+0.3,  dir:1  },
-    { code:'MCC', name:'Microcryst. Cellulose',  min:1.50,  max:2.80,  chg:+1.2,  dir:1  },
-    { code:'MGS', name:'Mg Stearate',            min:2.50,  max:4.00,  chg:-0.1,  dir:0  },
-    { code:'PVP', name:'Povidone',               min:8.00,  max:15.00, chg:-2.1,  dir:-1 },
-    { code:'TAL', name:'Talc',                   min:0.30,  max:0.80,  chg:+0.5,  dir:1  },
-    { code:'TIO', name:'Titanium Dioxide',       min:3.00,  max:6.00,  chg:+1.8,  dir:1  },
-    { code:'GLY', name:'Glycerol',               min:0.90,  max:1.50,  chg:+2.3,  dir:1  },
-    { code:'ETH', name:'Ethanol',                min:0.80,  max:1.50,  chg:+0.1,  dir:0  },
-    { code:'MAN', name:'Mannitol',               min:3.00,  max:5.00,  chg:+3.4,  dir:1  },
-    { code:'SOR', name:'Sorbitol',               min:0.80,  max:1.40,  chg:-0.3,  dir:0  },
-    { code:'STA', name:'Starch',                 min:0.50,  max:1.00,  chg:-0.8,  dir:-1 },
-    { code:'SAC', name:'Stearic Acid',           min:1.00,  max:2.00,  chg:-1.5,  dir:-1 },
-    { code:'CIT', name:'Citric Acid',            min:0.70,  max:1.30,  chg:+0.4,  dir:1  },
-    { code:'SUC', name:'Sucrose',                min:0.60,  max:1.00,  chg:+2.1,  dir:1  },
-    { code:'PPG', name:'Propylene Glycol',       min:1.20,  max:2.00,  chg:+1.9,  dir:1  },
-    { code:'BZA', name:'Benzyl Alcohol',         min:2.00,  max:3.50,  chg:-0.2,  dir:0  },
-    { code:'SLS', name:'Na Lauryl Sulfate',      min:1.50,  max:2.50,  chg:-0.7,  dir:0  },
-    { code:'CaS', name:'Calcium Stearate',       min:2.00,  max:4.00,  chg:-1.2,  dir:-1 },
-    { code:'DCP', name:'Dicalcium Phosphate',    min:0.80,  max:1.50,  chg:+0.2,  dir:0  },
-    { code:'CaC', name:'Calcium Carbonate',      min:0.30,  max:0.70,  chg:+1.4,  dir:1  },
-    { code:'NaC', name:'Sodium Chloride',        min:0.15,  max:0.35,  chg: 0.0,  dir:0  },
-    { code:'KCl', name:'Potassium Chloride',     min:0.50,  max:1.00,  chg:+0.3,  dir:0  },
-    { code:'ZnO', name:'Zinc Oxide',             min:2.00,  max:4.00,  chg:+2.8,  dir:1  },
-    { code:'SiO', name:'Colloid. SiO₂',          min:8.00,  max:15.00, chg:-3.1,  dir:-1 },
-    { code:'HPC', name:'Hydroxypropyl Cellulose',min:12.00, max:22.00, chg:+4.2,  dir:1  },
-    { code:'HMC', name:'Hypromellose',           min:15.00, max:30.00, chg:+5.1,  dir:1  },
-    { code:'PEG', name:'Macrogol 4000',          min:2.50,  max:4.50,  chg:-0.4,  dir:0  },
-    { code:'PS8', name:'Polysorbate 80',         min:6.00,  max:10.00, chg:-2.8,  dir:-1 },
-    { code:'BKC', name:'Benzalkonium Cl.',       min:8.00,  max:18.00, chg:+0.1,  dir:0  },
-    { code:'H₂O', name:'Purified Water',         min:0.05,  max:0.15,  chg: 0.0,  dir:0  },
-];
-
-// Price table loaded from Supabase — see buildPriceTable()
-
-function buildTicker() {
-    const el = document.getElementById('tickerScroll');
-    if (!el) return;
-    const rows = [...TICKER_DATA, ...TICKER_DATA];
-    el.innerHTML = rows.map(e => {
-        const mid  = ((e.min + e.max) / 2).toFixed(2).replace('.', ',');
-        const cls  = e.dir > 0 ? 'c-up' : e.dir < 0 ? 'c-dn' : 'c-neu';
-        const arr  = e.dir > 0 ? '▲' : e.dir < 0 ? '▼' : '▶';
-        const sign = e.chg > 0 ? '+' : '';
-        return `<span class="t-item">
-            <span class="ti-code">${e.code}</span>
-            <span class="ti-name">${e.name}</span>
-            <span class="ti-price">${mid}</span>
-            <span class="ti-unit">€/kg</span>
-            <span class="ti-chg ${cls}">${arr} ${sign}${Math.abs(e.chg).toFixed(1)}%</span>
-        </span>`;
-    }).join('');
-}
-
-function makeSpark(trend, w = 140, h = 50) {
-    const n = 28, vals = [];
-    let v = 50;
-    for (let i = 0; i < n; i++) {
-        v += (Math.random() - 0.47) * 7 + trend * 0.5;
-        v = Math.max(4, Math.min(96, v));
-        vals.push(v);
-    }
-    const mn = Math.min(...vals), rng = Math.max(...vals) - mn || 1;
-    const pts = vals.map((d, i) => `${((i/(n-1))*w).toFixed(1)},${(h-((d-mn)/rng)*(h-8)-4).toFixed(1)}`).join(' ');
-    const col = trend > 0 ? '#00d4aa' : trend < 0 ? '#ff4444' : '#8892a4';
-    const gid = '_g' + Math.random().toString(36).slice(2,8);
-    return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
-        <defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="${col}" stop-opacity=".25"/>
-            <stop offset="100%" stop-color="${col}" stop-opacity="0"/>
-        </linearGradient></defs>
-        <polygon points="${pts} ${w},${h} 0,${h}" fill="url(#${gid})"/>
-        <polyline points="${pts}" fill="none" stroke="${col}" stroke-width="1.8"/>
-    </svg>`;
-}
-
-async function buildPriceTable() {
-    const tbody = document.getElementById('priceBody');
-    if (!tbody) return;
-
-    try {
-        const SUPABASE_URL = 'https://jkaffpgqbyhuihvyvtld.supabase.co';
-        const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE2NTgzOTQsImV4cCI6MjA2NzIzNDM5NH0.OIjoz6uoPV25Nraral4YN_gz7q6COBW3dAVIYhBy1pI';
-        const [pricesRes, excRes] = await Promise.all([
-            fetch(`${SUPABASE_URL}/rest/v1/prices?select=excipient_id,prix_min,prix_max&order=prix_min.desc&limit=10`, {
-                headers: { 'apikey': ANON_KEY, 'Authorization': `Bearer ${ANON_KEY}` }
-            }),
-            fetch(`${SUPABASE_URL}/rest/v1/excipients?select=id,nom_commun,cas_number`, {
-                headers: { 'apikey': ANON_KEY, 'Authorization': `Bearer ${ANON_KEY}` }
-            })
-        ]);
-        const prices = await pricesRes.json();
-        const excipients = await excRes.json();
-        const excMap = {};
-        excipients.forEach(e => excMap[e.id] = e);
-
-        const globalMax = Math.max(...prices.map(r => r.prix_max));
-        tbody.innerHTML = prices.map((r, i) => {
-            const exc    = excMap[r.excipient_id] || {};
-            const barPct = Math.round((r.prix_max / globalMax) * 100);
-            return `<tr>
-                <td class="td-rk">${i+1}</td>
-                <td class="td-nm"><a href="produit-detail.html?id=${r.excipient_id}" style="color:inherit;text-decoration:none;">${exc.nom_commun || '—'}</a></td>
-                <td class="td-cas">${exc.cas_number || '—'}</td>
-                <td class="td-min">${parseFloat(r.prix_min).toFixed(2).replace('.',',')}</td>
-                <td class="td-max">${parseFloat(r.prix_max).toFixed(2).replace('.',',')}</td>
-                <td class="td-pct neu">—</td>
-                <td class="td-arr neu">→</td>
-                <td class="td-bar"><div class="price-bar-wrap"><div class="price-bar-fill" style="width:${barPct}%"></div></div></td>
-            </tr>`;
-        }).join('');
-    } catch (e) {
-        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--text-dim);padding:1rem;">Données indisponibles</td></tr>';
-    }
-}
-
-function tickClock() {
-    const el = document.getElementById('termClock');
-    if (!el) return;
-    const n = new Date(), p = x => String(x).padStart(2,'0');
-    el.textContent = `${p(n.getHours())}:${p(n.getMinutes())}:${p(n.getSeconds())}`;
+function goHeroSearch() {
+    const q = document.getElementById('heroSearch').value.trim();
+    if (q) window.location.href = `catalogue.html?q=${encodeURIComponent(q)}`;
 }
 
 function animateCounter(id, target) {
@@ -953,14 +630,7 @@ async function loadStats() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    buildTicker();
-    document.getElementById('spk-cs30').innerHTML = makeSpark(+0.82);
-    document.getElementById('spk-cel').innerHTML  = makeSpark(-0.43);
-    document.getElementById('spk-suc').innerHTML  = makeSpark(+1.12);
-    buildPriceTable();
     loadStats();
-    tickClock();
-    setInterval(tickClock, 1000);
 });
 </script>
 
