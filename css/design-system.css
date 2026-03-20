@@ -1,32 +1,32 @@
 /* ═══════════════════════════════════════════════════════════════
    ChemistrySpot — Design System v2 (Dark Theme)
-   Inspiré Sigma-Aldrich · Palette #00d4aa · Fond #0a0e1a
+   Inspiré Sigma-Aldrich · Palette #e8a0b4 · Fond #1a0f14
 ═══════════════════════════════════════════════════════════════ */
 
 /* ── CSS Variables ─────────────────────────────────────────── */
 :root {
-    --primary:        #00d4aa;
-    --primary-dark:   #00a88a;
-    --primary-light:  rgba(0, 212, 170, 0.12);
-    --primary-glow:   rgba(0, 212, 170, 0.25);
+    --primary:        #e8a0b4;
+    --primary-dark:   #c97a95;
+    --primary-light:  rgba(232, 160, 180, 0.12);
+    --primary-glow:   rgba(232, 160, 180, 0.25);
 
     --danger:         #ff4d4d;
     --warning:        #f0b429;
     --info:           #4fc3f7;
     --success:        #22c55e;
 
-    --text:           #e8e8e8;
-    --text-muted:     #8892a4;
-    --text-dim:       #556070;
+    --text:           #f5e6ea;
+    --text-muted:     #b8909a;
+    --text-dim:       #7a5060;
 
-    --bg:             #0a0e1a;
-    --bg-main:        #0a0e1a;   /* alias for --bg */
-    --bg-card:        #111827;
-    --bg-surface:     #1a2332;
-    --bg-hover:       #1e2d3d;
+    --bg:             #1a0f14;
+    --bg-main:        #1a0f14;   /* alias for --bg */
+    --bg-card:        #2d1520;
+    --bg-surface:     #3d1f2a;
+    --bg-hover:       #4a2535;
 
-    --border:         rgba(255, 255, 255, 0.08);
-    --border-focus:   rgba(0, 212, 170, 0.5);
+    --border:         rgba(232, 160, 180, 0.08);
+    --border-focus:   rgba(232, 160, 180, 0.5);
 
     --shadow:         0 4px 16px rgba(0, 0, 0, 0.4);
     --shadow-lg:      0 8px 32px rgba(0, 0, 0, 0.5);
@@ -72,7 +72,7 @@ ul { list-style: none; }
     position: sticky;
     top: 0;
     z-index: 1000;
-    background: #0d1220;
+    background: #140b10;
     border-bottom: 1px solid var(--border);
     box-shadow: 0 2px 20px rgba(0,0,0,0.5);
 }
@@ -133,7 +133,7 @@ ul { list-style: none; }
     padding: 0 1rem;
     background: var(--primary);
     border: none;
-    color: #0a0e1a;
+    color: #1a0f14;
     cursor: pointer;
     font-size: 0.9rem;
     transition: var(--transition);
@@ -199,10 +199,10 @@ ul { list-style: none; }
 
 .btn-primary {
     background: var(--primary);
-    color: #0a0e1a;
+    color: #1a0f14;
     border-color: var(--primary);
 }
-.btn-primary:hover { background: var(--primary-dark); border-color: var(--primary-dark); color: #0a0e1a; }
+.btn-primary:hover { background: var(--primary-dark); border-color: var(--primary-dark); color: #1a0f14; }
 
 .btn-outline {
     background: transparent;
@@ -263,7 +263,7 @@ ul { list-style: none; }
     transition: var(--transition);
 }
 .card:hover {
-    border-color: rgba(0, 212, 170, 0.25);
+    border-color: rgba(232, 160, 180, 0.25);
     box-shadow: var(--shadow);
 }
 .card-body { padding: 1.5rem; }
@@ -279,7 +279,7 @@ ul { list-style: none; }
     transition: var(--transition);
 }
 .product-card:hover {
-    border-color: rgba(0, 212, 170, 0.3);
+    border-color: rgba(232, 160, 180, 0.3);
     transform: translateY(-2px);
     box-shadow: var(--shadow);
 }
@@ -325,7 +325,7 @@ ul { list-style: none; }
     transition: var(--transition);
 }
 .supplier-card:hover {
-    border-color: rgba(0, 212, 170, 0.3);
+    border-color: rgba(232, 160, 180, 0.3);
     transform: translateY(-2px);
     box-shadow: var(--shadow);
 }
@@ -358,13 +358,13 @@ ul { list-style: none; }
     white-space: nowrap;
 }
 .badge-primary  { background: var(--primary-light); color: var(--primary); }
-.badge-success  { background: rgba(0,212,170,0.12); color: #00d4aa; }
+.badge-success  { background: rgba(232,160,180,0.12); color: #e8a0b4; }
 .badge-info     { background: rgba(79,195,247,0.12); color: #4fc3f7; }
 .badge-warning  { background: rgba(240,180,41,0.12); color: #f0b429; }
 .badge-danger   { background: rgba(255,77,77,0.12); color: #ff4d4d; }
 .badge-neutral  { background: rgba(136,146,164,0.12); color: var(--text-muted); }
 
-.badge-gmp  { background: rgba(0,212,170,0.15); color: #00d4aa; border: 1px solid rgba(0,212,170,0.3); }
+.badge-gmp  { background: rgba(232,160,180,0.15); color: #e8a0b4; border: 1px solid rgba(232,160,180,0.3); }
 .badge-iso  { background: rgba(79,195,247,0.15); color: #4fc3f7; border: 1px solid rgba(79,195,247,0.3); }
 .badge-usp  { background: rgba(240,180,41,0.15); color: #f0b429; border: 1px solid rgba(240,180,41,0.3); }
 .badge-ph-eur { background: rgba(153,102,255,0.15); color: #9966ff; border: 1px solid rgba(153,102,255,0.3); }
@@ -592,7 +592,7 @@ ul { list-style: none; }
     margin: 1rem 0;
 }
 .status-loading { background: rgba(240,180,41,0.1); color: var(--warning); border: 1px solid rgba(240,180,41,0.2); }
-.status-success { background: rgba(0,212,170,0.1); color: var(--primary); border: 1px solid rgba(0,212,170,0.2); }
+.status-success { background: rgba(232,160,180,0.1); color: var(--primary); border: 1px solid rgba(232,160,180,0.2); }
 .status-error   { background: rgba(255,77,77,0.1); color: var(--danger); border: 1px solid rgba(255,77,77,0.2); }
 
 .spinner-icon { animation: spin 1s linear infinite; display: inline-block; }
@@ -678,7 +678,7 @@ ul { list-style: none; }
 /* Excipient tags */
 .excipient-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.4rem; }
 .excipient-tag {
-    background: rgba(0,212,170,0.1);
+    background: rgba(232,160,180,0.1);
     color: var(--primary);
     padding: 0.15rem 0.55rem;
     border-radius: var(--radius-pill);
@@ -726,7 +726,7 @@ ul { list-style: none; }
     transition: var(--transition);
 }
 .pagination button:hover { border-color: var(--primary); color: var(--primary); }
-.pagination button.active { background: var(--primary); border-color: var(--primary); color: #0a0e1a; font-weight: 700; }
+.pagination button.active { background: var(--primary); border-color: var(--primary); color: #1a0f14; font-weight: 700; }
 .pagination button:disabled { opacity: 0.3; cursor: not-allowed; }
 .pagination .page-info { color: var(--text-muted); font-size: 0.82rem; padding: 0 0.5rem; }
 
@@ -734,7 +734,7 @@ ul { list-style: none; }
    SITE FOOTER — 3 colonnes
 ══════════════════════════════════════════════════════════════ */
 .site-footer {
-    background: #080c16;
+    background: #120b0f;
     border-top: 1px solid var(--border);
     margin-top: 4rem;
 }
@@ -769,8 +769,8 @@ a.footer-cert {
     cursor: pointer;
 }
 a.footer-cert:hover {
-    background: rgba(0,212,170,.12);
-    border-color: rgba(0,212,170,.35);
+    background: rgba(232,160,180,.12);
+    border-color: rgba(232,160,180,.35);
     color: var(--primary);
 }
 

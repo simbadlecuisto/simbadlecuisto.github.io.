@@ -18,7 +18,7 @@ console.log('[supply-map] script loaded');
     ];
 
     const RISK_COLORS = {
-        1: "#00d4aa",   // Faible
+        1: "#e8a0b4",   // Faible
         2: "#4fc3f7",   // Faible-Modéré
         3: "#f0b429",   // Modéré
         4: "#fb923c",   // Élevé
@@ -202,7 +202,7 @@ console.log('[supply-map] script loaded');
 
         Object.values(byCountry).forEach(country => {
             const risk     = allRiskData[country.iso3] || { risk_level: 1, risk_label: 'Inconnu' };
-            const color    = RISK_COLORS[risk.risk_level] || '#8892a4';
+            const color    = RISK_COLORS[risk.risk_level] || '#b8909a';
             const radius   = 8 + (country.total_value / maxValue) * 28;
 
             const circle = L.circleMarker([country.lat, country.lng], {
@@ -228,14 +228,14 @@ console.log('[supply-map] script loaded');
     }
 
     function buildPopup(country, risk, excipientFilter) {
-        const riskColor = RISK_COLORS[risk.risk_level] || '#8892a4';
+        const riskColor = RISK_COLORS[risk.risk_level] || '#b8909a';
         const riskLabel = risk.risk_label || RISK_LABELS[risk.risk_level] || '—';
 
         const excItems = country.excipients
             .sort((a, b) => b.value - a.value)
             .map(e => `
                 <div style="display:flex;justify-content:space-between;padding:.2rem 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.78rem;">
-                    <span style="color:#c0cfe0;">${e.nom}</span>
+                    <span style="color:#f0d4dc;">${e.nom}</span>
                     <span style="font-family:monospace;color:${riskColor};">${e.share != null ? e.share.toFixed(1) + '%' : '—'}</span>
                 </div>`)
             .join('');
@@ -256,16 +256,16 @@ console.log('[supply-map] script loaded');
         return `
         <div style="font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif;padding:.25rem;">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem;">
-                <strong style="font-size:.95rem;color:#e8f4f8;">${country.name}</strong>
+                <strong style="font-size:.95rem;color:#f5e6ea;">${country.name}</strong>
                 <span style="background:${riskColor}22;color:${riskColor};border:1px solid ${riskColor}55;border-radius:12px;padding:.15rem .55rem;font-size:.7rem;font-weight:700;margin-left:.5rem;">${riskLabel}</span>
             </div>
             <div style="display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:.55rem;">
                 ${sanctionsHtml}${restrictHtml}
             </div>
-            <div style="font-size:.72rem;color:#8892a4;margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.05em;">Parts de marché</div>
+            <div style="font-size:.72rem;color:#b8909a;margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.05em;">Parts de marché</div>
             ${excItems}
             ${factorsHtml}
-            ${risk.notes ? `<div style="margin-top:.5rem;font-size:.73rem;color:#8892a4;line-height:1.4;">${risk.notes}</div>` : ''}
+            ${risk.notes ? `<div style="margin-top:.5rem;font-size:.73rem;color:#b8909a;line-height:1.4;">${risk.notes}</div>` : ''}
         </div>`;
     }
 
@@ -286,18 +286,18 @@ console.log('[supply-map] script loaded');
             // Show mini HHI for each excipient
             const excipients = [...new Set(allTradeData.map(d => d.excipient_nom))];
             panel.innerHTML = `
-            <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;color:#8892a4;margin-bottom:.5rem;">Indice HHI par excipient</div>
+            <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;color:#b8909a;margin-bottom:.5rem;">Indice HHI par excipient</div>
             ${excipients.map(e => {
                 const h = computeHHI(e);
                 if (h == null) return '';
                 const { color, label } = hhiMeta(h);
                 return `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.3rem;font-size:.78rem;">
-                    <span style="color:#c0cfe0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px;" title="${e}">${e.split(' ')[0]}</span>
+                    <span style="color:#f0d4dc;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px;" title="${e}">${e.split(' ')[0]}</span>
                     <span style="font-family:monospace;color:${color};font-weight:700;margin-left:.5rem;">${h.toLocaleString()}</span>
                     <span style="background:${color}22;color:${color};border-radius:8px;padding:.05rem .4rem;font-size:.65rem;margin-left:.3rem;">${label}</span>
                 </div>`;
             }).join('')}
-            <div style="margin-top:.6rem;font-size:.67rem;color:#555e70;border-top:1px solid rgba(255,255,255,.06);padding-top:.5rem;">
+            <div style="margin-top:.6rem;font-size:.67rem;color:#7a5060;border-top:1px solid rgba(255,255,255,.06);padding-top:.5rem;">
                 HHI &lt;1500 : compétitif · 1500–2500 : modéré · &gt;2500 : 🚨 concentration
             </div>`;
         } else {
@@ -305,18 +305,18 @@ console.log('[supply-map] script loaded');
             if (hhi == null) { panel.innerHTML = ''; return; }
             const { color, label, alert } = hhiMeta(hhi);
             panel.innerHTML = `
-            <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;color:#8892a4;margin-bottom:.4rem;">Indice HHI — Concentration</div>
+            <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;color:#b8909a;margin-bottom:.4rem;">Indice HHI — Concentration</div>
             <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;">
                 <span style="font-size:1.6rem;font-weight:800;font-family:monospace;color:${color};">${hhi.toLocaleString()}</span>
                 <span style="background:${color}22;color:${color};border:1px solid ${color}55;border-radius:12px;padding:.2rem .65rem;font-size:.75rem;font-weight:700;">${label}</span>
                 ${alert ? `<span style="background:#ef444415;color:#ef4444;border:1px solid #ef444440;border-radius:12px;padding:.2rem .65rem;font-size:.72rem;font-weight:700;">🚨 Risque concentration</span>` : ''}
             </div>
-            <div style="font-size:.72rem;color:#8892a4;margin-top:.4rem;">HHI &lt;1500 compétitif · 1500–2500 modéré · &gt;2500 concentration élevée</div>`;
+            <div style="font-size:.72rem;color:#b8909a;margin-top:.4rem;">HHI &lt;1500 compétitif · 1500–2500 modéré · &gt;2500 concentration élevée</div>`;
         }
     }
 
     function hhiMeta(hhi) {
-        if (hhi < HHI_COMPETITIVE) return { color: '#00d4aa', label: 'Compétitif',  alert: false };
+        if (hhi < HHI_COMPETITIVE) return { color: '#e8a0b4', label: 'Compétitif',  alert: false };
         if (hhi < HHI_MODERATE)    return { color: '#f0b429', label: 'Modéré',       alert: false };
         return                              { color: '#ef4444', label: 'Concentré',   alert: true  };
     }
@@ -329,7 +329,7 @@ console.log('[supply-map] script loaded');
 
     function showEmptyState(msg) {
         const map = document.getElementById('supplyMap');
-        if (map) map.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#8892a4;font-size:.85rem;text-align:center;padding:2rem;">${msg}</div>`;
+        if (map) map.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#b8909a;font-size:.85rem;text-align:center;padding:2rem;">${msg}</div>`;
         const hhi = document.getElementById('supplyHhiPanel');
         if (hhi) hhi.innerHTML = '';
     }
@@ -361,7 +361,7 @@ console.log('[supply-map] script loaded');
             if (suppErr) throw suppErr;
 
             if (!suppliers || suppliers.length === 0) {
-                panel.innerHTML = '<div class="gazette-placeholder"><div style="font-size:.8rem;color:#555e70;text-align:center;padding:2rem;">Aucun fournisseur référencé pour ' + countryName + '</div></div>';
+                panel.innerHTML = '<div class="gazette-placeholder"><div style="font-size:.8rem;color:#7a5060;text-align:center;padding:2rem;">Aucun fournisseur référencé pour ' + countryName + '</div></div>';
                 return;
             }
 
@@ -414,7 +414,7 @@ console.log('[supply-map] script loaded');
 
         } catch (err) {
             console.error('[supply-map] showCountrySuppliers error:', err);
-            panel.innerHTML = '<div class="gazette-placeholder"><div style="font-size:.8rem;color:#555e70;text-align:center;padding:2rem;">Erreur chargement : ' + err.message + '</div></div>';
+            panel.innerHTML = '<div class="gazette-placeholder"><div style="font-size:.8rem;color:#7a5060;text-align:center;padding:2rem;">Erreur chargement : ' + err.message + '</div></div>';
         }
     }
 
