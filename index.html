@@ -268,6 +268,24 @@
         .sup-panel-all:hover { text-decoration: underline; }
         .sup-panel-loading { padding: 2rem; text-align: center; color: #555e70; font-size: .82rem; }
         .gazette-placeholder { display: flex; align-items: center; justify-content: center; min-height: 200px; border: 1px dashed rgba(255,255,255,.08); border-radius: 8px; }
+
+        /* ── GAZETTE WIDGET ── */
+        .gazette-widget { background: rgba(255,255,255,.02); border: 1px solid rgba(255,255,255,.08); border-radius: 10px; overflow: hidden; }
+        .gazette-tabs { display: flex; border-bottom: 1px solid rgba(255,255,255,.08); }
+        .gz-tab { flex: 1; padding: .65rem 1rem; background: none; border: none; color: #8892a4; font-size: .8rem; font-weight: 600; cursor: pointer; font-family: var(--sans); transition: all .15s; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+        .gz-tab:hover { color: #c0cfe0; }
+        .gz-tab.active { color: #00d4aa; border-bottom-color: #00d4aa; background: rgba(0,212,170,.04); }
+        .gz-panel { display: none; max-height: 600px; overflow-y: auto; padding: .5rem 0; }
+        .gz-panel.active { display: block; }
+        .gz-section-label { font-family: var(--mono); font-size: .65rem; text-transform: uppercase; letter-spacing: .1em; color: #555e70; padding: .6rem 1rem .3rem; }
+        .gz-article { padding: .7rem 1rem; border-bottom: 1px solid rgba(255,255,255,.04); }
+        .gz-article:last-child { border-bottom: none; }
+        .gz-tag { font-size: .68rem; color: #555e70; margin-bottom: .25rem; font-family: var(--mono); }
+        .gz-title { font-size: .8rem; line-height: 1.45; margin-bottom: .25rem; }
+        .gz-title a { color: #c0cfe0; text-decoration: none; }
+        .gz-title a:hover { color: #00d4aa; text-decoration: underline; }
+        .gz-meta { font-size: .7rem; color: #555e70; font-family: var(--mono); }
+        .gz-footer { padding: .65rem 1rem; border-top: 1px solid rgba(255,255,255,.06); text-align: center; }
     </style>
     <script type="application/ld+json">
     {
@@ -501,10 +519,93 @@
         </div><!-- /#supplyMapSection -->
     </div><!-- /.catalog-map-col -->
 
-    <!-- Right column: Gazette placeholder -->
+    <!-- Right column: Gazette widget -->
     <div class="catalog-gazette-col" id="gazettePanel">
-        <div class="gazette-placeholder">
-            <div style="font-size:.8rem;color:#555e70;text-align:center;padding:2rem;">Cliquez sur un pays pour voir ses fournisseurs</div>
+        <div class="gazette-widget" id="gazetteWidget">
+            <div class="gazette-tabs">
+                <button class="gz-tab active" onclick="switchGazetteTab('economique', this)">Économique</button>
+                <button class="gz-tab" onclick="switchGazetteTab('academique', this)">Académique</button>
+            </div>
+
+            <!-- Tab: Économique (Réglementaire + Marché) -->
+            <div class="gz-panel active" id="gz-economique">
+                <div class="gz-section-label">Réglementaire</div>
+                <article class="gz-article">
+                    <div class="gz-tag">EMA · CHMP · Fév 2026</div>
+                    <div class="gz-title"><a href="https://www.ema.europa.eu/en/guideline-excipients-label-package-leaflet-medicinal-products-human-use" target="_blank" rel="noopener">Guideline on excipients in the label — révision 2026</a></div>
+                    <div class="gz-meta">EMA/CHMP/QWP/126423/2004 Rev. 2</div>
+                </article>
+                <article class="gz-article">
+                    <div class="gz-tag">EDQM · Ph. Eur. · Jan 2026</div>
+                    <div class="gz-title"><a href="https://www.edqm.eu/en/ph-eur-online" target="_blank" rel="noopener">Pharmacopée Européenne Suppl. 11.5 : révision des monographies HPMC et HPC</a></div>
+                    <div class="gz-meta">Ph. Eur. 11.5 · 01/2026:0347</div>
+                </article>
+                <article class="gz-article">
+                    <div class="gz-tag">EMA · Q&A · Déc 2025</div>
+                    <div class="gz-title"><a href="https://www.ema.europa.eu/en/documents/other/questions-answers-polysorbate_en.pdf" target="_blank" rel="noopener">Q&amp;A on polysorbate 80 impurity profile in biological medicines</a></div>
+                    <div class="gz-meta">EMA/CHMP/BWP/534898/2018</div>
+                </article>
+                <article class="gz-article">
+                    <div class="gz-tag">ICH · Q3E · Oct 2025</div>
+                    <div class="gz-title"><a href="https://www.ema.europa.eu/en/ich-q3e-extractables-leachables-guideline" target="_blank" rel="noopener">ICH Q3E Extractables &amp; Leachables — étape 4 finalisée</a></div>
+                    <div class="gz-meta">ICH Q3E Step 4 · Oct 2025</div>
+                </article>
+                <div class="gz-section-label" style="margin-top:1rem;">Marché &amp; Prix</div>
+                <article class="gz-article">
+                    <div class="gz-tag">PharmaCompass · 1 Mars 2026</div>
+                    <div class="gz-title"><a href="https://www.pharmacompass.com/price/hypromellose" target="_blank" rel="noopener">HPMC : prix spot +5,1% en Q1 2026, contraintes approvisionnement Chine</a></div>
+                    <div class="gz-meta">15,00–30,00 €/kg</div>
+                </article>
+                <article class="gz-article">
+                    <div class="gz-tag">PharmaCompass · 20 Fév 2026</div>
+                    <div class="gz-title"><a href="https://www.pharmacompass.com/price/mannitol" target="_blank" rel="noopener">Mannitol : expansion Roquette &amp; SPI Pharma, lyophilisation en croissance</a></div>
+                    <div class="gz-meta">3,00–5,00 €/kg · +3,4%</div>
+                </article>
+                <article class="gz-article">
+                    <div class="gz-tag">PharmaCompass · 10 Fév 2026</div>
+                    <div class="gz-title"><a href="https://www.pharmacompass.com/price/polysorbate-80" target="_blank" rel="noopener">Polysorbate 80 : 3 fournisseurs réduisent production, +8% depuis janvier</a></div>
+                    <div class="gz-meta">6,00–10,00 €/kg</div>
+                </article>
+                <article class="gz-article">
+                    <div class="gz-tag">PharmaCompass · 25 Jan 2026</div>
+                    <div class="gz-title"><a href="https://www.pharmacompass.com/price/microcrystalline-cellulose" target="_blank" rel="noopener">MCC : prix européens +2,1%, concurrence asiatique stabilise la tendance</a></div>
+                    <div class="gz-meta">1,50–2,80 €/kg · +1,2%</div>
+                </article>
+            </div>
+
+            <!-- Tab: Académique (PubMed) -->
+            <div class="gz-panel" id="gz-academique">
+                <div class="gz-section-label">PubMed NCBI</div>
+                <article class="gz-article">
+                    <div class="gz-tag">Int J Pharm · Fév 2026</div>
+                    <div class="gz-title"><a href="https://pubmed.ncbi.nlm.nih.gov/?term=croscarmellose+sodium+starch+glycolate+disintegration+2026" target="_blank" rel="noopener">Croscarmellose sodium vs. sodium starch glycolate : disintegration kinetics in ODT</a></div>
+                    <div class="gz-meta">DOI: 10.1016/j.ijpharm.2026.124123</div>
+                </article>
+                <article class="gz-article">
+                    <div class="gz-tag">AAPS PharmSciTech · Jan 2026</div>
+                    <div class="gz-title"><a href="https://pubmed.ncbi.nlm.nih.gov/?term=HPMC+K100M+matrix+drug+release+2026" target="_blank" rel="noopener">HPMC K100M hydrophilic matrix tablets : drug release and polymer erosion front</a></div>
+                    <div class="gz-meta">DOI: 10.1208/s12249-025-03012-4</div>
+                </article>
+                <article class="gz-article">
+                    <div class="gz-tag">Eur J Pharm Biopharm · Jan 2026</div>
+                    <div class="gz-title"><a href="https://pubmed.ncbi.nlm.nih.gov/?term=mannitol+polymorphism+freeze-drying+2026" target="_blank" rel="noopener">Mannitol polymorphism in lyophilized formulations : δ/β ratio impact on reconstitution</a></div>
+                    <div class="gz-meta">DOI: 10.1016/j.ejpb.2025.114589</div>
+                </article>
+                <article class="gz-article">
+                    <div class="gz-tag">Int J Pharm · Déc 2025</div>
+                    <div class="gz-title"><a href="https://pubmed.ncbi.nlm.nih.gov/?term=carbomer+974P+bioadhesive+buccal+2025" target="_blank" rel="noopener">Carbomer 974P bioadhesive hydrogels for buccal drug delivery</a></div>
+                    <div class="gz-meta">DOI: 10.1016/j.ijpharm.2025.123981</div>
+                </article>
+                <article class="gz-article">
+                    <div class="gz-tag">J Pharm Sci · Déc 2025</div>
+                    <div class="gz-title"><a href="https://pubmed.ncbi.nlm.nih.gov/?term=polysorbate+80+degradation+monoclonal+antibody+2025" target="_blank" rel="noopener">Polysorbate 80 degradation in mAb formulations : oxidation vs. enzymatic hydrolysis</a></div>
+                    <div class="gz-meta">DOI: 10.1007/s11095-025-03882-1</div>
+                </article>
+            </div>
+
+            <div class="gz-footer">
+                <span style="font-size:.72rem;color:#555e70;">MAJ hebdomadaire · EMA · PubMed · PharmaCompass</span>
+            </div>
         </div>
     </div>
 
@@ -591,6 +692,14 @@ window.addEventListener('load', function () {
 </script>
 
 <script>
+/* Gazette tab switcher */
+function switchGazetteTab(tab, btn) {
+    document.querySelectorAll('.gz-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.gz-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('gz-' + tab).classList.add('active');
+}
+
 /* Modal helpers */
 function openModal(id) { document.getElementById(id).classList.add('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }

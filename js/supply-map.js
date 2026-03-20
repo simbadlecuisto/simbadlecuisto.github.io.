@@ -340,6 +340,11 @@ console.log('[supply-map] script loaded');
         const panel = document.getElementById('gazettePanel');
         if (!panel) return;
 
+        // Save gazette HTML on first click so it can be restored on close
+        if (!window._gazetteHTML) {
+            window._gazetteHTML = panel.innerHTML;
+        }
+
         // Show loading state
         panel.innerHTML = '<div class="sup-panel-loading">Chargement des fournisseurs…</div>';
 
@@ -415,7 +420,10 @@ console.log('[supply-map] script loaded');
 
     window.closeSupplierPanel = function() {
         var panel = document.getElementById('gazettePanel');
-        if (panel) panel.innerHTML = '<div class="gazette-placeholder"><div style="font-size:.8rem;color:#555e70;text-align:center;padding:2rem;">Cliquez sur un pays pour voir ses fournisseurs</div></div>';
+        if (panel && window._gazetteHTML) {
+            panel.innerHTML = window._gazetteHTML;
+            window._gazetteHTML = null; // allow re-saving on next click
+        }
     };
 
     // ── BOOT — called explicitly from index.html inline script ───────────────
