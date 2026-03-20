@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="google-site-verification" content="5wNfkVJrkI_jydHng6ztr6ZyLH7qCumPA8dZtmQOaFk" />
+    <meta name="google-site-verification" content="5wNfkVJrkI_jydHng6ztr6ZyLH7qCumPA8dZtmQOaFk">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ChemistrySpot — Catalogue Excipients Pharmaceutiques B2B</title>
     <meta name="description" content="Base de données B2B des excipients pharmaceutiques. 50 excipients, 192 fournisseurs, analyses supply chain mondiale.">
@@ -26,7 +26,7 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="./css/design-system.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin>
     <style>
         /* ── Supply Chain Map ── */
         #supplyMapSection { padding: 0; }
@@ -382,11 +382,11 @@
             </a>
             <div class="header-search">
                 <input type="text" placeholder="Rechercher un excipient, N° CAS..." id="globalSearch">
-                <button onclick="goSearch()"><i class="fas fa-search"></i></button>
+                <button type="button" aria-label="Rechercher" onclick="goSearch()"><i class="fas fa-search"></i></button>
             </div>
             <div class="header-actions">
-                <button class="btn btn-ghost btn-sm" onclick="openModal('loginModal')"><i class="fas fa-sign-in-alt"></i> Connexion</button>
-                <button class="btn btn-primary btn-sm" onclick="openModal('registerModal')"><i class="fas fa-user-plus"></i> Inscription</button>
+                <button type="button" class="btn btn-ghost btn-sm" onclick="openModal('loginModal')"><i class="fas fa-sign-in-alt"></i> Connexion</button>
+                <button type="button" class="btn btn-primary btn-sm" onclick="openModal('registerModal')"><i class="fas fa-user-plus"></i> Inscription</button>
             </div>
         </div>
     </div>
@@ -416,7 +416,7 @@
                 placeholder="Rechercher un excipient — ex: cellulose, HPMC, mannitol…"
                 onkeydown="if(event.key==='Enter'){goHeroSearch()}"
             >
-            <button class="hero-search-btn" onclick="goHeroSearch()">
+            <button type="button" class="hero-search-btn" onclick="goHeroSearch()">
                 <i class="fas fa-search"></i> Rechercher
             </button>
         </div>
@@ -523,8 +523,8 @@
     <div class="catalog-gazette-col" id="gazettePanel">
         <div class="gazette-widget" id="gazetteWidget">
             <div class="gazette-tabs">
-                <button class="gz-tab active" onclick="switchGazetteTab('economique', this)">Économique</button>
-                <button class="gz-tab" onclick="switchGazetteTab('academique', this)">Académique</button>
+                <button type="button" class="gz-tab active" onclick="switchGazetteTab('economique', this)">Économique</button>
+                <button type="button" class="gz-tab" onclick="switchGazetteTab('academique', this)">Académique</button>
             </div>
 
             <!-- Tab: Économique (Réglementaire + Marché) -->
@@ -541,7 +541,7 @@
                     <div class="gz-meta">Ph. Eur. 11.5 · 01/2026:0347</div>
                 </article>
                 <article class="gz-article">
-                    <div class="gz-tag">EMA · Q&A · Déc 2025</div>
+                    <div class="gz-tag">EMA · Q&amp;A · Déc 2025</div>
                     <div class="gz-title"><a href="https://www.ema.europa.eu/en/documents/other/questions-answers-polysorbate_en.pdf" target="_blank" rel="noopener">Q&amp;A on polysorbate 80 impurity profile in biological medicines</a></div>
                     <div class="gz-meta">EMA/CHMP/BWP/534898/2018</div>
                 </article>
@@ -637,8 +637,8 @@
                 <p><i class="fas fa-envelope"></i> contact@chemistryspot.com</p>
                 <p><i class="fas fa-map-marker-alt"></i> Paris, France</p>
                 <div class="footer-social">
-                    <a href="#"><i class="fab fa-linkedin"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
                 </div>
             </div>
         </div>
@@ -651,23 +651,23 @@
 <!-- ══ MODALS ══ -->
 <div id="loginModal" class="modal">
     <div class="modal-box">
-        <button class="modal-close" onclick="closeModal('loginModal')">&times;</button>
+        <button type="button" class="modal-close" onclick="closeModal('loginModal')" aria-label="Fermer">&times;</button>
         <div class="modal-title"><i class="fas fa-sign-in-alt"></i> Connexion</div>
         <form onsubmit="handleLogin(event)">
             <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" required></div>
-            <div class="form-group"><label class="form-label">Mot de passe</label><input type="password" class="form-input" required></div>
+            <div class="form-group"><label class="form-label">Mot de passe</label><input type="password" class="form-input" autocomplete="current-password" required></div>
             <button type="submit" class="btn btn-primary w-full">Se connecter</button>
         </form>
     </div>
 </div>
 <div id="registerModal" class="modal">
     <div class="modal-box">
-        <button class="modal-close" onclick="closeModal('registerModal')">&times;</button>
+        <button type="button" class="modal-close" onclick="closeModal('registerModal')" aria-label="Fermer">&times;</button>
         <div class="modal-title"><i class="fas fa-user-plus"></i> Inscription</div>
         <form onsubmit="handleRegister(event)">
             <div class="form-group"><label class="form-label">Entreprise</label><input type="text" class="form-input" required></div>
             <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" required></div>
-            <div class="form-group"><label class="form-label">Mot de passe</label><input type="password" class="form-input" required></div>
+            <div class="form-group"><label class="form-label">Mot de passe</label><input type="password" class="form-input" autocomplete="new-password" required></div>
             <button type="submit" class="btn btn-primary w-full">Créer mon compte</button>
         </form>
     </div>
@@ -677,7 +677,7 @@
 <script src="./js/supabase-config.js"></script>
 <script src="./js/main.js"></script>
 <script src="./js/auth.js"></script>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin></script>
 <script src="./js/supply-map.js"></script>
 <script>
 /* Supply chain map — explicit boot, no IIFE/IntersectionObserver ambiguity */
