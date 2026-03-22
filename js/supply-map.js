@@ -46,6 +46,11 @@ console.log('[supply-map] script loaded');
     let activeExcipient = "Tous";
     let mapInitialized  = false;
 
+    // Supplier layer state
+    let suppliersLayer  = null;   // L.markerClusterGroup
+    let allSuppliersData = [];    // [{id, name, country, latitude, longitude, excipient_names}]
+    let activeMapView   = 'exportateurs'; // 'exportateurs' | 'fournisseurs' | 'les-deux'
+
     // ── INIT ─────────────────────────────────────────────────────────────────
     function initSupplyMap() {
         if (mapInitialized) return;
@@ -81,7 +86,11 @@ console.log('[supply-map] script loaded');
         setTimeout(function () { mapInstance.invalidateSize(); }, 500);
 
         // Load data then render
-        loadData();
+        loadData().then(function() {
+            loadSuppliers().then(function() {
+                renderLayerToggle();
+            });
+        });
     }
 
     // ── DATA FETCH ───────────────────────────────────────────────────────────
@@ -138,6 +147,154 @@ console.log('[supply-map] script loaded');
             showMapLoading(false);
         }
     }
+
+    // ── SUPPLIER DATA FETCH ───────────────────────────────────────────────────
+    async function loadSuppliers() {
+        try {
+            const client = await waitForClient(5000);
+
+            const [suppRes, linksRes, excRes] = await Promise.all([
+                client.from('suppliers')
+                    .select('id, name, country, latitude, longitude')
+                    .not('latitude', 'is', null)
+                    .not('longitude', 'is', null),
+                client.from('excipient_suppliers')
+                    .select('supplier_id, excipient_id'),
+                client.from('excipients')
+                    .select('id, nom_commun'),
+            ]);
+
+            const suppliers = suppRes.data || [];
+            const links     = linksRes.data || [];
+            const excipients = excRes.data || [];
+
+            const excipientMap = {};
+            excipients.forEach(function(e) { excipientMap[e.id] = e.nom_commun; });
+
+            const supplierExcipients = {};
+            links.forEach(function(l) {
+                if (!supplierExcipients[l.supplier_id]) supplierExcipients[l.supplier_id] = [];
+                if (excipientMap[l.excipient_id]) {
+                    supplierExcipients[l.supplier_id].push(excipientMap[l.excipient_id]);
+                }
+            });
+
+            allSuppliersData = suppliers.map(function(s) {
+                return Object.assign({}, s, { excipient_names: supplierExcipients[s.id] || [] });
+            });
+
+            console.log('[supply-map] suppliers loaded:', allSuppliersData.length, 'with coordinates');
+
+            // Update country count badge
+            const countEl = document.getElementById('smapCountryCount');
+            if (countEl && allSuppliersData.length > 0) {
+                const countries = new Set(allSuppliersData.map(function(s) { return s.country; }));
+                countEl.textContent = countries.size + ' pays';
+            }
+        } catch (err) {
+            console.warn('[supply-map] loadSuppliers error (non-fatal):', err.message);
+        }
+    }
+
+    // ── SUPPLIER MARKERS ─────────────────────────────────────────────────────
+    function renderSupplierMarkers() {
+        if (suppliersLayer) {
+            mapInstance.removeLayer(suppliersLayer);
+            suppliersLayer = null;
+        }
+        if (!allSuppliersData.length || typeof L.markerClusterGroup !== 'function') return;
+
+        suppliersLayer = L.markerClusterGroup({
+            maxClusterRadius: 40,
+            iconCreateFunction: function(cluster) {
+                var count = cluster.getChildCount();
+                return L.divIcon({
+                    html: '<div class="smap-cluster">' + count + '</div>',
+                    className: '',
+                    iconSize: [32, 32],
+                });
+            },
+        });
+
+        allSuppliersData.forEach(function(sup) {
+            var lat = parseFloat(sup.latitude);
+            var lng = parseFloat(sup.longitude);
+            if (isNaN(lat) || isNaN(lng)) return;
+
+            var icon = L.divIcon({
+                html: '<div class="smap-pin"></div>',
+                className: '',
+                iconSize: [12, 12],
+                iconAnchor: [6, 6],
+            });
+
+            var excipientList = sup.excipient_names.length > 0
+                ? sup.excipient_names.slice(0, 5).map(function(n) {
+                    return '<span class="smap-tag">' + n + '</span>';
+                  }).join(' ')
+                : '<span style="color:#7a5060;">Aucun excipient listé</span>';
+
+            var popup = L.popup({ className: 'smap-popup', maxWidth: 260 }).setContent(
+                '<div style="font-weight:600;color:#e8a0b4;margin-bottom:.35rem;">' + sup.name + '</div>'
+                + '<div style="font-size:.78rem;color:#b8909a;margin-bottom:.5rem;">📍 ' + sup.country + '</div>'
+                + '<div style="font-size:.72rem;color:#7a5060;margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.05em;">Excipients fournis</div>'
+                + '<div style="font-size:.76rem;line-height:1.6;">' + excipientList + '</div>'
+            );
+
+            var marker = L.marker([lat, lng], { icon: icon }).bindPopup(popup);
+            suppliersLayer.addLayer(marker);
+        });
+
+        mapInstance.addLayer(suppliersLayer);
+    }
+
+    // ── LAYER TOGGLE ─────────────────────────────────────────────────────────
+    function renderLayerToggle() {
+        var existing = document.getElementById('smapLayerToggle');
+        if (existing) existing.remove();
+
+        var bar = document.createElement('div');
+        bar.id = 'smapLayerToggle';
+        bar.style.cssText = 'position:absolute;top:10px;right:10px;z-index:1000;display:flex;gap:4px;background:rgba(10,14,26,.85);border:1px solid rgba(232,160,180,.2);border-radius:6px;padding:4px;backdrop-filter:blur(4px);';
+
+        var views = [
+            { id: 'exportateurs', label: 'Exportateurs' },
+            { id: 'fournisseurs', label: 'Fournisseurs' },
+            { id: 'les-deux',     label: 'Les deux' },
+        ];
+
+        views.forEach(function(v) {
+            var btn = document.createElement('button');
+            btn.textContent = v.label;
+            btn.dataset.view = v.id;
+            btn.style.cssText = 'font-size:.72rem;padding:4px 9px;border:none;border-radius:4px;cursor:pointer;transition:all .15s;font-family:inherit;'
+                + (activeMapView === v.id
+                    ? 'background:#e8a0b4;color:#0a0e1a;font-weight:700;'
+                    : 'background:transparent;color:#b8909a;');
+            btn.onclick = function() { window._supplyMapView(v.id); };
+            bar.appendChild(btn);
+        });
+
+        var mapEl = document.getElementById('supplyMap');
+        if (mapEl) mapEl.appendChild(bar);
+    }
+
+    window._supplyMapView = function(view) {
+        activeMapView = view;
+        renderLayerToggle();
+
+        if (view === 'exportateurs') {
+            renderMarkers(activeExcipient);
+            if (suppliersLayer) mapInstance.removeLayer(suppliersLayer);
+        } else if (view === 'fournisseurs') {
+            markersLayer.clearLayers();
+            if (suppliersLayer) mapInstance.removeLayer(suppliersLayer);
+            renderSupplierMarkers();
+        } else { // les-deux
+            renderMarkers(activeExcipient);
+            renderSupplierMarkers();
+        }
+    };
 
     // ── FILTERS ──────────────────────────────────────────────────────────────
     function renderFilters() {

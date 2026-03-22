@@ -27,6 +27,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="./css/design-system.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" crossorigin>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" crossorigin>
     <style>
         /* ── Supply Chain Map ── */
         #supplyMapSection { padding: 0; }
@@ -86,6 +88,9 @@
             margin-top: .9rem;
         }
         .leaflet-attribution-flag { display: none !important; }
+        .smap-pin { width:12px;height:12px;border-radius:50%;background:#e8a0b4;border:2px solid rgba(255,255,255,.4);box-shadow:0 0 6px rgba(232,160,180,.6); }
+        .smap-cluster { width:32px;height:32px;border-radius:50%;background:rgba(232,160,180,.85);color:#0a0e1a;font-size:.72rem;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid rgba(255,255,255,.3);box-shadow:0 0 10px rgba(232,160,180,.4); }
+        .smap-tag { display:inline-block;background:rgba(232,160,180,.15);color:#e8a0b4;border-radius:3px;padding:1px 5px;font-size:.7rem;margin:1px; }
 
         /* ── Hero Catalog ── */
         .hero-catalog {
@@ -468,9 +473,14 @@
                 <span class="sec-badge badge-monthly">DONNÉES UN COMTRADE</span>
             </div>
 
-            <p style="font-size:.82rem;color:#b8909a;margin:.6rem 0 1.1rem;max-width:680px;">
+            <p style="font-size:.82rem;color:#b8909a;margin:.6rem 0 .5rem;max-width:680px;">
                 Top 10 exportateurs mondiaux par excipient — taille des cercles proportionnelle aux volumes exportés.
                 Couleur = niveau de risque géopolitique évalué par ChemistrySpot.
+            </p>
+            <p style="font-size:.78rem;color:#7a5060;margin:0 0 1rem;">
+                <span style="color:#e8a0b4;font-weight:600;">192 fournisseurs actifs</span>
+                &nbsp;·&nbsp; <span style="color:#b8909a;">50 excipients</span>
+                &nbsp;·&nbsp; <span id="smapCountryCount" style="color:#b8909a;">19 pays</span>
             </p>
 
             <!-- Filters -->
@@ -502,7 +512,15 @@
                             <div style="display:flex;align-items:center;gap:.5rem;font-size:.78rem;"><span style="width:12px;height:12px;border-radius:50%;background:#ef4444;flex-shrink:0;"></span> Critique 🚫</div>
                         </div>
                         <div style="margin-top:.6rem;font-size:.7rem;color:#7a5060;border-top:1px solid rgba(255,255,255,.06);padding-top:.5rem;">
-                            Taille ∝ volume exporté · Cliquer pour détails
+                            Cercles = volumes exportés · Cliquer pour détails
+                        </div>
+                        <div style="margin-top:.7rem;border-top:1px solid rgba(255,255,255,.06);padding-top:.6rem;">
+                            <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;color:#b8909a;margin-bottom:.45rem;">Fournisseurs</div>
+                            <div style="display:flex;align-items:center;gap:.5rem;font-size:.78rem;">
+                                <span style="width:12px;height:12px;border-radius:50%;background:#e8a0b4;border:2px solid rgba(255,255,255,.4);flex-shrink:0;box-shadow:0 0 5px rgba(232,160,180,.5);"></span>
+                                Localisation fournisseur
+                            </div>
+                            <div style="margin-top:.35rem;font-size:.7rem;color:#7a5060;">Cliquer pour nom + excipients</div>
                         </div>
                     </div>
 
@@ -517,7 +535,7 @@
             <!-- Sources -->
             <div style="margin-top:.75rem;font-size:.72rem;color:#7a5060;display:flex;align-items:center;gap:.5rem;">
                 <i class="fas fa-globe"></i>
-                Source : <strong style="color:#b8909a;">UN Comtrade</strong> — données 2023 · Évaluation risque géopolitique ChemistrySpot · Indices HHI calculés sur parts de marché déclarées
+                Source : <strong style="color:#b8909a;">UN Comtrade</strong> — données 2023 · <strong style="color:#b8909a;">OSM Nominatim</strong> — géocodage fournisseurs · Évaluation risque géopolitique ChemistrySpot · Indices HHI calculés sur parts de marché déclarées
             </div>
 
         </div><!-- /#supplyMapSection -->
@@ -662,6 +680,7 @@
 <script src="./js/main.js"></script>
 <script src="./js/auth.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js" crossorigin></script>
 <script src="./js/supply-map.js"></script>
 <script>
 /* Supply chain map — explicit boot, no IIFE/IntersectionObserver ambiguity */
