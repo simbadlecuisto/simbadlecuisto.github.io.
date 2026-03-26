@@ -529,7 +529,31 @@
                         </div>
                     </div>
 
-                    <!-- 7. Taille particule (collapsed) -->
+                    <!-- 7. Prix €/kg (collapsed) -->
+                    <div class="filter-section" id="fs-prix">
+                        <button class="filter-section-header" onclick="toggleSection('fs-prix')" aria-expanded="false">
+                            <span class="fs-label">Prix (€/kg)</span>
+                            <span class="fs-count" id="cnt-prix"></span>
+                            <i class="fas fa-chevron-down fs-chevron"></i>
+                        </button>
+                        <div class="filter-section-body">
+                            <div class="range-container">
+                                <div class="range-values">
+                                    <span id="prixMinVal">0 €</span>
+                                    <span id="prixMaxVal">200 €</span>
+                                </div>
+                                <div class="dual-range-wrap">
+                                    <div class="range-track-bg"></div>
+                                    <div class="range-track-fill" id="prixTrackFill"></div>
+                                    <input type="range" class="range-thumb" id="prixMin" min="0" max="200" value="0" step="5" oninput="onPrixChange()" aria-label="Prix minimum">
+                                    <input type="range" class="range-thumb" id="prixMax" min="0" max="200" value="200" step="5" oninput="onPrixChange()" aria-label="Prix maximum">
+                                </div>
+                                <p style="font-size:.7rem;color:#3a4a5a;margin-top:.5rem;">Prix indicatifs — source estimée.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 8. Taille particule (collapsed) -->
                     <div class="filter-section" id="fs-particule">
                         <button class="filter-section-header" onclick="toggleSection('fs-particule')" aria-expanded="false">
                             <span class="fs-label">Taille particule (µm)</span>
@@ -710,6 +734,8 @@ const advFilters = {
     stock: false,
     particuleMin: 0,
     particuleMax: 500,
+    prixMin: 0,
+    prixMax: 200,
 };
 
 // ── Sidebar (mobile) ──────────────────────────────────────────
@@ -807,10 +833,40 @@ function initRangeFill() {
     fill.style.width = '100%';
 }
 
+// ── Prix range slider ─────────────────────────────────────────
+function onPrixChange() {
+    let min = parseInt(document.getElementById('prixMin').value);
+    let max = parseInt(document.getElementById('prixMax').value);
+    if (min > max) {
+        const active = document.activeElement;
+        if (active && active.id === 'prixMin') {
+            document.getElementById('prixMin').value = max;
+            min = max;
+        } else {
+            document.getElementById('prixMax').value = min;
+            max = min;
+        }
+    }
+    document.getElementById('prixMinVal').textContent = min + ' €';
+    document.getElementById('prixMaxVal').textContent = max + ' €';
+    const fill = document.getElementById('prixTrackFill');
+    fill.style.left  = (min / 200 * 100) + '%';
+    fill.style.width = ((max - min) / 200 * 100) + '%';
+    advFilters.prixMin = min;
+    advFilters.prixMax = max;
+    applyFilters();
+}
+
+function initPrixFill() {
+    const fill = document.getElementById('prixTrackFill');
+    fill.style.left  = '0%';
+    fill.style.width = '100%';
+}
+
 // ── Section counts ─────────────────────────────────────────────
 function updateSectionCounts(n) {
     const label = `(${n})`;
-    ['categorie','certifications','grade','forme','origine','cond','particule'].forEach(id => {
+    ['categorie','certifications','grade','forme','origine','cond','prix','particule'].forEach(id => {
         const el = document.getElementById('cnt-' + id);
         if (el) el.textContent = label;
     });
@@ -830,6 +886,9 @@ function renderActiveFilters() {
     if (advFilters.stock) chips.push({ key: 'stock', value: null, label: 'Stock disponible' });
     if (advFilters.particuleMin !== 0 || advFilters.particuleMax !== 500) {
         chips.push({ key: 'range', value: null, label: `Particule ${advFilters.particuleMin}–${advFilters.particuleMax} µm` });
+    }
+    if (advFilters.prixMin !== 0 || advFilters.prixMax !== 200) {
+        chips.push({ key: 'prix', value: null, label: `Prix ${advFilters.prixMin}–${advFilters.prixMax} €/kg` });
     }
 
     bar.innerHTML = chips.map(c => `
@@ -858,6 +917,13 @@ function removeFilter(key, value) {
         document.getElementById('rangeMin').value = 0;
         document.getElementById('rangeMax').value = 500;
         onRangeChange();
+        return;
+    } else if (key === 'prix') {
+        advFilters.prixMin = 0;
+        advFilters.prixMax = 200;
+        document.getElementById('prixMin').value = 0;
+        document.getElementById('prixMax').value = 200;
+        onPrixChange();
         return;
     } else if (key === 'grade') {
         advFilters.gradeSearch = '';
@@ -896,6 +962,13 @@ function clearAllFilters() {
     document.getElementById('rangeMinVal').textContent = '0 µm';
     document.getElementById('rangeMaxVal').textContent = '500 µm';
     initRangeFill();
+    advFilters.prixMin = 0;
+    advFilters.prixMax = 200;
+    document.getElementById('prixMin').value = 0;
+    document.getElementById('prixMax').value = 200;
+    document.getElementById('prixMinVal').textContent = '0 €';
+    document.getElementById('prixMaxVal').textContent = '200 €';
+    initPrixFill();
     applyFilters();
 }
 
@@ -917,6 +990,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (urlQ) document.getElementById('catalogSearchInput').value = urlQ;
 
     initRangeFill();
+    initPrixFill();
 
     let attempts = 0;
     while (!window.ChemSpotDB && attempts < 20) {
@@ -954,6 +1028,9 @@ function applyFilters() {
     const pMin = advFilters.particuleMin;
     const pMax = advFilters.particuleMax;
     const rangeActive = (pMin !== 0 || pMax !== 500);
+    const prMin = advFilters.prixMin;
+    const prMax = advFilters.prixMax;
+    const prixActive = (prMin !== 0 || prMax !== 200);
 
     filteredExcipients = allExcipients.filter(exc => {
         if (query && !(
@@ -978,6 +1055,14 @@ function applyFilters() {
             exc.taille_particule_min !== null &&
             exc.taille_particule_max !== null) {
             if (exc.taille_particule_max < pMin || exc.taille_particule_min > pMax) return false;
+        }
+
+        if (prixActive) {
+            const pr = pricesMap[exc.id];
+            if (pr) {
+                const prixMid = (parseFloat(pr.prix_min) + parseFloat(pr.prix_max)) / 2;
+                if (prixMid < prMin || prixMid > prMax) return false;
+            }
         }
 
         return true;
