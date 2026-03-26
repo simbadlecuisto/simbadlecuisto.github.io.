@@ -218,6 +218,31 @@
         background: #e8a0b4; border: 2px solid #180e14; cursor: pointer; pointer-events: all;
     }
 
+    /* Pill-style checkboxes (formes pharmaceutiques) */
+    .pill-checkboxes { display: flex; flex-wrap: wrap; gap: 6px; padding: .5rem 1rem .75rem; }
+    .pill-checkbox { cursor: pointer; transition: all 0.2s; }
+    .pill-checkbox input { display: none; }
+    .pill-checkbox span {
+        display: inline-block;
+        padding: 5px 12px;
+        border-radius: 20px;
+        border: 1px solid rgba(232,160,180,0.3);
+        color: #b0b8d0;
+        font-size: 0.75rem;
+        transition: all 0.2s;
+        white-space: nowrap;
+    }
+    .pill-checkbox:hover span {
+        border-color: rgba(232,160,180,0.5);
+        color: #e8a0b4;
+    }
+    .pill-checkbox input:checked + span {
+        background: rgba(232,160,180,0.15);
+        border-color: #e8a0b4;
+        color: #e8a0b4;
+        font-weight: 600;
+    }
+
     /* Clear filters button (sidebar) */
     .sidebar-clear-btn {
         display: none; width: calc(100% - 2rem); margin: .75rem 1rem;
@@ -286,8 +311,22 @@
         background: var(--bg-card); border: 1px solid #1e2a3a; border-radius: 6px;
         padding: 1rem 1.1rem; display: flex; flex-direction: column; gap: .35rem;
         transition: border-color .18s, box-shadow .18s;
+        position: relative;
     }
     .product-card:hover { border-color: rgba(232,160,180,.35); box-shadow: 0 2px 16px rgba(232,160,180,.05); }
+    .supplier-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(232, 160, 180, 0.15);
+        border: 1px solid rgba(232, 160, 180, 0.4);
+        color: #e8a0b4;
+        font-size: 0.7rem;
+        padding: 3px 8px;
+        border-radius: 12px;
+        font-weight: 500;
+        white-space: nowrap;
+    }
     .product-card-cas { font-family: var(--mono); font-size: .7rem; color: #3a4a5a; letter-spacing: .04em; text-transform: uppercase; }
     .product-card-name { font-size: .95rem; font-weight: 700; color: #e8f0f8; line-height: 1.3; margin-bottom: .1rem; }
     .card-cert-badges { display: flex; flex-wrap: wrap; gap: .25rem; margin: .1rem 0; }
@@ -529,7 +568,26 @@
                         </div>
                     </div>
 
-                    <!-- 7. Prix €/kg (collapsed) -->
+                    <!-- 7. Forme pharmaceutique cible (collapsed) -->
+                    <div class="filter-section" id="fs-formes-pharma">
+                        <button class="filter-section-header" onclick="toggleSection('fs-formes-pharma')" aria-expanded="false">
+                            <span class="fs-label">Forme pharmaceutique cible</span>
+                            <span class="fs-count" id="cnt-formes-pharma"></span>
+                            <i class="fas fa-chevron-down fs-chevron"></i>
+                        </button>
+                        <div class="filter-section-body">
+                            <div class="pill-checkboxes">
+                                <label class="pill-checkbox" data-filter="formesPharmaceutiques" data-value="comprimés"><input type="checkbox" value="comprimés" onchange="onCbChange(this)"><span>Comprimés</span></label>
+                                <label class="pill-checkbox" data-filter="formesPharmaceutiques" data-value="gélules"><input type="checkbox" value="gélules" onchange="onCbChange(this)"><span>Gélules</span></label>
+                                <label class="pill-checkbox" data-filter="formesPharmaceutiques" data-value="injectables"><input type="checkbox" value="injectables" onchange="onCbChange(this)"><span>Injectables</span></label>
+                                <label class="pill-checkbox" data-filter="formesPharmaceutiques" data-value="topiques"><input type="checkbox" value="topiques" onchange="onCbChange(this)"><span>Topiques</span></label>
+                                <label class="pill-checkbox" data-filter="formesPharmaceutiques" data-value="lyophilisats"><input type="checkbox" value="lyophilisats" onchange="onCbChange(this)"><span>Lyophilisats</span></label>
+                                <label class="pill-checkbox" data-filter="formesPharmaceutiques" data-value="suspensions"><input type="checkbox" value="suspensions" onchange="onCbChange(this)"><span>Suspensions</span></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 8. Prix €/kg (collapsed) -->
                     <div class="filter-section" id="fs-prix">
                         <button class="filter-section-header" onclick="toggleSection('fs-prix')" aria-expanded="false">
                             <span class="fs-label">Prix (€/kg)</span>
@@ -553,7 +611,7 @@
                         </div>
                     </div>
 
-                    <!-- 8. Taille particule (collapsed) -->
+                    <!-- 9. Taille particule (collapsed) -->
                     <div class="filter-section" id="fs-particule">
                         <button class="filter-section-header" onclick="toggleSection('fs-particule')" aria-expanded="false">
                             <span class="fs-label">Taille particule (µm)</span>
@@ -714,6 +772,7 @@ document.getElementById('globalSearch').addEventListener('keydown', e => { if (e
 let allExcipients = [];
 let filteredExcipients = [];
 let pricesMap = {};
+let supplierCounts = {};
 
 // ── Accordion ──────────────────────────────────────────────────
 function toggleSection(id) {
@@ -723,6 +782,46 @@ function toggleSection(id) {
     sec.querySelector('.filter-section-header')?.setAttribute('aria-expanded', String(open));
 }
 
+// ── Pharmaceutical forms map ───────────────────────────────────
+const PHARMA_FORMS_MAP = {
+    'microcrystalline cellulose': ['comprimés', 'gélules'],
+    'hydroxypropyl methylcellulose': ['comprimés', 'gélules'],
+    'hydroxypropyl cellulose': ['comprimés', 'gélules'],
+    'carboxymethylcellulose': ['comprimés', 'gélules', 'suspensions'],
+    'ethylcellulose': ['comprimés', 'gélules'],
+    'mannitol': ['lyophilisats', 'injectables', 'comprimés'],
+    'sorbitol': ['comprimés', 'gélules', 'suspensions'],
+    'lactose': ['comprimés', 'gélules'],
+    'povidone': ['comprimés', 'gélules', 'injectables'],
+    'copovidone': ['comprimés', 'gélules'],
+    'starch': ['comprimés', 'gélules'],
+    'pregelatinized starch': ['comprimés', 'gélules'],
+    'magnesium stearate': ['comprimés', 'gélules'],
+    'stearic acid': ['comprimés', 'gélules'],
+    'talc': ['comprimés', 'gélules', 'topiques'],
+    'croscarmellose sodium': ['comprimés', 'gélules'],
+    'crospovidone': ['comprimés', 'gélules'],
+    'sodium starch glycolate': ['comprimés', 'gélules'],
+    'polysorbate 80': ['injectables', 'topiques'],
+    'polysorbate 20': ['injectables', 'topiques'],
+    'polyethylene glycol': ['injectables', 'topiques', 'comprimés'],
+    'propylene glycol': ['injectables', 'topiques'],
+    'glycerin': ['injectables', 'topiques', 'suspensions'],
+    'benzyl alcohol': ['injectables'],
+    'citric acid': ['comprimés', 'injectables', 'suspensions'],
+    'sodium chloride': ['injectables'],
+};
+
+function getPharmaceuticalForms(excipient) {
+    const name = (excipient.nom_commun || excipient.nom_chimique || '').toLowerCase();
+    for (const key in PHARMA_FORMS_MAP) {
+        if (name.includes(key)) {
+            return PHARMA_FORMS_MAP[key];
+        }
+    }
+    return ['comprimés'];
+}
+
 // ── Advanced filter state ──────────────────────────────────────
 const advFilters = {
     categorie: new Set(),
@@ -730,6 +829,7 @@ const advFilters = {
     formePhysique: new Set(),
     conditionnements: new Set(),
     origine: new Set(),
+    formesPharmaceutiques: new Set(),
     gradeSearch: '',
     stock: false,
     particuleMin: 0,
@@ -866,7 +966,7 @@ function initPrixFill() {
 // ── Section counts ─────────────────────────────────────────────
 function updateSectionCounts(n) {
     const label = `(${n})`;
-    ['categorie','certifications','grade','forme','origine','cond','prix','particule'].forEach(id => {
+    ['categorie','certifications','grade','forme','origine','cond','formes-pharma','prix','particule'].forEach(id => {
         const el = document.getElementById('cnt-' + id);
         if (el) el.textContent = label;
     });
@@ -882,6 +982,7 @@ function renderActiveFilters() {
     advFilters.formePhysique.forEach(v => chips.push({ key: 'formePhysique', value: v, label: 'Forme: ' + v }));
     advFilters.origine.forEach(v => chips.push({ key: 'origine', value: v, label: v }));
     advFilters.conditionnements.forEach(v => chips.push({ key: 'conditionnements', value: v, label: v }));
+    advFilters.formesPharmaceutiques.forEach(v => chips.push({ key: 'formesPharmaceutiques', value: v, label: 'Forme pharma: ' + v }));
     if (advFilters.gradeSearch) chips.push({ key: 'grade', value: null, label: 'Grade: ' + advFilters.gradeSearch });
     if (advFilters.stock) chips.push({ key: 'stock', value: null, label: 'Stock disponible' });
     if (advFilters.particuleMin !== 0 || advFilters.particuleMax !== 500) {
@@ -944,11 +1045,15 @@ function clearAllFilters() {
         cb.checked = false;
         cb.closest('.filter-row').classList.remove('checked');
     });
+    document.querySelectorAll('.pill-checkbox input[type="checkbox"]').forEach(cb => {
+        cb.checked = false;
+    });
     advFilters.categorie.clear();
     advFilters.certifications.clear();
     advFilters.formePhysique.clear();
     advFilters.conditionnements.clear();
     advFilters.origine.clear();
+    advFilters.formesPharmaceutiques.clear();
     advFilters.gradeSearch = '';
     const gi = document.getElementById('gradeSearchInput');
     if (gi) gi.value = '';
@@ -984,6 +1089,25 @@ async function fetchPrices() {
     } catch { /* non-bloquant */ }
 }
 
+// ── Load supplier counts ───────────────────────────────────────
+async function loadSupplierCounts() {
+    try {
+        const { data, error } = await window.ChemSpotDB.supabase()
+            .from('excipient_suppliers')
+            .select('excipient_id');
+        if (error) throw error;
+        const counts = {};
+        (data || []).forEach(row => {
+            counts[row.excipient_id] = (counts[row.excipient_id] || 0) + 1;
+        });
+        supplierCounts = counts;
+        console.log(`✅ Compteurs fournisseurs chargés: ${Object.keys(counts).length} excipients`);
+    } catch (e) {
+        console.warn('⚠️ Compteurs fournisseurs indisponibles:', e);
+        supplierCounts = {};
+    }
+}
+
 // ── Init ───────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', async () => {
     const urlQ = new URLSearchParams(window.location.search).get('q');
@@ -1002,7 +1126,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         [allExcipients] = await Promise.all([
             window.ChemSpotDB.getAllExcipients(),
-            fetchPrices()
+            fetchPrices(),
+            loadSupplierCounts()
         ]);
         filteredExcipients = [...allExcipients];
         document.getElementById('catalogLoading').style.display = 'none';
@@ -1023,6 +1148,7 @@ function applyFilters() {
     const formeSel = advFilters.formePhysique;
     const condSel  = advFilters.conditionnements;
     const origSel  = advFilters.origine;
+    const formesPharma = advFilters.formesPharmaceutiques;
     const gradeQ   = advFilters.gradeSearch;
     const stockOnly = advFilters.stock;
     const pMin = advFilters.particuleMin;
@@ -1048,6 +1174,13 @@ function applyFilters() {
         if (formeSel.size > 0 && exc.forme_physique && !formeSel.has(exc.forme_physique)) return false;
         if (condSel.size > 0 && !(exc.conditionnements || []).some(c => condSel.has(c))) return false;
         if (origSel.size > 0 && !(exc.origine || []).some(o => origSel.has(o))) return false;
+
+        if (formesPharma.size > 0) {
+            const excipientForms = getPharmaceuticalForms(exc);
+            const hasMatch = Array.from(formesPharma).some(f => excipientForms.includes(f));
+            if (!hasMatch) return false;
+        }
+
         if (gradeQ && !(exc.grades || []).some(g => g.toLowerCase().includes(gradeQ))) return false;
         if (stockOnly && !exc.stock_disponible) return false;
 
@@ -1124,9 +1257,12 @@ function displayExcipients() {
         const certHtml  = renderCertBadges(exc.certifications);
         const gradeHtml = renderGrades(exc.grades);
         const nomEscape = (exc.nom_commun || '').replace(/"/g, '&quot;');
+        const suppCount = supplierCounts[exc.id] || 0;
+        const suppLabel = suppCount > 1 ? 'fournisseurs' : 'fournisseur';
 
         return `
         <div class="product-card fade-in">
+            <span class="supplier-badge">🏭 ${suppCount} ${suppLabel}</span>
             <div class="product-card-cas">${exc.cas_number ? 'CAS ' + exc.cas_number : 'CAS N/A'}</div>
             <div class="product-card-name">${exc.nom_commun || '—'}</div>
             ${certHtml}
