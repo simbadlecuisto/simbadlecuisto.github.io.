@@ -1,0 +1,354 @@
+{
+  "total_rows_upserted": 41,
+  "errors": [],
+  "per_excipient": {
+    "Cellulose Microcristalline_2022": {
+      "excipient_nom": "Cellulose Microcristalline",
+      "year": 2022,
+      "rows": 5,
+      "total_import_value_usd": 29808000,
+      "top_partners": [
+        {
+          "country": "Chine",
+          "iso3": "CHN",
+          "value_usd": 10584000,
+          "market_share_pct": 35.51,
+          "rank": 1
+        },
+        {
+          "country": "Finlande",
+          "iso3": "FIN",
+          "value_usd": 7776000,
+          "market_share_pct": 26.09,
+          "rank": 2
+        },
+        {
+          "country": "Allemagne",
+          "iso3": "DEU",
+          "value_usd": 5508000,
+          "market_share_pct": 18.48,
+          "rank": 3
+        },
+        {
+          "country": "États-Unis",
+          "iso3": "USA",
+          "value_usd": 3672000,
+          "market_share_pct": 12.32,
+          "rank": 4
+        },
+        {
+          "country": "Inde",
+          "iso3": "IND",
+          "value_usd": 2268000,
+          "market_share_pct": 7.61,
+          "rank": 5
+        }
+      ]
+    },
+    "Cellulose Microcristalline_2023": {
+      "excipient_nom": "Cellulose Microcristalline",
+      "year": 2023,
+      "rows": 5,
+      "total_import_value_usd": 32076000,
+      "top_partners": [
+        {
+          "country": "Chine",
+          "iso3": "CHN",
+          "value_usd": 11232000,
+          "market_share_pct": 35.02,
+          "rank": 1
+        },
+        {
+          "country": "Finlande",
+          "iso3": "FIN",
+          "value_usd": 8424000,
+          "market_share_pct": 26.26,
+          "rank": 2
+        },
+        {
+          "country": "Allemagne",
+          "iso3": "DEU",
+          "value_usd": 5940000,
+          "market_share_pct": 18.52,
+          "rank": 3
+        },
+        {
+          "country": "États-Unis",
+          "iso3": "USA",
+          "value_usd": 3996000,
+          "market_share_pct": 12.46,
+          "rank": 4
+        },
+        {
+          "country": "Inde",
+          "iso3": "IND",
+          "value_usd": 2484000,
+          "market_share_pct": 7.74,
+          "rank": 5
+        }
+      ]
+    },
+    "Lactose_2023": {
+      "excipient_nom": "Lactose",
+      "year": 2023,
+      "rows": 8,
+      "total_import_value_usd": 67050288,
+      "top_partners": [
+        {
+          "country": "Allemagne",
+          "iso3": "DEU",
+          "value_usd": 36020160,
+          "market_share_pct": 53.72,
+          "rank": 1
+        },
+        {
+          "country": "Pays-Bas",
+          "iso3": "NLD",
+          "value_usd": 12938832,
+          "market_share_pct": 19.3,
+          "rank": 2
+        },
+        {
+          "country": "Danemark",
+          "iso3": "DNK",
+          "value_usd": 5045004,
+          "market_share_pct": 7.52,
+          "rank": 3
+        },
+        {
+          "country": "Royaume-Uni",
+          "iso3": "GBR",
+          "value_usd": 5035284,
+          "market_share_pct": 7.51,
+          "rank": 4
+        },
+        {
+          "country": "Italie",
+          "iso3": "ITA",
+          "value_usd": 3764556,
+          "market_share_pct": 5.61,
+          "rank": 5
+        },
+        {
+          "country": "Nouvelle-Zélande",
+          "iso3": "NZL",
+          "value_usd": 2648916,
+          "market_share_pct": 3.95,
+          "rank": 6
+        },
+        {
+          "country": "Autriche",
+          "iso3": "AUT",
+          "value_usd": 901152,
+          "market_share_pct": 1.34,
+          "rank": 7
+        },
+        {
+          "country": "Irlande",
+          "iso3": "IRL",
+          "value_usd": 696384,
+          "market_share_pct": 1.04,
+          "rank": 8
+        }
+      ]
+    },
+    "Mannitol_2023": {
+      "excipient_nom": "Mannitol",
+      "year": 2023,
+      "rows": 5,
+      "total_import_value_usd": 8407368,
+      "top_partners": [
+        {
+          "country": "Chine",
+          "iso3": "CHN",
+          "value_usd": 2918376,
+          "market_share_pct": 34.71,
+          "rank": 1
+        },
+        {
+          "country": "Etats-Unis d Amérique",
+          "iso3": "USA",
+          "value_usd": 2040336,
+          "market_share_pct": 24.27,
+          "rank": 2
+        },
+        {
+          "country": "Belgique",
+          "iso3": "BEL",
+          "value_usd": 1596888,
+          "market_share_pct": 18.99,
+          "rank": 3
+        },
+        {
+          "country": "Italie",
+          "iso3": "ITA",
+          "value_usd": 975564,
+          "market_share_pct": 11.6,
+          "rank": 4
+        },
+        {
+          "country": "Allemagne",
+          "iso3": "DEU",
+          "value_usd": 876204,
+          "market_share_pct": 10.42,
+          "rank": 5
+        }
+      ]
+    },
+    "Povidone (PVP)_2023": {
+      "excipient_nom": "Povidone (PVP)",
+      "year": 2023,
+      "rows": 8,
+      "total_import_value_usd": 38404260,
+      "top_partners": [
+        {
+          "country": "Allemagne",
+          "iso3": "DEU",
+          "value_usd": 16359516,
+          "market_share_pct": 42.6,
+          "rank": 1
+        },
+        {
+          "country": "Japon",
+          "iso3": "JPN",
+          "value_usd": 6694920,
+          "market_share_pct": 17.43,
+          "rank": 2
+        },
+        {
+          "country": "Pays-Bas",
+          "iso3": "NLD",
+          "value_usd": 4482216,
+          "market_share_pct": 11.67,
+          "rank": 3
+        },
+        {
+          "country": "Chine",
+          "iso3": "CHN",
+          "value_usd": 3437424,
+          "market_share_pct": 8.95,
+          "rank": 4
+        },
+        {
+          "country": "Royaume-Uni",
+          "iso3": "GBR",
+          "value_usd": 3304260,
+          "market_share_pct": 8.6,
+          "rank": 5
+        },
+        {
+          "country": "Italie",
+          "iso3": "ITA",
+          "value_usd": 1909224,
+          "market_share_pct": 4.97,
+          "rank": 6
+        },
+        {
+          "country": "Espagne",
+          "iso3": "ESP",
+          "value_usd": 1264032,
+          "market_share_pct": 3.29,
+          "rank": 7
+        },
+        {
+          "country": "Belgique",
+          "iso3": "BEL",
+          "value_usd": 952668,
+          "market_share_pct": 2.48,
+          "rank": 8
+        }
+      ]
+    },
+    "Stéarate de Magnésium_2022": {
+      "excipient_nom": "Stéarate de Magnésium",
+      "year": 2022,
+      "rows": 5,
+      "total_import_value_usd": 13716000,
+      "top_partners": [
+        {
+          "country": "Chine",
+          "iso3": "CHN",
+          "value_usd": 4536000,
+          "market_share_pct": 33.07,
+          "rank": 1
+        },
+        {
+          "country": "Inde",
+          "iso3": "IND",
+          "value_usd": 3348000,
+          "market_share_pct": 24.41,
+          "rank": 2
+        },
+        {
+          "country": "Allemagne",
+          "iso3": "DEU",
+          "value_usd": 2592000,
+          "market_share_pct": 18.9,
+          "rank": 3
+        },
+        {
+          "country": "Pays-Bas",
+          "iso3": "NLD",
+          "value_usd": 1944000,
+          "market_share_pct": 14.17,
+          "rank": 4
+        },
+        {
+          "country": "Belgique",
+          "iso3": "BEL",
+          "value_usd": 1296000,
+          "market_share_pct": 9.45,
+          "rank": 5
+        }
+      ]
+    },
+    "Stéarate de Magnésium_2023": {
+      "excipient_nom": "Stéarate de Magnésium",
+      "year": 2023,
+      "rows": 5,
+      "total_import_value_usd": 14904000,
+      "top_partners": [
+        {
+          "country": "Chine",
+          "iso3": "CHN",
+          "value_usd": 4968000,
+          "market_share_pct": 33.33,
+          "rank": 1
+        },
+        {
+          "country": "Inde",
+          "iso3": "IND",
+          "value_usd": 3672000,
+          "market_share_pct": 24.64,
+          "rank": 2
+        },
+        {
+          "country": "Allemagne",
+          "iso3": "DEU",
+          "value_usd": 2808000,
+          "market_share_pct": 18.84,
+          "rank": 3
+        },
+        {
+          "country": "Pays-Bas",
+          "iso3": "NLD",
+          "value_usd": 2052000,
+          "market_share_pct": 13.77,
+          "rank": 4
+        },
+        {
+          "country": "Belgique",
+          "iso3": "BEL",
+          "value_usd": 1404000,
+          "market_share_pct": 9.42,
+          "rank": 5
+        }
+      ]
+    }
+  },
+  "skipped_countries": {
+    "Povidone (PVP)": [
+      "Taïwan"
+    ]
+  }
+}
