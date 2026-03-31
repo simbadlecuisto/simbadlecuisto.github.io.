@@ -33,10 +33,12 @@
         /* ── Supply Chain Map ── */
         #supplyMapSection { padding: 0; }
         #supplyMap {
-            height: 420px;
-            border-radius: 10px;
+            height: 100%;
             background: #180e14;
             z-index: 0;
+        }
+        #smapLayout {
+            box-shadow: 0 4px 32px rgba(0,0,0,.5);
         }
         .smap-filter-bar {
             display: flex;
@@ -78,7 +80,6 @@
             background: rgba(26,15,20,.8);
             align-items: center;
             justify-content: center;
-            border-radius: 10px;
         }
         .smap-panel {
             background: rgba(255,255,255,.03);
@@ -480,56 +481,91 @@
             <p style="font-size:.78rem;color:#7a5060;margin:0 0 1rem;">
                 <span style="color:#e8a0b4;font-weight:600;">192 fournisseurs actifs</span>
                 &nbsp;·&nbsp; <span style="color:#b8909a;">50 excipients</span>
-                &nbsp;·&nbsp; <span id="smapCountryCount" style="color:#b8909a;">19 pays</span>
+                &nbsp;·&nbsp; <span style="color:#b8909a;">19 pays</span>
             </p>
 
-            <!-- Filters -->
-            <div class="smap-filter-bar" id="supplyMapFilters">
-                <span style="font-size:.78rem;color:#7a5060;align-self:center;">Chargement…</span>
-            </div>
+            <div id="smapLayout" style="display:flex;gap:0;height:600px;border-radius:12px;overflow:hidden;border:1px solid rgba(232,160,180,.15);">
 
-            <!-- Map + HHI side-by-side -->
-            <div style="display:grid;grid-template-columns:1fr 260px;gap:1rem;align-items:start;">
-
-                <!-- Map -->
-                <div style="position:relative;">
-                    <div id="supplyMap" style="height:500px;min-height:500px;width:100%;"></div>
+                <!-- Map: 70% -->
+                <div style="flex:0 0 70%;position:relative;">
+                    <div id="supplyMap" style="height:100%;width:100%;"></div>
                     <div id="supplyMapLoading">
                         <div class="spin-lg"></div>
                     </div>
                 </div>
 
-                <!-- Right panel: legend + HHI -->
-                <div>
-                    <!-- Risk legend -->
-                    <div class="smap-panel" style="margin-top:0;">
-                        <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;color:#b8909a;margin-bottom:.55rem;">Risque géopolitique</div>
-                        <div style="display:flex;flex-direction:column;gap:.3rem;">
-                            <div style="display:flex;align-items:center;gap:.5rem;font-size:.78rem;"><span style="width:12px;height:12px;border-radius:50%;background:#e8a0b4;flex-shrink:0;"></span> Faible</div>
-                            <div style="display:flex;align-items:center;gap:.5rem;font-size:.78rem;"><span style="width:12px;height:12px;border-radius:50%;background:#4fc3f7;flex-shrink:0;"></span> Faible-Modéré</div>
-                            <div style="display:flex;align-items:center;gap:.5rem;font-size:.78rem;"><span style="width:12px;height:12px;border-radius:50%;background:#f0b429;flex-shrink:0;"></span> Modéré</div>
-                            <div style="display:flex;align-items:center;gap:.5rem;font-size:.78rem;"><span style="width:12px;height:12px;border-radius:50%;background:#fb923c;flex-shrink:0;"></span> Élevé</div>
-                            <div style="display:flex;align-items:center;gap:.5rem;font-size:.78rem;"><span style="width:12px;height:12px;border-radius:50%;background:#ef4444;flex-shrink:0;"></span> Critique 🚫</div>
-                        </div>
-                        <div style="margin-top:.6rem;font-size:.7rem;color:#7a5060;border-top:1px solid rgba(255,255,255,.06);padding-top:.5rem;">
-                            Cercles = volumes exportés · Cliquer pour détails
-                        </div>
-                        <div style="margin-top:.7rem;border-top:1px solid rgba(255,255,255,.06);padding-top:.6rem;">
-                            <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;color:#b8909a;margin-bottom:.45rem;">Fournisseurs</div>
-                            <div style="display:flex;align-items:center;gap:.5rem;font-size:.78rem;">
-                                <span style="width:12px;height:12px;border-radius:50%;background:#e8a0b4;border:2px solid rgba(255,255,255,.4);flex-shrink:0;box-shadow:0 0 5px rgba(232,160,180,.5);"></span>
-                                Localisation fournisseur
-                            </div>
-                            <div style="margin-top:.35rem;font-size:.7rem;color:#7a5060;">Cliquer pour nom + excipients</div>
+                <!-- Filter/Info Panel: 30% -->
+                <div id="smapSidePanel" style="flex:0 0 30%;background:#12091a;border-left:1px solid rgba(232,160,180,.12);display:flex;flex-direction:column;overflow:hidden;">
+
+                    <!-- Search bar -->
+                    <div style="padding:.75rem .9rem .5rem;border-bottom:1px solid rgba(255,255,255,.06);">
+                        <input id="smapSearch" type="text" placeholder="Rechercher un pays ou fournisseur…"
+                            style="width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(232,160,180,.2);border-radius:6px;padding:.45rem .7rem;color:#f0d4dc;font-size:.8rem;font-family:inherit;outline:none;box-sizing:border-box;">
+                    </div>
+
+                    <!-- Excipient selector -->
+                    <div style="padding:.6rem .9rem;border-bottom:1px solid rgba(255,255,255,.06);">
+                        <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;color:#7a5060;margin-bottom:.4rem;">Excipient</div>
+                        <div id="supplyMapFilters" style="display:flex;flex-direction:column;gap:.3rem;">
+                            <!-- populated by JS -->
                         </div>
                     </div>
 
-                    <!-- HHI panel -->
-                    <div class="smap-panel" id="supplyHhiPanel">
-                        <div style="font-size:.78rem;color:#7a5060;">Sélectionnez un excipient pour voir l'indice HHI</div>
+                    <!-- Country filter -->
+                    <div style="padding:.6rem .9rem;border-bottom:1px solid rgba(255,255,255,.06);">
+                        <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;color:#7a5060;margin-bottom:.4rem;">Pays</div>
+                        <select id="smapCountryFilter" style="width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(232,160,180,.2);border-radius:6px;padding:.4rem .6rem;color:#f0d4dc;font-size:.78rem;font-family:inherit;outline:none;">
+                            <option value="">Tous les pays</option>
+                        </select>
+                    </div>
+
+                    <!-- Risk level filter -->
+                    <div style="padding:.6rem .9rem;border-bottom:1px solid rgba(255,255,255,.06);">
+                        <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;color:#7a5060;margin-bottom:.4rem;">Niveau de risque</div>
+                        <div id="smapRiskBtns" style="display:flex;flex-wrap:wrap;gap:.3rem;">
+                            <button onclick="window._smapRiskFilter(0)" data-risk="0" style="font-size:.7rem;padding:.2rem .55rem;border-radius:10px;border:1px solid rgba(232,160,180,.3);background:rgba(232,160,180,.12);color:#e8a0b4;cursor:pointer;font-family:inherit;">Tous</button>
+                            <button onclick="window._smapRiskFilter(1)" data-risk="1" style="font-size:.7rem;padding:.2rem .55rem;border-radius:10px;border:1px solid rgba(232,160,180,.3);background:transparent;color:#b8909a;cursor:pointer;font-family:inherit;">Faible</button>
+                            <button onclick="window._smapRiskFilter(2)" data-risk="2" style="font-size:.7rem;padding:.2rem .55rem;border-radius:10px;border:1px solid rgba(79,195,247,.3);background:transparent;color:#b8909a;cursor:pointer;font-family:inherit;">F-Modéré</button>
+                            <button onclick="window._smapRiskFilter(3)" data-risk="3" style="font-size:.7rem;padding:.2rem .55rem;border-radius:10px;border:1px solid rgba(240,180,41,.3);background:transparent;color:#b8909a;cursor:pointer;font-family:inherit;">Modéré</button>
+                            <button onclick="window._smapRiskFilter(4)" data-risk="4" style="font-size:.7rem;padding:.2rem .55rem;border-radius:10px;border:1px solid rgba(251,146,60,.3);background:transparent;color:#b8909a;cursor:pointer;font-family:inherit;">Élevé</button>
+                            <button onclick="window._smapRiskFilter(5)" data-risk="5" style="font-size:.7rem;padding:.2rem .55rem;border-radius:10px;border:1px solid rgba(239,68,68,.3);background:transparent;color:#b8909a;cursor:pointer;font-family:inherit;">Critique</button>
+                        </div>
+                    </div>
+
+                    <!-- View toggle -->
+                    <div style="padding:.6rem .9rem;border-bottom:1px solid rgba(255,255,255,.06);">
+                        <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;color:#7a5060;margin-bottom:.4rem;">Vue</div>
+                        <div style="display:flex;gap:.3rem;">
+                            <button onclick="window._supplyMapView('exportateurs')" data-view="exportateurs" style="flex:1;font-size:.7rem;padding:.3rem .4rem;border-radius:6px;border:1px solid rgba(232,160,180,.3);background:rgba(232,160,180,.12);color:#e8a0b4;cursor:pointer;font-family:inherit;font-weight:700;">Flux Export</button>
+                            <button onclick="window._supplyMapView('fournisseurs')" data-view="fournisseurs" style="flex:1;font-size:.7rem;padding:.3rem .4rem;border-radius:6px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#b8909a;cursor:pointer;font-family:inherit;">Fournisseurs</button>
+                            <button onclick="window._supplyMapView('les-deux')" data-view="les-deux" style="flex:1;font-size:.7rem;padding:.3rem .4rem;border-radius:6px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#b8909a;cursor:pointer;font-family:inherit;">Combiné</button>
+                        </div>
+                    </div>
+
+                    <!-- Info panel (HHI + selected item details) -->
+                    <div id="smapInfoPanel" style="flex:1;overflow-y:auto;padding:.75rem .9rem;">
+                        <!-- Risk legend -->
+                        <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;color:#7a5060;margin-bottom:.45rem;">Risque géopolitique</div>
+                        <div style="display:flex;flex-direction:column;gap:.25rem;margin-bottom:.75rem;">
+                            <div style="display:flex;align-items:center;gap:.4rem;font-size:.75rem;"><span style="width:10px;height:10px;border-radius:50%;background:#e8a0b4;flex-shrink:0;"></span> Faible</div>
+                            <div style="display:flex;align-items:center;gap:.4rem;font-size:.75rem;"><span style="width:10px;height:10px;border-radius:50%;background:#4fc3f7;flex-shrink:0;"></span> Faible-Modéré</div>
+                            <div style="display:flex;align-items:center;gap:.4rem;font-size:.75rem;"><span style="width:10px;height:10px;border-radius:50%;background:#f0b429;flex-shrink:0;"></span> Modéré</div>
+                            <div style="display:flex;align-items:center;gap:.4rem;font-size:.75rem;"><span style="width:10px;height:10px;border-radius:50%;background:#fb923c;flex-shrink:0;"></span> Élevé</div>
+                            <div style="display:flex;align-items:center;gap:.4rem;font-size:.75rem;"><span style="width:10px;height:10px;border-radius:50%;background:#ef4444;flex-shrink:0;"></span> Critique 🚫</div>
+                        </div>
+                        <!-- HHI panel -->
+                        <div id="supplyHhiPanel">
+                            <div style="font-size:.75rem;color:#7a5060;">Sélectionnez un excipient pour voir l'indice HHI</div>
+                        </div>
+                    </div>
+
+                    <!-- Footer stats -->
+                    <div style="padding:.6rem .9rem;border-top:1px solid rgba(255,255,255,.06);font-size:.7rem;color:#7a5060;">
+                        <span style="color:#e8a0b4;font-weight:600;">192 fournisseurs</span> ·
+                        <span>50 excipients</span> ·
+                        <span id="smapCountryCount">19 pays</span>
                     </div>
                 </div>
-
             </div>
 
             <!-- Sources -->
