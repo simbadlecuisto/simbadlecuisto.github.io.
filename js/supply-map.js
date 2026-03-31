@@ -234,28 +234,43 @@ console.log('[supply-map] script loaded');
                 iconAnchor: [6, 6],
             });
 
-            var excipientList = sup.excipient_names.length > 0
-                ? sup.excipient_names.slice(0, 5).map(function(n) {
-                    return '<span class="smap-tag">' + n + '</span>';
-                  }).join(' ')
-                : '<span style="color:#7a5060;">Aucun excipient listé</span>';
-
-            var popup = L.popup({ className: 'smap-popup', maxWidth: 260 }).setContent(
-                '<div style="font-weight:600;color:#e8a0b4;margin-bottom:.35rem;">' + sup.name + '</div>'
-                + '<div style="font-size:.78rem;color:#b8909a;margin-bottom:.5rem;">📍 ' + sup.country + '</div>'
-                + '<div style="font-size:.72rem;color:#7a5060;margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.05em;">Excipients fournis</div>'
-                + '<div style="font-size:.76rem;line-height:1.6;">' + excipientList + '</div>'
-            );
-
-            var marker = L.marker([lat, lng], { icon: icon }).bindPopup(popup);
+            var marker = L.marker([lat, lng], { icon: icon });
+            marker.on('click', function() { showSupplierDetail(sup); });
             suppliersLayer.addLayer(marker);
         });
 
         mapInstance.addLayer(suppliersLayer);
     }
 
+    // ── SUPPLIER DETAIL PANEL ────────────────────────────────────────────────
+    function showSupplierDetail(sup) {
+        var panel = document.getElementById('smapInfoPanel');
+        if (!panel) return;
+
+        var excipientList = sup.excipient_names.length > 0
+            ? sup.excipient_names.map(function(n) {
+                return '<span class="smap-tag">' + n + '</span>';
+              }).join(' ')
+            : '<span style="color:#7a5060;font-size:.75rem;">Aucun excipient listé</span>';
+
+        var websiteHtml = sup.website
+            ? '<a href="' + sup.website + '" target="_blank" rel="noopener" style="color:#e8a0b4;font-size:.75rem;text-decoration:none;border:1px solid rgba(232,160,180,.3);border-radius:4px;padding:.2rem .5rem;display:inline-block;margin-top:.5rem;">Site web ↗</a>'
+            : '';
+
+        panel.innerHTML = '<div style="padding:.1rem 0;">'
+            + '<button onclick="window._smapResetInfoPanel()" style="float:right;background:none;border:none;color:#7a5060;cursor:pointer;font-size:.9rem;line-height:1;">✕</button>'
+            + '<div style="font-size:.85rem;font-weight:700;color:#e8a0b4;margin-bottom:.2rem;">' + sup.name + '</div>'
+            + '<div style="font-size:.75rem;color:#b8909a;margin-bottom:.6rem;">📍 ' + sup.country + '</div>'
+            + '<div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#7a5060;margin-bottom:.35rem;">Excipients fournis</div>'
+            + '<div style="line-height:1.8;">' + excipientList + '</div>'
+            + websiteHtml
+            + '</div>';
+    }
+
     // ── LAYER TOGGLE ─────────────────────────────────────────────────────────
     function renderLayerToggle() {
+        if (document.getElementById('smapSidePanel')) return; // toggle now in side panel
+
         var existing = document.getElementById('smapLayerToggle');
         if (existing) existing.remove();
 
@@ -391,7 +406,7 @@ console.log('[supply-map] script loaded');
             });
 
             circle.on('click', function() {
-                showCountrySuppliers(country.name, country.iso3);
+                showExportDetail(country, risk, excipientFilter);
             });
 
             circle.addTo(markersLayer);
@@ -438,6 +453,56 @@ console.log('[supply-map] script loaded');
             ${factorsHtml}
             ${risk.notes ? `<div style="margin-top:.5rem;font-size:.73rem;color:#b8909a;line-height:1.4;">${risk.notes}</div>` : ''}
         </div>`;
+    }
+
+    // ── EXPORT DETAIL PANEL ──────────────────────────────────────────────────
+    function showExportDetail(country, risk, excipientFilter) {
+        var panel = document.getElementById('smapInfoPanel');
+        if (!panel) return;
+
+        var riskColor = RISK_COLORS[risk.risk_level] || '#b8909a';
+        var riskLabel = risk.risk_label || RISK_LABELS[risk.risk_level] || '—';
+
+        var hhi = computeHHI(excipientFilter === 'Tous' ? (country.excipients[0] && country.excipients[0].nom) || 'Tous' : excipientFilter);
+
+        var excItems = country.excipients
+            .sort(function(a, b) { return b.value - a.value; })
+            .slice(0, 6)
+            .map(function(e) {
+                return '<div style="display:flex;justify-content:space-between;padding:.2rem 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.75rem;">'
+                    + '<span style="color:#f0d4dc;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:120px;" title="' + e.nom + '">' + e.nom + '</span>'
+                    + '<span style="font-family:monospace;color:' + riskColor + ';margin-left:.3rem;">' + (e.share != null ? e.share.toFixed(1) + '%' : '—') + '</span>'
+                    + '</div>';
+            }).join('');
+
+        var sanctionsHtml = risk.sanctions_active
+            ? '<span style="background:#ef444422;color:#ef4444;border:1px solid #ef444455;border-radius:10px;padding:.1rem .4rem;font-size:.65rem;font-weight:700;display:inline-block;margin:.2rem .1rem;">🚫 SANCTIONS</span>'
+            : '';
+        var restrictHtml = risk.export_restrictions
+            ? '<span style="background:#f0b42922;color:#f0b429;border:1px solid #f0b42955;border-radius:10px;padding:.1rem .4rem;font-size:.65rem;font-weight:700;display:inline-block;margin:.2rem .1rem;">⚠ RESTRICTIONS</span>'
+            : '';
+
+        var hhiHtml = '';
+        if (hhi !== null) {
+            var meta = hhiMeta(hhi);
+            hhiHtml = '<div style="margin-top:.6rem;padding-top:.5rem;border-top:1px solid rgba(255,255,255,.06);">'
+                + '<div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#7a5060;margin-bottom:.3rem;">Indice HHI</div>'
+                + '<span style="font-size:1.3rem;font-weight:800;font-family:monospace;color:' + meta.color + ';">' + hhi.toLocaleString() + '</span>'
+                + ' <span style="background:' + meta.color + '22;color:' + meta.color + ';border-radius:8px;padding:.05rem .35rem;font-size:.65rem;">' + meta.label + '</span>'
+                + (meta.alert ? ' <span style="background:#ef444415;color:#ef4444;border-radius:8px;padding:.05rem .35rem;font-size:.65rem;">🚨 Concentration</span>' : '')
+                + '</div>';
+        }
+
+        panel.innerHTML = '<div style="padding:.1rem 0;">'
+            + '<button onclick="window._smapResetInfoPanel()" style="float:right;background:none;border:none;color:#7a5060;cursor:pointer;font-size:.9rem;line-height:1;">✕</button>'
+            + '<div style="font-size:.88rem;font-weight:700;color:#f5e6ea;margin-bottom:.2rem;">' + country.name + '</div>'
+            + '<span style="background:' + riskColor + '22;color:' + riskColor + ';border:1px solid ' + riskColor + '55;border-radius:10px;padding:.1rem .45rem;font-size:.68rem;font-weight:700;">' + riskLabel + '</span>'
+            + '<div style="margin-top:.35rem;">' + sanctionsHtml + restrictHtml + '</div>'
+            + '<div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#7a5060;margin:.55rem 0 .3rem;">Parts de marché</div>'
+            + excItems
+            + hhiHtml
+            + (risk.notes ? '<div style="margin-top:.5rem;font-size:.72rem;color:#b8909a;line-height:1.4;">' + risk.notes + '</div>' : '')
+            + '</div>';
     }
 
     // ── HHI PANEL ────────────────────────────────────────────────────────────
@@ -752,6 +817,21 @@ console.log('[supply-map] script loaded');
         });
 
         applyFilters();
+    };
+
+    // ── INFO PANEL RESET ─────────────────────────────────────────────────────
+    window._smapResetInfoPanel = function() {
+        var panel = document.getElementById('smapInfoPanel');
+        if (!panel) return;
+        panel.innerHTML = '<div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;color:#7a5060;margin-bottom:.45rem;">Risque géopolitique</div>'
+            + '<div style="display:flex;flex-direction:column;gap:.25rem;margin-bottom:.75rem;">'
+            + '<div style="display:flex;align-items:center;gap:.4rem;font-size:.75rem;"><span style="width:10px;height:10px;border-radius:50%;background:#e8a0b4;flex-shrink:0;"></span> Faible</div>'
+            + '<div style="display:flex;align-items:center;gap:.4rem;font-size:.75rem;"><span style="width:10px;height:10px;border-radius:50%;background:#4fc3f7;flex-shrink:0;"></span> Faible-Modéré</div>'
+            + '<div style="display:flex;align-items:center;gap:.4rem;font-size:.75rem;"><span style="width:10px;height:10px;border-radius:50%;background:#f0b429;flex-shrink:0;"></span> Modéré</div>'
+            + '<div style="display:flex;align-items:center;gap:.4rem;font-size:.75rem;"><span style="width:10px;height:10px;border-radius:50%;background:#fb923c;flex-shrink:0;"></span> Élevé</div>'
+            + '<div style="display:flex;align-items:center;gap:.4rem;font-size:.75rem;"><span style="width:10px;height:10px;border-radius:50%;background:#ef4444;flex-shrink:0;"></span> Critique 🚫</div>'
+            + '</div>'
+            + '<div id="supplyHhiPanel"><div style="font-size:.75rem;color:#7a5060;">Sélectionnez un excipient pour voir l\'indice HHI</div></div>';
     };
 
     // ── BOOT — called explicitly from index.html inline script ───────────────
