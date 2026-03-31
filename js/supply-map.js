@@ -51,6 +51,10 @@ console.log('[supply-map] script loaded');
     let allSuppliersData = [];    // [{id, name, country, latitude, longitude, excipient_names}]
     let activeMapView   = 'exportateurs'; // 'exportateurs' | 'fournisseurs' | 'les-deux'
 
+    let activeRiskFilter   = 0;     // 0 = all, 1-5 = specific risk level
+    let activeCountryFilter = '';   // empty = all countries
+    let activeSearchQuery  = '';    // empty = no filter
+
     // ── INIT ─────────────────────────────────────────────────────────────────
     function initSupplyMap() {
         if (mapInitialized) return;
@@ -138,6 +142,8 @@ console.log('[supply-map] script loaded');
             }
 
             renderFilters();
+            populateCountryDropdown();
+            initSearchBar();
             renderMarkers(activeExcipient);
             renderHhiPanel(activeExcipient);
         } catch (err) {
@@ -281,18 +287,26 @@ console.log('[supply-map] script loaded');
 
     window._supplyMapView = function(view) {
         activeMapView = view;
-        renderLayerToggle();
+
+        // Update button styles
+        document.querySelectorAll('[data-view]').forEach(function(btn) {
+            var isActive = btn.dataset.view === view;
+            btn.style.background = isActive ? 'rgba(232,160,180,.12)' : 'transparent';
+            btn.style.color = isActive ? '#e8a0b4' : '#b8909a';
+            btn.style.fontWeight = isActive ? '700' : '400';
+            btn.style.borderColor = isActive ? 'rgba(232,160,180,.3)' : 'rgba(255,255,255,.1)';
+        });
 
         if (view === 'exportateurs') {
-            renderMarkers(activeExcipient);
+            applyFilters();
             if (suppliersLayer) mapInstance.removeLayer(suppliersLayer);
         } else if (view === 'fournisseurs') {
             markersLayer.clearLayers();
             if (suppliersLayer) mapInstance.removeLayer(suppliersLayer);
-            renderSupplierMarkers();
+            renderFilteredSuppliers();
         } else { // les-deux
-            renderMarkers(activeExcipient);
-            renderSupplierMarkers();
+            applyFilters();
+            renderFilteredSuppliers();
         }
     };
 
@@ -318,7 +332,7 @@ console.log('[supply-map] script loaded');
         document.querySelectorAll('.smap-filter-btn').forEach(btn => {
             btn.classList.toggle('active', btn.title === excipient);
         });
-        renderMarkers(excipient);
+        applyFilters();
         renderHhiPanel(excipient);
     };
 
@@ -581,6 +595,163 @@ console.log('[supply-map] script loaded');
             panel.innerHTML = window._gazetteHTML;
             window._gazetteHTML = null; // allow re-saving on next click
         }
+    };
+
+    // ── FILTER LOGIC ─────────────────────────────────────────────────────────
+
+    function applyFilters() {
+        // Filter trade data
+        var tradeFiltered = allTradeData.filter(function(d) {
+            // Excipient filter
+            if (activeExcipient !== 'Tous' && d.excipient_nom !== activeExcipient) return false;
+            // Country filter (by iso3 or name)
+            if (activeCountryFilter && d.country_iso3 !== activeCountryFilter) return false;
+            // Search query (country name)
+            if (activeSearchQuery) {
+                var q = activeSearchQuery.toLowerCase();
+                if (d.country_name && !d.country_name.toLowerCase().includes(q)) return false;
+            }
+            // Risk filter
+            if (activeRiskFilter > 0) {
+                var risk = allRiskData[d.country_iso3];
+                if (!risk || risk.risk_level !== activeRiskFilter) return false;
+            }
+            return true;
+        });
+
+        // Re-render markers with filtered data (temporarily override allTradeData)
+        var savedAll = allTradeData;
+        allTradeData = tradeFiltered;
+        renderMarkers(activeExcipient === 'Tous' ? 'Tous' : activeExcipient);
+        allTradeData = savedAll;
+
+        // Filter suppliers
+        if (activeMapView === 'fournisseurs' || activeMapView === 'les-deux') {
+            renderFilteredSuppliers();
+        }
+    }
+
+    function renderFilteredSuppliers() {
+        if (suppliersLayer) {
+            mapInstance.removeLayer(suppliersLayer);
+            suppliersLayer = null;
+        }
+        if (!allSuppliersData.length || typeof L.markerClusterGroup !== 'function') return;
+
+        var filtered = allSuppliersData.filter(function(s) {
+            if (activeCountryFilter) {
+                // match by country name substring (suppliers table uses country name, not iso3)
+                var riskEntry = Object.values(allRiskData).find(function(r) { return r.country_iso3 === activeCountryFilter; });
+                if (riskEntry && s.country !== riskEntry.country_name) return false;
+            }
+            if (activeSearchQuery) {
+                var q = activeSearchQuery.toLowerCase();
+                var matchName = s.name && s.name.toLowerCase().includes(q);
+                var matchCountry = s.country && s.country.toLowerCase().includes(q);
+                var matchExcipient = s.excipient_names && s.excipient_names.some(function(e) { return e.toLowerCase().includes(q); });
+                if (!matchName && !matchCountry && !matchExcipient) return false;
+            }
+            return true;
+        });
+
+        suppliersLayer = L.markerClusterGroup({
+            maxClusterRadius: 40,
+            iconCreateFunction: function(cluster) {
+                var count = cluster.getChildCount();
+                return L.divIcon({
+                    html: '<div class="smap-cluster">' + count + '</div>',
+                    className: '',
+                    iconSize: [32, 32],
+                });
+            },
+        });
+
+        filtered.forEach(function(sup) {
+            var lat = parseFloat(sup.latitude);
+            var lng = parseFloat(sup.longitude);
+            if (isNaN(lat) || isNaN(lng)) return;
+
+            var icon = L.divIcon({
+                html: '<div class="smap-pin"></div>',
+                className: '',
+                iconSize: [12, 12],
+                iconAnchor: [6, 6],
+            });
+
+            var marker = L.marker([lat, lng], { icon: icon });
+            marker.on('click', function() {
+                if (typeof showSupplierDetail === 'function') showSupplierDetail(sup);
+            });
+            suppliersLayer.addLayer(marker);
+        });
+
+        mapInstance.addLayer(suppliersLayer);
+    }
+
+    function populateCountryDropdown() {
+        var select = document.getElementById('smapCountryFilter');
+        if (!select) return;
+
+        var countries = [];
+        var seen = {};
+        allTradeData.forEach(function(d) {
+            if (d.country_iso3 && !seen[d.country_iso3]) {
+                seen[d.country_iso3] = true;
+                countries.push({ iso3: d.country_iso3, name: d.country_name || d.country_iso3 });
+            }
+        });
+        countries.sort(function(a, b) { return a.name.localeCompare(b.name); });
+
+        countries.forEach(function(c) {
+            var opt = document.createElement('option');
+            opt.value = c.iso3;
+            opt.textContent = c.name;
+            select.appendChild(opt);
+        });
+
+        select.addEventListener('change', function() {
+            activeCountryFilter = this.value;
+            applyFilters();
+        });
+    }
+
+    function initSearchBar() {
+        var input = document.getElementById('smapSearch');
+        if (!input) return;
+
+        var debounceTimer = null;
+        input.addEventListener('input', function() {
+            clearTimeout(debounceTimer);
+            var val = this.value.trim();
+            debounceTimer = setTimeout(function() {
+                activeSearchQuery = val;
+                applyFilters();
+            }, 250);
+        });
+    }
+
+    function hexToRgb(hex) {
+        var r = parseInt(hex.slice(1,3),16);
+        var g = parseInt(hex.slice(3,5),16);
+        var b = parseInt(hex.slice(5,7),16);
+        return r + ',' + g + ',' + b;
+    }
+
+    window._smapRiskFilter = function(level) {
+        activeRiskFilter = level;
+
+        // Update button active styles
+        document.querySelectorAll('[data-risk]').forEach(function(btn) {
+            var btnLevel = parseInt(btn.dataset.risk, 10);
+            var isActive = btnLevel === level;
+            var riskColors = { 0: '#e8a0b4', 1: '#e8a0b4', 2: '#4fc3f7', 3: '#f0b429', 4: '#fb923c', 5: '#ef4444' };
+            var col = riskColors[btnLevel] || '#b8909a';
+            btn.style.background = isActive ? 'rgba(' + hexToRgb(col) + ',.15)' : 'transparent';
+            btn.style.color = isActive ? col : '#b8909a';
+            btn.style.borderColor = isActive ? 'rgba(' + hexToRgb(col) + ',.5)' : 'rgba(255,255,255,.1)';
+        });
+
+        applyFilters();
     };
 
     // ── BOOT — called explicitly from index.html inline script ───────────────
