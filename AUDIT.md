@@ -56,6 +56,19 @@ Méthode : lecture du code, requêtes live sur l'API Supabase (anon + service_ro
 
 ---
 
+## 🔴 ADDENDUM SÉCURITÉ (découvert en Phase B, 12/07)
+
+**La clé `service_role` Supabase est hardcodée dans au moins 5 scripts Python d'un repo GitHub PUBLIC** (`scripts/geocode_suppliers.py`, `insert_dgddi_supabase.py`, `populate_excipient_suppliers.py`, `populate_formulations.py`, `fetch_comtrade.py`). Cette clé contourne le RLS : n'importe qui peut lire, modifier ou **supprimer toute la base** (1 737 relations, 192 fournisseurs…).
+
+**Action requise (utilisateur, Dashboard Supabase)** :
+1. Settings → API → **régénérer la clé service_role** (la clé actuelle restera exposée dans l'historique git même après nettoyage des fichiers)
+2. Ne plus jamais committer la nouvelle clé — la passer en variable d'environnement (`SUPABASE_SERVICE_KEY`), comme le fait `scripts/insert_product_grades.py`
+3. Nettoyer les 5 scripts (remplacer la clé en dur par `os.environ`)
+
+La clé anon dans le front-end est normale (conçue pour être publique, protégée par RLS).
+
+---
+
 ## ⚠️ CE QUI MANQUE / INCOHÉRENCES (hors verrous — ne pas traiter avant traction)
 
 | Constat | Détail |

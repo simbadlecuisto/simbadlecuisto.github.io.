@@ -1,0 +1,337 @@
+{
+  "_note": "Grades commerciaux des 9 excipients prioritaires (Phase B). Valeurs indicatives issues des catalogues publics fabricants (IFF/DuPont, Meggle, DFE Pharma, Roquette, BASF, Ashland, JRS Pharma, Peter Greven, Imerys) et du Handbook of Pharmaceutical Excipients (9e éd.). d50 = diamètre médian. À vérifier sur le CoA fabricant avant tout usage réglementaire.",
+  "grades": [
+    {
+      "excipient_id": 11,
+      "grade_name": "PH-101",
+      "nom_commercial": "Avicel PH-101 / Vivapur 101",
+      "fabricant": "IFF (ex-DuPont) / JRS Pharma",
+      "specs": { "d50_um": "~50", "densite_vrac_g_ml": "0.26–0.31", "humidite_pct_max": "5.0" },
+      "pharmacopees": ["Ph.Eur.", "USP-NF", "JP"],
+      "usage_principal": "Granulation humide, extrusion-sphéronisation — grade de référence historique"
+    },
+    {
+      "excipient_id": 11,
+      "grade_name": "PH-102",
+      "nom_commercial": "Avicel PH-102 / Vivapur 102",
+      "fabricant": "IFF (ex-DuPont) / JRS Pharma",
+      "specs": { "d50_um": "~100", "densite_vrac_g_ml": "0.28–0.33", "humidite_pct_max": "5.0" },
+      "pharmacopees": ["Ph.Eur.", "USP-NF", "JP"],
+      "usage_principal": "Compression directe — meilleur écoulement que PH-101, grade le plus utilisé"
+    },
+    {
+      "excipient_id": 11,
+      "grade_name": "PH-105",
+      "nom_commercial": "Avicel PH-105",
+      "fabricant": "IFF (ex-DuPont)",
+      "specs": { "d50_um": "~20", "densite_vrac_g_ml": "0.20–0.30", "humidite_pct_max": "5.0" },
+      "pharmacopees": ["Ph.Eur.", "USP-NF", "JP"],
+      "usage_principal": "Compression directe de PA fins, compactage à rouleaux — compressibilité maximale"
+    },
+    {
+      "excipient_id": 11,
+      "grade_name": "PH-200",
+      "nom_commercial": "Avicel PH-200",
+      "fabricant": "IFF (ex-DuPont)",
+      "specs": { "d50_um": "~180", "densite_vrac_g_ml": "0.29–0.36", "humidite_pct_max": "5.0" },
+      "pharmacopees": ["Ph.Eur.", "USP-NF", "JP"],
+      "usage_principal": "Compression directe haut débit — écoulement optimal, uniformité de masse"
+    },
+    {
+      "excipient_id": 11,
+      "grade_name": "PH-302",
+      "nom_commercial": "Avicel PH-302",
+      "fabricant": "IFF (ex-DuPont)",
+      "specs": { "d50_um": "~100", "densite_vrac_g_ml": "0.35–0.46", "humidite_pct_max": "5.0" },
+      "pharmacopees": ["Ph.Eur.", "USP-NF", "JP"],
+      "usage_principal": "Comprimés de petite taille — densité élevée, dose massique accrue"
+    },
+
+    {
+      "excipient_id": 10,
+      "grade_name": "Monohydrate 200M",
+      "nom_commercial": "GranuLac 200 / Pharmatose 200M",
+      "fabricant": "Meggle / DFE Pharma",
+      "specs": { "d50_um": "~30–40", "type": "broyé (milled)", "humidite_pct_max": "0.5 (eau libre)" },
+      "pharmacopees": ["Ph.Eur.", "USP-NF", "JP"],
+      "usage_principal": "Granulation humide — grade broyé fin, le plus courant"
+    },
+    {
+      "excipient_id": 10,
+      "grade_name": "Monohydrate 100M",
+      "nom_commercial": "GranuLac 100 / Pharmatose 100M",
+      "fabricant": "Meggle / DFE Pharma",
+      "specs": { "d50_um": "~100–160", "type": "tamisé/broyé", "humidite_pct_max": "0.5 (eau libre)" },
+      "pharmacopees": ["Ph.Eur.", "USP-NF", "JP"],
+      "usage_principal": "Granulation humide, remplissage gélules — écoulement supérieur au 200M"
+    },
+    {
+      "excipient_id": 10,
+      "grade_name": "Spray-dried",
+      "nom_commercial": "FlowLac 90 / SuperTab 11SD",
+      "fabricant": "Meggle / DFE Pharma",
+      "specs": { "d50_um": "~110–140", "type": "atomisé (spray-dried), particules sphériques", "humidite_pct_max": "0.5 (eau libre)" },
+      "pharmacopees": ["Ph.Eur.", "USP-NF", "JP"],
+      "usage_principal": "Compression directe — excellent écoulement et compressibilité"
+    },
+    {
+      "excipient_id": 10,
+      "grade_name": "Aggloméré",
+      "nom_commercial": "Tablettose 80",
+      "fabricant": "Meggle",
+      "specs": { "d50_um": "~180–250", "type": "aggloméré (granulated)", "humidite_pct_max": "0.5 (eau libre)" },
+      "pharmacopees": ["Ph.Eur.", "USP-NF", "JP"],
+      "usage_principal": "Compression directe — bon compromis écoulement/compressibilité"
+    },
+    {
+      "excipient_id": 10,
+      "grade_name": "Anhydre DC",
+      "nom_commercial": "SuperTab 21AN",
+      "fabricant": "DFE Pharma",
+      "specs": { "type": "anhydre (β-lactose majoritaire)", "humidite_pct_max": "0.5" },
+      "pharmacopees": ["Ph.Eur.", "USP-NF", "JP"],
+      "usage_principal": "Compression directe de PA sensibles à l'humidité"
+    },
+
+    {
+      "excipient_id": 19,
+      "grade_name": "Pearlitol 25C",
+      "nom_commercial": "Pearlitol 25C",
+      "fabricant": "Roquette",
+      "specs": { "d50_um": "~25", "type": "cristallin, poudre fine" },
+      "pharmacopees": ["Ph.Eur.", "USP-NF", "JP"],
+      "usage_principal": "Granulation humide, formes orodispersibles (ODT)"
+    },
+    {
+      "excipient_id": 19,
+      "grade_name": "Pearlitol 160C",
+      "nom_commercial": "Pearlitol 160C",
+      "fabricant": "Roquette",
+      "specs": { "d50_um": "~160", "type": "cristallin granulaire" },
+      "pharmacopees": ["Ph.Eur.", "USP-NF", "JP"],
+      "usage_principal": "Mélange direct, remplissage gélules et sachets — bon écoulement"
+    },
+    {
+      "excipient_id": 19,
+      "grade_name": "Pearlitol 100SD",
+      "nom_commercial": "Pearlitol 100SD",
+      "fabricant": "Roquette",
+      "specs": { "d50_um": "~100", "type": "atomisé (spray-dried)" },
+      "pharmacopees": ["Ph.Eur.", "USP-NF", "JP"],
+      "usage_principal": "Compression directe — compressibilité élevée, non hygroscopique"
+    },
+    {
+      "excipient_id": 19,
+      "grade_name": "Pearlitol 200SD",
+      "nom_commercial": "Pearlitol 200SD",
+      "fabricant": "Roquette",
+      "specs": { "d50_um": "~180", "type": "atomisé (spray-dried)" },
+      "pharmacopees": ["Ph.Eur.", "USP-NF", "JP"],
+      "usage_principal": "Compression directe haut débit — écoulement optimal"
+    },
+
+    {
+      "excipient_id": 40,
+      "grade_name": "Ac-Di-Sol SD-711",
+      "nom_commercial": "Ac-Di-Sol SD-711",
+      "fabricant": "IFF (ex-DuPont)",
+      "specs": { "d50_um": "~35–50", "concentration_usage_pct": "2–5", "type": "Type A (Ph.Eur.)" },
+      "pharmacopees": ["Ph.Eur.", "USP-NF", "JP"],
+      "usage_principal": "Superdésintégrant de référence — compression directe et granulation"
+    },
+    {
+      "excipient_id": 40,
+      "grade_name": "Primellose",
+      "nom_commercial": "Primellose",
+      "fabricant": "DFE Pharma",
+      "specs": { "concentration_usage_pct": "2–5", "type": "Type A (Ph.Eur.)" },
+      "pharmacopees": ["Ph.Eur.", "USP-NF", "JP"],
+      "usage_principal": "Superdésintégrant — alternative européenne à l'Ac-Di-Sol"
+    },
+    {
+      "excipient_id": 40,
+      "grade_name": "Vivasol",
+      "nom_commercial": "Vivasol GF",
+      "fabricant": "JRS Pharma",
+      "specs": { "concentration_usage_pct": "2–5", "type": "Type A (Ph.Eur.)" },
+      "pharmacopees": ["Ph.Eur.", "USP-NF", "JP"],
+      "usage_principal": "Superdésintégrant — grade à écoulement amélioré (GF = good flow)"
+    },
+
+    {
+      "excipient_id": 12,
+      "grade_name": "Végétal MF-2-V",
+      "nom_commercial": "Ligamed MF-2-V",
+      "fabricant": "Peter Greven",
+      "specs": { "origine": "végétale", "concentration_usage_pct": "0.25–1", "remarque": "mélange court (<5 min) pour éviter la sur-lubrification" },
+      "pharmacopees": ["Ph.Eur.", "USP-NF", "JP"],
+      "usage_principal": "Lubrifiant de compression — grade végétal de référence (halal/casher/vegan)"
+    },
+    {
+      "excipient_id": 12,
+      "grade_name": "Végétal MF-3-V",
+      "nom_commercial": "Ligamed MF-3-V",
+      "fabricant": "Peter Greven",
+      "specs": { "origine": "végétale", "concentration_usage_pct": "0.25–1", "remarque": "granulométrie plus fine que MF-2-V, surface spécifique accrue" },
+      "pharmacopees": ["Ph.Eur.", "USP-NF"],
+      "usage_principal": "Lubrifiant de compression — efficacité accrue à dose réduite"
+    },
+    {
+      "excipient_id": 12,
+      "grade_name": "HyQual végétal",
+      "nom_commercial": "HyQual Magnesium Stearate",
+      "fabricant": "Avantor (Mallinckrodt)",
+      "specs": { "origine": "végétale", "concentration_usage_pct": "0.25–1" },
+      "pharmacopees": ["Ph.Eur.", "USP-NF", "JP"],
+      "usage_principal": "Lubrifiant de compression — qualité constante lot à lot, marché US"
+    },
+
+    {
+      "excipient_id": 41,
+      "grade_name": "Kollidon CL",
+      "nom_commercial": "Kollidon CL",
+      "fabricant": "BASF",
+      "specs": { "d50_um": "~110–130", "concentration_usage_pct": "2–5", "type": "Type A (Ph.Eur.)" },
+      "pharmacopees": ["Ph.Eur.", "USP-NF", "JP"],
+      "usage_principal": "Superdésintégrant standard — comprimés et gélules"
+    },
+    {
+      "excipient_id": 41,
+      "grade_name": "Kollidon CL-F",
+      "nom_commercial": "Kollidon CL-F",
+      "fabricant": "BASF",
+      "specs": { "d50_um": "~20–40", "concentration_usage_pct": "2–5", "type": "Type B (Ph.Eur.)" },
+      "pharmacopees": ["Ph.Eur.", "USP-NF"],
+      "usage_principal": "Désintégrant fin — meilleure uniformité dans les comprimés de petite taille"
+    },
+    {
+      "excipient_id": 41,
+      "grade_name": "Kollidon CL-SF",
+      "nom_commercial": "Kollidon CL-SF",
+      "fabricant": "BASF",
+      "specs": { "d50_um": "~10–30", "concentration_usage_pct": "2–5", "type": "Type B (Ph.Eur.)" },
+      "pharmacopees": ["Ph.Eur.", "USP-NF"],
+      "usage_principal": "Formes orodispersibles (ODT) — sensation en bouche optimale"
+    },
+    {
+      "excipient_id": 41,
+      "grade_name": "Polyplasdone XL",
+      "nom_commercial": "Polyplasdone XL",
+      "fabricant": "Ashland",
+      "specs": { "d50_um": "~100–130", "concentration_usage_pct": "2–5", "type": "Type A (Ph.Eur.)" },
+      "pharmacopees": ["Ph.Eur.", "USP-NF", "JP"],
+      "usage_principal": "Superdésintégrant standard — alternative au Kollidon CL"
+    },
+    {
+      "excipient_id": 41,
+      "grade_name": "Polyplasdone XL-10",
+      "nom_commercial": "Polyplasdone XL-10",
+      "fabricant": "Ashland",
+      "specs": { "d50_um": "~25–40", "concentration_usage_pct": "2–5", "type": "Type B (Ph.Eur.)" },
+      "pharmacopees": ["Ph.Eur.", "USP-NF", "JP"],
+      "usage_principal": "Désintégrant fin — gélules, petits comprimés, suspensions"
+    },
+
+    {
+      "excipient_id": 42,
+      "grade_name": "Primojel",
+      "nom_commercial": "Primojel",
+      "fabricant": "DFE Pharma",
+      "specs": { "d50_um": "~35–55", "concentration_usage_pct": "2–8", "type": "Type A (Ph.Eur.)" },
+      "pharmacopees": ["Ph.Eur.", "USP-NF", "JP"],
+      "usage_principal": "Superdésintégrant de référence en Europe — comprimés et gélules"
+    },
+    {
+      "excipient_id": 42,
+      "grade_name": "Explotab",
+      "nom_commercial": "Explotab",
+      "fabricant": "JRS Pharma",
+      "specs": { "concentration_usage_pct": "2–8", "type": "Type A (Ph.Eur.)" },
+      "pharmacopees": ["Ph.Eur.", "USP-NF", "JP"],
+      "usage_principal": "Superdésintégrant historique — large antériorité réglementaire"
+    },
+    {
+      "excipient_id": 42,
+      "grade_name": "Vivastar P",
+      "nom_commercial": "Vivastar P",
+      "fabricant": "JRS Pharma",
+      "specs": { "concentration_usage_pct": "2–8", "type": "Type A (Ph.Eur.)" },
+      "pharmacopees": ["Ph.Eur.", "USP-NF"],
+      "usage_principal": "Superdésintégrant — granulation humide et compression directe"
+    },
+    {
+      "excipient_id": 42,
+      "grade_name": "Glycolys",
+      "nom_commercial": "Glycolys",
+      "fabricant": "Roquette",
+      "specs": { "concentration_usage_pct": "2–8", "type": "Type A (Ph.Eur.)" },
+      "pharmacopees": ["Ph.Eur.", "USP-NF", "JP"],
+      "usage_principal": "Superdésintégrant — offre européenne, variantes LV (basse viscosité)"
+    },
+
+    {
+      "excipient_id": 13,
+      "grade_name": "K25",
+      "nom_commercial": "Kollidon 25",
+      "fabricant": "BASF",
+      "specs": { "k_value": "22.5–27.0", "concentration_usage_pct": "2–5 (liant)" },
+      "pharmacopees": ["Ph.Eur.", "USP-NF", "JP"],
+      "usage_principal": "Liant de granulation basse viscosité — solutions concentrées possibles"
+    },
+    {
+      "excipient_id": 13,
+      "grade_name": "K30",
+      "nom_commercial": "Kollidon 30 / Plasdone K-29/32",
+      "fabricant": "BASF / Ashland",
+      "specs": { "k_value": "27.0–32.4", "concentration_usage_pct": "2–5 (liant)" },
+      "pharmacopees": ["Ph.Eur.", "USP-NF", "JP"],
+      "usage_principal": "Liant de référence pour granulation humide — libération immédiate"
+    },
+    {
+      "excipient_id": 13,
+      "grade_name": "K90",
+      "nom_commercial": "Kollidon 90 F",
+      "fabricant": "BASF",
+      "specs": { "k_value": "85.5–95.0", "concentration_usage_pct": "2–5 (liant)" },
+      "pharmacopees": ["Ph.Eur.", "USP-NF", "JP"],
+      "usage_principal": "Liant haute viscosité — matrices à libération prolongée"
+    },
+    {
+      "excipient_id": 13,
+      "grade_name": "K12 PF",
+      "nom_commercial": "Kollidon 12 PF",
+      "fabricant": "BASF",
+      "specs": { "k_value": "10.2–13.8", "remarque": "PF = pyrogen-free" },
+      "pharmacopees": ["Ph.Eur.", "USP-NF", "JP"],
+      "usage_principal": "Formes parentérales — solubilisant, faible masse molaire"
+    },
+
+    {
+      "excipient_id": 14,
+      "grade_name": "Luzenac Pharma",
+      "nom_commercial": "Luzenac Pharma",
+      "fabricant": "Imerys",
+      "specs": { "concentration_usage_pct": "1–5", "conformite": "Ph.Eur. 2.4.28 (absence d'amiante)" },
+      "pharmacopees": ["Ph.Eur.", "USP-NF", "JP"],
+      "usage_principal": "Glidant / anti-adhérent de référence — compression et enrobage"
+    },
+    {
+      "excipient_id": 14,
+      "grade_name": "Micronisé",
+      "nom_commercial": "Talc pharma micronisé",
+      "fabricant": "Imerys / divers",
+      "specs": { "d50_um": "~5–15", "concentration_usage_pct": "1–5", "conformite": "Ph.Eur. 2.4.28 (absence d'amiante)" },
+      "pharmacopees": ["Ph.Eur.", "USP-NF", "JP"],
+      "usage_principal": "Anti-collage dans les enrobages pelliculaires (HPMC) et pelliculage de gélules"
+    },
+    {
+      "excipient_id": 14,
+      "grade_name": "Standard tamisé",
+      "nom_commercial": "Talc pharma standard",
+      "fabricant": "divers",
+      "specs": { "d50_um": "~20–40", "concentration_usage_pct": "1–5", "conformite": "Ph.Eur. 2.4.28 (absence d'amiante)" },
+      "pharmacopees": ["Ph.Eur.", "USP-NF", "JP"],
+      "usage_principal": "Lubrifiant secondaire / glidant — formes sèches classiques"
+    }
+  ]
+}
