@@ -370,6 +370,11 @@
 
         <!-- Tab: Prix -->
         <div id="tab-prix" class="tab-panel active">
+            <!-- Grades commerciaux (rempli si product_grades contient des lignes) -->
+            <div id="gradesSection" style="display:none; margin-bottom:2rem;">
+                <div class="section-title"><i class="fas fa-layer-group"></i> Grades disponibles</div>
+                <div id="gradesContent"></div>
+            </div>
             <div class="section-title"><i class="fas fa-table"></i> Comparatif Prix Fournisseurs</div>
             <div id="prixContent"></div>
         </div>
@@ -599,6 +604,7 @@ async function loadAllData() {
 
         // Après affichage du DOM — erreur isolée pour ne pas bloquer le reste
         try { displayAcademiqueTab(excipient); } catch (e) { console.error('Academic tab error:', e); }
+        loadAndDisplayGrades(currentExcipientId); // non-blocking, section masquée si table vide/absente
     } catch (err) {
         console.error(err);
         document.getElementById('loadingState').innerHTML = `
@@ -623,6 +629,68 @@ async function loadExcipientSuppliers(excipientId) {
         .order('prix_min', { ascending: true });
     if (error) throw error;
     return data || [];
+}
+
+// ── Grades commerciaux (table product_grades) ─────────────────────
+const SPEC_LABELS = {
+    d50_um: 'd50 (µm)',
+    densite_vrac_g_ml: 'Densité vrac (g/mL)',
+    humidite_pct_max: 'Humidité max (%)',
+    concentration_usage_pct: 'Usage (%)',
+    k_value: 'K-value',
+    type: 'Type',
+    origine: 'Origine',
+    conformite: 'Conformité',
+    remarque: 'Remarque'
+};
+
+function escGr(s) {
+    return String(s ?? '').replace(/[&<>"']/g, c =>
+        ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+async function loadAndDisplayGrades(excipientId) {
+    try {
+        const { data, error } = await supabaseClient
+            .from('product_grades')
+            .select('grade_name, nom_commercial, fabricant, specs, pharmacopees, usage_principal')
+            .eq('excipient_id', excipientId)
+            .order('grade_name', { ascending: true });
+        if (error || !data || data.length === 0) return; // table absente ou vide → section masquée
+
+        const rows = data.map(g => {
+            const specs = Object.entries(g.specs || {})
+                .map(([k, v]) => `<span class="badge badge-neutral" title="${escGr(SPEC_LABELS[k] || k)}">${escGr(SPEC_LABELS[k] || k)} : ${escGr(v)}</span>`)
+                .join(' ');
+            const phs = (g.pharmacopees || [])
+                .map(p => `<span class="badge badge-usp">${escGr(p)}</span>`)
+                .join(' ');
+            return `
+                <tr>
+                    <td><strong>${escGr(g.grade_name)}</strong><br>
+                        <span style="font-size:.78rem;color:var(--text-muted);">${escGr(g.nom_commercial || '')}${g.fabricant ? ' — ' + escGr(g.fabricant) : ''}</span></td>
+                    <td style="max-width:340px;">${specs || '<span class="text-muted">—</span>'}</td>
+                    <td style="white-space:nowrap;">${phs || '—'}</td>
+                    <td style="font-size:.85rem;">${escGr(g.usage_principal || '—')}</td>
+                </tr>`;
+        }).join('');
+
+        document.getElementById('gradesContent').innerHTML = `
+            <div class="table-wrap">
+                <table class="data-table">
+                    <thead><tr>
+                        <th>Grade</th><th>Spécifications indicatives</th><th>Pharmacopées</th><th>Usage principal</th>
+                    </tr></thead>
+                    <tbody>${rows}</tbody>
+                </table>
+            </div>
+            <p class="text-muted" style="font-size:.75rem;margin-top:.5rem;">
+                Valeurs indicatives (catalogues fabricants, Handbook of Pharmaceutical Excipients) — se référer au certificat d'analyse du lot.
+            </p>`;
+        document.getElementById('gradesSection').style.display = 'block';
+    } catch (e) {
+        console.warn('Grades non disponibles :', e.message);
+    }
 }
 
 function displayProductBand(exc) {
