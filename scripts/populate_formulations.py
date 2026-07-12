@@ -9,6 +9,7 @@ Prérequis : exécuter scripts/create_formulations.sql dans Supabase SQL Editor.
 Usage : python3 scripts/populate_formulations.py
 """
 
+import os
 import json
 import time
 import urllib.request
@@ -17,12 +18,7 @@ import urllib.error
 # ─── CONFIGURATION SUPABASE ──────────────────────────────────────────────────
 
 SUPABASE_URL     = "https://jkaffpgqbyhuihvyvtld.supabase.co"
-SERVICE_ROLE_KEY = (
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
-    ".eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwi"
-    "cm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MTY1ODM5NCwiZXhwIjoyMDY3"
-    "MjM0Mzk0fQ.dgU2hQsRW0kWKriCNwx_SMES5GWO25Wl7Y-jmes05b0"
-)
+SERVICE_ROLE_KEY = os.environ["SUPABASE_SERVICE_KEY"]
 
 HEADERS = {
     "apikey":        SERVICE_ROLE_KEY,

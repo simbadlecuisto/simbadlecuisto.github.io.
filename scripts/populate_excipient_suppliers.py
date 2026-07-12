@@ -13,6 +13,7 @@ Prérequis :
 Usage : python3 scripts/populate_excipient_suppliers.py
 """
 
+import os
 import json
 import random
 import time
@@ -25,12 +26,7 @@ from datetime import datetime, timezone
 # ─────────────────────────────────────────────
 
 SUPABASE_URL      = "https://jkaffpgqbyhuihvyvtld.supabase.co"
-SUPABASE_SERV_KEY = (
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
-    ".eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwi"
-    "cm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MTY1ODM5NCwiZXhwIjoyMDY3"
-    "MjM0Mzk0fQ.dgU2hQsRW0kWKriCNwx_SMES5GWO25Wl7Y-jmes05b0"
-)
+SUPABASE_SERV_KEY = os.environ["SUPABASE_SERVICE_KEY"]
 
 HEADERS = {
     "apikey":        SUPABASE_SERV_KEY,

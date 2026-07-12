@@ -5,10 +5,11 @@ Requiert que migrate_phase1.sql ait été exécuté dans Supabase SQL Editor.
 Usage : python3 scripts/populate_phase1.py
 """
 
+import os
 import urllib.request, urllib.error, json, sys
 
 SUPABASE_URL     = 'https://jkaffpgqbyhuihvyvtld.supabase.co'
-SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MTY1ODM5NCwiZXhwIjoyMDY3MjM0Mzk0fQ.dgU2hQsRW0kWKriCNwx_SMES5GWO25Wl7Y-jmes05b0'
+SERVICE_ROLE_KEY = os.environ["SUPABASE_SERVICE_KEY"]
 
 HEADERS = {
     'apikey':        SERVICE_ROLE_KEY,

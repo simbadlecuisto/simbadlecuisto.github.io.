@@ -22,12 +22,7 @@ from collections import defaultdict
 # ── Configuration ─────────────────────────────────────────────────────────────
 
 SUPABASE_URL = "https://jkaffpgqbyhuihvyvtld.supabase.co"
-SERVICE_ROLE_KEY = (
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
-    ".eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6"
-    "InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MTY1ODM5NCwiZXhwIjoyMDY3MjM0Mzk0fQ"
-    ".dgU2hQsRW0kWKriCNwx_SMES5GWO25Wl7Y-jmes05b0"
-)
+SERVICE_ROLE_KEY = os.environ["SUPABASE_SERVICE_KEY"]
 
 EUR_TO_USD = 1.08
 BATCH_SIZE = 50

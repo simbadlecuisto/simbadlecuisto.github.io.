@@ -282,8 +282,17 @@
 // TODO: remplacer DASHBOARD_PIN par votre mot de passe admin
 const DASHBOARD_PIN    = 'cspot2026';
 const SUPABASE_URL     = 'https://jkaffpgqbyhuihvyvtld.supabase.co';
-// La service_role key est nécessaire : la RLS bloque SELECT anon sur contact_requests
-const SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MTY1ODM5NCwiZXhwIjoyMDY3MjM0Mzk0fQ.dgU2hQsRW0kWKriCNwx_SMES5GWO25Wl7Y-jmes05b0';
+// La service_role key est nécessaire (la RLS bloque SELECT anon sur contact_requests)
+// mais ne doit JAMAIS être committée : page publique. Saisie une fois, stockée
+// uniquement dans le localStorage de ce navigateur (Dashboard Supabase > Settings > API).
+function getServiceRoleKey() {
+    let k = localStorage.getItem('cspot_service_key') || '';
+    if (!k) {
+        k = (prompt('Clé service_role Supabase (stockée en local uniquement) :') || '').trim();
+        if (k) localStorage.setItem('cspot_service_key', k);
+    }
+    return k;
+}
 // ────────────────────────────────────────────────────────────
 
 // ── AUTH ────────────────────────────────────────────────────
@@ -323,8 +332,12 @@ async function loadRequests() {
     try {
         const res = await fetch(
             `${SUPABASE_URL}/rest/v1/contact_requests?select=*&order=created_at.desc`,
-            { headers: { 'apikey': SERVICE_ROLE_KEY, 'Authorization': `Bearer ${SERVICE_ROLE_KEY}` } }
+            { headers: { 'apikey': getServiceRoleKey(), 'Authorization': `Bearer ${getServiceRoleKey()}` } }
         );
+        if (res.status === 401 || res.status === 403) {
+            localStorage.removeItem('cspot_service_key');
+            throw new Error('Clé service_role invalide — rechargez la page pour la ressaisir');
+        }
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         allRows = await res.json();
         updateStats();
@@ -451,8 +464,8 @@ async function updateStatut(id, newStatut) {
             {
                 method: 'PATCH',
                 headers: {
-                    'apikey': SERVICE_ROLE_KEY,
-                    'Authorization': `Bearer ${SERVICE_ROLE_KEY}`,
+                    'apikey': getServiceRoleKey(),
+                    'Authorization': `Bearer ${getServiceRoleKey()}`,
                     'Content-Type': 'application/json',
                     'Prefer': 'return=minimal'
                 },

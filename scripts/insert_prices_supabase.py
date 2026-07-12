@@ -7,6 +7,7 @@ Usage: python scripts/insert_prices_supabase.py
 Prérequis: créer la table prices (scripts/create_prices_table.sql)
 """
 
+import os
 import json
 import urllib.request
 import urllib.error
@@ -14,7 +15,7 @@ from datetime import datetime, timezone
 
 # ── Configuration ──────────────────────────────────────────────
 SUPABASE_URL = "https://jkaffpgqbyhuihvyvtld.supabase.co"
-SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MTY1ODM5NCwiZXhwIjoyMDY3MjM0Mzk0fQ.dgU2hQsRW0kWKriCNwx_SMES5GWO25Wl7Y-jmes05b0"
+SUPABASE_KEY = os.environ["SUPABASE_SERVICE_KEY"]
 DATA_FILE    = "data/prices.json"
 
 HEADERS = {

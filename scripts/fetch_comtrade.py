@@ -8,6 +8,7 @@ Usage:  python3 scripts/fetch_comtrade.py
 Deps:   stdlib only (urllib, json, time)
 """
 
+import os
 import json
 import time
 import urllib.request
@@ -16,7 +17,7 @@ from datetime import datetime, timezone
 
 # ── SUPABASE CONFIG ──────────────────────────────────────────────────────────
 SUPABASE_URL = "https://jkaffpgqbyhuihvyvtld.supabase.co"
-SERVICE_KEY  = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprYWZmcGdxYnlodWlodnl2dGxkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MTY1ODM5NCwiZXhwIjoyMDY3MjM0Mzk0fQ.dgU2hQsRW0kWKriCNwx_SMES5GWO25Wl7Y-jmes05b0"
+SERVICE_KEY  = os.environ["SUPABASE_SERVICE_KEY"]
 
 # ── EXCIPIENTS CONFIG ────────────────────────────────────────────────────────
 EXCIPIENTS = [
