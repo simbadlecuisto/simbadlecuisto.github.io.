@@ -143,6 +143,8 @@
                 <p class="text-muted mb-2" style="font-size:.88rem;">Réponse sous 24h ouvrées</p>
 
                 <form id="contactForm" onsubmit="handleContact(event)">
+                    <!-- Honeypot anti-spam : invisible pour les humains, rempli par les bots -->
+                    <input id="cf-website" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;height:0;width:0;opacity:0;pointer-events:none;">
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label">Prénom *</label>
@@ -340,6 +342,14 @@ async function handleContact(e) {
     e.preventDefault();
     const fb  = document.getElementById('formFeedback');
     const btn = e.target.querySelector('button[type="submit"]');
+
+    // Honeypot rempli = bot → faux succès, aucun INSERT
+    if (document.getElementById('cf-website').value) {
+        fb.style.display = 'block';
+        fb.innerHTML = '<div class="status-bar status-success"><i class="fas fa-check-circle"></i> Message envoyé ! Nous vous répondrons sous 24h ouvrées.</div>';
+        e.target.reset();
+        return;
+    }
 
     const payload = {
         prenom:     document.getElementById('cf-prenom').value.trim(),

@@ -726,6 +726,8 @@
         <p style="font-size:.88rem;color:var(--text-muted);margin-bottom:1rem;">Recevez le prix exact pour votre volume sous 24h ouvrées.</p>
         <div id="cpe-product-label" style="background:var(--bg-surface);padding:.65rem 1rem;border-radius:var(--radius);margin-bottom:1.25rem;font-weight:600;color:var(--primary);font-size:.9rem;border-left:3px solid var(--primary);"></div>
         <form id="cpeExactForm" onsubmit="handleCatalogPrixExact(event)">
+            <!-- Honeypot anti-spam : invisible pour les humains, rempli par les bots -->
+            <input id="cpe-website" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;height:0;width:0;opacity:0;pointer-events:none;">
             <div class="form-group">
                 <label class="form-label" for="cpe-email">Email professionnel *</label>
                 <input id="cpe-email" type="email" class="form-input" required placeholder="jean.dupont@labo.com" autocomplete="email">
@@ -1305,6 +1307,15 @@ async function handleCatalogPrixExact(e) {
     e.preventDefault();
     const fb  = document.getElementById('cpeExactFeedback');
     const btn = e.target.querySelector('button[type="submit"]');
+
+    // Honeypot rempli = bot → faux succès, aucun INSERT
+    if (document.getElementById('cpe-website').value) {
+        fb.style.display = 'block';
+        fb.innerHTML = '<div class="status-bar status-success"><i class="fas fa-check-circle"></i> Vous recevrez le prix exact sous 24h.</div>';
+        e.target.reset();
+        return;
+    }
+
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi…';
     const qty = document.getElementById('cpe-quantite').value;
