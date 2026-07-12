@@ -1,5 +1,5 @@
 # 🏰 CHEMISTRYSPOT — FEUILLE DE ROUTE CONSOLIDÉE
-**Version 7.1 — 12 juillet 2026 (mise à jour post-audit, voir AUDIT.md)**
+**Version 7.2 — 12 juillet 2026 (soir) — PHASES A & B TERMINÉES le jour même. Prochaine action : Phase C (vendre).**
 *Remplace : Feuille de Route V1, FILROUGE, FILROUGE2, CONV-SYNCHRO, Château d'If roadmap*
 
 ---
@@ -19,12 +19,12 @@
 | Concurrence | Analyse Pharmaoffer/Europages faite → gap excipients confirmé, commission 4-6 % viable |
 | Prospection (préparé) | Templates emails, tableau acheteurs (24 facs, 32 CHU, labos, CDMO) |
 
-### ❌ Ce qui BLOQUE (3 verrous, pas plus — précisés par l'audit)
-1. **Capture de leads aveugle** — EmailJS en placeholders (`contact.html:341`, `catalogue.html:754`). Les demandes ARRIVENT en base mais personne n'est notifié. Contenu actuel : 13 lignes, 100 % spam bots, 0 lead réel. Aucun anti-spam.
-2. **Grades sans profondeur** — table `product_grades` inexistante (vérifié : 42P01). 7/9 prioritaires ont des noms de grades mais zéro spec, et `produit-detail.html` ne les affiche même pas. Crospovidone + SSG : rien.
-3. **Traction commerciale = 0** — le vrai problème. 0 lead réel en 4 mois. Le pattern identifié dans toutes les sessions : *ajouter des features au lieu de vendre*.
+### ❌ Ce qui BLOQUE (mise à jour 12/07 soir)
+1. ~~**Capture de leads aveugle**~~ ✅ **LEVÉ (12/07)** — clés EmailJS live sur les 3 formulaires, test bout en bout OK (HTTP 200 + email reçu), honeypot anti-spam posé, table purgée (0 ligne, plus de spam).
+2. ~~**Grades sans profondeur**~~ ✅ **LEVÉ (12/07)** — table `product_grades` créée, 36 grades × 9 excipients seedés, section « Grades disponibles » vérifiée en prod (headless Chrome sur chemistryspot.com).
+3. **Traction commerciale = 0** — LE seul verrou restant. 0 lead réel en 4 mois. Il n'y a plus AUCUN prétexte technique : Phase C.
 
-Bug annexe intégré en Phase A (15 min) : **auth factice sur index/contact/fournisseurs** — modals inline résiduels qui court-circuitent `auth.js` (détails AUDIT.md, verrou n°3).
+~~Bug annexe : auth factice sur index/contact/fournisseurs~~ ✅ corrigé (12/07, modals inline supprimés). Bonus sécurité : clé service_role régénérée + nettoyée de 13 scripts et dashboard.html.
 
 ---
 
@@ -194,11 +194,11 @@ Auth avancée/espace client → Stripe Connect (5 %) → Matomo → ESRI dashboa
 
 ## 6. TABLEAU DE BORD — LES SEULS CHIFFRES QUI COMPTENT
 
-| Métrique | Actuel | Cible 30j | Cible 90j |
+| Métrique | Actuel (12/07 soir) | Cible 30j | Cible 90j |
 |---|---|---|---|
-| EmailJS fonctionnel | ❌ | ✅ | ✅ |
-| Auth réelle sur toutes les pages | ❌ (3 pages factices) | ✅ | ✅ |
-| Excipients avec grades complets (specs) | 0 (10 ont des noms seuls) | 9 | 9 |
+| EmailJS fonctionnel | ✅ (testé bout en bout) | ✅ | ✅ |
+| Auth réelle sur toutes les pages | ✅ | ✅ | ✅ |
+| Excipients avec grades complets (specs) | ✅ 9/9 (36 grades en prod) | 9 | 9 |
 | Leads réels reçus (hors spam) | 0 | ≥1 | ≥10 |
 | Emails prospection envoyés | 0 | 30 | 100 |
 | Réponses obtenues | 0 | 5 | 20 |
@@ -211,7 +211,8 @@ Auth avancée/espace client → Stripe Connect (5 %) → Matomo → ESRI dashboa
 
 ## 7. LA PROCHAINE ACTION (une seule)
 
-> **Ouvrir EmailJS → récupérer les 3 clés → les coller dans `contact.html:341` et `catalogue.html:754` → tester → commit.**
-> 2 heures max. Tout le reste attend.
+> **Phase C, séquence fournisseurs : corriger le Template 1 (URL chemistryspot.com, chiffres réels 50 excipients / 192 fournisseurs, zéro claim inventé) → envoyer les 10 premiers emails (Roquette, JRS, DFE, Meggle, BASF, IMCD, Azelis, Seppic, Croda, Gattefossé).**
+> Angle : « Votre fiche existe déjà — et vos grades aussi (ex. Avicel PH-102 en ligne). Voulez-vous la valider ? »
+> Plus rien à coder. Chaque jour sans email envoyé est un jour perdu.
 
-*Document maître — à mettre à jour après chaque session. Version 7.1, 12/07/2026 (post-audit AUDIT.md).*
+*Document maître — à mettre à jour après chaque session. Version 7.2, 12/07/2026 soir (Phases A+B closes le jour même — AUDIT.md pour le détail).*
